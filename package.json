@@ -16,7 +16,10 @@
     },
     "qna": "https://archicad-talk.graphisoft.com/viewforum.php?f=49",
     "license": "MIT",
-    "repository": { "url": "https://github.com/GRAPHISOFT/vscode-gdl" },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/GRAPHISOFT/vscode-gdl"
+    },
     "engines": {
         "vscode": "^1.57.0"
     },
