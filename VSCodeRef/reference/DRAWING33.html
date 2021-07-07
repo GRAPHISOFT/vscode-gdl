@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>DRAWING3{3}</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="DRAWING33_gdlcommand">DRAWING3{3}</h3>
+				
+				<pre class="programlisting"><b id="DRAWING33_keyword_2.8.7.7.4.1">DRAWING3{3}</b> projection_code, angle, method, parts [, backgroundColor,
+        fillOrigoX, fillOrigoY, filldirection][[,]
+        PARAMETERS name1=value1, ..., namen=valuen]</pre>
+				
+					<p>
+						Similarly to PROJECT2, creates a projection of the 3D script of the library part associated with the property library part containing this command.
+						All parameters are similar to those of PROJECT2, PROJECT2{2} and PROJECT2{3}.
+					</p>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>method: </b></code>New method flags in DRAWING3{3}</div>
+						<div><code>2048: </code>
+							addition modifier: modifiers 16, 32, 64, 128, 256, 512, 1024 and fill attribute parameters are effective only
+							for the view part of the projection. By default they are effective for all parts,
+						</div>
+						<div><code>4096: </code>
+							addition modifier: modifiers 16, 32, 64, 128, 256, 512, 1024 and fill attribute parameters are effective only
+							for the cut part of the projection. By default they are effective for all parts,
+						</div>
+						<div><code>8192: </code>addition modifier: cut fills are slanted.</div>
+						<div><code>16384: </code>addition modifier: enables transparency for transparent surfaces. Note that transparency in this case means full transparency for surfaces with transmittance greater than 50, everything else is non-transparent.</div>
+					</div>
+				
+			<hr/><a href="002.008.html#DRAWING33_gdlcommand">Related in 2D Shapes</a><p>
+				<span class="bold"><strong>GDL Reference Guide</strong></span>
+			</p><p>
+				<span class="trademark">Copyright</span><sup>©</sup> 2021 by GRAPHISOFT, all rights reserved.
+				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+			</p></body></html>

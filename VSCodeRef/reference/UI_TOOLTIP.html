@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>UI_TOOLTIP</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="UI_TOOLTIP_gdlcommand">UI_TOOLTIP</h3>
+				
+				<pre class="programlisting"><b id="UI_BUTTON_keyword_2.12.5.34.4.1">UI_BUTTON</b> type, text, x, y, width, height [, id [, url]] [ <b id="UI_TOOLTIP_keyword_2.12.5.34.4.3">UI_TOOLTIP</b> tooltiptext ]</pre>
+				<pre class="programlisting"><b id="UI_PICT_BUTTON_keyword_2.12.5.34.6.1">UI_PICT_BUTTON</b> type, text, picture_reference,
+        x, y, width, height [, id [, url]] [ <b id="UI_TOOLTIP_keyword_2.12.5.34.6.3">UI_TOOLTIP</b> tooltiptext ]</pre>
+				<pre class="programlisting"><b id="UI_INFIELD_keyword_2.12.5.34.8.1">UI_INFIELD</b> "name", x, y, width, height [, extra parameters ... ]
+        [ <b id="UI_TOOLTIP_keyword_2.12.5.34.8.3">UI_TOOLTIP</b> tooltiptext ]</pre>
+				<pre class="programlisting"><b id="UI_INFIELD2_keyword_2.12.5.34.10.1">UI_INFIELD{2}</b> name, x, y, width, height [, extra parameters ... ]
+        [ <b id="UI_TOOLTIP_keyword_2.12.5.34.10.3">UI_TOOLTIP</b> tooltiptext ]</pre>
+				<pre class="programlisting"><b id="UI_INFIELD3_keyword_2.12.5.34.12.1">UI_INFIELD{3}</b> name, x, y, width, height [, extra parameters ... ]
+        [ <b id="UI_TOOLTIP_keyword_2.12.5.34.12.3">UI_TOOLTIP</b> tooltiptext ]</pre>
+				<pre class="programlisting"><b id="UI_INFIELD4_keyword_2.12.5.34.14.1">UI_INFIELD{4}</b> "name", x, y, width, height [, extra parameters ... ]
+        [ <b id="UI_TOOLTIP_keyword_2.12.5.34.14.3">UI_TOOLTIP</b> tooltiptext ]</pre>
+				<pre class="programlisting"><b id="UI_CUSTOM_POPUP_INFIELD_keyword_2.12.5.34.16.1">UI_CUSTOM_POPUP_INFIELD</b> "name", x, y, width, height , extra parameters ...
+        [ <b id="UI_TOOLTIP_keyword_2.12.5.34.16.3">UI_TOOLTIP</b> tooltiptext ]</pre>
+				<pre class="programlisting"><b id="UI_CUSTOM_POPUP_INFIELD2_keyword_2.12.5.34.18.1">UI_CUSTOM_POPUP_INFIELD{2}</b> name, x, y, width, height , extra parameters ...
+        [ <b id="UI_TOOLTIP_keyword_2.12.5.34.18.3">UI_TOOLTIP</b> tooltiptext ]</pre>
+				<pre class="programlisting"><b id="UI_RADIOBUTTON_keyword_2.12.5.34.20.1">UI_RADIOBUTTON</b> name, value, text, x, y, width, height [ <b id="UI_TOOLTIP_keyword_2.12.5.34.20.3">UI_TOOLTIP</b> tooltiptext ]</pre>
+				<pre class="programlisting"><b id="UI_OUTFIELD_keyword_2.12.5.34.22.1">UI_OUTFIELD</b> expression, x, y, width, height [, flags] [ <b id="UI_TOOLTIP_keyword_2.12.5.34.22.3">UI_TOOLTIP</b> tooltiptext ]</pre>
+				<pre class="programlisting"><b id="UI_PICT_keyword_2.12.5.34.24.1">UI_PICT</b> expression, x, y [, width, height [, mask]] [ <b id="UI_TOOLTIP_keyword_2.12.5.34.24.3">UI_TOOLTIP</b> tooltiptext ]</pre>
+				<pre class="programlisting"><b id="UI_LISTFIELD_keyword_2.12.5.34.26.1">UI_LISTFIELD</b> fieldID, x, y, width, height [, iconFlag [, description_header [, value_header]]]
+        [ <b id="UI_TOOLTIP_keyword_2.12.5.34.26.3">UI_TOOLTIP</b> tooltiptext ]</pre>
+				<pre class="programlisting"><b id="UI_LISTITEM_keyword_2.12.5.34.28.1">UI_LISTITEM</b> itemID, fieldID, "name" [, childFlag [, image [, paramDesc]]]
+        [ <b id="UI_TOOLTIP_keyword_2.12.5.34.28.3">UI_TOOLTIP</b> tooltiptext ]</pre>
+				<pre class="programlisting"><b id="UI_LISTITEM2_keyword_2.12.5.34.30.1">UI_LISTITEM{2}</b> itemID, fieldID, name [, childFlag [, image [, paramDesc]]]
+        [ <b id="UI_TOOLTIP_keyword_2.12.5.34.30.3">UI_TOOLTIP</b> tooltiptext ]</pre>
+				<pre class="programlisting"><b id="UI_CUSTOM_POPUP_LISTITEM_keyword_2.12.5.34.32.1">UI_CUSTOM_POPUP_LISTITEM</b> itemID, fieldID, "name", childFlag , image , paramDesc,
+        extra parameters ...
+        [ <b id="UI_TOOLTIP_keyword_2.12.5.34.32.3">UI_TOOLTIP</b> tooltiptext ]</pre>
+				<pre class="programlisting"><b id="UI_CUSTOM_POPUP_LISTITEM2_keyword_2.12.5.34.34.1">UI_CUSTOM_POPUP_LISTITEM{2}</b> itemID, fieldID, name, childFlag , image , paramDesc,
+        extra parameters ...
+        [ <b id="UI_TOOLTIP_keyword_2.12.5.34.34.3">UI_TOOLTIP</b> tooltiptext ]</pre>
+				
+					<p>
+						Defines the tooltip for the control on the user interface page.
+						Tooltips are available for buttons, infields, outfields, listfields, listitems and pictures
+						if they are not disabled by the user in the running context (e.g., in the Help menu of ARCHICAD).
+					</p>
+					<p>
+						The listfield's tooltip appears in all included listitems if an item has none declared.
+						The own tooltip of the listitem will take effect over the tooltip of the listfield (if existing) inline.
+					</p>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>tooltiptext: </b></code>the text to display as tooltip for the control.</div>
+					</div>
+				
+			<hr/><a href="002.012.html#UI_TOOLTIP_gdlcommand">Related in Non-Geometric Scripts</a><p>
+				<span class="bold"><strong>GDL Reference Guide</strong></span>
+			</p><p>
+				<span class="trademark">Copyright</span><sup>©</sup> 2021 by GRAPHISOFT, all rights reserved.
+				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+			</p></body></html>

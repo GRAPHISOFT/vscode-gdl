@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>NURBSTRIMSINGULAR</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="NURBSTRIMSINGULAR_gdlcommand">NURBSTRIMSINGULAR</h3>
+					
+					<pre class="programlisting"><b id="NURBSTRIMSINGULAR_keyword_2.7.9.17.6.4.1">NURBSTRIMSINGULAR</b> vertex, curve, curveDomainBeg, curveDomainEnd, tolerance</pre>
+					
+						<p>
+							A bounding edge of a face.
+							Used for trimming a face in the parameter space of the surface of the face.
+							NURBSTRIMSINGULAR is used along singular sides of the surface (which side is contracted to one point on the surface).
+							Connects the face to an edge (or to a vertex in singular case).
+						</p>
+						<div style="margin-left: 1em">
+							<div style="text-indent: -1em"><code><b>edge: </b></code>gdl-index of NURBS edge to which this trim is attached. Positive index, edge and trim are always oriented consistently.</div>
+						</div>
+						<div style="margin-left: 1em">
+							<div style="text-indent: -1em"><code><b>vertex: </b></code>gdl-index of NURBS vertex to which this trim is attached (singular case).</div>
+						</div>
+						<div style="margin-left: 1em">
+							<div style="text-indent: -1em"><code><b>curve: </b></code>gdl-index of a 2D NURBS curve. Positive index, curve and trim are always oriented consistently.
+								It is defined on the domain (u-v parameter space) of the surface of the face.</div>
+						</div>
+						<div style="margin-left: 1em">
+							<div style="text-indent: -1em"><code><b>curveDomainBeg, curveDomainEnd: </b></code>definition of the part of curve which geometrically represents the trim.
+								The curveDomainEnd must be greater than curveDomainBeg, they must not coincide, and both value must be in the usable domain of the curve.</div>
+						</div>
+						<div style="margin-left: 1em">
+							<div style="text-indent: -1em"><code><b>tolerance: </b></code>maximum geometric distance between 2D curve of NURBS trim and other entities (other NURBS trims) which are topologically connected to it.
+								If negative, tolerance will be some predefined default.</div>
+						</div>
+						<p>
+							The curve restricted to [curveDomainBeg, curveDomainEnd] interval should completely lie within the usable domain of the surface of the face (with given tolerance).
+							For NURBSTRIMSINGULAR the 2D curve must lie along a singular side of the usable domain (u-v parameter space) of the surface of the face.
+						</p>
+						<p>
+							The composition of the restricted 2D curve and the surface gives a 3D curve which should coincide with the restricted 3D curve of the edge.
+							Therefore the 2D curve evaluated at curveDomainBeg and curveDomainEnd should coincide with the position of the appropriate vertex.
+							In the singular case the composition of the 2D curve and the surface gives a 3D point, which should coincide with the given vertex.
+						</p>
+						<p>
+							Indexing of singular and non-singular trims is common.
+						</p>
+						<p>
+							Any number of trims can refer to each edge (so indirectly any number of face can be attached to an edge).
+							The edge can be non-2-manifold.
+						</p>
+						<p>
+							Two trims on one edge may belong to the same face, in this case edge is called a seam edge.
+							For example a mantle of a cylinder can be one face with a seam edge.
+						</p>
+					
+				<hr/><a href="002.007.html#NURBSTRIMSINGULAR_gdlcommand">Related in 3D Shapes</a><p>
+				<span class="bold"><strong>GDL Reference Guide</strong></span>
+			</p><p>
+				<span class="trademark">Copyright</span><sup>©</sup> 2021 by GRAPHISOFT, all rights reserved.
+				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+			</p></body></html>

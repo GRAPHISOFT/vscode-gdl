@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>CUTPLANE{3}</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="CUTPLANE3_gdlcommand">CUTPLANE{3}</h3>
+				
+				<pre class="programlisting"><b id="CUTPLANE3_keyword_2.7.11.4.4.1">CUTPLANE{3}</b> [x [, y [, z [, side [, status]]]]]
+[statement1 ... statementn]
+<b id="CUTEND_keyword_2.7.11.4.4.3">CUTEND</b></pre>
+				
+					<p>
+						Creates a cutting plane and removes the cut parts of enclosed
+						shapes. CUTPLANE may have a different number of parameters.
+					</p>
+					<p>If CUTPLANE has the following number of parameters:</p>
+					<p>0: x-y plane;</p>
+					<p>1: cutting plane goes across x axis, angle is between cutting plane and x-y plane;</p>
+					<p>2: cutting plane is parallel to z axis, crosses x axis and y axis at the given values;</p>
+					<p>3: cutting plane crosses the x, y and z axes at the given values;</p>
+					<p>4: the first three parameters are as above, with the addition of the side value as follows:</p>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>side: </b></code>definition of the side to cut.</div>
+						<div><code>0: </code>removes parts above cutting plane (default),</div>
+						<div><code>1: </code>removes parts below cutting plane; in case of x-y, x-z, y-z, removes the parts in the negative direction of the axis.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>status: </b></code>status control of the cut surfaces. If the status is not given the status is set to 1+2 automatically.</div><div><code>status = j<sub>1</sub> + 2*j<sub>2</sub> + 4*j<sub>3</sub> + 256*j<sub>9</sub></code>, where each j can be 0 or 1.
+	</div>
+						<div><code>j<sub>1</sub>: </code>use the attributes of the body for the generated polygons and edges.</div>
+						<div><code>j<sub>2</sub>: </code>generated cut polygons will be treated as normal polygons.</div>
+						<div><code>j<sub>3</sub>: </code>generated cut edges will be invisible.</div>
+						<div><code>j<sub>9</sub>: </code>vertices on the cutting plane are treated as removed.</div>
+					</div>
+					<p>
+						The cut (without the side parameter) removes parts above the cutting plane.
+						If the first three parameters define the x-y, x-z or y-z plane (for example, 1.0, 1.0, 0.0 defines the x-y plane),
+						the parts in the positive direction of the third axis are removed.
+					</p>
+					<p>
+						Any number of statements can be added between CUTPLANE and CUTEND.
+						It is also possible to include CUTPLANEs in macros. CUTPLANE parameters refer to the current coordinate system.
+					</p>
+					<p>
+						Transformations between CUTPLANE and CUTEND have no effect on this very cutting plane,
+						but any successive CUTPLANEs will be transformed.
+						Therefore, it is recommended to use as many transformations to set up the CUTPLANE as necessary,
+						then delete these transformations before you define the shapes to cut.
+					</p>
+					<p>
+						If transformations used only to position the CUTPLANE are not removed,
+						you may think that the CUTPLANE is at a wrong position when, in reality, it is the shapes that have moved away.
+					</p>
+					<p>
+						Pairs of CUTPLANE-CUTEND commands can be nested, even within loops.
+						If the final CUTEND is missing, its corresponding CUTPLANE will be effective on all shapes until the end of the script.
+					</p>
+					<div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3>
+						If CUTPLANE is not closed with CUTEND, all shapes may be entirely removed.
+						That’s why you always get a warning message about missing CUTENDs.
+					</div>
+					<p>CUTPLANEs in macros affect shapes in the macro only, even if CUTEND is missing.</p>
+					<p>If a macro is called between CUTPLANE and CUTEND, the shapes in the macro will be cut.</p>
+					<div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3>If you use CUTPLANE{2} with more than two parameters, then this will act like CUTPLANE.</div>
+					<div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3>
+						Prefer using CUTPLANE{3} instead of CUTPLANE.
+						If you use CUTPLANE with 5 parameters, then the 4th parameter will be omitted.
+						For CUTPLANE{3}, this parameter has effect independently from the 5th parameter.
+					</div>
+				
+				<div class="example"><a id="id510258"/><p class="title"><b>Example 1:
+</b></p><div class="example-contents"><div class="informaltable"><table border="0"><colgroup><col/><col/></colgroup><tbody><tr><td>
+										<pre class="programlisting">CUTPLANE 2, 2, 4
+CUTPLANE -2, 2, 4
+CUTPLANE -2, -2, 4
+CUTPLANE 2, -2, 4
+ADD -1, -1, 0
+BRICK 2, 2, 4
+DEL 1
+CUTEND
+CUTEND
+CUTEND
+CUTEND</pre>
+									</td><td>
+										<div style="text-align: center"><img src="Images/GDL_Images/3Dshapes_cutplane_ex1.png" style="text-align: middle" alt="Images/GDL_Images/3Dshapes_cutplane_ex1.png"/></div>
+									</td></tr></tbody></table></div></div></div>
+				<div class="example"><a id="id510306"/><p class="title"><b>Example 2:
+</b></p><div class="example-contents"><div class="informaltable"><table border="0"><colgroup><col/><col/></colgroup><tbody><tr><td>
+										<div style="text-align: center"><img src="Images/GDL_Images/3Dshapes_cutplane_ex2_1.png" style="text-align: middle" alt="Images/GDL_Images/3Dshapes_cutplane_ex2_1.png"/></div>
+									</td><td>
+										<div style="text-align: center"><img src="Images/GDL_Images/3Dshapes_cutplane_ex2_2.png" style="text-align: middle" alt="Images/GDL_Images/3Dshapes_cutplane_ex2_2.png"/></div>
+									</td></tr><tr><td>
+										<pre class="programlisting">CUTPLANE
+SPHERE 2
+CUTEND</pre>
+									</td><td>
+										<pre class="programlisting">CUTPLANE 1, 1, 0, 1
+SPHERE 2
+CUTEND</pre>
+									</td></tr></tbody></table></div></div></div>
+				<div class="example"><a id="id510327"/><p class="title"><b>Example 3:
+</b></p><div class="example-contents"><div class="informaltable"><table border="0"><colgroup><col/><col/></colgroup><tbody><tr><td>
+										<div style="text-align: center"><img src="Images/GDL_Images/3Dshapes_cutplane_ex3_1.png" style="text-align: middle" alt="Images/GDL_Images/3Dshapes_cutplane_ex3_1.png"/></div>
+									</td><td>
+										<div style="text-align: center"><img src="Images/GDL_Images/3Dshapes_cutplane_ex3_2.png" style="text-align: middle" alt="Images/GDL_Images/3Dshapes_cutplane_ex3_2.png"/></div>
+									</td></tr><tr><td>
+										<pre class="programlisting">CUTPLANE 1.8, 1.8, 1.8
+SPHERE 2
+CUTEND</pre>
+									</td><td>
+										<pre class="programlisting">CUTPLANE 1.8, 1.8, 1.8, 1
+SPHERE 2
+CUTEND</pre>
+									</td></tr></tbody></table></div></div></div>
+				<div class="example"><a id="id510368"/><p class="title"><b>Example 4:
+</b></p><div class="example-contents"><div class="informaltable"><table border="0"><colgroup><col/><col/></colgroup><tbody><tr><td>
+										<div style="text-align: center"><img src="Images/GDL_Images/3Dshapes_cutplane_ex4_1.png" style="text-align: middle" alt="Images/GDL_Images/3Dshapes_cutplane_ex4_1.png"/></div>
+									</td><td>
+										<div style="text-align: center"><img src="Images/GDL_Images/3Dshapes_cutplane_ex4_2.png" style="text-align: middle" alt="Images/GDL_Images/3Dshapes_cutplane_ex4_2.png"/></div>
+									</td></tr><tr><td>
+										<pre class="programlisting">CUTPLANE 60
+BRICK 2, 2, 2
+CUTEND</pre>
+									</td><td>
+										<pre class="programlisting">CUTPLANE -120
+BRICK 2, 2, 2
+CUTEND</pre>
+									</td></tr></tbody></table></div></div></div>
+			<hr/><a href="002.007.html#CUTPLANE3_gdlcommand">Related in 3D Shapes</a><p>
+				<span class="bold"><strong>GDL Reference Guide</strong></span>
+			</p><p>
+				<span class="trademark">Copyright</span><sup>©</sup> 2021 by GRAPHISOFT, all rights reserved.
+				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+			</p></body></html>

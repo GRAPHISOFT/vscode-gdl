@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>WALLHOLE2{2}</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="WALLHOLE22_gdlcommand">WALLHOLE2{2}</h3>
+							
+							<pre class="programlisting"><b id="WALLHOLE22_keyword_2.15.9.5.6.2.5.4.1">WALLHOLE2{2}</b> n, frame_fill, fillcategory, distortion_flags,
+        fill_pen, fill_background_pen,
+        fillOrigoX, fillOrigoY,
+        mxx, mxy, myx, myy,
+        innerRadius,
+        x1, y1, s1,
+        ...
+        xn, yn, sn</pre>
+							
+								<p>Advanced version of WALLHOLE2, where fill distortion can be controlled in an enhanced way.</p>
+								<p>It is equivalent to <a class="xref" href="reference/POLY2_B5.html">the POLY2_B{5} command</a> in the geometric definition.</p>
+								<div style="margin-left: 1em">
+									<div style="text-indent: -1em"><code><b>distortion_flags: </b></code></div><div><code>distortion_flags = j<sub>1</sub> + 2*j<sub>2</sub> + 4*j<sub>3</sub> + 8*j<sub>4</sub> + 16*j<sub>5</sub> + 32*j<sub>6</sub> + 64*j<sub>7</sub> + 128*j<sub>8</sub></code>, where each j can be 0 or 1.
+	</div>
+									<p>
+										The valid value for distortion_flags is between 0 and 255. Don’t use value out of this range.
+									</p>
+									<p><code class="literal">j<sub>1</sub>-j<sub>7</sub>:</code>
+										 similar to <a class="xref" href="reference/POLY2_B5.html">the POLY2_B{5} command</a>,
+									</p>
+									
+									
+									
+									
+									
+									
+									
+									<div><code>j<sub>8</sub>: </code>
+										local fill should align with the wall direction
+										(fill origin is at the wall origin and directions are matching), meaningful only when j4 is set.
+										Distortion matrix (mij parameters) are omitted.
+									</div>
+								</div>
+							
+						<hr/><a href="002.015.html#WALLHOLE22_gdlcommand">Related in Miscellaneous</a><p>
+				<span class="bold"><strong>GDL Reference Guide</strong></span>
+			</p><p>
+				<span class="trademark">Copyright</span><sup>©</sup> 2021 by GRAPHISOFT, all rights reserved.
+				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+			</p></body></html>

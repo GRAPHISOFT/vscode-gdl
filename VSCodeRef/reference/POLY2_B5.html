@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>POLY2_B{5}</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="POLY2_B5_gdlcommand">POLY2_B{5}</h3>
+				
+				<pre class="programlisting"><b id="POLY2_B5_keyword_2.8.3.14.4.1">POLY2_B{5}</b> n, frame_fill, fillcategory, distortion_flags,
+        fill_pen, fill_background_pen,
+        fillOrigoX, fillOrigoY,
+        mxx, mxy, myx, myy,
+        gradientInnerRadius,
+        x1, y1, s1, ..., xn, yn, sn</pre>
+				
+					<p>Advanced version of POLY2_ B{4}, where fill distortion can be controlled in an enhanced way.</p>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>frame_fill: </b></code></div><div><code>frame_fill = j<sub>1</sub> + 2*j<sub>2</sub> + 4*j<sub>3</sub></code>, where each j can be 0 or 1.
+	</div>
+						<div><code>j<sub>1</sub>: </code>draw contour</div>
+						<div><code>j<sub>2</sub>: </code>draw fill</div>
+						<div><code>j<sub>3</sub>: </code>close an open polygon.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>fillcategory: </b></code></div>
+						<div><code>0: </code>Draft,</div>
+						<div><code>1: </code>Cut,</div>
+						<div><code>2: </code>Cover.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>distortion_flags: </b></code></div><div><code>distortion_flags = j<sub>1</sub> + 2*j<sub>2</sub> + 4*j<sub>3</sub> + 8*j<sub>4</sub> + 16*j<sub>5</sub> + 32*j<sub>6</sub> + 64*j<sub>7</sub></code>, where each j can be 0 or 1.
+	</div>
+						<p>
+							The valid value for distortion_flags is between 0 and 127. Don’t use value out of this range.
+						</p>
+						<div><code>j<sub>1</sub>: </code>
+							the fill origin’s X coordinate is the global origin’s X coordinate, meaningful only when j4 is set.
+							The fillOrigo is the origin (0,0) projected on the line of the (mxx, mxy) vector,
+						</div>
+						<div><code>j<sub>2</sub>: </code>the fill origin’s Y coordinate is the global origin’s Y coordinate, meaningful only when j4 is set,</div>
+						<div><code>j<sub>3</sub>: </code>create circular distortion using the innerRadius parameter,</div>
+						<div><code>j<sub>4</sub>: </code>use local orientation, use the distortion matrix (mij parameters),</div>
+						<div><code>j<sub>5</sub>: </code>(effective for symbol fills only) reset the pattern’s X size to the defined X vector’s length (mxx, mxy),</div>
+						<div><code>j<sub>6</sub>: </code>(effective for symbol fills only) reset the pattern’s Y size to the defined Y vector’s length (myx, myy),</div>
+						<div><code>j<sub>7</sub>: </code>(effective for symbol fills only) keep proportion of symbol fill pattern; effective only if one of j5 and j6 is set.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>innerRadius: </b></code>
+							radius for circular fill distortion;
+							the origin of the base circle will be placed on the Y fill axis in the (0, -innerRadius) position.
+						</div>
+					</div>
+				
+			<hr/><a href="002.008.html#POLY2_B5_gdlcommand">Related in 2D Shapes</a><p>
+				<span class="bold"><strong>GDL Reference Guide</strong></span>
+			</p><p>
+				<span class="trademark">Copyright</span><sup>©</sup> 2021 by GRAPHISOFT, all rights reserved.
+				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+			</p></body></html>

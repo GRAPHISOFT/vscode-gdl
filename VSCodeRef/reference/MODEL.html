@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>MODEL</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="MODEL_gdlcommand">MODEL</h3>
+					
+					<pre class="programlisting"><b id="MODEL_keyword_2.11.3.4.2.4.1">MODEL</b> <b id="WIRE_keyword_2.11.3.4.2.4.3">WIRE</b></pre>
+					<pre class="programlisting"><b id="MODEL_keyword_2.11.3.4.2.6.1">MODEL</b> <b id="SURFACE_keyword_2.11.3.4.2.6.3">SURFACE</b></pre>
+					<pre class="programlisting"><b id="MODEL_keyword_2.11.3.4.2.8.1">MODEL</b> <b id="SOLID_keyword_2.11.3.4.2.8.3">SOLID</b></pre>
+					
+						<p>Sets the representation mode in the current script.</p>
+						<p>MODEL WIRE: only wireframe, no surfaces or volumes. Objects are transparent.</p>
+						<p>
+							MODEL SURFACE, MODEL SOLID: The generation of the section surfaces is based on the relation of the boundary surfaces,
+							so that both methods generate the same 3D internal data structure. Objects are opaque.
+						</p>
+						<p>The only distinction can be seen after cutting away a part of the body:</p>
+						<p>MODEL SURFACE: the inside of bodies will be visible,</p>
+						<p>MODEL SOLID: new surfaces may appear.</p>
+						<p>
+							<span class="italic">Default:</span>
+						</p>
+						<p>MODEL SOLID</p>
+					
+					<div class="example"><a id="id520324"/><p class="title"><b>Example:
+To illustrate the three modeling methods, consider the following three blocks:</b></p><div class="example-contents"><pre class="programlisting">MODEL WIRE
+BLOCK 3,2,1
+ADDY 4
+MODEL SURFACE
+BLOCK 3,2,1
+ADDY 4
+MODEL SOLID
+BLOCK 3,2,1</pre><p>After cutting them with a plane:</p><div style="text-align: center"><img src="Images/GDL_Images/Attributes_model.png" style="text-align: middle" alt="Images/GDL_Images/Attributes_model.png"/></div></div></div>
+				<hr/><a href="002.011.html#MODEL_gdlcommand">Related in Attributes</a><p>
+				<span class="bold"><strong>GDL Reference Guide</strong></span>
+			</p><p>
+				<span class="trademark">Copyright</span><sup>©</sup> 2021 by GRAPHISOFT, all rights reserved.
+				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+			</p></body></html>

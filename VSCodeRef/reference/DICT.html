@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>DICT</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="DICT_gdlcommand">DICT</h3>
+				
+				<pre class="programlisting"><b id="DICT_keyword_2.13.3.4.4.1">DICT</b> variableName1[, variableName2...]</pre>
+				
+					<p>
+						 <span class="italic">Compatibility: introduced in ARCHICAD 23.</span>
+					</p>
+					<p>GDL supports dictionaries. A variable is declared as a dictionary after the above declaration statement (and cannot be changed to array or simple type or vice versa). Library part parameters can also be dictionaries, by selecting Dictionary type in the parameter list.</p>
+					<p>
+						After the DICT keyword there can be any number of variable names separated by commas. Each variable will contain hierarchical key and value pairs. A key of the dictionary can be referenced with dot notation. The full path of a key cannot be longer than 255 characters (counting array indices as one character).
+					</p>
+					<p>
+						Dictionaries and simple type values:
+					</p>
+					<div class="itemizedlist"><ul class="itemizedlist"><li class="listitem"><p>simple type (string, integer, floating-point) values can be assigned to dictionary keys,</p></li><li class="listitem"><p>no declaration is necessary, the value type for the key is set by the current value:</p><pre class="programlisting">DICT myDictionary
+
+myDictionary.element1 = 1
+myDictionary.element1 = "hello"
+
+print myDictionary</pre></li></ul></div>
+					<p>
+						Dictionaries and derived type values:
+					</p>
+					<div class="itemizedlist"><ul class="itemizedlist"><li class="listitem"><p>a dictionary can nest array type (with one dimension only) and dictionary type keys,</p></li><li class="listitem"><p>an array inside a dictionary can contain unnamed dictionary or simple types (referenced by the index),</p></li><li class="listitem"><p>however, a standalone array type parameter/variable cannot contain dictionary type elements,</p></li><li class="listitem"><p>a nested array key can be initialized by referencing it right away, no need to declare with DIM in this case,</p><pre class="programlisting">DICT myDictionary
+myDictionary.myArray[1] = 1
+myDictionary.myArray[2] = 5
+
+print myDictionary</pre></li><li class="listitem"><p>unreferenced indexes of a nested array are automatically initialized according to the type of the first referenced element of the array (string keys to "", numerical keys to 0, dictionary keys to {}),</p><pre class="programlisting">DICT myDictionary
+DICT dictForNesting
+dictForNesting.elem1 = "hello"
+dictForNesting.elem2 = "world"
+
+myDictionary.myArray[2] = dictForNesting
+
+print myDictionary
+
+DICT myDictionary2
+myDictionary2.myArray[3] = 33
+myDictionary2.myArray[4] = 44
+
+print myDictionary2</pre></li><li class="listitem"><p>the values of a nested array has to be of the same type (all string, all integer, all floating-point or all dictionary types), this is contrary to how arrays work, so extra caution is needed!</p><pre class="programlisting">DICT myDictionary2
+myDictionary2.myArray[1] = 1
+myDictionary2.myArray[2] = 1.0	! GDL error</pre></li><li class="listitem"><p>to change the value types of a nested array, it needs to be reset first: create an empty array, and overwrite the nested array with this new empty array. The type of the next referenced value will set the type for the array after the reset automatically:</p><pre class="programlisting">DICT myDictionary
+myDictionary.myArray[1] = "hello"
+print myDictionary
+
+DIM arrayForReset[]
+myDictionary.myArray = arrayForReset
+print myDictionary
+
+myDictionary.myArray[1] = 10000
+print myDictionary</pre></li><li class="listitem"><p>changing the type of the first value of a nested array containing that value only, will not change the type of the array!</p><pre class="programlisting">DICT myDictionary
+myDictionary.myArray[1] = "hello"
+print myDictionary
+
+myDictionary.myArray[1] = 10000 ! GDL error
+print myDictionary</pre></li></ul></div>
+					<p>
+						Initialization and copying:
+					</p>
+					<div class="itemizedlist"><ul class="itemizedlist"><li class="listitem"><p>the first reference of the dictionary has to be <code class="literal">DICT dictName</code>, a subroutine containing the name of the dictionary can not precede it (same as with DIM arrays),</p></li><li class="listitem"><p>initialization is required before the first use of a key, either explicitly with assignment to the key, or implicitly with assigning a dictionary that contains the key at the right depth.</p><pre class="programlisting">DICT myDictionary
+
+myDictionary.level1.a = 1
+myDictionary.level1.b = 2
+myDictionary.level2 = myDictionary.level1
+
+print myDictionary.level2.b</pre></li><li class="listitem"><p>writing the dictionary name without actual inner keys references the whole dictionary structure, 
+							which is accepted in some cases (CALL, PRINT, LET statements),</p></li><li class="listitem"><p>writing part of the structure references the subtree below that key as a dictionary</p><pre class="programlisting">DICT myDictionary
+myDictionary.point1.x = 1
+myDictionary.point1.y = 1
+myDictionary.point1.type = 0
+print myDictionary
+
+DICT myPoint
+myPoint = myDictionary.point1
+print myPoint
+
+myDictionary.point2 = myDictionary.point1
+print myDictionary</pre></li><li class="listitem"><p>assigning all or part of a dictionary makes a deep copy of the right-hand side on the left-hand side</p><pre class="programlisting">DICT myDictionary, tempPoint
+tempPoint.x = 1
+tempPoint.y = 1
+myDictionary.line.point1 = tempPoint
+
+tempPoint.x = 2
+tempPoint.y = 2
+myDictionary.line.point2 = tempPoint
+
+DICT myLine
+myLine = myDictionary.line
+myDictionary.line.point2.x = 0
+print myLine</pre></li></ul></div>
+					<p>
+						Macro calls and requests:
+					</p>
+					<div class="itemizedlist"><ul class="itemizedlist"><li class="listitem"><p>in macro calls, dictionary type values can be sent to the macro if there is a dictionary type parameter on the receiving end,</p></li><li class="listitem"><p>RETURNED_PARAMETERS can work with dictionaries: an empty DICT has to be declared on the receiving end (caller object). In the following code <code class="literal">myDictionary</code> is a dict type parameter in the macro, <code class="literal">_myDictionary</code> is a dict type variable on the caller object side:</p><pre class="programlisting">! caller object Master script
+DICT _myDictionary
+
+_myDictionary.element1 = 1
+_myDictionary.element2 = 2
+
+DICT _dictForReceivedData
+
+call "macroname" parameters all myDictionary = _myDictionary,
+				returned_parameters _dictForReceivedData
+
+print _dictForReceivedData
+
+! in the macro object Master script
+myDictionary.element1 = myDictionary.element1 * 2
+myDictionary.element2 = myDictionary.element2 * 2
+
+end myDictionary</pre></li><li class="listitem"><p>in REQUEST options currently there is no request supporting dictionaries. However, the possibility is open for the future.</p></li><li class="listitem"><p>LIBRARYGLOBAL requests cannot return dictionary type values.</p></li></ul></div>
+					<p>
+						Visualization and functions:
+					</p>
+					<div class="itemizedlist"><ul class="itemizedlist"><li class="listitem"><p>dictionary type parameters are not visible on "All Parameters" page in the "Settings" dialog,</p></li><li class="listitem"><p>dictionary type parameters are not available for Listing display or IFC mappings,</p></li><li class="listitem"><p>text-like visualization works only with <a class="xref" href="reference/PRINT.html">the PRINT command</a> ("Check Script" warning and printed to Report window in JSON format),</p></li><li class="listitem"><p>general text handling commands like TEXT2, RICHTEXT2, etc. are not supporting the complete dictionary,</p></li><li class="listitem"><p>however, nested non-dictionary type values can be displayed with them,</p><pre class="programlisting">DICT myDictionary
+myDictionary.myArray[1] = "hello"
+myDictionary.myArray[2] = "world"
+
+text2 0, 0, myDictionary.myArray[1] + " " + myDictionary.myArray[2]
+print myDictionary</pre></li><li class="listitem"><p>values for a dictionary type parameter can only be set via the Parameter script (no direct user input is available through Parameter list or UI controls), <a class="xref" href="reference/VALUES.html">the VALUES command</a> is disabled for this type,</p></li><li class="listitem"><p>however, using non-dictionary parameters for user input can work. In the following code, <code class="literal">myDictionary</code> is a dictionary type parameter, <code class="literal">stTextInput</code> is a string type parameter (which can be used in User Interface, displayed on the "All Parameters" page, and works together with GLOB_MODPAR_NAME):</p><pre class="programlisting">! in Parameter Script
+myDictionary.text1 = stTextInput
+parameters myDictionary = myDictionary
+
+! in Master Script
+print myDictionary
+
+! in 2D script
+TEXT2 0, 0, myDictionary.text1</pre></li><li class="listitem"><p>value replacement using the LP_XMLConverter tool is currently unavailable for dictionary type parameters.</p></li></ul></div>
+				
+			<hr/><a href="002.013.html#DICT_gdlcommand">Related in Expressions and Functions</a><p>
+				<span class="bold"><strong>GDL Reference Guide</strong></span>
+			</p><p>
+				<span class="trademark">Copyright</span><sup>©</sup> 2021 by GRAPHISOFT, all rights reserved.
+				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+			</p></body></html>

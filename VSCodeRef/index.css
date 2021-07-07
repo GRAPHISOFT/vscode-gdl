@@ -1,0 +1,33 @@
+
+
+@import url("common.css");
+
+
+body {
+	margin-left: 2%;
+	margin-right: 2%;
+	padding-right: 20px;
+	text-align: justify;
+}
+
+a[href]:visited,
+a[href]:link {
+	text-decoration: none;
+}
+
+a[href]:hover,
+a[href]:active {
+	text-decoration: underline;
+}
+
+div.hoveringtoc {
+	visibility: hidden;
+	position:fixed; 
+	border-right: 1px black solid; 
+	height: 100%; 
+	top:0px; 
+	left:0px; 
+	width:0px;
+}
+
+

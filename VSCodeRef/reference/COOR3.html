@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>COOR{3}</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="COOR3_gdlcommand">COOR{3}</h3>
+				
+				<pre class="programlisting"><b id="COOR3_keyword_2.7.8.26.4.1">COOR{3}</b> wrapping_method, wrap_flags,
+								origin_X, origin_Y, origin_Z,
+								endOfX_X, endOfX_Y, endOfX_Z,
+								endOfY_X, endOfY_Y, endOfY_Z,
+								endOfZ_X, endOfZ_Y, endOfZ_Z</pre>
+				
+					<p>
+						<span class="italic">Compatibility: introduced in ARCHICAD 20.</span>
+					</p>
+					<p>Similar to <a class="xref" href="reference/COOR2.html">the COOR{2} command</a>. Can be used with array parameter input (see WALL_TEXTURE_WRAP global in <a class="xref" href="002.015.html#WallGlobals_section" title="Wall parameters - available for Doors/Windows, listing and labels">the section called “Wall parameters - available for Doors/Windows, listing and labels”</a> for more).</p>
+					<p>The coordinate system of the projection body is included in the COOR{3} command itself, no need to define additional vertexes in the current BODY.
+						Compatible with NURBS bodies (no non-NURBS primitives are needed to set up the texture coordinate system).
+					</p>
+          <div style="margin-left: 1em">
+            <div style="text-indent: -1em"><code><b>wrap_method: </b></code>
+              Wrapping modes are the same as described in the <a class="xref" href="reference/COOR.html">the COOR command</a> supplemented by NURBS based wrapping mode. Projection types don't apply, use <code class="literal">wrap_flags</code> instead.
+            </div>
+            <div><code>1: </code>planar box (deprecated),</div>
+            <div><code>2: </code>box,</div>
+            <div><code>3: </code>cylindrical,</div>
+            <div><code>4: </code>spherical,</div>
+            <div><code>5: </code>same as the cylindrical fill mapping, but in rendering the top and the bottom surface will get a circular mapping,</div>
+            <div><code>6: </code>planar,</div>
+            <div><code>7: </code>NURBS based, the vertices' texture coordinates are from their surface parameters, only in case of NURBS bodies.</div>
+          </div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>wrap_flags: </b></code>Wrapping flags</div><div><code>wrap_flags = 4*j<sub>3</sub> + 8*j<sub>4</sub> + 16*j<sub>5</sub> + 32*j<sub>6</sub> + 64*j<sub>7</sub> + 128*j<sub>8</sub></code>, where each j can be 0 or 1.
+	</div>
+						<div><code>j<sub>3</sub>: </code>quadratic texture projection (recommended),</div>
+						<div><code>j<sub>4</sub>: </code>linear texture projection based on the average distance,</div>
+						<div><code>j<sub>5</sub>: </code>linear texture projection based on normal triangulation,</div>
+
+						
+						
+						<div><code>j<sub>8</sub>: </code>translate the origin of the texture coordinate system closest to the global origin in the direction of the X, Y or Z axis respectively. For example, <code class="literal">j6</code> makes the origin translating in the direction of the X axis so that it will be the orthogonal projection of the global origin to the line of the X axis. That is, if all <code class="literal">j6</code>, <code class="literal">j7</code> and <code class="literal">j8</code> are <code class="literal">1</code>, the origin is translated into the global origin (opposite effect of projection type <code class="literal">256</code> in the <a class="xref" href="reference/COOR.html">the COOR command</a>).</div>
+					</div>
+					<div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3>The <code class="literal">j3</code>, <code class="literal">j4</code> and <code class="literal">j5</code> flags are only effective if <code class="literal">wrap_method</code> is <code class="literal">0</code> and only one of them can be <code class="literal">1</code>. The <code class="literal">j6</code>, <code class="literal">j7</code> and <code class="literal">j8</code> flags are only effective if <code class="literal">wrap_method</code> is not <code class="literal">0</code>. These can be <code class="literal">1</code> at the same time in any combination.</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>origin_X, origin_Y, origin_Z: </b></code>node in the x-y-z space, defined by three coordinates, texture origin.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>endOfX_X, endOfX_Y, endOfX_Z: </b></code>node in the x-y-z space, defined by three coordinates, texture mapping X direction.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>endOfY_X, endOfY_Y, endOfY_Z: </b></code>node in the x-y-z space, defined by three coordinates, texture mapping Y direction.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>endOfZ_X, endOfZ_Y, endOfZ_Z: </b></code>node in the x-y-z space, defined by three coordinates, texture mapping Z direction.</div>
+					</div>
+				
+				<div class="example"><a id="id508987"/><p class="title"><b>Example:
+COOR{3} and equivalent COOR{2} parametrisation</b></p><div class="example-contents"><pre class="programlisting">
+COOR{3} wrapping_method, wrap_flags,
+        origin_X, origin_Y, origin_Z,
+        endOfX_X, endOfX_Y, endOfX_Z,
+        endOfY_X, endOfY_Y, endOfY_Z,
+        endOfZ_X, endOfZ_Y, endOfZ_Z
+
+! COOR{2} equivalent
+BASE
+VERT    origin_X, origin_Y, origin_Z,
+VERT    endOfX_X, endOfX_Y, endOfX_Z
+VERT    endOfY_X, endOfY_Y, endOfY_Z
+VERT    endOfZ_X, endOfZ_Y, endOfZ_Z
+COOR{2} wrapping_method, wrap_flags, -1, -2, -3, -4
+					</pre></div></div>
+			<hr/><a href="002.007.html#COOR3_gdlcommand">Related in 3D Shapes</a><p>
+				<span class="bold"><strong>GDL Reference Guide</strong></span>
+			</p><p>
+				<span class="trademark">Copyright</span><sup>©</sup> 2021 by GRAPHISOFT, all rights reserved.
+				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+			</p></body></html>

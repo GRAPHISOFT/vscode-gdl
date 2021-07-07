@@ -1,0 +1,3992 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Symbol IsArchivable="false" IsPlaceable="true" MainGUID="613BA7AB-0886-4BD0-84A6-29E63030C1EB" MigrationValue="Normal" Owner="1196638531" Signature="1196644685" Version="38">
+<Ancestry SectVersion="1" SectionFlags="0" SubIdent="0" Template="false">
+	<MainGUID>F938E33A-329D-4A36-BE3E-85E126820996</MainGUID>
+	<MainGUID>103E8D2C-8230-42E1-9597-46F84CCE28C0</MainGUID>
+	<MainGUID>784EAEA1-5041-4AA6-B6F4-EF263A891EE7</MainGUID>
+	<MainGUID>1AE13752-A530-420C-B9ED-FB2B15FD4942</MainGUID>
+	<MainGUID>FFBD3CCB-E0A4-44CD-8EDC-7CBBA7D123FB</MainGUID>
+	<MainGUID>67D5BED0-B0D1-4A6B-8B1A-F96539D4715D</MainGUID>
+</Ancestry>
+
+<CalledMacros SectVersion="2" SectionFlags="0" SubIdent="0">
+	<Macro>
+		<MName><![CDATA["treadAccessories_m"]]></MName>
+		<MainGUID>78CBDF37-7009-4133-BAB2-D8F0C5092E7F</MainGUID>
+	</Macro>
+	<Macro>
+		<MName><![CDATA["GetStairGlobals"]]></MName>
+		<MainGUID>6BF45F16-E3BE-4D74-AEF9-841E4ED956A6</MainGUID>
+	</Macro>
+	<Macro>
+		<MName><![CDATA["basicStairTread_m"]]></MName>
+		<MainGUID>F3F5EA38-E82F-41E7-8FD1-7B83F39DB604</MainGUID>
+	</Macro>
+	<Macro>
+		<MName><![CDATA["BasicGeometricCalc"]]></MName>
+		<MainGUID>62A13C20-3109-4A7A-962D-DC8E22F867F5</MainGUID>
+	</Macro>
+</CalledMacros>
+
+<!-- GDL SCRIPT ===== GDL SCRIPT ===== GDL SCRIPT ===== GDL SCRIPT ===== GDL SCRIPT -->
+
+<Script_3D SectVersion="20" SectionFlags="0" SubIdent="0">
+<![CDATA[
+resol gs_resol
+
+_toler = 0.001
+
+building_material structureBMat
+
+_treadSurface = treadSurface
+if bOverrideStructureSurface then
+	material treadSurface
+else
+	_result = request{2} ("Building_Material_info", structureBMat, "gs_bmat_surface", _treadSurface)
+endif
+
+pen gs_cont_pen
+SECT_ATTRS{2} penSection
+
+! ===============================================================================
+! Basic Calculations
+! ===============================================================================
+
+_vertexNum				= vardim1(STAIR_TREAD_GEOMETRY)				!!! Number of Vertexes
+_vertexNumForSideOrder	= vardim1(STAIR_TREAD_GEOMETRY) - 1			!!! Number of Vertexes W/O end Vertex
+_edgeNum				= vardim1(STAIR_TREAD_FLAGS) - 1			!!! Number of Edges
+_leadingEdgesNum		= 0											!!! Index of Leading Edge
+_trailingEdgesNum		= 0											!!! Index of Trailing Edge
+_leftEdgesNum			= 0											!!! Number of Edges on Left Side
+_rightEdgesNum			= 0											!!! Number of Edges on Right Side
+_currEdgesNum			= 0											!!! Number of Edges on Current Side
+
+
+! ===============================================================================
+! Check Tread Validity
+! ===============================================================================
+
+_bTreadExists		= 0
+_bDiffXCoordsNum	= 0
+_bDiffYCoordsNum	= 0
+for tt = 1 to vardim1(STAIR_TREAD_GEOMETRY)
+	_currXCoord	= STAIR_TREAD_GEOMETRY[tt][1]
+	_currYCoord	= STAIR_TREAD_GEOMETRY[tt][2]
+	if tt > 1 then
+		if abs(_lastXCoord - _currXCoord) > eps then
+			_bDiffXCoordsNum = _bDiffXCoordsNum + 1
+		endif
+		if abs(_lastYCoord - _currYCoord) > eps then
+			_bDiffYCoordsNum = _bDiffYCoordsNum + 1
+		endif
+	endif
+	if _bDiffXCoordsNum + _bDiffYCoordsNum > eps then
+		_bTreadExists	= 1
+		tt = vardim1(STAIR_TREAD_GEOMETRY)
+	endif
+	_lastXCoord = _currXCoord
+	_lastYCoord = _currYCoord
+next tt
+if _bTreadExists = 0 then end
+
+
+! ===============================================================================
+! Additional Calculations
+! ===============================================================================
+
+dim	_archedEdgeData[][]			!!! [][1] - Index of Arched Edge,	[][2] - Number of Segments in Arched Edge
+dim	_segmentData[][]				!!! [][1] - X coord of Segment,		[][2] - Y coord of Segment
+
+for iii = 1 to _edgeNum
+	if STAIR_TREAD_FLAGS[iii][1] = TREAD_LEADINGEDGE then	_leadingEdgesNum	= _leadingEdgesNum + 1
+	if STAIR_TREAD_FLAGS[iii][1] = TREAD_TRAILINGEDGE then	_trailingEdgesNum	= _trailingEdgesNum + 1
+	if STAIR_TREAD_FLAGS[iii][1] = TREAD_LEFTSIDEEDGE then	_leftEdgesNum		= _leftEdgesNum + 1
+	if STAIR_TREAD_FLAGS[iii][1] = TREAD_RIGHTSIDEEDGE then	_rightEdgesNum		= _rightEdgesNum + 1
+next iii
+
+_bLeadingEdgeExists		= (_leadingEdgesNum > 0)
+_bTrailingEdgeExists	= (_trailingEdgesNum > 0)
+_bLeftEdgeExists		= (_leftEdgesNum > 0)
+_bRightEdgeExists		= (_rightEdgesNum > 0)
+
+_bHasTreadNosingProfileOnFront	= _bEnableTreadNosingProfileOnFront		& _bLeadingEdgeExists
+_bHasTreadNosingProfileOnLeft	= _bEnableTreadNosingProfileOnLeft		& _bLeftEdgeExists
+_bHasTreadNosingProfileOnRight	= _bEnableTreadNosingProfileOnRight		& _bRightEdgeExists
+_bHasTreadNosingProfileOnBack	= _bEnableTreadNosingProfileOnBack		& _bTrailingEdgeExists
+
+
+! ===============================================================================
+! Calculating Arched Profile Edges
+! ===============================================================================
+
+gosub "archedSegmentsCalc"
+
+pen gs_cont_pen
+
+! ===============================================================================
+! Cut Milled Recess
+! ===============================================================================
+_bCutMilledRecess = 0
+
+if 	bMilledRecess 			&\
+	_bLeadingEdgeExists		then
+
+	_bCutMilledRecess = 1
+	gosub "cutMilledRecess"
+endif
+
+! ===============================================================================
+! Draw Tread Profiles
+! ===============================================================================
+
+group "treadEdgeCutting"
+	if bNosingProfile then
+		_bCollectPathForEdgeCutting		= 1
+		gosub "drawTubes"
+	endif
+endgroup
+
+group "treadProfiles"
+	if bNosingProfile then
+		_bCollectPathForEdgeCutting		= 0
+		gosub "drawTubes"
+		gosub "textureFitting"
+	endif
+endgroup
+
+
+! ===============================================================================
+! Draw Tread
+! ===============================================================================
+
+if iTreadNosingProfile = NOSINGPROFILE_CUSTOM_PROF then
+	_treadThkExtensionTop		= TREAD_THICKNESS
+	_treadThkExtensionBottom	= TREAD_THICKNESS
+else
+	_treadThkExtensionTop		= TREAD_THICKNESS
+	_treadThkExtensionBottom	= extensionHeight * _bNosingHasExtension
+endif
+
+group "basicTreadForProfiles"
+	call "basicStairTread_m" parameters all bCallForTreadProfiles	= 1,
+											treadThkExtensionTop	= _treadThkExtensionTop,
+											treadThkExtensionBottom	= _treadThkExtensionBottom
+endgroup
+
+group "basicTread"
+	call "basicStairTread_m" parameters all
+endgroup
+
+if	_bHasTreadNosingProfileOnFront |\
+	_bHasTreadNosingProfileOnBack |\
+	_bHasTreadNosingProfileOnLeft |\
+	_bHasTreadNosingProfileOnRight then
+
+	if iTreadNosingProfile = NOSINGPROFILE_CUSTOM_PROF then
+		placegroup subgroup("basicTread", "treadEdgeCutting")
+		placegroup isectgroup("treadProfiles", "basicTreadForProfiles")
+	else
+		_resultAfterEdgeCutting		= subgroup("basicTread", "treadEdgeCutting")
+		_resultAfterAddingProfiles	= addgroup(_resultAfterEdgeCutting, "treadProfiles")
+		placegroup isectgroup("basicTreadForProfiles", _resultAfterAddingProfiles)
+	endif
+else
+	placegroup "basicTread"
+endif
+
+killgroup "basicTread"
+
+if _bCutMilledRecess then
+	for ii = 1 to iRecessNum
+		cutend
+	next ii
+endif
+
+! ===============================================================================
+! Other Accessories - do not require cutform from Tread
+!	- Draw Non Slip Bands
+!	- Draw Raised Strip
+! ===============================================================================
+
+if bAccessory or bRaisedStrip then
+	call "treadAccessories_m" parameters all
+endif
+
+! =====================================================================================================================================
+end ! end ! end ! end ! end ! end ! end ! end ! end ! end ! end ! end ! end ! end ! end ! end ! end ! end ! end ! end ! end ! end ! end
+! =====================================================================================================================================
+
+! ==============================================================================
+"archedSegmentsCalc":
+! ------------------------------------------------------------------------------
+
+	! ===============================================================================
+	! Calculation for Arched Segments
+	! ===============================================================================
+
+	centerX			= 0
+	centerY			= 0
+	_actArchIdx		= 1
+	_actSegmentIdx	= 1
+
+	for ii = 1 to _edgeNum						! Last Vertex point has no angle
+		if abs(STAIR_TREAD_GEOMETRY[ii][3]) > eps then
+
+			centerX = (STAIR_TREAD_GEOMETRY[ii][1] + STAIR_TREAD_GEOMETRY[ii + 1][1]) / 2
+			centerY = (STAIR_TREAD_GEOMETRY[ii][2] + STAIR_TREAD_GEOMETRY[ii + 1][2]) / 2
+
+			h = sqr ((STAIR_TREAD_GEOMETRY[ii][1] - centerX)^2 + (STAIR_TREAD_GEOMETRY[ii][2] - centerY)^2)
+			t = tan (abs(STAIR_TREAD_GEOMETRY[ii][3] / 2.0))
+			if (abs (t) > eps) then
+				m = h / t
+			else
+				m = 0
+			endif
+
+			dirX = STAIR_TREAD_GEOMETRY[ii + 1][1] - centerX
+			dirY = STAIR_TREAD_GEOMETRY[ii + 1][2] - centerY
+			len = sqr (dirX^2 + dirY^2)
+
+			__archAngle = STAIR_TREAD_GEOMETRY[ii][3]
+
+			normX = dirY * sgn(__archAngle)
+			normY = (-1) * dirX * sgn(__archAngle)
+
+			if abs(len) > eps then
+				normX = normX / len
+				normY = normY / len
+			endif
+
+			centerX = centerX - m * normX
+			centerY = centerY - m * normY
+
+			_edgeStartXCoord	= STAIR_TREAD_GEOMETRY[ii][1]
+			_edgeStartYCoord	= STAIR_TREAD_GEOMETRY[ii][2]
+			_edgeEndXCoord		= STAIR_TREAD_GEOMETRY[ii + 1][1]
+			_edgeEndYCoord		= STAIR_TREAD_GEOMETRY[ii + 1][2]
+			gosub "calculateEdgeAngleAndLength"
+
+			_radius	= _edgeLength / 2 / (sin(abs(__archAngle / 2)))
+
+			gosub "segmentPointCollector"
+
+			_archedEdgeData[_actArchIdx][1] = ii
+			_archedEdgeData[_actArchIdx][2] = _numOfSegments - 1
+
+			_actArchIdx = _actArchIdx + 1
+		endif
+	next ii
+
+return
+
+
+
+! ==============================================================================
+"segmentPointCollector":
+! ------------------------------------------------------------------------------
+
+	! ===============================================================================
+	! Collect Segmented Point coords for Tread Profiles
+	! ===============================================================================
+
+	_tubeResol		= ceil((360 / acs((_radius - _toler) / _radius)) / 2)
+	_numOfSegments	= abs(_tubeResol / 360 * (__archAngle))
+
+	if _numOfSegments - int(_numOfSegments) < 0.5 then
+		_numOfSegments = int(_numOfSegments)
+	else
+		_numOfSegments = int(_numOfSegments) + 1
+	endif
+	_numOfSegments = max(_numOfSegments, 1)
+
+	if _numOfSegments > 0 then
+		_edgeStartXCoord	= STAIR_TREAD_GEOMETRY[ii][1]
+		_edgeStartYCoord	= STAIR_TREAD_GEOMETRY[ii][2]
+		_edgeEndXCoord	= centerX
+		_edgeEndYCoord	= centerY
+		gosub "calculateEdgeAngleAndLength"
+
+		_segmentAngle = __archAngle / _numOfSegments
+		_actArchAngle = _edgeAngle + _segmentAngle
+
+		for ik = 1 to _numOfSegments - 1
+			_segmentData[_actSegmentIdx][1] = centerX - _radius * cos(_actArchAngle)
+			_segmentData[_actSegmentIdx][2] = centerY - _radius * sin(_actArchAngle)
+			_actArchAngle	= _actArchAngle + _segmentAngle
+			_actSegmentIdx	= _actSegmentIdx + 1
+		next ik
+	endif
+
+return
+
+
+! ==============================================================================
+"drawTubes":
+! ------------------------------------------------------------------------------
+
+	! ===============================================================================
+	! Draw Tubes for Profiles, Non Slip Bands
+	! ===============================================================================
+
+	_bGetCurrTreadEdge	= 0
+	_bGetPrevTreadEdge	= 0
+	_bGetNextTreadEdge	= 0
+
+	for iii = 1 to _edgeNum
+		__actEdge	= iii
+		gosub "getPrevNextEdgeInfo"
+		_bGetCurrTreadEdge	= __bGetActTreadEdge
+		_actualVertexNum	= __actEdge
+
+		if _bGetCurrTreadEdge then
+			if iii = 1 then
+				__actEdge	= _edgeNum
+			else
+				__actEdge	= iii - 1
+			endif
+			gosub "getPrevNextEdgeInfo"
+			_bGetPrevTreadEdge	= __bGetActTreadEdge
+			_prevVertexNum		= __actEdge
+
+			if iii = _edgeNum then
+				__actEdge	= 1
+			else
+				__actEdge	= iii + 1
+			endif
+			gosub "getPrevNextEdgeInfo"
+			_bGetNextTreadEdge	= __bGetActTreadEdge
+			_nextVertexNum		= __actEdge
+
+			gosub "treadEdgePointCollector"
+		endif
+
+		_bGetCurrTreadEdge	= 0
+		_bGetPrevTreadEdge	= 0
+		_bGetNextTreadEdge	= 0
+	next iii
+
+return
+
+
+! ==============================================================================
+"getPrevNextEdgeInfo":
+! ------------------------------------------------------------------------------
+
+	! ===============================================================================
+	! Profile exists on Previous and Next edge
+	! ===============================================================================
+
+	__bGetActTreadEdge	= 0
+
+	if	(STAIR_TREAD_FLAGS[__actEdge][1] = TREAD_LEADINGEDGE 	&	_bHasTreadNosingProfileOnFront) |\
+		(STAIR_TREAD_FLAGS[__actEdge][1] = TREAD_RIGHTSIDEEDGE	&	_bHasTreadNosingProfileOnRight) |\
+		(STAIR_TREAD_FLAGS[__actEdge][1] = TREAD_TRAILINGEDGE	&	_bHasTreadNosingProfileOnBack) |\
+		(STAIR_TREAD_FLAGS[__actEdge][1] = TREAD_LEFTSIDEEDGE	&	_bHasTreadNosingProfileOnLeft) then
+
+		__bGetActTreadEdge	= 1
+	endif
+
+return
+
+
+! ==============================================================================
+"treadEdgePointCollector":
+! ------------------------------------------------------------------------------
+
+	! ===============================================================================
+	! Collect Tread Edge Points for tube
+	! ===============================================================================
+
+	_isCurrEdgeArched		= 0
+	_isPrevEdgeArched		= 0
+	_isNextEdgeArched		= 0
+
+	if _bGetPrevTreadEdge then
+		_startSegmIdx	= 1
+		_endSegmIdx		= 1
+		for ttt = 1 to vardim1(_archedEdgeData)
+			if	_prevVertexNum = _archedEdgeData[ttt][1] &\
+				_archedEdgeData[ttt][2] > 0 then
+
+				for vvv = 1 to ttt - 1
+					_startSegmIdx = _startSegmIdx + _archedEdgeData[vvv][2]
+				next vvv
+
+				_endSegmIdx = _startSegmIdx + _archedEdgeData[ttt][2] - 1
+				put _segmentData[_endSegmIdx][1], _segmentData[_endSegmIdx][2], 0, 0
+				ttt = vardim1(_archedEdgeData)
+				_isPrevEdgeArched	= 1
+			endif
+		next ttt
+		if not(_isPrevEdgeArched) then
+			put STAIR_TREAD_GEOMETRY[_prevVertexNum][1], STAIR_TREAD_GEOMETRY[_prevVertexNum][2], 0, 0
+		endif
+	else
+		_startSegmIdx	= 1
+		_endSegmIdx		= 1
+		for ttt = 1 to vardim1(_archedEdgeData)
+			if	_prevVertexNum = _archedEdgeData[ttt][1] &\
+				_archedEdgeData[ttt][2] > 0 then
+
+				for vvv = 1 to ttt - 1
+					_startSegmIdx = _startSegmIdx + _archedEdgeData[vvv][2]
+				next vvv
+
+				_endSegmIdx = _startSegmIdx + _archedEdgeData[ttt][2] - 1
+				_nextVertX	= _segmentData[_endSegmIdx][1]
+				_nextVertY	= _segmentData[_endSegmIdx][2]
+
+				ttt = vardim1(_archedEdgeData)
+				_isPrevEdgeArched	= 1
+			endif
+		next ttt
+
+		_startSegmIdx	= 1
+		_endSegmIdx		= 1
+		for ttt = 1 to vardim1(_archedEdgeData)
+			if	_actualVertexNum = _archedEdgeData[ttt][1] &\
+				_archedEdgeData[ttt][2] > 0 then
+
+				for vvv = 1 to ttt - 1
+					_startSegmIdx = _startSegmIdx + _archedEdgeData[vvv][2]
+				next vvv
+
+				_startVertX	= _segmentData[_startSegmIdx][1]
+				_startVertY	= _segmentData[_startSegmIdx][2]
+
+				ttt = vardim1(_archedEdgeData)
+				_isCurrEdgeArched	= 1
+			endif
+		next ttt
+
+		_cutPos = CUTPOSITION_START
+		__startVertexNum = _nextVertexNum
+		gosub "calculateStartEndVertexes"
+		put _targetVertX, _targetVertY, 0, 0
+
+	endif
+
+	put STAIR_TREAD_GEOMETRY[_actualVertexNum][1], STAIR_TREAD_GEOMETRY[_actualVertexNum][2], 0, 0
+	_startSegmIdx = 1
+	for ttt = 1 to vardim1(_archedEdgeData)
+		if	_actualVertexNum = _archedEdgeData[ttt][1] &\
+			_archedEdgeData[ttt][2] > 0 then
+
+			for vvv = 1 to ttt - 1
+				_startSegmIdx = _startSegmIdx + _archedEdgeData[vvv][2]
+			next vvv
+
+			for kkk = _startSegmIdx to _startSegmIdx + _archedEdgeData[ttt][2] - 1
+				put _segmentData[kkk][1], _segmentData[kkk][2], 0, 0
+			next kkk
+			ttt = vardim1(_archedEdgeData)
+		endif
+	next ttt
+	put STAIR_TREAD_GEOMETRY[_nextVertexNum][1], STAIR_TREAD_GEOMETRY[_nextVertexNum][2], 0, 0
+
+	if _bGetNextTreadEdge then
+		_startSegmIdx = 1
+		for ttt = 1 to vardim1(_archedEdgeData)
+			if	_nextVertexNum = _archedEdgeData[ttt][1] &\
+				_archedEdgeData[ttt][2] > 0 then
+
+				for vvv = 1 to ttt - 1
+					_startSegmIdx = _startSegmIdx + _archedEdgeData[vvv][2]
+				next vvv
+
+				put _segmentData[_startSegmIdx][1], _segmentData[_startSegmIdx][2], 0, 0
+				ttt = vardim1(_archedEdgeData)
+				_isNextEdgeArched	= 1
+			endif
+		next ttt
+		if not(_isNextEdgeArched) then
+			if _nextVertexNum = _vertexNumForSideOrder then
+				_actualVertexNum = 1
+			else
+				_actualVertexNum = _nextVertexNum + 1
+			endif
+			put STAIR_TREAD_GEOMETRY[_actualVertexNum][1], STAIR_TREAD_GEOMETRY[_actualVertexNum][2], 0, 0
+		endif
+
+	else
+		_startSegmIdx	= 1
+		_endSegmIdx		= 1
+		for ttt = 1 to vardim1(_archedEdgeData)
+			if	_nextVertexNum = _archedEdgeData[ttt][1] &\
+				_archedEdgeData[ttt][2] > 0 then
+
+				for vvv = 1 to ttt - 1
+					_startSegmIdx = _startSegmIdx + _archedEdgeData[vvv][2]
+				next vvv
+
+				_nextVertX	= _segmentData[_startSegmIdx][1]
+				_nextVertY	= _segmentData[_startSegmIdx][2]
+
+				ttt = vardim1(_archedEdgeData)
+				_isNextEdgeArched	= 1
+			endif
+		next ttt
+
+		_startSegmIdx	= 1
+		_endSegmIdx		= 1
+		for ttt = 1 to vardim1(_archedEdgeData)
+			if	_actualVertexNum = _archedEdgeData[ttt][1] &\
+				_archedEdgeData[ttt][2] > 0 then
+
+				for vvv = 1 to ttt - 1
+					_startSegmIdx = _startSegmIdx + _archedEdgeData[vvv][2]
+				next vvv
+
+				_endSegmIdx = _startSegmIdx + _archedEdgeData[ttt][2] - 1
+				_startVertX	= _segmentData[_endSegmIdx][1]
+				_startVertY	= _segmentData[_endSegmIdx][2]
+
+				ttt = vardim1(_archedEdgeData)
+				_isCurrEdgeArched	= 1
+			endif
+		next ttt
+
+		_cutPos = CUTPOSITION_END
+		__startVertexNum = _actualVertexNum
+		gosub "calculateStartEndVertexes"
+		put _targetVertX, _targetVertY, 0, 0
+
+	endif
+
+	if _bCollectPathForEdgeCutting then
+		gosub "drawTreadEdgeCutting"
+	else
+		gosub "drawTreadProfiles"
+	endif
+
+return
+
+
+! ==============================================================================
+"calculateStartEndVertexes":
+! ------------------------------------------------------------------------------
+
+	! ===============================================================================
+	! Calculate Additional Start/End Vertexes for Tube/Profile
+	! ===============================================================================
+
+	if _cutPos = CUTPOSITION_START then
+		if	_isPrevEdgeArched |\
+			_isCurrEdgeArched then
+
+			if __startVertexNum = 1 then
+				__headVertexNum	= _vertexNumForSideOrder
+			else
+				__headVertexNum	= __startVertexNum - 1
+			endif
+			if __headVertexNum = 1 then
+				__nextVertexNum	= _vertexNumForSideOrder
+			else
+				__nextVertexNum	= __headVertexNum - 1
+			endif
+
+			_headVertX		= STAIR_TREAD_GEOMETRY[__headVertexNum][1]
+			_headVertY		= STAIR_TREAD_GEOMETRY[__headVertexNum][2]
+
+			if	not(_isPrevEdgeArched) |\
+				not(_isCurrEdgeArched) then
+
+				if _isPrevEdgeArched then
+					_startVertX		= STAIR_TREAD_GEOMETRY[__startVertexNum][1]
+					_startVertY		= STAIR_TREAD_GEOMETRY[__startVertexNum][2]
+				else
+					_nextVertX		= STAIR_TREAD_GEOMETRY[__nextVertexNum][1]
+					_nextVertY		= STAIR_TREAD_GEOMETRY[__nextVertexNum][2]
+				endif
+			endif
+		else
+			if __startVertexNum = 1 then
+				__headVertexNum	= _vertexNumForSideOrder
+			else
+				__headVertexNum	= __startVertexNum - 1
+			endif
+
+			if __headVertexNum = 1 then
+				__nextVertexNum	= _vertexNumForSideOrder
+			else
+				__nextVertexNum	= __headVertexNum - 1
+			endif
+
+			_startVertX		= STAIR_TREAD_GEOMETRY[__startVertexNum][1]
+			_startVertY		= STAIR_TREAD_GEOMETRY[__startVertexNum][2]
+			_headVertX		= STAIR_TREAD_GEOMETRY[__headVertexNum][1]
+			_headVertY		= STAIR_TREAD_GEOMETRY[__headVertexNum][2]
+			_nextVertX		= STAIR_TREAD_GEOMETRY[__nextVertexNum][1]
+			_nextVertY		= STAIR_TREAD_GEOMETRY[__nextVertexNum][2]
+		endif
+	else
+		if	_isNextEdgeArched |\
+			_isCurrEdgeArched then
+
+			if __startVertexNum = _vertexNumForSideOrder then
+				__headVertexNum	= 1
+			else
+				__headVertexNum	= __startVertexNum + 1
+			endif
+			if __headVertexNum = _vertexNumForSideOrder then
+				__nextVertexNum	= 1
+			else
+				__nextVertexNum	= __headVertexNum + 1
+			endif
+
+			_headVertX		= STAIR_TREAD_GEOMETRY[__headVertexNum][1]
+			_headVertY		= STAIR_TREAD_GEOMETRY[__headVertexNum][2]
+
+			if	not(_isNextEdgeArched) |\
+				not(_isCurrEdgeArched) then
+
+				if _isNextEdgeArched then
+					_startVertX		= STAIR_TREAD_GEOMETRY[__startVertexNum][1]
+					_startVertY		= STAIR_TREAD_GEOMETRY[__startVertexNum][2]
+				else
+					_nextVertX		= STAIR_TREAD_GEOMETRY[__nextVertexNum][1]
+					_nextVertY		= STAIR_TREAD_GEOMETRY[__nextVertexNum][2]
+				endif
+			endif
+		else
+			if __startVertexNum = _vertexNumForSideOrder then
+				__headVertexNum	= 1
+			else
+				__headVertexNum	= __startVertexNum + 1
+			endif
+			if __headVertexNum = _vertexNumForSideOrder then
+				__nextVertexNum	= 1
+			else
+				__nextVertexNum	= __headVertexNum + 1
+			endif
+
+			_startVertX		= STAIR_TREAD_GEOMETRY[__startVertexNum][1]
+			_startVertY		= STAIR_TREAD_GEOMETRY[__startVertexNum][2]
+			_headVertX		= STAIR_TREAD_GEOMETRY[__headVertexNum][1]
+			_headVertY		= STAIR_TREAD_GEOMETRY[__headVertexNum][2]
+			_nextVertX		= STAIR_TREAD_GEOMETRY[__nextVertexNum][1]
+			_nextVertY		= STAIR_TREAD_GEOMETRY[__nextVertexNum][2]
+		endif
+	endif
+
+	_edgeStartXCoord	= _startVertX
+	_edgeStartYCoord	= _startVertY
+	_edgeEndXCoord	= _headVertX
+	_edgeEndYCoord	= _headVertY
+	gosub "calculateEdgeAngleAndLength"
+	_alpha	= _edgeAngle
+
+	_edgeStartXCoord	= _headVertX
+	_edgeStartYCoord	= _headVertY
+	_edgeEndXCoord	= _nextVertX
+	_edgeEndYCoord	= _nextVertY
+	gosub "calculateEdgeAngleAndLength"
+	_beta	= _edgeAngle
+
+	_actEdgeLength	= sqr((_startVertY - _headVertY)**2 \
+						+ (_startVertX - _headVertX)**2)
+
+	_gamma	= _alpha - _beta
+	if abs(_alpha - _beta) < eps then _gamma = 90
+	if _gamma < 0 then _gamma = _gamma + 360
+	_delta	= -_gamma
+
+	if	(_headVertX > _startVertX) then
+		if	(_headVertY > _startVertY) then
+			_actEdgeDir = EDGEDIR_090
+		else
+			_actEdgeDir = EDGEDIR_270360
+		endif
+	else
+		if	(_headVertY > _startVertY) then
+			_actEdgeDir = EDGEDIR_90180
+		else
+			_actEdgeDir = EDGEDIR_180270
+		endif
+	endif
+	if	(_nextVertX > _headVertX) then
+		if	(_nextVertY > _headVertY) then
+			_nextEdgeDir = EDGEDIR_090
+		else
+			_nextEdgeDir = EDGEDIR_270360
+		endif
+	else
+		if	(_nextVertY > _headVertY) then
+			_nextEdgeDir = EDGEDIR_90180
+		else
+			_nextEdgeDir = EDGEDIR_180270
+		endif
+	endif
+
+	_modAngle = 0
+	if _actEdgeDir = _nextEdgeDir then
+		if _gamma > 0 and _gamma < 180 then _modAngle = 180
+	endif
+	if _actEdgeDir = EDGEDIR_090 then
+		if _nextEdgeDir = EDGEDIR_180270 and _gamma > 0 and _gamma < 180 then _modAngle = 180
+		if _nextEdgeDir = EDGEDIR_270360 then _modAngle = 180
+	endif
+	if _actEdgeDir = EDGEDIR_90180 then
+		if _nextEdgeDir = EDGEDIR_270360 and _gamma > 0 and _gamma < 180 then _modAngle = 180
+		if _nextEdgeDir = EDGEDIR_090 then _modAngle = 180
+	endif
+	if _actEdgeDir = EDGEDIR_180270 then
+		if _nextEdgeDir = EDGEDIR_090 and _gamma > 0 and _gamma < 180 then _modAngle = 180
+		if _nextEdgeDir = EDGEDIR_90180 then _modAngle = 180
+	endif
+	if _actEdgeDir = EDGEDIR_270360 then
+		if _nextEdgeDir = EDGEDIR_90180 and _gamma > 0 and _gamma < 180 then _modAngle = 180
+		if _nextEdgeDir = EDGEDIR_180270 then _modAngle = 180
+	endif
+
+	_zeta				= _alpha - (90 - _delta) - _modAngle
+	_normalVectorLength	= abs(_actEdgeLength * sin(_delta)) * 2
+	_xMod				= _normalVectorLength * cos(_zeta)
+	_yMod				= _normalVectorLength * sin(_zeta)
+
+	_targetVertX		= _startVertX + _xMod
+	_targetVertY		= _startVertY + _yMod
+
+	_isPrevEdgeArched	= 0
+	_isCurrEdgeArched	= 0
+	_isNextEdgeArched	= 0
+
+return
+
+
+! ==============================================================================
+"drawTreadEdgeCutting":
+! ------------------------------------------------------------------------------
+
+	_treadEdgeNosingLower	= 0
+	_treadEdgeNosingUpper	= 0
+
+	! ===============================================================================
+	! Draw Tread Cutting for Profiles
+	! ===============================================================================
+
+	if iTreadNosingProfile = NOSINGPROFILE_CUSTOM_PROF then
+		_result = REQUEST ("Profile_default_boundingbox",  nosingProfileID, _xMin, _yMin, _xMax, _yMax)
+		if _result then
+			_profileWidth	= abs(_xMax - _xMin)
+		else
+			_profileWidth	= 0
+		endif
+	endif
+	if iTreadNosingProfile = NOSINGPROFILE_CLASSICAL	then
+		_radiusUpper 	= 0.02
+		_heightUpper	= 0.03
+		_radiusLower	= 0.015
+		_heightLower	= 0.02
+		_widthNose		= 0.015
+	endif
+
+	if iTreadNosingProfile = NOSINGPROFILE_CUSTOM_PROF then
+		_treadEdgeNosingLower	= _profileWidth
+		_treadEdgeNosingUpper	= _profileWidth
+	endif
+	if iTreadNosingProfile = NOSINGPROFILE_CLASSICAL	then
+		_treadEdgeNosingLower	= _radiusUpper + _radiusLower + _widthNose
+		_treadEdgeNosingUpper	= _radiusUpper + _radiusLower + _widthNose
+	endif
+	if iTreadNosingProfile = NOSINGPROFILE_ROUNDED then
+		_treadEdgeNosingLower	= filletRadius
+		_treadEdgeNosingUpper	= filletRadius
+	endif
+	if	iTreadNosingProfile = NOSINGPROFILE_CHAMFER |\
+		iTreadNosingProfile = NOSINGPROFILE_FILLET then
+
+		_treadEdgeNosingLower	= 0
+		_treadEdgeNosingUpper	= filletRadius
+	endif
+	if _bSlantedNosing then
+		if not(bUseSlantingAngleRiser) & iDefSlantingAngleCustom = CUSTOMSLANTING_BYDISTANCE then
+			_slantingDist	= slantingDistCustom
+			_y2				= TREAD_THICKNESS - _slantingStartPoint * (iTreadNosingProfile <> NOSINGPROFILE_SLANTED_ONLY)
+			if abs(_slantingDist) > eps then
+				_slantingAngle	= atn(_y2 / _slantingDist)
+			else
+				_slantingAngle = 90
+			endif
+		else
+			if bUseSlantingAngleRiser then
+				_slantingAngle	= TREAD_LOWER_RISER_SLANT_ANGLE
+			else
+				_slantingAngle	= slantingAngleCustom
+			endif
+
+			_y2				= TREAD_THICKNESS - _slantingStartPoint * (iTreadNosingProfile <> NOSINGPROFILE_SLANTED_ONLY)
+			_slantingDist	= _y2 / tan(_slantingAngle)
+		endif
+
+		_treadEdgeNosingLower	= _slantingDist
+		_treadEdgeNosingUpper	= filletRadius * (_bFilletNosing | _bChamferNosing)
+	endif
+
+
+	if _bEnableNosingExtension & _bNosingHasExtension then _treadEdgeNosingLower = extensionWidth
+
+	if nsp > 0 then
+		tube 6, nsp / 4, 1 + 2 + 16 + 32,
+			-eps, 					eps, 					1,
+			_treadEdgeNosingUpper, 	eps, 					1,
+			_treadEdgeNosingUpper, 	0, 						1,
+			_treadEdgeNosingLower, 	-TREAD_THICKNESS,		1,
+			_treadEdgeNosingLower, 	-TREAD_THICKNESS - eps,	1,
+			-eps, 					-TREAD_THICKNESS - eps,	1,
+
+			get(nsp)
+	endif
+
+return
+
+
+! ==============================================================================
+"drawTreadProfiles":
+! ------------------------------------------------------------------------------
+
+	_cutOversize	= 0.005
+
+	dim _pathPolyCoords[][]
+	for _iPath = 1 to nsp / 4
+		_pathPolyCoords[_iPath][1]	= get(1)
+		_pathPolyCoords[_iPath][2]	= get(1)
+		_pathPolyCoords[_iPath][3]	= get(1)
+		_pathPolyCoords[_iPath][4]	= get(1)
+	next _iPath
+
+	dim	_profileSectionPoly[]
+
+
+	! ===============================================================================
+	! Draw Tread Profiles
+	! ===============================================================================
+
+	if iTreadNosingProfile = NOSINGPROFILE_CUSTOM_PROF then
+		treadEdgeNosing	= _profileWidth
+
+		! Data from User defined profile
+		_nComponents = 0
+		dim _componentTypes[]
+
+		n = REQUEST{2} ("Profile_components", nosingProfileID, _nComponents, _componentTypes)
+
+		if n then
+			dim _bShowPart[]
+			_needRequestDetails = 0
+
+			for _i = 1 to _nComponents
+				_bShowPart[_i] = 1
+				  if GLOB_STRUCTURE_DISPLAY = DISPLAY_COREONLY AND _componentTypes[_i] <> COMPTYPE_CORE then _bShowPart[_i] = 0
+				  if GLOB_STRUCTURE_DISPLAY = DISPLAY_NOFINISH AND _componentTypes[_i] = COMPTYPE_FINISH then _bShowPart[_i] = 0
+				  if _bShowPart[_i] then _needRequestDetails = 1
+			next _i
+
+			if _needRequestDetails then
+
+				dim _profileGeometryRawData[]
+				n = REQUEST ("Profile_default_geometry", nosingProfileID, _profileGeometryRawData)		! n1, n2, ..., nn, x11, y11,s11
+
+				dim _contStartPoints[]
+				dim _contEndPoints[]
+
+				_contStartPoints[1] = _nComponents + 1
+
+				for _i = 2 to _nComponents
+					_contStartPoints[_i] = _contStartPoints[_i - 1] + _profileGeometryRawData[_i - 1] * 5
+					_contEndPoints[_i-1] = _contStartPoints[_i] - 1
+				next _i
+
+				_contEndPoints[_nComponents] = vardim1(_profileGeometryRawData)
+
+				for _iComp = 1 to _nComponents
+
+					if _bShowPart[_iComp] then
+						dim _currSurfaces[]
+						n = REQUEST{3} ("Profile_component_info", nosingProfileID, _iComp, "gs_profile_comp_surfaces", _currSurfaces)
+
+						if not(bProfileAttributes) then
+							for _surf = 1 to vardim1(_currSurfaces)
+								_currSurfaces[_surf] = _treadSurface
+							next _surf
+						endif
+
+						_bmat = 1
+						_pen = 1
+						n = request{3} ("Profile_component_info", nosingProfileID, _iComp, "gs_profile_bmat", _bmat)
+						n = request{3} ("Profile_component_info", nosingProfileID, _iComp, "gs_profile_outlinepen", _pen)
+
+						if bProfileAttributes then
+							building_material _bmat
+							sect_attrs{2} _pen
+						endif
+
+						_surface = 1
+						if bProfileAttributes then
+							n = request{3} ("Profile_component_info", nosingProfileID, _iComp, "gs_profile_surface", _surface)
+						else
+							_surface = _treadSurface
+						endif
+
+						_surfIdx = 1
+
+						for _i = _contStartPoints[_iComp] to _contEndPoints[_iComp] step 5
+							if _profileGeometryRawData[_i + 4] # -1 then
+								_stat = _profileGeometryRawData[_i + 4] + 2
+							else
+								_stat = -1
+							endif
+
+							put _profileGeometryRawData[_i],
+								_profileGeometryRawData[_i + 1],
+								_stat,
+								_currSurfaces[_surfIdx]
+
+							_surfIdx = _surfIdx + 1
+						next _i
+
+
+						! reput profile path
+						for i = 1 to vardim1(_pathPolyCoords)
+							put	_pathPolyCoords[i][1],
+								_pathPolyCoords[i][2],
+								_pathPolyCoords[i][3],
+								_pathPolyCoords[i][4]
+						next i
+
+						tube{2} _surface, _surface, _surface,
+							(_contEndPoints[_iComp] - _contStartPoints[_iComp] + 1) / 5,
+							vardim1(_pathPolyCoords),
+							1 + 2 + 16 + 32 + 256,
+
+							get((_contEndPoints[_iComp] - _contStartPoints[_iComp] + 1) / 5 * 4),
+							get(vardim1(_pathPolyCoords) * 4)
+					endif
+
+				next _iComp
+			endif
+		endif
+	else
+		if iTreadNosingProfile = NOSINGPROFILE_CLASSICAL then
+			_num	= 0:		_profileSectionPoly[_num + COORD_X]	= _radiusUpper 								: _profileSectionPoly[_num + COORD_Y]	= 0 										: _profileSectionPoly[_num + COORD_STATUS]	= 1
+			_num	= _num + 3:	_profileSectionPoly[_num + COORD_X]	= _radiusUpper								: _profileSectionPoly[_num + COORD_Y]	= -_radiusUpper								: _profileSectionPoly[_num + COORD_STATUS]	= 900
+			_num	= _num + 3:	_profileSectionPoly[_num + COORD_X]	= 0											: _profileSectionPoly[_num + COORD_Y]	= 180										: _profileSectionPoly[_num + COORD_STATUS]	= 4001
+			_num	= _num + 3:	_profileSectionPoly[_num + COORD_X]	= _radiusUpper								: _profileSectionPoly[_num + COORD_Y]	= -_radiusUpper * 2 - _heightUpper						: _profileSectionPoly[_num + COORD_STATUS]	= 1
+			_num	= _num + 3:	_profileSectionPoly[_num + COORD_X]	= _radiusUpper 								: _profileSectionPoly[_num + COORD_Y]	= -_radiusUpper * 2 - _heightUpper - _radiusLower			: _profileSectionPoly[_num + COORD_STATUS]	= 900
+			_num	= _num + 3:	_profileSectionPoly[_num + COORD_X]	= 0											: _profileSectionPoly[_num + COORD_Y]	= -90										: _profileSectionPoly[_num + COORD_STATUS]	= 4001
+			_num	= _num + 3:	_profileSectionPoly[_num + COORD_X]	= _radiusUpper + _radiusLower				: _profileSectionPoly[_num + COORD_Y]	= -_radiusUpper * 2 - _heightUpper - _radiusLower - _heightLower	: _profileSectionPoly[_num + COORD_STATUS]	= 1
+			_num	= _num + 3:	_profileSectionPoly[_num + COORD_X]	= _radiusUpper + _radiusLower + _widthNose	: _profileSectionPoly[_num + COORD_Y]	= -_radiusUpper * 2 - _heightUpper - _radiusLower - _heightLower	: _profileSectionPoly[_num + COORD_STATUS]	= 1
+			_num	= _num + 3:	_profileSectionPoly[_num + COORD_X]	= _radiusUpper + _radiusLower + _widthNose	: _profileSectionPoly[_num + COORD_Y]	= 0 										: _profileSectionPoly[_num + COORD_STATUS]	= 1
+			_num	= _num + 3:	_profileSectionPoly[_num + COORD_X]	= _radiusUpper 								: _profileSectionPoly[_num + COORD_Y]	= 0 										: _profileSectionPoly[_num + COORD_STATUS]	= -1
+		endif
+
+		if iTreadNosingProfile = NOSINGPROFILE_ROUNDED then
+			treadEdgeNosing	= filletRadius
+
+			hur		= sqr(treadEdgeNosing**2 + (TREAD_THICKNESS / 2)**2)
+			alpha	= atn((TREAD_THICKNESS / 2) / treadEdgeNosing)
+			rad		= (hur / 2) / cos(alpha)
+
+			if treadEdgeNosing > TREAD_THICKNESS / 2 then
+				_num	= 0:		_profileSectionPoly[_num + COORD_X]	= filletRadius							: _profileSectionPoly[_num + COORD_Y]	= 0						: _profileSectionPoly[_num + COORD_STATUS]	= 1
+				_num	= _num + 3:	_profileSectionPoly[_num + COORD_X]	= filletRadius							: _profileSectionPoly[_num + COORD_Y]	= -treadEdgeNosing		: _profileSectionPoly[_num + COORD_STATUS]	= 901
+				_num	= _num + 3:	_profileSectionPoly[_num + COORD_X]	= filletRadius - treadEdgeNosing		: _profileSectionPoly[_num + COORD_Y]	= -treadEdgeNosing		: _profileSectionPoly[_num + COORD_STATUS]	= 3001
+				_num	= _num + 3:	_profileSectionPoly[_num + COORD_X]	= filletRadius							: _profileSectionPoly[_num + COORD_Y]	= -treadEdgeNosing * 2	: _profileSectionPoly[_num + COORD_STATUS]	= 3001
+			else
+				_num	= 0:		_profileSectionPoly[_num + COORD_X]	= filletRadius							: _profileSectionPoly[_num + COORD_Y]	= 0						: _profileSectionPoly[_num + COORD_STATUS]	= 1
+				_num	= _num + 3:	_profileSectionPoly[_num + COORD_X]	= filletRadius - treadEdgeNosing + rad	: _profileSectionPoly[_num + COORD_Y]	= -TREAD_THICKNESS / 2	: _profileSectionPoly[_num + COORD_STATUS]	= 901
+				_num	= _num + 3:	_profileSectionPoly[_num + COORD_X]	= filletRadius - treadEdgeNosing		: _profileSectionPoly[_num + COORD_Y]	= -TREAD_THICKNESS / 2	: _profileSectionPoly[_num + COORD_STATUS]	= 3001
+				_num	= _num + 3:	_profileSectionPoly[_num + COORD_X]	= filletRadius							: _profileSectionPoly[_num + COORD_Y]	= -TREAD_THICKNESS		: _profileSectionPoly[_num + COORD_STATUS]	= 3001
+			endif
+		endif
+
+		if iTreadNosingProfile = NOSINGPROFILE_CHAMFER then
+			if _bEnableNosingExtension & _bNosingHasExtension | abs(TREAD_THICKNESS - filletRadius) > eps then
+				_num	= 0:		_profileSectionPoly[_num + COORD_X]	= filletRadius		: _profileSectionPoly[_num + COORD_Y]	= 0					: _profileSectionPoly[_num + COORD_STATUS]	= 1
+				_num	= _num + 3:	_profileSectionPoly[_num + COORD_X]	= 0					: _profileSectionPoly[_num + COORD_Y]	= -filletRadius		: _profileSectionPoly[_num + COORD_STATUS]	= 1
+				_num	= _num + 3:	_profileSectionPoly[_num + COORD_X]	= 0					: _profileSectionPoly[_num + COORD_Y]	= -TREAD_THICKNESS	: _profileSectionPoly[_num + COORD_STATUS]	= 1
+			endif
+		endif
+
+		if iTreadNosingProfile = NOSINGPROFILE_FILLET then
+			_num	= 0:		_profileSectionPoly[_num + COORD_X]	= filletRadius		: _profileSectionPoly[_num + COORD_Y]	= 0						: _profileSectionPoly[_num + COORD_STATUS]	= 1
+			_num	= _num + 3:	_profileSectionPoly[_num + COORD_X]	= -1				: _profileSectionPoly[_num + COORD_Y]	= 0						: _profileSectionPoly[_num + COORD_STATUS]	= 801
+			_num	= _num + 3:	_profileSectionPoly[_num + COORD_X]	= filletRadius		: _profileSectionPoly[_num + COORD_Y]	= 90					: _profileSectionPoly[_num + COORD_STATUS]	= 2001
+			_num	= _num + 3:	_profileSectionPoly[_num + COORD_X]	= 0					: _profileSectionPoly[_num + COORD_Y]	= -TREAD_THICKNESS		: _profileSectionPoly[_num + COORD_STATUS]	= 1
+		endif
+
+		if iTreadNosingProfile = NOSINGPROFILE_SLANTED_FILLET then
+			_num	= 0:		_profileSectionPoly[_num + COORD_X]	= filletRadius		: _profileSectionPoly[_num + COORD_Y]	= 0						: _profileSectionPoly[_num + COORD_STATUS]	= 1
+			_num	= _num + 3:	_profileSectionPoly[_num + COORD_X]	= -1				: _profileSectionPoly[_num + COORD_Y]	= 0						: _profileSectionPoly[_num + COORD_STATUS]	= 801
+			_num	= _num + 3:	_profileSectionPoly[_num + COORD_X]	= filletRadius		: _profileSectionPoly[_num + COORD_Y]	= 90					: _profileSectionPoly[_num + COORD_STATUS]	= 2001
+			_num	= _num + 3:	_profileSectionPoly[_num + COORD_X]	= 0					: _profileSectionPoly[_num + COORD_Y]	= -_slantingStartPoint	: _profileSectionPoly[_num + COORD_STATUS]	= 1
+			_num	= _num + 3:	_profileSectionPoly[_num + COORD_X]	= _slantingDist		: _profileSectionPoly[_num + COORD_Y]	= -TREAD_THICKNESS		: _profileSectionPoly[_num + COORD_STATUS]	= 1
+		endif
+
+		if iTreadNosingProfile = NOSINGPROFILE_SLANTED_CHAMFER then
+			_num	= 0:		_profileSectionPoly[_num + COORD_X]	= filletRadius		: _profileSectionPoly[_num + COORD_Y]	= 0						: _profileSectionPoly[_num + COORD_STATUS]	= 1
+			_num	= _num + 3:	_profileSectionPoly[_num + COORD_X]	= 0					: _profileSectionPoly[_num + COORD_Y]	= -filletRadius			: _profileSectionPoly[_num + COORD_STATUS]	= 1
+			_num	= _num + 3:	_profileSectionPoly[_num + COORD_X]	= 0					: _profileSectionPoly[_num + COORD_Y]	= -_slantingStartPoint	: _profileSectionPoly[_num + COORD_STATUS]	= 1
+			_num	= _num + 3:	_profileSectionPoly[_num + COORD_X]	= _slantingDist		: _profileSectionPoly[_num + COORD_Y]	= -TREAD_THICKNESS		: _profileSectionPoly[_num + COORD_STATUS]	= 1
+		endif
+
+		if iTreadNosingProfile = NOSINGPROFILE_SLANTED_ONLY then
+		endif
+
+		if iTreadNosingProfile = NOSINGPROFILE_SLANTED_SQUARE then
+			_num	= 0:		_profileSectionPoly[_num + COORD_X]	= 0					: _profileSectionPoly[_num + COORD_Y]	= 0						: _profileSectionPoly[_num + COORD_STATUS]	= 1
+			_num	= _num + 3:	_profileSectionPoly[_num + COORD_X]	= 0					: _profileSectionPoly[_num + COORD_Y]	= -_slantingStartPoint	: _profileSectionPoly[_num + COORD_STATUS]	= 1
+			_num	= _num + 3:	_profileSectionPoly[_num + COORD_X]	= _slantingDist		: _profileSectionPoly[_num + COORD_Y]	= -TREAD_THICKNESS		: _profileSectionPoly[_num + COORD_STATUS]	= 1
+		endif
+
+		if _bEnableNosingExtension & _bNosingHasExtension then gosub "drawNosingExtension"
+
+		if vardim1(_profileSectionPoly) > 0 then
+			! put section poly
+			for i = 1 to vardim1(_profileSectionPoly) / 3
+				j = (i - 1) * 3
+
+				put _profileSectionPoly[j + 1], _profileSectionPoly[j + 2], _profileSectionPoly[j + 3]
+			next i
+
+			! reput profile path
+			for i = 1 to vardim1(_pathPolyCoords)
+				put	_pathPolyCoords[i][1],
+					_pathPolyCoords[i][2],
+					_pathPolyCoords[i][3],
+					_pathPolyCoords[i][4]
+			next i
+
+			tube vardim1(_profileSectionPoly) / 3,
+				vardim1(_pathPolyCoords),
+				1 + 2 + 16 + 32,
+
+				get(vardim1(_profileSectionPoly)),
+				get(vardim1(_pathPolyCoords) * 4)
+		endif
+	endif
+
+return
+
+
+! ==============================================================================
+"calculateEdgeAngleAndLength":
+! ------------------------------------------------------------------------------
+
+	! ===============================================================================
+	! Calculate Current Edge Angle and Length
+	! ===============================================================================
+
+	_edgeLength		= sqr((_edgeStartYCoord - _edgeEndYCoord)**2 + (_edgeStartXCoord - _edgeEndXCoord)**2)
+
+	if abs(_edgeStartXCoord - _edgeEndXCoord) < eps then
+		if _edgeStartYCoord > _edgeEndYCoord then
+			_edgeAngle	= -90
+		else
+			_edgeAngle	= 90
+		endif
+	else
+		if abs(_edgeStartYCoord - _edgeEndYCoord) < eps then
+			if _edgeStartXCoord > _edgeEndXCoord then
+				_edgeAngle	= 180
+			else
+				_edgeAngle	= 0
+			endif
+		else
+			if _edgeStartXCoord > _edgeEndXCoord then
+				_edgeAngle	= 180 + atn((_edgeStartYCoord - _edgeEndYCoord) / (_edgeStartXCoord - _edgeEndXCoord))
+			else
+				if _edgeStartYCoord > _edgeEndYCoord then
+					_edgeAngle	= atn((_edgeEndYCoord - _edgeStartYCoord) / (_edgeEndXCoord - _edgeStartXCoord))
+				else
+					_edgeAngle	= atn((_edgeStartYCoord - _edgeEndYCoord) / (_edgeStartXCoord - _edgeEndXCoord))
+				endif
+			endif
+		endif
+	endif
+
+return
+
+! ==============================================================================
+"cutMilledRecess":
+! ------------------------------------------------------------------------------
+	! Collect Leading end Points
+	gosub "collectLeadingEndPoints"
+
+	if _bLeadingEdgeExists = 0 then _bCutMilledRecess = 0
+
+	if _bCutMilledRecess then
+		! --------------------------------------------------------------------------
+		! Get the Simplified Leading Edge vector and Length
+		! --------------------------------------------------------------------------
+		call "BasicGeometricCalc" parameters	iFunction	= 1,		! DIRECTION_POINTS
+												Point1x		= STAIR_TREAD_GEOMETRY[_endLeadIdx][1],
+												Point1y		= STAIR_TREAD_GEOMETRY[_endLeadIdx][2],
+												Point1z		= 0,
+												Point2x		= STAIR_TREAD_GEOMETRY[_startLeadIdx][1],
+												Point2y		= STAIR_TREAD_GEOMETRY[_startLeadIdx][2],
+												Point2z		= 0,
+							returned_parameters	LeadingVx,
+												LeadingVy,
+												dummy,
+												LeadingLength
+
+		! --------------------------------------------------------------------------
+		! Transform Coordinate System for the Cutting bodies
+		! --------------------------------------------------------------------------
+
+		XFORM	LeadingVx,	-LeadingVy,		0,		STAIR_TREAD_GEOMETRY[_startLeadIdx][1],
+				LeadingVy,	LeadingVx,		0,		STAIR_TREAD_GEOMETRY[_startLeadIdx][2],
+				0,			0,				1,		0
+
+		addy mrOffsetStart
+
+		! --------------------------------------------------------------------------
+		! Cutform for recesses
+		! --------------------------------------------------------------------------
+		for ii = 1 to iRecessNum
+			cutform 4, 1, 1+2+16,
+					0,	0, -1, recessDepth,
+					mrOffsetLeft, 					0, 				15,
+					LeadingLength - mrOffsetRight, 	0,				15,
+					LeadingLength - mrOffsetRight,	recessWidth,	15,
+					mrOffsetLeft,					recessWidth,	15
+
+			addy recessWidth + dRecess
+		next ii
+
+		del iRecessNum
+		del 2
+	endif
+return
+
+! ==============================================================================
+"getCutform":
+! ------------------------------------------------------------------------------
+
+	gosub "SetOriginalPolyArray"
+
+	gosub "InitAddOnScope"
+
+	gosub "SetOffsetArray"
+
+	gosub "ResultPoly"
+
+	gosub "CloseAddOnScope"
+
+return
+
+
+! ==============================================================================
+"SetOriginalPolyArray":
+! ------------------------------------------------------------------------------
+
+	DRAWPOLY_COORD_X	= 1
+	DRAWPOLY_COORD_Y	= 2
+	DRAWPOLY_ANGLE		= 3
+
+	OFFSET_COORD_X		= 1
+	OFFSET_COORD_Y		= 2
+	OFFSET_ANGLE		= 3
+
+	dim _vertCoorArr[][]
+	dim _edgeFlagArr[]
+
+	_lastVertex = vardim1(STAIR_TREAD_GEOMETRY)
+
+	for iVertexIdx = 1 to _lastVertex
+
+		if iVertexIdx < _lastVertex then
+			_vertCoorArr[iVertexIdx][DRAWPOLY_COORD_X]	= STAIR_TREAD_GEOMETRY[iVertexIdx][DRAWPOLY_COORD_X]
+			_vertCoorArr[iVertexIdx][DRAWPOLY_COORD_Y]	= STAIR_TREAD_GEOMETRY[iVertexIdx][DRAWPOLY_COORD_Y]
+			_vertCoorArr[iVertexIdx][DRAWPOLY_ANGLE]	= STAIR_TREAD_GEOMETRY[iVertexIdx][DRAWPOLY_ANGLE]
+			_edgeFlagArr[iVertexIdx]					= STAIR_TREAD_FLAGS[iVertexIdx][1]
+		else
+			_vertCoorArr[iVertexIdx][DRAWPOLY_COORD_X]	= STAIR_TREAD_GEOMETRY[1][DRAWPOLY_COORD_X]
+			_vertCoorArr[iVertexIdx][DRAWPOLY_COORD_Y]	= STAIR_TREAD_GEOMETRY[1][DRAWPOLY_COORD_Y]
+			_vertCoorArr[iVertexIdx][DRAWPOLY_ANGLE]	= 0
+			_edgeFlagArr[iVertexIdx]					= STAIR_TREAD_FLAGS[1][1]
+		endif
+	next iVertexIdx
+
+return
+
+
+! ==============================================================================
+"InitAddOnScope":
+! ------------------------------------------------------------------------------
+
+	ch = INITADDONSCOPE ("PolyOperations", "", "")
+
+	! --------------------------------------------------------------------------
+	! Creating polygon containers
+	! --------------------------------------------------------------------------
+
+	PREPAREFUNCTION ch, "CreateContainer", "mySourceContainer", ""
+	PREPAREFUNCTION ch, "CreateContainer", "myDestinationContainer", ""
+
+	PREPAREFUNCTION ch, "SetSourceContainer",		"mySourceContainer", ""
+	PREPAREFUNCTION ch, "SetDestinationContainer",	"myDestinationContainer", ""
+
+return
+
+
+! ==============================================================================
+"SetOffsetArray":
+! ------------------------------------------------------------------------------
+
+	_treadNonSlipBandAxisDist		= treadNonSlipBandWidth   + treadNonSlipBandDist
+	_treadNonSlipBandOffsetFirst	= treadNonSlipBandWidth/2 + treadNonSlipBandOffsetFront
+
+	_offsetDistLead = 0	!(-1) * treadNonSlipBandOffsetFront + EPS
+	_offsetDistSide = (-1) * treadNonSlipBandOffsetSide
+	_offsetDistBack = 0
+
+	dim _customOffset[]
+
+	for iEdges = 1 to vardim1(_vertCoorArr) - 1
+		if _edgeFlagArr[iEdges] = TREAD_LEADINGEDGE then
+			_customOffset[iEdges] = _offsetDistLead
+		else
+			if _edgeFlagArr[iEdges] = TREAD_TRAILINGEDGE then
+				_customOffset[iEdges] = _offsetDistBack
+			else							! SIDEEDGE
+				_customOffset[iEdges] = _offsetDistSide
+			endif
+		endif
+	next iEdges
+
+return
+
+
+! ==============================================================================
+"ResultPoly":
+! ------------------------------------------------------------------------------
+
+	_nVertices	= vardim1(_vertCoorArr)
+	_nContours	= 1			! Number of contours in the polygon
+	_numPoly	= 0			! Number of offsetted polygons
+	dim _contArr[]
+		_contArr[1] = _nVertices	! Last vertex index of the main contour
+
+	_defaultInhEdgeInfo	= 99999	! Default edge info of the newly created edges
+	dim _inhEdgeInfos[]
+	for iVert = 1 to _nVertices
+		if iVert < _nVertices then
+			_inhEdgeInfos[iVert] = 1
+		else
+			_inhEdgeInfos[_nVertices] = -1
+		endif
+	next iVert
+
+	namePoly = "TreadPoly"
+
+	PREPAREFUNCTION ch, "Store", namePoly, _nVertices, _nContours, _vertCoorArr, _contArr, _defaultInhEdgeInfo, _inhEdgeInfos
+
+	for iSegment = 1 to vardim1(_customOffset)
+		if ( abs(_customOffset[iSegment]) > EPS ) then
+
+			put iSegment, _customOffset[iSegment]
+
+		endif
+	next iSegment
+
+	dim _resVertices[]
+
+	if (nsp > EPS) then
+		PREPAREFUNCTION  ch, "MultipleEdgeOffsetParams", "", nsp/2, get(nsp)
+
+		dim _resPolyIDArray[]
+		_numPoly = CALLFUNCTION (ch, "OffsetMultipleEdges", namePoly, _resPolyIDArray)
+
+		if _numPoly > 0 then
+			_polygonID = _resPolyIDArray[1]
+
+			dim _resVertices[]
+			_numVertices = CALLFUNCTION (ch, "GetVertices", _polygonID, _resVertices)
+			_numVertices = _numVertices / 3
+
+			dim _inhEdgeInfos[]
+			_numEdges = CALLFUNCTION (ch, "GetInhEdgeInfos", _polygonID, _inhEdgeInfos)
+		endif
+	endif
+
+	if (_numPoly < 1) | (nsp < EPS) then
+		for iVert = 1 to vardim1(_vertCoorArr) - 1
+			_resVertices[3 * (iVert - 1) + OFFSET_COORD_X]	= _vertCoorArr[iVert][OFFSET_COORD_X]
+			_resVertices[3 * (iVert - 1) + OFFSET_COORD_Y]	= _vertCoorArr[iVert][OFFSET_COORD_Y]
+			_resVertices[3 * (iVert - 1) + OFFSET_ANGLE]	= _vertCoorArr[iVert][OFFSET_ANGLE]
+		next iVert
+	endif
+
+	_numVertices = vardim1(_resVertices) / 3
+
+	dim _resVertAttr[][3]
+
+	for iVert = 1 to _numVertices
+		_resVertAttr[iVert][OFFSET_COORD_X]	= _resVertices[3 * (iVert - 1) + OFFSET_COORD_X]
+		_resVertAttr[iVert][OFFSET_COORD_Y]	= _resVertices[3 * (iVert - 1) + OFFSET_COORD_Y]
+		_resVertAttr[iVert][OFFSET_ANGLE]		= _resVertices[3 * (iVert - 1) + OFFSET_ANGLE]
+	next iVert
+
+	_resVertAttr[iVert][OFFSET_COORD_X]	= _resVertAttr[1][OFFSET_COORD_X]
+	_resVertAttr[iVert][OFFSET_COORD_Y]	= _resVertAttr[1][OFFSET_COORD_Y]
+	_resVertAttr[iVert][OFFSET_ANGLE]		= 0
+
+
+	if ( vardim1(_resVertAttr) > 2 ) then
+		dim _polyVertAttr[][3]
+			_polyVertAttr = _resVertAttr
+
+		gosub "DrawPoly"
+	endif
+
+return
+
+
+! ==============================================================================
+"CloseAddOnScope":
+! ------------------------------------------------------------------------------
+
+	CLOSEADDONSCOPE ch
+
+return
+
+
+
+! ==============================================================================
+"GetDirectionP2toP1":
+! ------------------------------------------------------------------------------
+! Input:
+!	Point1x:	Coordinate X of the first point
+!	Point1y:	Coordinate Y of the first point
+!	Point1z:	Coordinate Z of the first point
+!	Point2x:	Coordinate X of the second point
+!	Point2y:	Coordinate Y of the second point
+!	Point2z:	Coordinate Z of the second point
+! Output:
+!	DirectionVx:	Vector X from second to first point
+!	DirectionVy:	Vector Y from second to first point
+!	DirectionVz:	Vector Z from second to first point
+!	Distance:		Distance between two point
+! ==============================================================================
+
+	! Calculate distance
+	Distance = SQR((Point1x - Point2x)^2 + (Point1y - Point2y)^2 + (Point1z - Point2z)^2)
+
+	! Direction vector from Point2 to Point1
+	if Distance > EPS then
+		DirectionVx = (Point1x - Point2x)/Distance
+		DirectionVy = (Point1y - Point2y)/Distance
+		DirectionVz = (Point1z - Point2z)/Distance
+	else
+		DirectionVx = 0
+		DirectionVy = 0
+		DirectionVz = 0
+	endif
+return
+
+! ==============================================================================
+"collectLeadingEndPoints":
+! ------------------------------------------------------------------------------
+	_bLeadingEdgeExists = 1
+	_startLeadIdx 		= 0
+	_endLeadIdx			= 0
+
+	for iii = 1 to _edgeNum
+		if STAIR_TREAD_FLAGS[iii][1] = TREAD_LEADINGEDGE then
+			for j = iii + 1 to iii + _edgeNum	! find leading end
+				if j > _edgeNum then
+					__actEdge = j - _edgeNum
+				else
+					__actEdge = j
+				endif
+				if STAIR_TREAD_FLAGS[__actEdge][1] <> TREAD_LEADINGEDGE then	! end of continous leading edge
+					_endLeadIdx = __actEdge
+					j = iii + _edgeNum			! break loop
+				endif
+			next j
+
+			if iii = 1 then						! find leading start
+				for k = _edgeNum to 1 step -1
+					if STAIR_TREAD_FLAGS[k][1] <> TREAD_LEADINGEDGE then		! start of continous leading edge
+						_startLeadIdx = k + 1
+						k = 1					! break loop
+					endif
+				next k
+			else
+				_startLeadIdx = iii
+			endif
+
+			iii = _edgeNum						! break loop
+		endif
+	next iii
+
+	if _startLeadIdx = 0 | _endLeadIdx = 0 then
+		_bLeadingEdgeExists = 0
+	endif
+return
+
+! ==========================================================================
+"textureFitting":
+	! Fit texture to leading edge first and last point
+! --------------------------------------------------------------------------
+	! Collect Leading end Points
+	gosub "collectLeadingEndPoints"
+
+	if _bLeadingEdgeExists then
+		! --------------------------------------------------------------------------
+		! Get the Simplified Leading Edge vector and Length
+		! --------------------------------------------------------------------------
+		Point1x		= STAIR_TREAD_GEOMETRY[_endLeadIdx][1]
+		Point1y		= STAIR_TREAD_GEOMETRY[_endLeadIdx][2]
+		Point1z		= 0
+		Point2x		= STAIR_TREAD_GEOMETRY[_startLeadIdx][1]
+		Point2y		= STAIR_TREAD_GEOMETRY[_startLeadIdx][2]
+		Point2z		= 0
+
+		gosub "GetDirectionP2toP1"
+
+		! --------------------------------------------------------------------------
+		! Texture Fitting
+		! --------------------------------------------------------------------------
+		coor{3} 2,
+				4,
+				STAIR_TREAD_GEOMETRY[_startLeadIdx][1], STAIR_TREAD_GEOMETRY[_startLeadIdx][2], 								0,	! origo
+				DirectionVx, 											DirectionVy, 											0,	! x
+				STAIR_TREAD_GEOMETRY[_startLeadIdx][1] -DirectionVy, 	STAIR_TREAD_GEOMETRY[_startLeadIdx][2] + DirectionVx, 	0,	! y
+				STAIR_TREAD_GEOMETRY[_startLeadIdx][1],				STAIR_TREAD_GEOMETRY[_startLeadIdx][2],				1	! z
+		body 1
+
+	endif
+return
+
+! ==============================================================================
+"DrawPoly":
+! ------------------------------------------------------------------------------
+
+	_bIgnoreNextPoint = 0
+	_nVert = vardim1(_polyVertAttr)
+	for iVert = 1 to _nVert
+
+		if _bIgnoreNextPoint then
+			_bIgnoreNextPoint = 0
+
+			put 0, _arcAngle, 4000 + 7
+		else
+			put _polyVertAttr[iVert][DRAWPOLY_COORD_X], _polyVertAttr[iVert][DRAWPOLY_COORD_Y], 7
+		endif
+
+		if abs(_polyVertAttr[iVert][DRAWPOLY_ANGLE]) > EPS then
+			iNextVert = iVert + 1
+			if iNextVert > _nVert then
+				iNextVert = iNextVert - _nVert
+			endif
+
+			Point1x = _polyVertAttr[iNextVert][DRAWPOLY_COORD_X]
+			Point1y = _polyVertAttr[iNextVert][DRAWPOLY_COORD_Y]
+			Point1z = 0
+
+			Point2x = _polyVertAttr[iVert][DRAWPOLY_COORD_X]
+			Point2y = _polyVertAttr[iVert][DRAWPOLY_COORD_Y]
+			Point2z = 0
+
+			gosub "GetDirectionP2toP1"
+
+			_arcAngle = _polyVertAttr[iVert][DRAWPOLY_ANGLE]
+
+			rr = (Distance/2) / sin(abs(_arcAngle/2))
+
+			if _arcAngle < 0 then
+				ArcDirectionVx = -DirectionVy
+				ArcDirectionVy = DirectionVx
+			else
+				ArcDirectionVx = DirectionVy
+				ArcDirectionVy = -DirectionVx
+			endif
+
+			cpx = _polyVertAttr[iVert][DRAWPOLY_COORD_X] + (Distance/2) * DirectionVx - (sqr((rr)^2 - (Distance/2)^2)) * ArcDirectionVx
+			cpy = _polyVertAttr[iVert][DRAWPOLY_COORD_Y] + (Distance/2) * DirectionVy - (sqr((rr)^2 - (Distance/2)^2)) * ArcDirectionVy
+
+			put cpx, cpy, 907
+
+			_bIgnoreNextPoint = 1
+		endif
+	next iVert
+
+	if nsp >= 6 then
+		addz -0.01
+
+		cutform nsp/3, 1, 1+2+0+0+32,
+			0, 0, 1, 0.03,
+			get(nsp)
+
+		del 1
+	endif
+
+return
+
+
+! ==============================================================================
+"drawNosingExtension":
+! ------------------------------------------------------------------------------
+
+	_extensionXStart	= 0
+	if _bSlantedNosing then
+		_extensionXStart	= _slantingDist + extensionHeight / tan(_slantingAngle)
+	endif
+
+	_num	= _num + 3:	_profileSectionPoly[_num + COORD_X]	= _extensionXStart	: _profileSectionPoly[_num + COORD_Y]	= -TREAD_THICKNESS - extensionHeight	: _profileSectionPoly[_num + COORD_STATUS]	= 1
+	_num	= _num + 3:	_profileSectionPoly[_num + COORD_X]	= extensionWidth	: _profileSectionPoly[_num + COORD_Y]	= -TREAD_THICKNESS - extensionHeight	: _profileSectionPoly[_num + COORD_STATUS]	= 1
+	_num	= _num + 3:	_profileSectionPoly[_num + COORD_X]	= extensionWidth	: _profileSectionPoly[_num + COORD_Y]	= -TREAD_THICKNESS						: _profileSectionPoly[_num + COORD_STATUS]	= 1
+
+return
+
+]]>
+</Script_3D>
+
+<!-- GDL SCRIPT ===== GDL SCRIPT ===== GDL SCRIPT ===== GDL SCRIPT ===== GDL SCRIPT -->
+
+<Script_2D SectVersion="20" SectionFlags="0" SubIdent="0">
+<![CDATA[
+unID = 200
+_nTrans = 0
+
+_lineType	= 1
+
+! ==============================================================================
+! Content To Draw
+! ==============================================================================
+
+gosub "setContentToDraw"
+
+! ===============================================================================
+! Other Accessories - do not require cutform from Tread
+!	- Draw Non Slip Bands
+!	- Draw Raised Strip
+! ===============================================================================
+
+if bAccessory or bRaisedStrip then
+	pen			_penColor
+	line_type 	_lineType
+
+	if _bDrawCurrSymbol then
+		call "treadAccessories_m" parameters all
+	endif
+endif
+
+
+! ==============================================================================
+end ! end ! end ! end ! end ! end ! end ! end ! end ! end ! end ! end ! end ! en
+! ==============================================================================
+
+! ==============================================================================
+"setContentToDraw":
+! ------------------------------------------------------------------------------
+
+	if _bOverrideMVO then
+		gosub "GetAttributesBySymbol"
+	else
+		gosub "GetAttributesByMVO"
+	endif
+
+	gosub "AttributesSettings"
+return
+
+! ==============================================================================
+"GetAttributesBySymbol":
+! ------------------------------------------------------------------------------
+	_bAcc2DVisible		= (iAcc2DVisibility = SHOW_VISIBLE | iAcc2DVisibility = SHOW_ALL)
+	_bAcc2DHidden		= (iAcc2DVisibility = SHOW_NON_VIS | iAcc2DVisibility = SHOW_ALL)
+
+return
+
+! ==============================================================================
+"GetAttributesByMVO":
+! ------------------------------------------------------------------------------
+
+	iMVOTread2D	= SHOW_NONE
+
+	call "GetStairGlobals" parameters	bGetTreadSymbolMVOValues	= 1,
+					returned_parameters	dummy,			! Tread
+										dummy,			! Grid Fill
+										dummy,			! Nosing
+										dummy,			! Landing Line
+										dummy,			! Draining
+										dummy,			! Draining Fill
+										dummy,			! WalkLine
+										dummy,			! WL on Landing
+										dummy,			! WL Start
+										dummy,			! WL End
+										dummy,			! Numbering
+										iMVOTread2D,	! Tread 2D
+										dummy,			! Beam Structure
+										dummy,			! Stringers
+										dummy			! Cantilevered
+
+	_bAcc2DVisible		= (iMVOTread2D = SHOW_VISIBLE | iMVOTread2D = SHOW_ALL)
+	_bAcc2DHidden		= (iMVOTread2D = SHOW_NON_VIS | iMVOTread2D = SHOW_ALL)
+
+return
+
+! ==============================================================================
+"AttributesSettings":
+! ------------------------------------------------------------------------------
+
+	if _bDrawAsVisibleSymbol then
+		_lineType	= lineAccVisible
+		_penColor	= penAccVisible
+
+		_bDrawCurrSymbol = _bAcc2DVisible
+	else
+		_lineType	= lineAccHidden
+		_penColor	= penAccHidden
+
+		_bDrawCurrSymbol = _bAcc2DHidden
+	endif
+
+return
+]]>
+</Script_2D>
+
+<!-- GDL SCRIPT ===== GDL SCRIPT ===== GDL SCRIPT ===== GDL SCRIPT ===== GDL SCRIPT -->
+
+<Script_PR SectVersion="20" SectionFlags="0" SubIdent="0">
+<![CDATA[
+v = volume3D()
+COMPONENT "material", v, "m3"
+]]>
+</Script_PR>
+
+<!-- GDL SCRIPT ===== GDL SCRIPT ===== GDL SCRIPT ===== GDL SCRIPT ===== GDL SCRIPT -->
+
+<Script_1D SectVersion="20" SectionFlags="0" SubIdent="0">
+<![CDATA[
+EPS = 0.0001
+
+_bOverrideMVO			= STAIR2D_CUSTOMDISPLAY		! always false in param script and UI script
+_bDrawAsVisibleSymbol	= STAIR2D_VISIBILITY
+
+! MVO Values
+SHOW_NONE		= 0
+SHOW_VISIBLE	= 1
+SHOW_NON_VIS	= 2
+SHOW_ALL		= 3
+
+COORD_X			= 1
+COORD_Y			= 2
+COORD_STATUS	= 3
+
+COMPTYPE_CORE	= 0
+COMPTYPE_FINISH	= 1
+COMPTYPE_OTHER	= 2
+
+! GLOB_STRUCTURE_DISPLAY
+DISPLAY_ALL			= 0
+DISPLAY_COREONLY	= 1
+DISPLAY_NOFINISH	= 2
+
+! const values for: iNosingMainType
+NOSING_MAIN_TYPE_NOEXT			= 1
+NOSING_MAIN_TYPE_EXT			= 2
+NOSING_MAIN_TYPE_CUSTOM_PROF	= 3
+
+dim	stNosingMainTypes[]
+	stNosingMainTypes[1]	= `Nosing without Extension`
+	stNosingMainTypes[2]	= `Nosing with Extension`
+	stNosingMainTypes[3]	= `Custom Profile`
+
+! const values for: TREAD_NOSING_METHOD
+NOSING_METHOD_VALUE_LENGTH		= 1
+NOSING_METHOD_SLANTING_LENGTH	= 2
+
+_treadNosingMethod			= TREAD_NOSING_METHOD
+_bManualSlantingStartPoint	= (_treadNosingMethod	= NOSING_METHOD_VALUE_LENGTH)
+
+if _bManualSlantingStartPoint then
+	_slantingStartPoint	= slantingStartPoint
+else
+	_slantingStartPoint	= TREAD_NOSING_BY_SLANTING
+endif
+
+! const values for: iTreadNosingProfile
+NOSINGPROFILE_FILLET				= 1		!2
+NOSINGPROFILE_CHAMFER				= 2		!4
+NOSINGPROFILE_ROUNDED				= 3		!8
+NOSINGPROFILE_SLANTED_FILLET		= 4		!16
+NOSINGPROFILE_SLANTED_CHAMFER		= 5		!32
+NOSINGPROFILE_SLANTED_ONLY			= 6		!64
+NOSINGPROFILE_CUSTOM_PROF			= 7		!128
+NOSINGPROFILE_CLASSICAL				= 8		!256
+NOSINGPROFILE_SLANTED_SQUARE		= 9		!512
+NOSINGPROFILE_SQUARE				= 10	!1024
+
+dim	stNosingTypes[]
+	stNosingTypes[1]	= `Fillet`
+	stNosingTypes[2]	= `Chamfered`
+	stNosingTypes[3]	= `Rounded`
+	stNosingTypes[4]	= `Rounded with Slanting`
+	stNosingTypes[5]	= `Chamfered with Slanting`
+	stNosingTypes[6]	= `Slanted Only`
+	stNosingTypes[7]	= `Custom Profile`
+	stNosingTypes[8]	= `Classical`
+	stNosingTypes[9]	= `Square with Slanting`
+	stNosingTypes[10]	= `Square`
+
+_bNosingHasExtension	= (iNosingMainType	= NOSING_MAIN_TYPE_EXT)
+
+_stAllEnabledNosingTypes	= `Tread Profile Type:`
+if iNosingMainType	= NOSING_MAIN_TYPE_CUSTOM_PROF then
+	_iEnableNosingTypes	= 128
+	_stAllEnabledNosingTypes	= _stAllEnabledNosingTypes +\
+								  stNosingTypes[7] + ", "
+else
+	if _bManualSlantingStartPoint then
+		if _bNosingHasExtension then
+			_iEnableNosingTypes	= 2 + 4 + 16 + 32 + 64 + 512 + 1024
+			_stAllEnabledNosingTypes	= _stAllEnabledNosingTypes +\
+										  stNosingTypes[10] + ", " +\
+										  stNosingTypes[1] + ", " +\
+										  stNosingTypes[2] + ", " +\
+										  stNosingTypes[9] + ", " +\
+										  stNosingTypes[4] + ", " +\
+										  stNosingTypes[5] + ", " +\
+										  stNosingTypes[6]
+		else
+			_iEnableNosingTypes	= 2 + 4 + 8 + 16 + 32 + 64 + 512
+			_stAllEnabledNosingTypes	= _stAllEnabledNosingTypes +\
+										  stNosingTypes[3] + ", " +\
+										  stNosingTypes[1] + ", " +\
+										  stNosingTypes[2] + ", " +\
+										  stNosingTypes[9] + ", " +\
+										  stNosingTypes[4] + ", " +\
+										  stNosingTypes[5] + ", " +\
+										  stNosingTypes[6]
+		endif
+	else
+		if abs(_slantingStartPoint) > eps then
+			if _bNosingHasExtension then
+				_iEnableNosingTypes	= 2 + 4 + 16 + 32 + 512 + 1024
+				_stAllEnabledNosingTypes	= _stAllEnabledNosingTypes +\
+											  stNosingTypes[10] + ", " +\
+											  stNosingTypes[1] + ", " +\
+											  stNosingTypes[2] + ", " +\
+											  stNosingTypes[9] + ", " +\
+											  stNosingTypes[4] + ", " +\
+											  stNosingTypes[5]
+			else
+				_iEnableNosingTypes	= 2 + 4 + 8 + 16 + 32 + 512
+				_stAllEnabledNosingTypes	= _stAllEnabledNosingTypes +\
+											  stNosingTypes[3] + ", " +\
+											  stNosingTypes[1] + ", " +\
+											  stNosingTypes[2] + ", " +\
+											  stNosingTypes[9] + ", " +\
+											  stNosingTypes[4] + ", " +\
+											  stNosingTypes[5]
+			endif
+		else
+			if _bNosingHasExtension then
+				_iEnableNosingTypes	= 2 + 4 + 64 + 1024
+				_stAllEnabledNosingTypes	= _stAllEnabledNosingTypes +\
+											  stNosingTypes[10] + ", " +\
+											  stNosingTypes[1] + ", " +\
+											  stNosingTypes[2] + ", " +\
+											  stNosingTypes[6]
+			else
+				_iEnableNosingTypes	= 2 + 4 + 8 + 64
+				_stAllEnabledNosingTypes	= _stAllEnabledNosingTypes +\
+											  stNosingTypes[3] + ", " +\
+											  stNosingTypes[1] + ", " +\
+											  stNosingTypes[2] + ", " +\
+											  stNosingTypes[6]
+			endif
+		endif
+	endif
+endif
+
+dim _iNosingTypeValueList[]
+dim _stNosingTypeValueList[]
+j = 1
+for i = 1 to vardim1(stNosingTypes)
+	if bittest(_iEnableNosingTypes, i) then
+		_iNosingTypeValueList[j] = i
+		_stNosingTypeValueList[j] = stNosingTypes[i]
+		j = j + 1
+	endif
+next i
+
+_bEnableNosingExtension	=	(iTreadNosingProfile	= NOSINGPROFILE_FILLET) |\
+							(iTreadNosingProfile	= NOSINGPROFILE_CHAMFER) |\
+							(iTreadNosingProfile	= NOSINGPROFILE_SLANTED_FILLET) |\
+							(iTreadNosingProfile	= NOSINGPROFILE_SLANTED_CHAMFER) |\
+							(iTreadNosingProfile	= NOSINGPROFILE_SLANTED_ONLY) |\
+							(iTreadNosingProfile	= NOSINGPROFILE_SLANTED_SQUARE) |\
+							(iTreadNosingProfile	= NOSINGPROFILE_SQUARE)
+
+_bSlantedNosing	=	(iTreadNosingProfile	= NOSINGPROFILE_SLANTED_FILLET) |\
+					(iTreadNosingProfile	= NOSINGPROFILE_SLANTED_CHAMFER) |\
+					(iTreadNosingProfile	= NOSINGPROFILE_SLANTED_ONLY) |\
+					(iTreadNosingProfile	= NOSINGPROFILE_SLANTED_SQUARE)
+
+_bEnableSlantingStartPoint	=	_bSlantedNosing & not(iTreadNosingProfile	= NOSINGPROFILE_SLANTED_ONLY)
+
+_bFilletNosing	=	(iTreadNosingProfile	= NOSINGPROFILE_FILLET) |\
+					(iTreadNosingProfile	= NOSINGPROFILE_SLANTED_FILLET)
+
+_bChamferNosing	=	(iTreadNosingProfile	= NOSINGPROFILE_CHAMFER) |\
+					(iTreadNosingProfile	= NOSINGPROFILE_SLANTED_CHAMFER)
+
+
+TREAD_LEADINGEDGE			= 0
+TREAD_TRAILINGEDGE			= 1
+TREAD_LEFTSIDEEDGE			= 2
+TREAD_RIGHTSIDEEDGE			= 3
+
+CUTPOSITION_START			= 1
+CUTPOSITION_END				= 2
+
+EDGEDIR_090					= 1
+EDGEDIR_90180				= 2
+EDGEDIR_180270				= 3
+EDGEDIR_270360				= 4
+
+CUSTOMSLANTING_BYDISTANCE	= 1
+CUSTOMSLANTING_BYANGLE		= 2
+
+! iAccessory
+ACC_NONSLIPBAND				= 1
+ACC_EDGEPROTECTION			= 2
+ACC_CUSTOMPROFILE			= 99
+
+! iEdgeProtectionShape
+PROTECTION_SQUARE 	= 1
+PROTECTION_SLANTED 	= 2		! inside of Tread
+PROTECTION_SLANTED2 = 3		! outside of Tread
+PROTECTION_ROUND 	= 4		! inside of Tread
+PROTECTION_ROUND2 	= 5		! outside of Tread
+
+! iRecessMultiply
+RECESS_DISTRIBUTE			= 1
+RECESS_SPREAD				= 2
+
+_bEnableTreadNosingProfileOnFront	= bNosingProfile & bTreadNosingProfileOnFront
+_bEnableTreadNosingProfileOnLeft	= bNosingProfile & bTreadNosingProfileOnLeft
+_bEnableTreadNosingProfileOnRight	= bNosingProfile & bTreadNosingProfileOnRight
+_bEnableTreadNosingProfileOnBack	= bNosingProfile & bTreadNosingProfileOnBack
+
+_bNonSlipBands = 0
+if bAccessory then
+	if iAccessory = ACC_NONSLIPBAND		then _bNonSlipBands = 1
+endif
+
+! --- iTypeRaisedStrip ----------------------------------------------------------------
+STRIPTYPE_SQUARE = 1
+STRIPTYPE_ROUNDED = 2
+
+
+]]>
+</Script_1D>
+
+<!-- GDL SCRIPT ===== GDL SCRIPT ===== GDL SCRIPT ===== GDL SCRIPT ===== GDL SCRIPT -->
+
+<Script_UI SectVersion="20" SectionFlags="0" SubIdent="0">
+<![CDATA[
+ui_dialog `Tread Component Settings`
+
+dim tabTitles[5]
+	tabTitles[1] = `Nosing`
+	tabTitles[2] = `Raised Strip`
+	tabTitles[3] = `Milled Recess`
+	tabTitles[4] = `Non-Slip Accessory`
+	tabTitles[5] = `Representation`
+
+dim tabIcons[5]
+	tabIcons[1] = "uiTab_Nosing_hl(1)"
+	tabIcons[2] = "uiTab_RaisedStrip_hl(1)"
+	tabIcons[3] = "uiTab_StairMilledRecess_hl(1)"
+	tabIcons[4] = "uiTab_StairTread_Accessory_hl(1)"
+	tabIcons[5] = "uiTab_2DRepr_hl(1)"
+
+dim	uiListItemDesc[17]
+	uiListItemDesc[1]	= `Uncut Line Pen`
+	uiListItemDesc[2]	= `Cut Pen`
+	uiListItemDesc[3]	= `Material and Surfaces`
+	uiListItemDesc[4]	= `Building Material`
+	uiListItemDesc[5]	= `Override Surfaces`
+	uiListItemDesc[6]	= `Tread Surface`
+	uiListItemDesc[7]	= `Cut Surfaces`
+	uiListItemDesc[8]	= `Override Cut Fill Pens`
+	uiListItemDesc[9]	= `Cut Fill Foreground Pen`
+	uiListItemDesc[10]	= `Cut Fill Background Pen`
+
+	uiListItemDesc[11]	= `Tread Accessories Representation`
+	uiListItemDesc[12]	= ""	! unused
+
+	uiListItemDesc[13]	= `Line Pen on Visible Parts`
+	uiListItemDesc[14]	= `Line Type on Visible Parts`
+	uiListItemDesc[15]	= `Surface`
+	uiListItemDesc[16]	= `Line Pen on Hidden Parts`
+	uiListItemDesc[17]	= `Line Type on Hidden Parts`
+
+
+! Page IDs
+TABID_ROOT				= -1		: _idxTab = 1
+TABID_TREADSETTINGS		= _idxTab	: _idxTab = _idxTab + 1
+TABID_RAISEDSTRIP		= _idxTab	: _idxTab = _idxTab + 1
+TABID_MILLEDRECESS		= _idxTab	: _idxTab = _idxTab + 1
+TABID_ACCESSORY			= _idxTab	: _idxTab = _idxTab + 1
+TABID_REPRESENTATION	= _idxTab	: _idxTab = _idxTab + 1
+
+
+_penContPic	= "ui_list_contourPen_hl(1)"
+_penCutPic	= "ui_list_pencolor_hl(1)"
+_lineTypPic	= "ui_list_contLineType_hl(1)"
+_buiMatPic	= "ui_list_BuildingMaterial_hl(1)"
+_surfacePic	= "ui_list_surface_hl(1)"
+_surORidPic	= "ui_list_SurfaceOverride_hl(1)"
+_filORidPic	= "ui_list_OverrideCutFillPens_hl(1)"
+_fillFgPic	= "ui_list_fillPen_hl(1)"
+_fillBgPic	= "ui_list_fillBgPen_hl(1)"
+
+file_dependence "uiTab_Nosing_hl(1)"
+file_dependence "uiTab_RaisedStrip_hl(1)"
+file_dependence "uiTab_StairMilledRecess_hl(1)"
+file_dependence "uiTab_StairTread_Accessory_hl(1)"
+file_dependence "uiTab_2DRepr_hl(1)"
+
+file_dependence "ui_list_contourPen_hl(1)"
+file_dependence "ui_list_pencolor_hl(1)"
+file_dependence "ui_list_contLineType_hl(1)"
+file_dependence "ui_list_BuildingMaterial_hl(1)"
+file_dependence "ui_list_surface_hl(1)"
+file_dependence "ui_list_SurfaceOverride_hl(1)"
+file_dependence "ui_list_OverrideCutFillPens_hl(1)"
+file_dependence "ui_list_fillPen_hl(1)"
+file_dependence "ui_list_fillBgPen_hl(1)"
+file_dependence "ui_list_TreadAccessories_hl(1)"
+
+
+pageStartY = 1
+
+! Get Format String
+_stFormat	= "%m"		! default meter
+_reqUnit	= request("Model_length_unit", "", _stFormat)
+_stAngleFormat	= "%10.4dd"
+_reqAngleUnit	= request("Working_angle_unit", "", _stAngleFormat)
+
+! ==============================================================================
+! UI Pages
+! ==============================================================================
+
+ui_page TABID_TREADSETTINGS,	TABID_ROOT, tabTitles[1], tabIcons[1]
+	gosub "pageTreadSettings"
+
+ui_page TABID_RAISEDSTRIP,		TABID_ROOT, tabTitles[2], tabIcons[2]
+	gosub "pageRaisedStripSettings"
+
+ui_page TABID_MILLEDRECESS,		TABID_ROOT, tabTitles[3], tabIcons[3]
+	gosub "pageMilledRecessSettings"
+
+ui_page TABID_ACCESSORY,		TABID_ROOT, tabTitles[4], tabIcons[4]
+	gosub "pageAccessorySettings"
+
+ui_page TABID_REPRESENTATION,	TABID_ROOT, tabTitles[5], tabIcons[5]
+	gosub "pageRepresSettings"
+
+! ==============================================================================
+end ! end ! end ! end ! end ! end ! end ! end ! end ! end ! end ! end ! end ! en
+! ==============================================================================
+
+
+! ==============================================================================
+"pageTreadSettings":
+! ------------------------------------------------------------------------------
+	! Sizes and Positions
+	yCurr		= pageStartY
+	diffY		= 23
+
+	inFldWdt1 	= 180
+	inFldWdt	= 90
+	inFldHgt	= 19
+
+	outFldWdt	= 90
+	outFldHgt	= 15
+
+	picWdt1		= 154
+	picHgt1		= 69
+	picPosX1	= 32
+	picPosY1	= 160
+
+	picWdt2		= 74
+	picHgt2		= 76
+	picPosX2	= 324
+	picPosY2	= 160
+
+	xPos1		= 1
+	xPos2		= xPos1 + inFldWdt1 + 2
+
+	fullWidth	= 443
+
+! ------------------------------------------------------------------------------
+	_nosDimPic = 8						! Nosing_Chamfered_hl(1)
+
+	if iTreadNosingProfile = NOSINGPROFILE_CUSTOM_PROF then
+		_nosDimPic 	= 11				! Nosing_Custom_hl(1)
+	endif
+	if iTreadNosingProfile = NOSINGPROFILE_ROUNDED then
+		_nosDimPic 	= 15				! Nosing_Rounded_hl(1)
+	endif
+	if iTreadNosingProfile = NOSINGPROFILE_FILLET then
+		if _bNosingHasExtension then
+			_nosDimPic 	= 23				! NosingExtension_Fillet_hl(1)
+		else
+			_nosDimPic 	= 12				! Nosing_Fillet_hl(1)
+		endif
+	endif
+	if iTreadNosingProfile = NOSINGPROFILE_CHAMFER then
+		if _bNosingHasExtension then
+			_nosDimPic 	= 20				! NosingExtension_Chamfered_hl(1)
+		else
+			_nosDimPic 	= 8					! Nosing_Chamfered_hl(1)
+		endif
+	endif
+	if iTreadNosingProfile = NOSINGPROFILE_SLANTED_FILLET then
+		if _bNosingHasExtension then
+			if iDefSlantingAngleCustom = CUSTOMSLANTING_BYANGLE then
+				_nosDimPic 	= 24			! NosingExtension_Fillet_SlantedAngle_hl(1)
+			else
+				_nosDimPic 	= 25			! NosingExtension_Fillet_SlantedDim_hl(1)
+			endif
+		else
+			if iDefSlantingAngleCustom = CUSTOMSLANTING_BYANGLE then
+				_nosDimPic 	= 13			! Nosing_Fillet_SlantedAngle_hl(1)
+			else
+				_nosDimPic 	= 14			! Nosing_Fillet_SlantedDim_hl(1)
+			endif
+		endif
+	endif
+	if iTreadNosingProfile = NOSINGPROFILE_SLANTED_CHAMFER then
+		if _bNosingHasExtension then
+			if iDefSlantingAngleCustom = CUSTOMSLANTING_BYANGLE then
+				_nosDimPic 	= 21				! NosingExtension_Chamfered_SlantedAngle_hl(1)
+			else
+				_nosDimPic 	= 22			! NosingExtension_Chamfered_SlantedDim_hl(1)
+			endif
+		else
+			if iDefSlantingAngleCustom = CUSTOMSLANTING_BYANGLE then
+				_nosDimPic 	= 9				! Nosing_Chamfered_SlantedAngle_hl(1)
+			else
+				_nosDimPic 	= 10			! Nosing_Chamfered_SlantedDim_hl(1)
+			endif
+		endif
+	endif
+	if iTreadNosingProfile = NOSINGPROFILE_SLANTED_ONLY then
+		if _bNosingHasExtension then
+			if iDefSlantingAngleCustom = CUSTOMSLANTING_BYANGLE then
+				_nosDimPic 	= 26			! NosingExtension_SlantedOnlyAngle_hl(1)
+			else
+				_nosDimPic 	= 27			! NosingExtension_SlantedOnlyDim_hl(1)
+			endif
+		else
+			if iDefSlantingAngleCustom = CUSTOMSLANTING_BYANGLE then
+				_nosDimPic 	= 16			! Nosing_SlantedOnlyAngle_hl(1)
+			else
+				_nosDimPic 	= 17			! Nosing_SlantedOnlyDim_hl(1)
+			endif
+		endif
+	endif
+	if iTreadNosingProfile = NOSINGPROFILE_SLANTED_SQUARE then
+		if _bNosingHasExtension then
+			if iDefSlantingAngleCustom = CUSTOMSLANTING_BYANGLE then
+				_nosDimPic 	= 28			! NosingExtension_Square_SlantedAngle_hl(1)
+			else
+				_nosDimPic 	= 29			! NosingExtension_Square_SlantedDim_hl(1)
+			endif
+		else
+			if iDefSlantingAngleCustom = CUSTOMSLANTING_BYANGLE then
+				_nosDimPic 	= 18			! Nosing_Square_SlantedAngle_hl(1)
+			else
+				_nosDimPic 	= 19			! Nosing_Square_SlantedDim_hl(1)
+			endif
+		endif
+	endif
+	if iTreadNosingProfile = NOSINGPROFILE_CLASSICAL then
+		_nosDimPic 	= 31				! Nosing_Classic_hl(1)
+		picHgt2		= 95
+	endif
+	if iTreadNosingProfile = NOSINGPROFILE_SQUARE then
+		_nosDimPic 	= 30				! NosingExtension_Square_hl(1)			! temporary
+	endif
+
+! ------------------------------------------------------------------------------
+
+	ui_style 0, 1
+	ui_infield{3}	"bNosingProfile",		xPos1,	yCurr,	inFldWdt1,		inFldHgt,
+		7, "", 0, 0,
+		0, 0, 0, 0,
+		"", `Nosing`, 0,
+		"", `Nosing`, 1
+	ui_style 0, 0
+
+	ui_infield{3}	"iNosingMainType",		xPos2,	yCurr,	210,	inFldHgt,
+		8, "", 0, 0,
+		0, 0, 0, 0,
+		"", stNosingMainTypes[1], NOSING_MAIN_TYPE_NOEXT,
+		"", stNosingMainTypes[2], NOSING_MAIN_TYPE_EXT,
+		"", stNosingMainTypes[3], NOSING_MAIN_TYPE_CUSTOM_PROF
+
+	yCurr	= yCurr + diffY
+
+	ui_outfield		`Nosing Shape`,			xPos1,	yCurr + 4,		inFldWdt1,	outFldHgt,	4 * not(bNosingProfile)
+
+	if iNosingMainType = NOSING_MAIN_TYPE_CUSTOM_PROF then
+		ui_infield	"nosingProfileID",	xPos2,	yCurr,	210, 26
+
+		yCurr	= yCurr + diffY + 5
+
+		ui_infield{3}	"bProfileAttributes",	xPos1,	yCurr,	fullWidth - xPos1,		inFldHgt,
+			7, "", 0, 0,
+			0, 0, 0, 0,
+			"", `Use Profile Attributes for Nosing`, 0,
+			"", `Use Profile Attributes for Nosing`, 1
+	else
+		if _bNosingHasExtension then
+			ui_infield{3}	"iTreadNosingProfile",	xPos2,	yCurr,	30 * vardim1(_stNosingTypeValueList), 24,
+				4, 32, 7, 1,								! NosingType_with_Extension_hl(1)
+				30, 24, 30, 24,
+				1,	"",	NOSINGPROFILE_SQUARE,
+				2,	"",	NOSINGPROFILE_FILLET,
+				3,	"",	NOSINGPROFILE_CHAMFER,
+				4,	"",	NOSINGPROFILE_SLANTED_SQUARE,
+				5,	"",	NOSINGPROFILE_SLANTED_FILLET,
+				6,	"",	NOSINGPROFILE_SLANTED_CHAMFER,
+				7,	"",	NOSINGPROFILE_SLANTED_ONLY			ui_tooltip _stAllEnabledNosingTypes
+		else
+			ui_infield{3}	"iTreadNosingProfile",	xPos2,	yCurr,	30 * vardim1(_stNosingTypeValueList), 24,
+				4, 33, 7, 1,								! NosingType_without_Extension_hl(1)
+				30, 24, 30, 24,
+				1,	"",	NOSINGPROFILE_ROUNDED,
+				2,	"",	NOSINGPROFILE_FILLET,
+				3,	"",	NOSINGPROFILE_CHAMFER,
+				4,	"",	NOSINGPROFILE_SLANTED_SQUARE,
+				5,	"",	NOSINGPROFILE_SLANTED_FILLET,
+				6,	"",	NOSINGPROFILE_SLANTED_CHAMFER,
+				7,	"",	NOSINGPROFILE_SLANTED_ONLY			ui_tooltip _stAllEnabledNosingTypes
+		endif
+	endif
+
+	yCurr	= yCurr + diffY + 5
+
+	if _bSlantedNosing then
+		ui_infield{3}	"bUseSlantingAngleRiser",	xPos1,	yCurr,	inFldWdt1 + 60,		inFldHgt,
+			7, "", 0, 0,
+			0, 0, 0, 0,
+			"", `Cut with Riser Angle`, 0,
+			"", `Cut with Riser Angle`, 1
+
+		ui_infield{3}	"iDefSlantingAngleCustom",	xPos2 + 60 - 2,	yCurr,	60,	24,
+			4, 3, 2, 1,																! NosingSlanted_hl(1)
+			27, 24, 27, 24,
+			1,	"",	CUSTOMSLANTING_BYANGLE,
+			2,	"",	CUSTOMSLANTING_BYDISTANCE
+
+		if iDefSlantingAngleCustom = CUSTOMSLANTING_BYANGLE then
+			ui_infield	"slantingAngleCustom", xPos2 + 120,	yCurr,	inFldWdt,	inFldHgt		ui_tooltip `Custom Slanting Angle`
+		else
+			ui_infield	"slantingDistCustom", xPos2 + 120,	yCurr,	inFldWdt,	inFldHgt		ui_tooltip `Custom Slanting Distance`
+		endif
+	endif
+
+
+	yCurr	= pageStartY + 123
+
+	ui_separator 0, yCurr, 444, yCurr
+	yCurr	= yCurr + diffY - 4
+
+	if	iTreadNosingProfile = NOSINGPROFILE_ROUNDED |\
+		_bFilletNosing | _bChamferNosing then
+
+		if _bChamferNosing then
+			_stRadius	= `Chamfered`
+		else
+			_stRadius	= `Fillet`
+		endif
+
+		ui_infield{3}	"filletRadius",		picPosX2 - inFldWdt + 25,	yCurr - 5,	inFldWdt,	inFldHgt ui_tooltip _stRadius
+	endif
+
+	ui_outfield	str(_stFormat, TREAD_THICKNESS), picPosX2 - inFldWdt + picWdt2 + 42,	yCurr - 1,	outFldWdt,	outFldHgt, 2 + 4 * not(bNosingProfile)		ui_tooltip `Tread Thickness`
+
+	ui_pict	_nosDimPic,	picPosX2,	picPosY2,	picWdt2,	picHgt2, 1
+
+	if _bSlantedNosing then
+		if _bEnableSlantingStartPoint then
+			if _bManualSlantingStartPoint then
+				ui_infield	"slantingStartPoint", picPosX2 - inFldWdt - 2,	picPosY2 + 14,	outFldWdt,	outFldHgt						ui_tooltip `Custom Slanting Start Point`
+			else
+				ui_outfield	str(_stFormat, _slantingStartPoint), picPosX2 - outFldWdt - 2,	picPosY2 + 14,	outFldWdt,	outFldHgt, 1	ui_tooltip `Slanting Start Point`
+			endif
+		endif
+
+		if not(bUseSlantingAngleRiser) then
+			if iDefSlantingAngleCustom = CUSTOMSLANTING_BYANGLE then
+				ui_outfield	str(_stAngleFormat, slantingAngleCustom),	picPosX2 - inFldWdt - 2,	picPosY2 + 45,	outFldWdt,	outFldHgt, 1	ui_tooltip `Custom Slanting Angle`
+			else
+				ui_outfield	str(_stFormat, slantingDistCustom),			picPosX2 - inFldWdt - 2,	picPosY2 + 45,	outFldWdt,	outFldHgt, 1	ui_tooltip `Custom Slanting Distance`
+			endif
+		endif
+	endif
+
+	if	iTreadNosingProfile = NOSINGPROFILE_CUSTOM_PROF then
+		_result = REQUEST ("Profile_default_boundingbox",  nosingProfileID, _xMin, _yMin, _xMax, _yMax)
+
+		if _result then
+			_profileWidth	= abs(_xMax - _xMin)
+			_profileHeight	= abs(_yMax - _yMin)
+		else
+			_profileWidth	= 0
+			_profileHeight	= 0
+		endif
+
+		ui_outfield	str(_stFormat, _profileHeight),		picPosX2 - outFldWdt - 2,	picPosY2 + 45,	outFldWdt,	outFldHgt, 1	ui_tooltip `Profile Height`
+		ui_outfield	str(_stFormat, _profileWidth),		picPosX2 - outFldWdt + 20,	yCurr,			outFldWdt,	outFldHgt, 1	ui_tooltip `Profile Width`
+	endif
+
+	if _bNosingHasExtension then
+		ui_infield	"extensionWidth",	picPosX2 - inFldWdt + 20,			picPosY2 + picHgt2 + 4,	inFldWdt,	inFldHgt	ui_tooltip `Extension Width`
+		ui_infield	"extensionHeight",	picPosX2 - inFldWdt + picWdt2 + 40,	picPosY2 + picHgt2 + 4,	inFldWdt,	inFldHgt	ui_tooltip `Extension Height`
+	endif
+
+
+	yCurr	= yCurr + diffY + 4
+
+	ui_pict	2,	picPosX1,	picPosY1,	picWdt1,	picHgt1, 1						! NosingPlacement_hl(1)
+
+	picMrgnVert = 3 : 	picMrgnHor = 7
+	chckBxWdt = 13
+
+	ui_infield{3}	"bTreadNosingProfileOnBack",	picPosX1 + picWdt1 / 2 - chckBxWdt/2,		picPosY1 - picMrgnHor - chckBxWdt,		chckBxWdt,	chckBxWdt
+	ui_infield{3}	"bTreadNosingProfileOnLeft",	picPosX1 - picMrgnVert - chckBxWdt,			picPosY1 + picHgt1 / 2 - chckBxWdt/2,	chckBxWdt,	chckBxWdt
+	ui_infield{3}	"bTreadNosingProfileOnRight",	picPosX1 + picWdt1 + picMrgnVert,			picPosY1 + picHgt1 / 2 - chckBxWdt/2,	chckBxWdt,	chckBxWdt
+	ui_infield{3}	"bTreadNosingProfileOnFront",	picPosX1 + picWdt1 / 2 - chckBxWdt/2,		picPosY1 + picHgt1 + picMrgnHor,		chckBxWdt,	chckBxWdt
+
+return
+
+! ==============================================================================
+"pageRaisedStripSettings":
+! ------------------------------------------------------------------------------
+
+	call "treadAccessories_m" parameters all	iTabpageType = 2	! TABPAGE_RAISEDSTRIP
+
+return
+
+! ==============================================================================
+"pageAccessorySettings":
+! ------------------------------------------------------------------------------
+
+	call "treadAccessories_m" parameters all	iTabpageType = 1	! TABPAGE_NONSLIPBAND
+
+return
+
+! ==============================================================================
+"pageMilledRecessSettings":
+! ------------------------------------------------------------------------------
+	! Sizes and Positions
+	yCurr		= pageStartY
+	diffY		= 23
+
+	inFldWdt1 	= 213
+	inFldWdt2	= 240
+	inFldWdt	= 90
+	inFldHgt	= 19
+
+	outFldWdt	= 180
+	outFldHgt	= 15
+
+	picWdt1		= 154
+	picHgt1		= 69
+	picPosX1	= 32
+	picPosY1	= 160
+
+	picWdt2		= 74
+	picHgt2		= 64
+	picPosX2	= 324
+	picPosY2	= 160
+
+	xPos1		= 1
+	xPos2		= 231
+
+	fullWidth	= 443
+
+! ------------------------------------------------------------------------------
+
+	ui_style 0, 1
+	ui_infield{3}	"bMilledRecess",		xPos1,	yCurr,	fullWidth - xPos1,		inFldHgt,
+		7, "", 0, 0,
+		0, 0, 0, 0,
+		"", `Milled Recess`, 0,
+		"", `Milled Recess `, 1
+	ui_style 0, 0
+	yCurr	= yCurr + diffY
+
+	ui_outfield		`No. of Milled Recesses`,	xPos1,					yCurr + 4,	outFldWdt,	outFldHgt,	4 * not(bMilledRecess)
+	ui_infield		"iRecessNum",				xPos1 + outFldWdt + 2,	yCurr,		inFldWdt,	inFldHgt
+	yCurr	= yCurr + diffY
+
+	ui_outfield		`Multiply Method`,				xPos1,	yCurr + 4,	outFldWdt,	outFldHgt,	4 * not(bMilledRecess)
+
+	ui_radiobutton	"iRecessMultiply",	RECESS_DISTRIBUTE,	`Distribute`, 	xPos1 + outFldWdt + 2,	yCurr,	inFldWdt2,		inFldHgt
+	yCurr	= yCurr + diffY
+	ui_radiobutton	"iRecessMultiply",	RECESS_SPREAD,		`Spread`, 		xPos1 + outFldWdt + 2,	yCurr,	inFldWdt2,		inFldHgt
+	yCurr	= yCurr + diffY * 2 + 10
+
+	ui_separator 0, yCurr, 444, yCurr
+
+	picMrgHor = 3
+	ui_pict	6,	picPosX2,	picPosY2,	picWdt2,	picHgt2, 1		! MilledRecessDimensions_hl(1)
+
+	ui_infield	"recessWidth",		fullWidth - inFldWdt * 2 - 4,	picPosY2 - inFldHgt - picMrgHor,	inFldWdt,	inFldHgt	ui_tooltip `Width of Milled Recesses`
+	ui_infield	"recessDepth",		picPosX2 - inFldWdt - 2,		picPosY2  + 8,						inFldWdt,	inFldHgt	ui_tooltip `Depth of Milled Recesses`
+	ui_infield	"mrOffsetStart",	picPosX2 - 20,					picPosY1 + picHgt1 + 7,				inFldWdt,	inFldHgt 	ui_tooltip `Start Offset`
+
+	ui_pict	7,	picPosX1,	picPosY1,	picWdt1,	picHgt1, 1		! MilledRecessPlacement_hl(1)
+
+	if iRecessMultiply  = RECESS_DISTRIBUTE then
+		ui_infield	"cuttingWidth", 			picPosX1 + picWdt1 + 2,			picPosY1 + 48,						inFldWdt,	inFldHgt 					ui_tooltip `Distribution Area`
+		ui_outfield	str(_stFormat, dRecess),	fullWidth - inFldWdt,			picPosY2 - inFldHgt,	inFldWdt,	outFldHgt, 4 * 	not(bMilledRecess)	ui_tooltip `Spread Distance`
+	else
+		ui_infield	"dRecess",						fullWidth - inFldWdt - 1,	picPosY2 - inFldHgt - picMrgHor,	inFldWdt, 	inFldHgt					ui_tooltip `Spread Distance`
+		ui_outfield	str(_stFormat, cuttingWidth),	picPosX1 + picWdt1 + 2,		picPosY1 + 52,						inFldWdt,	outFldHgt, 4 * 	not(bMilledRecess)	ui_tooltip `Distribution Area`
+	endif
+
+	picMrgHor = 4
+
+	ui_infield	"mrOffsetLeft",		0,				picPosY1 + picHgt1 + picMrgHor,	inFldWdt,	inFldHgt ui_tooltip `Left Offset`
+	ui_infield	"mrOffsetRight",	xPos1 + 122,	picPosY1 + picHgt1 + picMrgHor,	inFldWdt,	inFldHgt ui_tooltip `Right Offset`
+
+return
+
+! ==============================================================================
+"pageRepresSettings":
+! ------------------------------------------------------------------------------
+	! Sizes and Positions
+	listFieldID	= TABID_REPRESENTATION
+
+	listFieldPosX	= 0
+	listFieldPosY	= 0
+
+	listFieldWidth	= 444 - listFieldPosX
+	listFieldHeight	= 266 - listFieldPosY
+! ------------------------------------------------------------------------------
+
+	ui_listfield listFieldID, listFieldPosX, listFieldPosY, listFieldWidth, listFieldHeight
+
+! ------------------------------------------------------------------------------
+
+	itemID		= 1
+
+	if bAccessory or bRaisedStrip then
+		ui_listitem itemID, listFieldID, "gs_2D_representation",	0,	""									: itemID = itemID + 1
+
+		ui_listitem itemID, listFieldID, "iAcc2DVisibility",			1, "ui_list_TreadAccessories_hl(1)",uiListItemDesc[11]	ui_tooltip uiListItemDesc[11]	: itemID = itemID + 1
+
+		ui_listitem itemID, listFieldID, "penAccVisible",				1, "ui_list_contourPen_hl(1)",		uiListItemDesc[13]	ui_tooltip uiListItemDesc[13]	: itemID = itemID + 1
+		ui_listitem itemID, listFieldID, "lineAccVisible",				1, "ui_list_contLineType_hl(1)",	uiListItemDesc[14]	ui_tooltip uiListItemDesc[14]	: itemID = itemID + 1
+
+		ui_listitem itemID, listFieldID, "penAccHidden",				1, "ui_list_contourPen_hl(1)",		uiListItemDesc[16]	ui_tooltip uiListItemDesc[16]	: itemID = itemID + 1
+		ui_listitem itemID, listFieldID, "lineAccHidden",				1, "ui_list_contLineType_hl(1)",	uiListItemDesc[17]	ui_tooltip uiListItemDesc[17]	: itemID = itemID + 1
+	else
+		itemID = itemID + 7
+	endif
+
+	ui_listitem itemID, listFieldID, "gs_3D_representation",		0,	""										: itemID = itemID + 1
+	ui_listitem itemID, listFieldID, "gs_cont_pen",						1,	"ui_list_3DPen_hl(1)"				: itemID = itemID + 1
+	ui_listitem itemID, listFieldID, "penSection",						1,	"ui_list_cutPen_hl(1)"				: itemID = itemID + 1
+	ui_listitem itemID, listFieldID, "gs_resol",						1,	"ui_list_resol_hl(1)"				: itemID = itemID + 1
+
+	ui_listitem itemID, listFieldID, "gs_material",					0,	""	 									: itemID = itemID + 1
+	ui_listitem itemID, listFieldID, "structureBMat",					1,	"ui_list_BuildingMaterial_hl(1)"	: itemID = itemID + 1
+
+	if bAccessory then
+		if iAccessory = ACC_NONSLIPBAND then
+			ui_listitem itemID, listFieldID, "bmatNonSlipBand",				1,	"ui_list_BuildingMaterial_hl(1)"	: itemID = itemID + 1
+		else
+			ui_listitem itemID, listFieldID, "bmatEdgeProtection",			1,	"ui_list_BuildingMaterial_hl(1)"	: itemID = itemID + 1
+		endif
+	else
+		itemID = itemID + 3
+	endif
+
+	ui_listitem itemID, listFieldID, "bOverrideStructureSurface",		1,	"ui_list_SurfaceOverride_hl(1)"		: itemID = itemID + 1
+
+	if bAccessory then
+		ui_listitem itemID, listFieldID, "bOverrideAccessorySurface",	1,	"ui_list_SurfaceOverride_hl(1)"		: itemID = itemID + 1
+	else
+		itemID = itemID + 1
+	endif
+
+	if bOverrideStructureSurface then
+		ui_listitem itemID, listFieldID, "treadSurface",				1,	"ui_list_surface_hl(1)"				: itemID = itemID + 1
+	else
+		itemID = itemID + 1
+	endif
+
+	if bAccessory then
+		if bOverrideAccessorySurface then
+			if iAccessory = ACC_NONSLIPBAND then
+				ui_listitem itemID, listFieldID, "matBand",				1,	"ui_list_surface_hl(1)"				: itemID = itemID + 1
+			else
+				ui_listitem itemID, listFieldID, "matEdgeProtection",	1,	"ui_list_surface_hl(1)"				: itemID = itemID + 1
+			endif
+		else
+			itemID = itemID + 1
+		endif
+	else
+		itemID = itemID + 1
+	endif
+
+	file_dependence	"ui_list_3DPen_hl(1)"
+	file_dependence	"ui_list_cutPen_hl(1)"
+	file_dependence	"ui_list_contourPen_hl(1)"
+	file_dependence	"ui_list_resol_hl(1)"
+	file_dependence	"ui_list_BuildingMaterial_hl(1)"
+	file_dependence	"ui_list_SurfaceOverride_hl(1)"
+	file_dependence	"ui_list_surface_hl(1)"
+	file_dependence	"ui_list_contLineType_hl(1)"
+
+return
+
+
+]]>
+</Script_UI>
+
+<!-- GDL SCRIPT ===== GDL SCRIPT ===== GDL SCRIPT ===== GDL SCRIPT ===== GDL SCRIPT -->
+
+<Script_VL SectVersion="20" SectionFlags="0" SubIdent="0">
+<![CDATA[
+! ==============================================================================
+! Hideparameter
+! ==============================================================================
+
+hideparameter all
+
+
+! ==============================================================================
+! Macro Call
+! ==============================================================================
+
+call "treadAccessories_m" parameters all
+
+
+! ==============================================================================
+! Parameter Values
+! ==============================================================================
+
+values{2} "iNosingMainType" NOSING_MAIN_TYPE_NOEXT,			stNosingMainTypes[1],
+							NOSING_MAIN_TYPE_EXT,			stNosingMainTypes[2],
+							NOSING_MAIN_TYPE_CUSTOM_PROF,	stNosingMainTypes[3]
+
+values{2} "iTreadNosingProfile"  _iNosingTypeValueList, _stNosingTypeValueList
+
+values{2} "iDefSlantingAngleCustom" CUSTOMSLANTING_BYDISTANCE,		`By Distance`,
+									CUSTOMSLANTING_BYANGLE,			`By Angle`
+
+if iTreadNosingProfile = NOSINGPROFILE_ROUNDED then
+	_maxFilletRadius = TREAD_THICKNESS / 2
+else
+	if	iTreadNosingProfile = NOSINGPROFILE_SLANTED_FILLET |\
+		iTreadNosingProfile = NOSINGPROFILE_SLANTED_CHAMFER then
+
+		_maxFilletRadius = _slantingStartPoint
+	else
+		_maxFilletRadius = TREAD_THICKNESS
+	endif
+endif
+
+values "filletRadius" range (0, _maxFilletRadius]
+
+_minOffsetFront	= 0
+_minOffsetRight	= 0
+_minOffsetLeft	= 0
+_minOffsetBack	= 0
+
+if _bEnableTreadNosingProfileOnFront then
+	if	iTreadNosingProfile	<> NOSINGPROFILE_SLANTED_ONLY	&\
+		iTreadNosingProfile	<> NOSINGPROFILE_SLANTED_SQUARE	&\
+		iTreadNosingProfile	<> NOSINGPROFILE_SQUARE			&\
+		iTreadNosingProfile	<> NOSINGPROFILE_CUSTOM_PROF	then
+
+		_minOffsetFront	= filletRadius
+	endif
+endif
+
+if _bEnableTreadNosingProfileOnRight then
+	if	iTreadNosingProfile	<> NOSINGPROFILE_SLANTED_ONLY	&\
+		iTreadNosingProfile	<> NOSINGPROFILE_SLANTED_SQUARE	&\
+		iTreadNosingProfile	<> NOSINGPROFILE_SQUARE			&\
+		iTreadNosingProfile	<> NOSINGPROFILE_CUSTOM_PROF	then
+
+		_minOffsetRight	= filletRadius
+	endif
+endif
+
+if _bEnableTreadNosingProfileOnLeft then
+	if	iTreadNosingProfile	<> NOSINGPROFILE_SLANTED_ONLY	&\
+		iTreadNosingProfile	<> NOSINGPROFILE_SLANTED_SQUARE	&\
+		iTreadNosingProfile	<> NOSINGPROFILE_SQUARE			&\
+		iTreadNosingProfile	<> NOSINGPROFILE_CUSTOM_PROF	then
+
+		_minOffsetLeft	= filletRadius
+	endif
+endif
+
+if _bEnableTreadNosingProfileOnBack then
+	if	iTreadNosingProfile	<> NOSINGPROFILE_SLANTED_ONLY	&\
+		iTreadNosingProfile	<> NOSINGPROFILE_SLANTED_SQUARE	&\
+		iTreadNosingProfile	<> NOSINGPROFILE_SQUARE			&\
+		iTreadNosingProfile	<> NOSINGPROFILE_CUSTOM_PROF	then
+
+		_minOffsetBack	= filletRadius
+	endif
+endif
+
+values "nosingProfileID"		PROFILETYPES_MASK 16	! other: Object
+
+values{2} "iAccessory"			ACC_NONSLIPBAND,	`Non-Slip Bands`,
+								ACC_EDGEPROTECTION,	`Edge Protection`,
+								ACC_CUSTOMPROFILE,	`Custom Profile`
+
+values{2} "iRecessMultiply"		RECESS_DISTRIBUTE,	`Distribute`,
+								RECESS_SPREAD,		`Spread`
+
+values "dRecess"				range [0, )
+values "recessWidth"			range (0, )
+values "recessDepth"			range (0, )
+values "iRecessNum"				range [1, )
+values "cuttingWidth"			range [recessWidth * iRecessNum, )
+
+values "iTreadNonSlipBandNum"	range [1, )
+values "treadNonSlipBandDist"	range (0, )
+values "treadNonSlipBandWidth"	range (0, )
+
+if iAccessory = ACC_NONSLIPBAND then
+	_minOffsetFront	= max(_minOffsetFront, _minOffsetRight * bAccRight, _minOffsetLeft * bAccLeft)
+
+	values "accOffsetFront"		range [_minOffsetFront, )
+	values "accOffsetRight"		range [_minOffsetRight, )
+	values "accOffsetLeft"		range [_minOffsetLeft, )
+	values "accOffsetBack"		range [_minOffsetBack, )
+endif
+
+values{2} "iTypeRaisedStrip"	STRIPTYPE_SQUARE,		`Square`,
+								STRIPTYPE_ROUNDED,		`Rounded`
+
+values "posRaisedStrip"			range [max(_minOffsetRight,_minOffsetLeft), 0.1]
+values "offsetFrontRaisedStrip"	range [_minOffsetFront, )
+values "offsetBackRaisedStrip"	range [_minOffsetBack, )
+values "radiusRounded"			range [0, min(widthRaisedStrip/2, heightRaisedStrip)]
+
+values "gs_cont_pen"			range [1, 255]
+values "penSection"				range [1, 255]
+values "penAccVisible"			range [1, 255]
+values "penAccHidden"			range [1, 255]
+! ==============================================================================
+! Parameter Lock
+! ==============================================================================
+
+if not(bNosingProfile) then
+	lock	"iNosingMainType",
+			"iTreadNosingProfile",
+			"filletRadius",
+			"bTreadNosingProfileOnFront",
+			"bTreadNosingProfileOnBack",
+			"bTreadNosingProfileOnLeft",
+			"bTreadNosingProfileOnRight",
+
+			"slantingAngleCustom",
+			"slantingDistCustom",
+			"bUseSlantingAngleRiser",
+			"iDefSlantingAngleCustom"
+endif
+
+
+if not(bMilledRecess) then
+	lock	"iRecessMultiply",
+			"iRecessNum",
+			"dRecess",
+			"recessWidth",
+			"recessDepth",
+			"mrOffsetStart",
+			"cuttingWidth",
+			"mrOffsetLeft",
+			"mrOffsetRight"
+else
+	if iRecessNum = 1 then
+		cuttingWidth 	= recessWidth
+		dRecess			= 0
+		parameters	cuttingWidth	= cuttingWidth,
+					dRecess			= dRecess
+		lock "cuttingWidth", "dRecess"
+	else
+		if iRecessMultiply = RECESS_DISTRIBUTE then
+			dRecess = (cuttingWidth - iRecessNum * recessWidth)/ (iRecessNum - 1)
+			if dRecess < eps then
+				dRecess = 0
+				cuttingWidth = iRecessNum * recessWidth
+				parameters cuttingWidth = cuttingWidth
+			endif
+			parameters dRecess = dRecess
+			lock "dRecess"
+		else
+			cuttingWidth = iRecessNum * recessWidth + dRecess * (iRecessNum - 1)
+			parameters cuttingWidth = cuttingWidth
+			lock "cuttingWidth"
+		endif
+	endif
+endif
+
+
+if GLOB_MODPAR_NAME = "bNosingProfile" then
+	if bNosingProfile then
+		if	not(bTreadNosingProfileOnFront)	&\
+			not(bTreadNosingProfileOnBack)	&\
+			not(bTreadNosingProfileOnLeft)	&\
+			not(bTreadNosingProfileOnRight)	then
+
+			bTreadNosingProfileOnFront = 1
+			parameters bTreadNosingProfileOnFront = bTreadNosingProfileOnFront
+		endif
+	endif
+endif
+
+if bNosingProfile then
+	if	bTreadNosingProfileOnFront		&\
+		not(bTreadNosingProfileOnBack)	&\
+		not(bTreadNosingProfileOnLeft)	&\
+		not(bTreadNosingProfileOnRight)	then
+
+		lock "bTreadNosingProfileOnFront"
+	endif
+	if	not(bTreadNosingProfileOnFront)	&\
+		bTreadNosingProfileOnBack		&\
+		not(bTreadNosingProfileOnLeft)	&\
+		not(bTreadNosingProfileOnRight)	then
+
+		lock "bTreadNosingProfileOnBack"
+	endif
+	if	not(bTreadNosingProfileOnFront)	&\
+		not(bTreadNosingProfileOnBack)	&\
+		bTreadNosingProfileOnLeft		&\
+		not(bTreadNosingProfileOnRight)	then
+
+		lock "bTreadNosingProfileOnLeft"
+	endif
+	if	not(bTreadNosingProfileOnFront)	&\
+		not(bTreadNosingProfileOnBack)	&\
+		not(bTreadNosingProfileOnLeft)	&\
+		bTreadNosingProfileOnRight		then
+
+		lock "bTreadNosingProfileOnRight"
+	endif
+endif
+
+if bShowStripLeft and not(bShowStripRight) then
+	bShowStripLeft = 1
+	parameters bShowStripLeft = bShowStripLeft
+	lock "bShowStripLeft"
+endif
+
+if bShowStripRight and not(bShowStripLeft) then
+	bShowStripRight = 1
+	parameters bShowStripRight = bShowStripRight
+	lock "bShowStripRight"
+endif
+
+if iTypeRaisedStrip # STRIPTYPE_ROUNDED then
+	lock "radiusRounded"
+endif
+
+if not(bRaisedStrip) then
+	lock	"iTypeRaisedStrip",
+			"radiusRounded",
+			"bShowStripLeft",
+			"bShowStripRight",
+			"offsetFrontRaisedStrip",
+			"offsetBackRaisedStrip",
+			"heightRaisedStrip",
+			"widthRaisedStrip",
+			"posRaisedStrip"
+endif
+
+! ==============================================================================
+! Slanted parameter handling
+! ==============================================================================
+
+if _bSlantedNosing then
+	if iDefSlantingAngleCustom = CUSTOMSLANTING_BYDISTANCE then
+		lock "slantingAngleCustom"
+	else
+		lock "slantingDistCustom"
+	endif
+
+	if bUseSlantingAngleRiser then
+		lock	"slantingAngleCustom",
+				"slantingDistCustom",
+				"iDefSlantingAngleCustom"
+	endif
+
+	_minSlantAngle	= 45
+	_maxSlantAngle	= 90
+	_minSlantDist	= 0
+
+	if GLOB_MODPAR_NAME = "slantingDistCustom" then
+		_slantingDist	= slantingDistCustom
+
+		_y2				= TREAD_THICKNESS - _slantingStartPoint * (iTreadNosingProfile <> NOSINGPROFILE_SLANTED_ONLY)
+		_maxSlantDist	= _y2
+		if abs(_slantingDist) > eps then
+			_slantingAngle	= atn(_y2 / _slantingDist)
+		else
+			_slantingAngle = 90
+		endif
+
+		parameters slantingAngleCustom = _slantingAngle
+	else
+		_slantingAngle	= slantingAngleCustom
+
+		_y2				= TREAD_THICKNESS - _slantingStartPoint * (iTreadNosingProfile <> NOSINGPROFILE_SLANTED_ONLY)
+		_slantingDist	= _y2 / tan(_slantingAngle)
+		_maxSlantDist	= _y2
+
+		parameters slantingDistCustom = _slantingDist
+	endif
+
+	values "slantingAngleCustom" range [_minSlantAngle, _maxSlantAngle]
+	values "slantingDistCustom" range [_minSlantDist, _maxSlantDist]
+
+	if _bManualSlantingStartPoint then
+		values "slantingStartPoint" range [0, )
+	else
+		lock	"slantingStartPoint"
+	endif
+else
+	lock	"slantingAngleCustom",
+			"slantingDistCustom",
+			"bUseSlantingAngleRiser",
+			"iDefSlantingAngleCustom"
+endif
+
+if not(_bNosingHasExtension) | not(bNosingProfile) then
+	lock	"extensionHeight",
+			"extensionWidth"
+else
+	values "extensionHeight" range [0, )
+
+	if _bSlantedNosing then
+		_minExtWidth	= slantingDistCustom + extensionHeight / tan(_slantingAngle)
+	else
+		_minExtWidth	= 0
+	endif
+
+	values "extensionWidth" range [_minExtWidth, )
+endif
+
+]]>
+</Script_VL>
+
+<ParamSection SectVersion="26" SectionFlags="0" SubIdent="0">
+	<ParamSectHeader>
+		<Version>26</Version>
+		<AutoHotspots>false</AutoHotspots>
+		<StatBits>
+			<STBit_UIDefault/>
+			<STBit_FixSize/>
+			<STBit_UIUseHierarchicalPages/>
+		</StatBits>
+		<WDLeftFrame>0</WDLeftFrame>
+		<WDRightFrame>0</WDRightFrame>
+		<WDTopFrame>0</WDTopFrame>
+		<WDBotFrame>0</WDBotFrame>
+		<LayFlags>65535</LayFlags>
+		<WDMirrorThickness>0</WDMirrorThickness>
+		<WDWallInset>0</WDWallInset>
+		<SymbolColor>0</SymbolColor>
+	</ParamSectHeader>
+	<Parameters>
+		<Length Name="A">
+			<Description><![CDATA["Dimension 1"]]></Description>
+			<Fix/>
+			<Value>1</Value>
+		</Length>
+		<Length Name="B">
+			<Description><![CDATA["Dimension 2"]]></Description>
+			<Fix/>
+			<Value>1</Value>
+		</Length>
+		<Length Name="ZZYZX">
+			<Description><![CDATA["Height"]]></Description>
+			<Fix/>
+			<Value>1</Value>
+		</Length>
+		<Boolean Name="AC_show2DHotspotsIn3D">
+			<Description><![CDATA["Show 2D Hotspots in 3D"]]></Description>
+			<Fix/>
+			<Flags>
+				<ParFlg_Hidden/>
+			</Flags>
+			<Value>0</Value>
+		</Boolean>
+		<Length Name="ac_bottomlevel">
+			<Description><![CDATA["Bottom Level"]]></Description>
+			<Fix/>
+			<Flags>
+				<ParFlg_Hidden/>
+			</Flags>
+			<Value>1</Value>
+		</Length>
+		<Length Name="ac_toplevel">
+			<Description><![CDATA["Top Level"]]></Description>
+			<Fix/>
+			<Flags>
+				<ParFlg_Hidden/>
+			</Flags>
+			<Value>0</Value>
+		</Length>
+
+		<!-- gs_2D_representation: PARAMETER BLOCK ===== PARAMETER BLOCK ===== PARAMETER BLOCK ===== PARAMETER BLOCK -->
+
+		<Title Name="gs_2D_representation">
+			<Description><![CDATA["2D Representation"]]></Description>
+			<Fix/>
+			<Flags>
+				<ParFlg_Hidden/>
+			</Flags>
+		</Title>
+		<FillPattern Name="gs_fill_type">
+			<Description><![CDATA["Fill Type"]]></Description>
+			<Fix/>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value Meaning="Stair_TreadSectionFillType">65</Value>
+		</FillPattern>
+		<PenColor Name="gs_fill_pen">
+			<Description><![CDATA["Fill Pen"]]></Description>
+			<Fix/>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value Meaning="Stair_TreadSectionFillPen">19</Value>
+		</PenColor>
+		<PenColor Name="gs_back_pen">
+			<Description><![CDATA["Fill Background Pen"]]></Description>
+			<Fix/>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value Meaning="Stair_TreadSectionFillBgPen">19</Value>
+		</PenColor>
+
+		<!-- gs_3D_representation: PARAMETER BLOCK ===== PARAMETER BLOCK ===== PARAMETER BLOCK ===== PARAMETER BLOCK -->
+
+		<Title Name="gs_3D_representation">
+			<Description><![CDATA["3D Representation"]]></Description>
+		</Title>
+		<PenColor Name="penSection">
+			<Description><![CDATA["Cut Line Pen"]]></Description>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value Meaning="Stair_TreadSectionPen">51</Value>
+		</PenColor>
+		<PenColor Name="gs_cont_pen">
+			<Description><![CDATA["Uncut Line Pen"]]></Description>
+			<Fix/>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value Meaning="Stair_TreadContourPen">11</Value>
+		</PenColor>
+		<Integer Name="gs_resol">
+			<Description><![CDATA["Cross-section Resolution"]]></Description>
+			<Value>36</Value>
+		</Integer>
+
+		<!-- gs_material: PARAMETER BLOCK ===== PARAMETER BLOCK ===== PARAMETER BLOCK ===== PARAMETER BLOCK -->
+
+		<Title Name="gs_material">
+			<Description><![CDATA["Building Materials and Surfaces"]]></Description>
+		</Title>
+		<BuildingMaterial Name="structureBMat">
+			<Description><![CDATA["Tread"]]></Description>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value Meaning="Stair_TreadBuildingMaterial">24</Value>
+		</BuildingMaterial>
+		<BuildingMaterial Name="bmatNonSlipBand">
+			<Description><![CDATA["Non-Slip Band"]]></Description>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value Meaning="Stair_TreadBandBuildMat">41</Value>
+		</BuildingMaterial>
+		<BuildingMaterial Name="bmatEdgeProtection">
+			<Description><![CDATA["Edge protection"]]></Description>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value Meaning="Stair_TreadEdgeProtBuildMat">33</Value>
+		</BuildingMaterial>
+		<Boolean Name="bOverrideStructureSurface">
+			<Description><![CDATA["Override Surfaces"]]></Description>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value Meaning="Stair_TreadbOverrideStructureSurface">0</Value>
+		</Boolean>
+		<Material Name="treadSurface">
+			<Description><![CDATA["Tread Surface"]]></Description>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value Meaning="Stair_TreadSurface">16</Value>
+		</Material>
+		<Boolean Name="bOverrideAccessorySurface">
+			<Description><![CDATA["Override Accessory Surfaces"]]></Description>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value>0</Value>
+		</Boolean>
+		<Material Name="matBand">
+			<Description><![CDATA["Non-Slip Band Surface"]]></Description>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value Meaning="Stair_TreadBandSurface">78</Value>
+		</Material>
+		<Material Name="matEdgeProtection">
+			<Description><![CDATA["Edge Protection Surface"]]></Description>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value Meaning="Stair_TreadEdgeProtSurface">47</Value>
+		</Material>
+
+		<!-- MyStairTre_sp1: PARAMETER BLOCK ===== PARAMETER BLOCK ===== PARAMETER BLOCK ===== PARAMETER BLOCK -->
+
+		<Title Name="MyStairTre_sp1">
+			<Description><![CDATA["Tread Profile"]]></Description>
+		</Title>
+		<Boolean Name="bNosingProfile">
+			<Description><![CDATA["Nosing"]]></Description>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value>1</Value>
+		</Boolean>
+		<Integer Name="iNosingMainType">
+			<Description><![CDATA["Nosing Main Type"]]></Description>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value>1</Value>
+		</Integer>
+		<Integer Name="iTreadNosingProfile">
+			<Description><![CDATA["Tread Profile Type"]]></Description>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value Meaning="Stair_TreadiTreadNosingProfile">3</Value>
+		</Integer>
+		<Profile Name="nosingProfileID">
+			<Description><![CDATA["Tread Nosing Profile"]]></Description>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value Meaning="Stair_TreadProfileCustomNosing">24</Value>
+		</Profile>
+		<Boolean Name="bProfileAttributes">
+			<Description><![CDATA["Use Profile Attributes for Nosing"]]></Description>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value>0</Value>
+		</Boolean>
+		<Boolean Name="bUseSlantingAngleRiser">
+			<Description><![CDATA["Cut With Riser Angle"]]></Description>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value Meaning="Stair_TreadbUseSlantingAngleRiser">0</Value>
+		</Boolean>
+		<Integer Name="iDefSlantingAngleCustom">
+			<Description><![CDATA["Define Custom Slanting Angle"]]></Description>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value>2</Value>
+		</Integer>
+		<Angle Name="slantingAngleCustom">
+			<Description><![CDATA["Custom Slanting Angle"]]></Description>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value>90</Value>
+		</Angle>
+		<Length Name="slantingDistCustom">
+			<Description><![CDATA["Custom Slanting Distance"]]></Description>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value>0</Value>
+		</Length>
+		<Length Name="slantingStartPoint">
+			<Description><![CDATA["Slanting Start Point"]]></Description>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value Meaning="Length_0.015">0.014</Value>
+		</Length>
+		<Length Name="filletRadius">
+			<Description><![CDATA["Fillet Radius"]]></Description>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value Meaning="Stair_TreadfilletRadius">0.0125</Value>
+		</Length>
+		<Length Name="extensionHeight">
+			<Description><![CDATA["Extension Height"]]></Description>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value Meaning="Length_0.01">0.01</Value>
+		</Length>
+		<Length Name="extensionWidth">
+			<Description><![CDATA["Extension Width"]]></Description>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value Meaning="Length_0.04">0.04</Value>
+		</Length>
+		<Boolean Name="bTreadNosingProfileOnFront">
+			<Description><![CDATA["Tread Profile on Front"]]></Description>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value>1</Value>
+		</Boolean>
+		<Boolean Name="bTreadNosingProfileOnBack">
+			<Description><![CDATA["Tread Profile on Back"]]></Description>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value>0</Value>
+		</Boolean>
+		<Boolean Name="bTreadNosingProfileOnLeft">
+			<Description><![CDATA["Tread Profile on Left"]]></Description>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value>0</Value>
+		</Boolean>
+		<Boolean Name="bTreadNosingProfileOnRight">
+			<Description><![CDATA["Tread Profile on Right"]]></Description>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value>0</Value>
+		</Boolean>
+
+		<!-- bAccessory: PARAMETER BLOCK ===== PARAMETER BLOCK ===== PARAMETER BLOCK ===== PARAMETER BLOCK -->
+
+		<Boolean Name="bAccessory">
+			<Description><![CDATA["Accessory"]]></Description>
+			<Flags>
+				<ParFlg_BoldName/>
+			</Flags>
+			<Value Meaning="Stair_TreadAccessory">0</Value>
+		</Boolean>
+		<Integer Name="iAccessory">
+			<Description><![CDATA["Accessory Type"]]></Description>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value Meaning="Stair_TreadAccessoryType">1</Value>
+		</Integer>
+		<Integer Name="iAcc2DVisibility">
+			<Description><![CDATA["Tread Accessories Representation"]]></Description>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value>3</Value>
+		</Integer>
+		<Length Name="accThk">
+			<Description><![CDATA["Accessory Thickness"]]></Description>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value Meaning="Length_0.005">0.003</Value>
+		</Length>
+		<Boolean Name="bAccBack">
+			<Description><![CDATA["Accessory on Back"]]></Description>
+			<Flags>
+				<ParFlg_Child/>
+				<ParFlg_Hidden/>
+			</Flags>
+			<Value>0</Value>
+		</Boolean>
+		<Boolean Name="bAccRight">
+			<Description><![CDATA["Accessory on Right"]]></Description>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value>0</Value>
+		</Boolean>
+		<Boolean Name="bAccLeft">
+			<Description><![CDATA["Accessory on Left"]]></Description>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value>0</Value>
+		</Boolean>
+		<Length Name="accOffsetFront">
+			<Description><![CDATA["Accessory Offset on Front"]]></Description>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value Meaning="Stair_TreadaccOffsetFront">0.02</Value>
+		</Length>
+		<Length Name="accOffsetBack">
+			<Description><![CDATA["Accessory Offset on Back"]]></Description>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value Meaning="Length_0.005">0.05</Value>
+		</Length>
+		<Length Name="accOffsetRight">
+			<Description><![CDATA["Accessory Offset on Right Side"]]></Description>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value Meaning="Stair_TreadaccOffsetRight">0.1</Value>
+		</Length>
+		<Length Name="accOffsetLeft">
+			<Description><![CDATA["Accessory Offset on Left Side"]]></Description>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value Meaning="Stair_TreadaccOffsetLeft">0.1</Value>
+		</Length>
+		<PenColor Name="penAccVisible">
+			<Description><![CDATA["Line Pen"]]></Description>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value Meaning="Stair_TreadAccLinePenVis">71</Value>
+		</PenColor>
+		<LineType Name="lineAccVisible">
+			<Description><![CDATA["Line Type"]]></Description>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value Meaning="Stair_TreadAccLineTypeVis">1</Value>
+		</LineType>
+		<PenColor Name="penAccHidden">
+			<Description><![CDATA["Line Pen"]]></Description>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value Meaning="Stair_TreadAccLinePenHid">71</Value>
+		</PenColor>
+		<LineType Name="lineAccHidden">
+			<Description><![CDATA["Line Type"]]></Description>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value Meaning="Stair_TreadAccLineTypeHid">25</Value>
+		</LineType>
+
+		<!-- nonslipBands: PARAMETER BLOCK ===== PARAMETER BLOCK ===== PARAMETER BLOCK ===== PARAMETER BLOCK -->
+
+		<Title Name="nonslipBands">
+			<Description><![CDATA["Non-Slip Bands"]]></Description>
+		</Title>
+		<Integer Name="iTreadNonSlipBandNum">
+			<Description><![CDATA["Number of Bands"]]></Description>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value>3</Value>
+		</Integer>
+		<Length Name="treadNonSlipBandWidth">
+			<Description><![CDATA["Band Width"]]></Description>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value Meaning="Length_0.01">0.01</Value>
+		</Length>
+		<Length Name="treadNonSlipBandDist">
+			<Description><![CDATA["Band Distance"]]></Description>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value Meaning="Length_0.015">0.015</Value>
+		</Length>
+
+		<!-- edgeProtection: PARAMETER BLOCK ===== PARAMETER BLOCK ===== PARAMETER BLOCK ===== PARAMETER BLOCK -->
+
+		<Title Name="edgeProtection">
+			<Description><![CDATA["Edge Protection"]]></Description>
+		</Title>
+		<Integer Name="iEdgeProtectionShape">
+			<Description><![CDATA["Edge Protection Shape"]]></Description>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value>1</Value>
+		</Integer>
+		<Profile Name="accProfileID">
+			<Description><![CDATA["Edge Protection Profile"]]></Description>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value Meaning="Stair_TreadCustomProfileSec">28</Value>
+		</Profile>
+		<Length Name="edgeProtectionWidth">
+			<Description><![CDATA["Edge Protection Width"]]></Description>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value Meaning="Length_0.05">0.05</Value>
+		</Length>
+		<Length Name="edgeProtectionHeight">
+			<Description><![CDATA["Edge Protection Height"]]></Description>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value Meaning="Length_0.02_rounded">0.02</Value>
+		</Length>
+		<Integer Name="iDefProtectionSlanting">
+			<Description><![CDATA["Define Edge Protection Slanting Angle"]]></Description>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value>2</Value>
+		</Integer>
+		<Length Name="protectionSlantingDist">
+			<Description><![CDATA["Edge Protection Slanting Distance"]]></Description>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value Meaning="Length_0.02_rounded">0.02</Value>
+		</Length>
+		<RealNum Name="protectionSlantingAngle">
+			<Description><![CDATA["Edge Protection Slanting Angle"]]></Description>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value>70</Value>
+		</RealNum>
+		<Length Name="protectionFilletRadius">
+			<Description><![CDATA["Edge Protection Fillet Radius"]]></Description>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value Meaning="Length_0.01">0.01</Value>
+		</Length>
+
+		<!-- bMilledRecess: PARAMETER BLOCK ===== PARAMETER BLOCK ===== PARAMETER BLOCK ===== PARAMETER BLOCK -->
+
+		<Boolean Name="bMilledRecess">
+			<Description><![CDATA["Milled Recess"]]></Description>
+			<Flags>
+				<ParFlg_BoldName/>
+			</Flags>
+			<Value Meaning="Stair_TreadbMilledRecess">0</Value>
+		</Boolean>
+		<Integer Name="iRecessMultiply">
+			<Description><![CDATA["Multiply Method"]]></Description>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value>2</Value>
+		</Integer>
+		<Integer Name="iRecessNum">
+			<Description><![CDATA["Number of Milled Recesses"]]></Description>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value Meaning="Stair_TreadiRecessNum">4</Value>
+		</Integer>
+		<Length Name="dRecess">
+			<Description><![CDATA["Distance of Milled Recesses"]]></Description>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value Meaning="Length_0.01">0.01</Value>
+		</Length>
+		<Length Name="recessWidth">
+			<Description><![CDATA["Width of Milled Recesses"]]></Description>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value Meaning="Stair_TreadrecessWidth">0.015</Value>
+		</Length>
+		<Length Name="recessDepth">
+			<Description><![CDATA["Depth of Milled Recesses"]]></Description>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value Meaning="Stair_TreadrecessDepth">0.01</Value>
+		</Length>
+		<Length Name="mrOffsetStart">
+			<Description><![CDATA["Start Offset"]]></Description>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value Meaning="Stair_TreadmrOffsetStart">0</Value>
+		</Length>
+		<Length Name="mrOffsetLeft">
+			<Description><![CDATA["Left Offset"]]></Description>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value Meaning="Stair_TreadmrOffsetLeft">0</Value>
+		</Length>
+		<Length Name="mrOffsetRight">
+			<Description><![CDATA["Right Offset"]]></Description>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value Meaning="Stair_TreadmrOffsetRight">0</Value>
+		</Length>
+		<Length Name="cuttingWidth">
+			<Description><![CDATA["Cutting Width"]]></Description>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value Meaning="Length_0.05">0.06</Value>
+		</Length>
+
+		<!-- bRaisedStrip: PARAMETER BLOCK ===== PARAMETER BLOCK ===== PARAMETER BLOCK ===== PARAMETER BLOCK -->
+
+		<Boolean Name="bRaisedStrip">
+			<Description><![CDATA["Raised Strip"]]></Description>
+			<Flags>
+				<ParFlg_BoldName/>
+			</Flags>
+			<Value>0</Value>
+		</Boolean>
+		<Boolean Name="bShowStripRight">
+			<Description><![CDATA["Raised Strip on Right Side"]]></Description>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value>1</Value>
+		</Boolean>
+		<Boolean Name="bShowStripLeft">
+			<Description><![CDATA["Raised Strip on Left Side"]]></Description>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value>1</Value>
+		</Boolean>
+		<Integer Name="iTypeRaisedStrip">
+			<Description><![CDATA["Raised Strip Type"]]></Description>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value>2</Value>
+		</Integer>
+		<Length Name="radiusRounded">
+			<Description><![CDATA["Rounded Radius"]]></Description>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value>0.003</Value>
+		</Length>
+		<Length Name="widthRaisedStrip">
+			<Description><![CDATA["Raised Strip Width"]]></Description>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value>0.02</Value>
+		</Length>
+		<Length Name="heightRaisedStrip">
+			<Description><![CDATA["Raised Strip Height"]]></Description>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value>0.005</Value>
+		</Length>
+		<Length Name="posRaisedStrip">
+			<Description><![CDATA["Position Y"]]></Description>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value>0.01</Value>
+		</Length>
+		<Length Name="offsetFrontRaisedStrip">
+			<Description><![CDATA["Offset Front"]]></Description>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value>0.02</Value>
+		</Length>
+		<Length Name="offsetBackRaisedStrip">
+			<Description><![CDATA["Offset Back"]]></Description>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value>0.01</Value>
+		</Length>
+
+		<!-- gs_list: PARAMETER BLOCK ===== PARAMETER BLOCK ===== PARAMETER BLOCK ===== PARAMETER BLOCK -->
+
+		<Title Name="gs_list">
+			<Description><![CDATA["Description"]]></Description>
+			<Fix/>
+		</Title>
+		<RealNum Name="gs_list_cost">
+			<Description><![CDATA["Cost"]]></Description>
+			<Fix/>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value>0</Value>
+		</RealNum>
+		<String Name="gs_list_manufacturer">
+			<Description><![CDATA["Manufacturer"]]></Description>
+			<Fix/>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value><![CDATA[""]]></Value>
+		</String>
+		<String Name="gs_list_note">
+			<Description><![CDATA["Note/Remarks"]]></Description>
+			<Fix/>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value><![CDATA[""]]></Value>
+		</String>
+		<String Name="gs_list_location">
+			<Description><![CDATA["Location"]]></Description>
+			<Fix/>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value><![CDATA[""]]></Value>
+		</String>
+		<String Name="gs_list_accessories">
+			<Description><![CDATA["Accessories"]]></Description>
+			<Fix/>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value><![CDATA[""]]></Value>
+		</String>
+		<String Name="gs_list_soundinsul">
+			<Description><![CDATA["Sound Insulation"]]></Description>
+			<Fix/>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value><![CDATA[""]]></Value>
+		</String>
+		<String Name="FM_Type">
+			<Description><![CDATA["Group Type"]]></Description>
+			<Fix/>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value><![CDATA["Others"]]></Value>
+		</String>
+		<Integer Name="iFMType">
+			<Description><![CDATA["Group Type"]]></Description>
+			<Fix/>
+			<Flags>
+				<ParFlg_Child/>
+				<ParFlg_Hidden/>
+			</Flags>
+			<Value>25</Value>
+		</Integer>
+		<String Name="FM_InventoryNumber">
+			<Description><![CDATA["Inventory Number"]]></Description>
+			<Fix/>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value><![CDATA[""]]></Value>
+		</String>
+		<String Name="FM_SerialNumber">
+			<Description><![CDATA["Serial Number"]]></Description>
+			<Fix/>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value><![CDATA[""]]></Value>
+		</String>
+		<String Name="FM_ProductionYear">
+			<Description><![CDATA["Production Year"]]></Description>
+			<Fix/>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value><![CDATA[""]]></Value>
+		</String>
+		<RealNum Name="FM_ObjectWeight">
+			<Description><![CDATA["Object Weight"]]></Description>
+			<Fix/>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value>0</Value>
+		</RealNum>
+		<String Name="FM_ObjectWeightUnit">
+			<Description><![CDATA["Object Weight Unit"]]></Description>
+			<Fix/>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value><![CDATA["kg"]]></Value>
+		</String>
+		<RealNum Name="FM_Stories">
+			<Description><![CDATA["Number of Stories"]]></Description>
+			<Fix/>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value>0</Value>
+		</RealNum>
+		<RealNum Name="FM_HalfLandings">
+			<Description><![CDATA["Number of Half-Landings"]]></Description>
+			<Fix/>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value>0</Value>
+		</RealNum>
+		<RealNum Name="FM_LevelHeight">
+			<Description><![CDATA["Height of Levels"]]></Description>
+			<Fix/>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value>0</Value>
+		</RealNum>
+		<RealNum Name="FM_HeadRoom">
+			<Description><![CDATA["Headroom"]]></Description>
+			<Fix/>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value>0</Value>
+		</RealNum>
+		<String Name="FM_BearingStructure">
+			<Description><![CDATA["Bearing Structure"]]></Description>
+			<Fix/>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value><![CDATA[""]]></Value>
+		</String>
+		<RealNum Name="FM_BearingCapacity">
+			<Description><![CDATA["Bearing Capacity"]]></Description>
+			<Fix/>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value>0</Value>
+		</RealNum>
+		<Boolean Name="FM_SmokeFree">
+			<Description><![CDATA["Smoke-free Staircase"]]></Description>
+			<Fix/>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value>0</Value>
+		</Boolean>
+		<RealNum Name="FM_StepsLength">
+			<Description><![CDATA["Length of Steps"]]></Description>
+			<Fix/>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value>0</Value>
+		</RealNum>
+		<String Name="FM_MaterialFootstep">
+			<Description><![CDATA["Material of Footstep"]]></Description>
+			<Fix/>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value><![CDATA[""]]></Value>
+		</String>
+		<String Name="FM_MaterialStairRailing">
+			<Description><![CDATA["Material of Stair Railing"]]></Description>
+			<Fix/>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value><![CDATA[""]]></Value>
+		</String>
+		<String Name="FM_MaterialHandhold">
+			<Description><![CDATA["Material of Handhold"]]></Description>
+			<Fix/>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value><![CDATA[""]]></Value>
+		</String>
+		<String Name="gs_list_custom1">
+			<Description><![CDATA["User Defined 1"]]></Description>
+			<Fix/>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value><![CDATA[""]]></Value>
+		</String>
+		<String Name="gs_list_custom2">
+			<Description><![CDATA["User Defined 2"]]></Description>
+			<Fix/>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value><![CDATA[""]]></Value>
+		</String>
+		<String Name="gs_list_custom3">
+			<Description><![CDATA["User Defined 3"]]></Description>
+			<Fix/>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value><![CDATA[""]]></Value>
+		</String>
+		<String Name="gs_list_custom4">
+			<Description><![CDATA["User Defined 4"]]></Description>
+			<Fix/>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value><![CDATA[""]]></Value>
+		</String>
+		<String Name="gs_list_custom5">
+			<Description><![CDATA["User Defined 5"]]></Description>
+			<Fix/>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value><![CDATA[""]]></Value>
+		</String>
+
+		<!-- ifc_Title: PARAMETER BLOCK ===== PARAMETER BLOCK ===== PARAMETER BLOCK ===== PARAMETER BLOCK -->
+
+		<Title Name="ifc_Title">
+			<Description><![CDATA["IFC2x3 Property Set for Stairs"]]></Description>
+			<Fix/>
+			<Flags>
+				<ParFlg_Hidden/>
+			</Flags>
+		</Title>
+		<Integer Name="ifc_StairType">
+			<Description><![CDATA["Stair Type"]]></Description>
+			<Fix/>
+			<Flags>
+				<ParFlg_Child/>
+				<ParFlg_Unique/>
+			</Flags>
+			<Value>0</Value>
+		</Integer>
+		<Integer Name="ifc_NumberOfRiser">
+			<Description><![CDATA["Number of Riser"]]></Description>
+			<Fix/>
+			<Flags>
+				<ParFlg_Child/>
+				<ParFlg_Unique/>
+			</Flags>
+			<Value>0</Value>
+		</Integer>
+		<Integer Name="ifc_NumberOfTreads">
+			<Description><![CDATA["Number of Tread"]]></Description>
+			<Fix/>
+			<Flags>
+				<ParFlg_Child/>
+				<ParFlg_Unique/>
+			</Flags>
+			<Value>0</Value>
+		</Integer>
+		<Length Name="ifc_RiserHeight">
+			<Description><![CDATA["Riser Height"]]></Description>
+			<Fix/>
+			<Flags>
+				<ParFlg_Child/>
+				<ParFlg_Unique/>
+			</Flags>
+			<Value>0</Value>
+		</Length>
+		<Length Name="ifc_TreadLength">
+			<Description><![CDATA["Tread Length"]]></Description>
+			<Fix/>
+			<Flags>
+				<ParFlg_Child/>
+				<ParFlg_Unique/>
+			</Flags>
+			<Value>0</Value>
+		</Length>
+	</Parameters>
+</ParamSection>
+
+<Copyright SectVersion="1" SectionFlags="0" SubIdent="0">
+	<Author>GRAPHISOFT</Author>
+	<License>
+		<Type>CC BY-ND</Type>
+		<Version>3.0</Version>
+	</License>
+</Copyright>
+
+<Picture MIME="image/png" SectVersion="19" SectionFlags="0" SubIdent="0" path="Object Library/1. BASIC LIBRARY/1.8 Stair/Tread/Tread/Picture_0.png"/>
+
+<GDLPict MIME="image/svg" SectVersion="19" SectionFlags="1" SubIdent="1" path="Object Library/1. BASIC LIBRARY/1.8 Stair/Tread/Tread/NosingType_hl(1).svg"/>
+
+<GDLPict MIME="image/svg" SectVersion="19" SectionFlags="1" SubIdent="2" path="Object Library/1. BASIC LIBRARY/1.8 Stair/Tread/Tread/NosingPlacement_hl(1).svg"/>
+
+<GDLPict MIME="image/svg" SectVersion="19" SectionFlags="1" SubIdent="3" path="Object Library/1. BASIC LIBRARY/1.8 Stair/Tread/Tread/NosingSlanted_hl(1).svg"/>
+
+<GDLPict MIME="image/svg" SectVersion="19" SectionFlags="1" SubIdent="4" path="Object Library/1. BASIC LIBRARY/1.8 Stair/Tread/Tread/AccessoryPlacement_hl(1).svg"/>
+
+<GDLPict MIME="image/svg" SectVersion="19" SectionFlags="1" SubIdent="5" path="Object Library/1. BASIC LIBRARY/1.8 Stair/Tread/Tread/BandsDimensions_hl(1).svg"/>
+
+<GDLPict MIME="image/svg" SectVersion="19" SectionFlags="1" SubIdent="6" path="Object Library/1. BASIC LIBRARY/1.8 Stair/Tread/Tread/MilledRecessDimensions_hl(1).svg"/>
+
+<GDLPict MIME="image/svg" SectVersion="19" SectionFlags="1" SubIdent="7" path="Object Library/1. BASIC LIBRARY/1.8 Stair/Tread/Tread/MilledRecessPlacement_hl(1).svg"/>
+
+<GDLPict MIME="image/svg" SectVersion="19" SectionFlags="1" SubIdent="8" path="Object Library/1. BASIC LIBRARY/1.8 Stair/Tread/Tread/Nosing_Chamfered_hl(1).svg"/>
+
+<GDLPict MIME="image/svg" SectVersion="19" SectionFlags="1" SubIdent="9" path="Object Library/1. BASIC LIBRARY/1.8 Stair/Tread/Tread/Nosing_Chamfered_SlantedAngle_hl(1).svg"/>
+
+<GDLPict MIME="image/svg" SectVersion="19" SectionFlags="1" SubIdent="10" path="Object Library/1. BASIC LIBRARY/1.8 Stair/Tread/Tread/Nosing_Chamfered_SlantedDim_hl(1).svg"/>
+
+<GDLPict MIME="image/svg" SectVersion="19" SectionFlags="1" SubIdent="11" path="Object Library/1. BASIC LIBRARY/1.8 Stair/Tread/Tread/Nosing_Custom_hl(1).svg"/>
+
+<GDLPict MIME="image/svg" SectVersion="19" SectionFlags="1" SubIdent="12" path="Object Library/1. BASIC LIBRARY/1.8 Stair/Tread/Tread/Nosing_Fillet_hl(1).svg"/>
+
+<GDLPict MIME="image/svg" SectVersion="19" SectionFlags="1" SubIdent="13" path="Object Library/1. BASIC LIBRARY/1.8 Stair/Tread/Tread/Nosing_Fillet_SlantedAngle_hl(1).svg"/>
+
+<GDLPict MIME="image/svg" SectVersion="19" SectionFlags="1" SubIdent="14" path="Object Library/1. BASIC LIBRARY/1.8 Stair/Tread/Tread/Nosing_Fillet_SlantedDim_hl(1).svg"/>
+
+<GDLPict MIME="image/svg" SectVersion="19" SectionFlags="1" SubIdent="15" path="Object Library/1. BASIC LIBRARY/1.8 Stair/Tread/Tread/Nosing_Rounded_hl(1).svg"/>
+
+<GDLPict MIME="image/svg" SectVersion="19" SectionFlags="1" SubIdent="16" path="Object Library/1. BASIC LIBRARY/1.8 Stair/Tread/Tread/Nosing_SlantedOnlyAngle_hl(1).svg"/>
+
+<GDLPict MIME="image/svg" SectVersion="19" SectionFlags="1" SubIdent="17" path="Object Library/1. BASIC LIBRARY/1.8 Stair/Tread/Tread/Nosing_SlantedOnlyDim_hl(1).svg"/>
+
+<GDLPict MIME="image/svg" SectVersion="19" SectionFlags="1" SubIdent="18" path="Object Library/1. BASIC LIBRARY/1.8 Stair/Tread/Tread/Nosing_Square_SlantedAngle_hl(1).svg"/>
+
+<GDLPict MIME="image/svg" SectVersion="19" SectionFlags="1" SubIdent="19" path="Object Library/1. BASIC LIBRARY/1.8 Stair/Tread/Tread/Nosing_Square_SlantedDim_hl(1).svg"/>
+
+<GDLPict MIME="image/svg" SectVersion="19" SectionFlags="1" SubIdent="20" path="Object Library/1. BASIC LIBRARY/1.8 Stair/Tread/Tread/NosingExtension_Chamfered_hl(1).svg"/>
+
+<GDLPict MIME="image/svg" SectVersion="19" SectionFlags="1" SubIdent="21" path="Object Library/1. BASIC LIBRARY/1.8 Stair/Tread/Tread/NosingExtension_Chamfered_SlantedAngle_hl(1).svg"/>
+
+<GDLPict MIME="image/svg" SectVersion="19" SectionFlags="1" SubIdent="22" path="Object Library/1. BASIC LIBRARY/1.8 Stair/Tread/Tread/NosingExtension_Chamfered_SlantedDim_hl(1).svg"/>
+
+<GDLPict MIME="image/svg" SectVersion="19" SectionFlags="1" SubIdent="23" path="Object Library/1. BASIC LIBRARY/1.8 Stair/Tread/Tread/NosingExtension_Fillet_hl(1).svg"/>
+
+<GDLPict MIME="image/svg" SectVersion="19" SectionFlags="1" SubIdent="24" path="Object Library/1. BASIC LIBRARY/1.8 Stair/Tread/Tread/NosingExtension_Fillet_SlantedAngle_hl(1).svg"/>
+
+<GDLPict MIME="image/svg" SectVersion="19" SectionFlags="1" SubIdent="25" path="Object Library/1. BASIC LIBRARY/1.8 Stair/Tread/Tread/NosingExtension_Fillet_SlantedDim_hl(1).svg"/>
+
+<GDLPict MIME="image/svg" SectVersion="19" SectionFlags="1" SubIdent="26" path="Object Library/1. BASIC LIBRARY/1.8 Stair/Tread/Tread/NosingExtension_SlantedOnlyAngle_hl(1).svg"/>
+
+<GDLPict MIME="image/svg" SectVersion="19" SectionFlags="1" SubIdent="27" path="Object Library/1. BASIC LIBRARY/1.8 Stair/Tread/Tread/NosingExtension_SlantedOnlyDim_hl(1).svg"/>
+
+<GDLPict MIME="image/svg" SectVersion="19" SectionFlags="1" SubIdent="28" path="Object Library/1. BASIC LIBRARY/1.8 Stair/Tread/Tread/NosingExtension_Square_SlantedAngle_hl(1).svg"/>
+
+<GDLPict MIME="image/svg" SectVersion="19" SectionFlags="1" SubIdent="29" path="Object Library/1. BASIC LIBRARY/1.8 Stair/Tread/Tread/NosingExtension_Square_SlantedDim_hl(1).svg"/>
+
+<GDLPict MIME="image/svg" SectVersion="19" SectionFlags="1" SubIdent="30" path="Object Library/1. BASIC LIBRARY/1.8 Stair/Tread/Tread/NosingExtension_Square_hl(1).svg"/>
+
+<GDLPict MIME="image/svg" SectVersion="19" SectionFlags="1" SubIdent="31" path="Object Library/1. BASIC LIBRARY/1.8 Stair/Tread/Tread/Nosing_Classic_hl(1).svg"/>
+
+<GDLPict MIME="image/svg" SectVersion="19" SectionFlags="1" SubIdent="32" path="Object Library/1. BASIC LIBRARY/1.8 Stair/Tread/Tread/NosingType_with_Extension_hl(1).svg"/>
+
+<GDLPict MIME="image/svg" SectVersion="19" SectionFlags="1" SubIdent="33" path="Object Library/1. BASIC LIBRARY/1.8 Stair/Tread/Tread/NosingType_without_Extension_hl(1).svg"/>
+
+<Keywords SectVersion="1" SectionFlags="0" SubIdent="0">
+<![CDATA[]]>
+</Keywords>
+
+<MigrationTable SectVersion="1" SectionFlags="0" SubIdent="0">
+	<MigrationTableElement>
+		<MainGUID>7A5B1CF3-42A7-4A1F-972F-FE5D800CAF1C</MainGUID>
+		<Version>21</Version>
+		<Name><![CDATA[""]]></Name>
+		<AutoMigration>false</AutoMigration>
+	</MigrationTableElement>
+	<MigrationTableElement>
+		<MainGUID>A8FF1ECC-DE74-405C-A31C-06F45A0FA657</MainGUID>
+		<Version>21</Version>
+		<Name><![CDATA[""]]></Name>
+		<AutoMigration>false</AutoMigration>
+	</MigrationTableElement>
+	<MigrationTableElement>
+		<MainGUID>FD825624-9DD6-4D6F-9B11-5DBFBA6EDCC8</MainGUID>
+		<Version>0</Version>
+		<Name><![CDATA[""]]></Name>
+		<AutoMigration>false</AutoMigration>
+	</MigrationTableElement>
+</MigrationTable>
+
+<!-- GDL SCRIPT ===== GDL SCRIPT ===== GDL SCRIPT ===== GDL SCRIPT ===== GDL SCRIPT -->
+
+<Script_FWM SectVersion="20" SectionFlags="0" SubIdent="0">
+<![CDATA[
+actualGUID = FROM_GUID
+
+! ==============================================================================
+! Subroutines
+! ==============================================================================
+
+	_startID1	= "7A5B1CF3-42A7-4A1F-972F-FE5D800CAF1C"	! Tread 21
+	_startID2	= "A8FF1ECC-DE74-405C-A31C-06F45A0FA657"	! Tread with Profiled Accessory 21
+	_endID		= "FD825624-9DD6-4D6F-9B11-5DBFBA6EDCC8"
+gosub "MergeTreads_FWM"
+
+	_startID	= "FD825624-9DD6-4D6F-9B11-5DBFBA6EDCC8"
+	_endID		= "613BA7AB-0886-4BD0-84A6-29E63030C1EB"
+gosub "Acc2DVisibility_FWM"
+
+! ==============================================================================
+! Set migration GUID
+! ==============================================================================
+
+setmigrationguid actualGUID
+
+! ==============================================================================
+end ! end ! end ! end ! end ! end ! end ! end ! end ! end ! end ! end ! end ! en
+! ==============================================================================
+
+
+"MergeTreads_FWM":
+
+	if actualGUID = _startID1 | actualGUID = _startID2 then
+		if actualGUID = _startID1 then
+			_structureBMat	= 1
+			bHas	= STORED_PAR_VALUE ("structureBMat",	_structureBMat)
+
+			bmatNonSlipBand				= _structureBMat
+			bmatEdgeProtection			= _structureBMat
+			bOverrideAccessorySurface	= 1
+
+			parameters	bmatNonSlipBand				= bmatNonSlipBand,
+						bmatEdgeProtection			= bmatEdgeProtection,
+						bOverrideAccessorySurface	= bOverrideAccessorySurface
+		endif
+
+		actualGUID	= _endID
+	endif
+
+return
+
+! ==============================================================================
+! Acc2DVisibility
+! ==============================================================================
+"Acc2DVisibility_FWM":
+	if actualGUID = _startID then
+	
+		! unify two booleans of previous version to one integer
+		_bAcc2DVisible = 1	! source code default value was "on"
+		_bAcc2DHidden = 1	! source code default value was "on"
+		! these boolenas were hidden from interface, but defaults could be overwritten in template, so read them
+		_unused = deleted_par_value("bAcc2DVisible", _bAcc2DVisible)
+		_unused = deleted_par_value("bAcc2DHidden", _bAcc2DHidden)
+
+		iAcc2DVisibility = _bAcc2DVisible * SHOW_VISIBLE + _bAcc2DHidden * SHOW_NON_VIS
+
+		! SHOW_NONE not allowed, cut migration, else:
+		if iAcc2DVisibility # SHOW_NONE then
+			parameters iAcc2DVisibility = iAcc2DVisibility
+			actualGUID	= _endID
+		else
+			actualGUID = ""
+		endif
+	
+	endif
+return
+
+]]>
+</Script_FWM>
+
+<!-- GDL SCRIPT ===== GDL SCRIPT ===== GDL SCRIPT ===== GDL SCRIPT ===== GDL SCRIPT -->
+
+<Script_BWM SectVersion="20" SectionFlags="0" SubIdent="0">
+<![CDATA[
+targetGUID = TO_GUID
+
+! ==============================================================================
+! Subroutines
+! ==============================================================================
+
+gosub "Acc2DVisibility_BWM"
+
+	_targetID1	= "7A5B1CF3-42A7-4A1F-972F-FE5D800CAF1C"	! Tread 21
+	_targetID2	= "A8FF1ECC-DE74-405C-A31C-06F45A0FA657"	! Tread with Profiled Accessory 21
+gosub "MergeTreads_BWM"
+
+! ==============================================================================
+! Set migration GUID
+! ==============================================================================
+
+setmigrationguid targetGUID
+
+! ==============================================================================
+end ! end ! end ! end ! end ! end ! end ! end ! end ! end ! end ! end ! end ! en
+! ==============================================================================
+
+
+! ==============================================================================
+! Acc2DVisibility
+! ==============================================================================
+"Acc2DVisibility_BWM":
+	if targetGUID # "" then
+	
+		! break integer visibility to two booleans
+		! these booleans will be hidden from interface, but functional
+		_bAcc2DVisible	= (iAcc2DVisibility = SHOW_VISIBLE		| iAcc2DVisibility = SHOW_ALL)
+		_bAcc2DHidden	= (iAcc2DVisibility = SHOW_NON_VIS		| iAcc2DVisibility = SHOW_ALL)
+
+		NEWPARAMETER "bAcc2DVisible", "Boolean"
+		NEWPARAMETER "bAcc2DHidden", "Boolean"
+
+		parameters	bAcc2DVisible	= _bAcc2DVisible,
+					bAcc2DHidden	= _bAcc2DHidden
+
+		! always migrate
+	
+	endif
+return
+
+! ==============================================================================
+! New Description Values
+! ==============================================================================
+"MergeTreads_BWM":
+	if targetGUID # "" then
+		! No Backward Migration to Tread 21
+		targetGUID	= _targetID2
+	endif
+return
+
+]]>
+</Script_BWM>
+
+<!-- GDL SCRIPT ===== GDL SCRIPT ===== GDL SCRIPT ===== GDL SCRIPT ===== GDL SCRIPT -->
+
+<Comment SectVersion="20" SectionFlags="0" SubIdent="0">
+<![CDATA[]]>
+</Comment>
+
+</Symbol>

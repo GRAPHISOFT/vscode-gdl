@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>UI_INFIELD{4}</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="UI_INFIELD4_gdlcommand">UI_INFIELD{4}</h3>
+				
+				<pre class="programlisting"><b id="UI_INFIELD4_keyword_2.12.5.18.4.1">UI_INFIELD{4}</b> "name", x, y, width, height [,
+        method, picture_name,
+        images_number,
+        rows_number, cell_x, cell_y,
+        image_x, image_y,
+        expression_image1, text1, value_definition1,
+        ...
+        [picIdxArray, textArray, valuesArray,
+        ...]
+        expression_imagen, textn, value_definitionn]</pre>
+				
+					<p>
+						Generates an edit text or a pop-up menu for the parameter input.
+						A pop-up is generated if the parameter type is value list, material, fill, line type or pencolor.
+					</p>
+					<p>
+						If the optional parameters of the command are present, value lists can be alternatively displayed as thumbnail view fields.
+						Different thumbnail control types are available.
+						They display the specified images and associated texts and allow the selection of one single item at a time, just like in a pop-up menu.
+					</p>
+					<p>In the version 1 and 2 infield, the thumbnail items and the value list items are associated by indices.</p>
+					<p>
+						The version 3 and version 4 infield defines value association which binds the thumbnail items to value list items of the associated parameter.
+						If a value defined in a thumbnail item isn’t present in the parameter’s value list, it won’t be displayed in the control.
+						Identical sized arrays can be used for lines of definition as well.
+					</p>
+					<p>The Interface Script is rebuilt with the new value after any parameter is modified.</p>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>name: </b></code>
+							parameter name as string expression (all 4 command versions),
+							with parameter name option for UI_INFIELD{2} and UI_INFIELD{3},
+							and parameter name as text array value option for UI_INFIELD{4}.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>x, y: </b></code>the position of the edit text, pop-up or control.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>width, height: </b></code>width and height in pixels.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>method: </b></code>the type of the control.</div>
+						<div><code>1: </code>List view control.</div>
+						<div style="text-align: center"><img src="Images/GDL_Images/NonGeom_infield3_method1_List_view_control.png" style="text-align: middle" alt="Images/GDL_Images/NonGeom_infield3_method1_List_view_control.png"/></div>
+						<div><code>2: </code>Popup menu control.</div>
+						<div style="text-align: center"><img src="Images/GDL_Images/NonGeom_infield3_method2_Popup_menu_control.png" style="text-align: middle" alt="Images/GDL_Images/NonGeom_infield3_method2_Popup_menu_control.png"/></div>
+						<div><code>3: </code>Popup icon radio control (arrow on picture).</div>
+						<div style="text-align: center"><img src="Images/GDL_Images/NonGeom_infield3_method3_popupIconRadioControl_ArrowOnPic.png" style="text-align: middle" alt="Images/GDL_Images/NonGeom_infield3_method3_popupIconRadioControl_ArrowOnPic.png"/></div>
+						<div><code>4: </code>Push icon radio control.</div>
+						<div style="text-align: center"><img src="Images/GDL_Images/NonGeom_infield3_method4_pushIconRadioControl.PNG" style="text-align: middle" alt="Images/GDL_Images/NonGeom_infield3_method4_pushIconRadioControl.PNG"/></div>
+						<div><code>5: </code>Pushbutton with text.</div>
+						<div style="text-align: center"><img src="Images/GDL_Images/NonGeom_infield3_method5_pushbuttonWithText.PNG" style="text-align: middle" alt="Images/GDL_Images/NonGeom_infield3_method5_pushbuttonWithText.PNG"/></div>
+						<div><code>6: </code>Pushbutton with picture.</div>
+						<div style="text-align: center"><img src="Images/GDL_Images/NonGeom_infield3_method6_pushButtonWithPicture.PNG" style="text-align: middle" alt="Images/GDL_Images/NonGeom_infield3_method6_pushButtonWithPicture.PNG"/></div>
+						<div><code>7: </code>Checkbox with text.</div>
+						<div style="text-align: center"><img src="Images/GDL_Images/NonGeom_infield3_method7_checkboxWithText.PNG" style="text-align: middle" alt="Images/GDL_Images/NonGeom_infield3_method7_checkboxWithText.PNG"/></div>
+						<div><code>8: </code>Popup list with text.</div>
+						<div style="text-align: center"><img src="Images/GDL_Images/NonGeom_infield3_method8_popupListWithText.PNG" style="text-align: middle" alt="Images/GDL_Images/NonGeom_infield3_method8_popupListWithText.PNG"/></div>
+                        <div><code>9: </code>Popup icon radio control (arrow next to picture).</div>
+						<div style="text-align: center"><img src="Images/GDL_Images/NonGeom_infield3_method9_popupIconRadioControl_ArrowNextToPic.png" style="text-align: middle" alt="Images/GDL_Images/NonGeom_infield3_method9_popupIconRadioControl_ArrowNextToPic.png"/></div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>picture_name: </b></code>name of the common image file containing a matrix of concatenated images, or empty string.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>images_number: </b></code>number of images in the matrix, for boolean parameters it can be 0 or 2.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>rows_number: </b></code>number of rows of the matrix.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>cell_x, cell_y: </b></code>width and height of a cell within the thumbnail view field, including image and text.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>image_x, image_y: </b></code>width and height of the image in the cell.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>expression_imagei: </b></code>
+							index of image number i in the matrix, or individual file name.
+							If a common image file name was specified, indices must be used here.
+							Combination of indices and individual file names does not work.
+						</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>texti: </b></code>text in cell number i.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>value_definitioni: </b></code>value definition which matches the cell with a value list item by value:</div>
+						<div><code>expression: </code>numerical or string expression, or</div>
+						<div><code>CUSTOM: </code>keyword, meaning that any custom value can be entered.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>picIdxArray: </b></code>Dynamic array of picture names (strings) or indexes (integers) in cells. Do not use mixed types in array</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>textArray: </b></code>Dynamic array of texts in cells</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>valueArray: </b></code>Dynamic array of parameter values in cells</div>
+					</div>
+				
+				<div class="example"><a id="id527491"/><p class="title"><b>Example 1:
+</b></p><div class="example-contents"><pre class="programlisting">IF c THEN
+    UI_DIALOG "Hole definition parameters"
+    UI_OUTFIELD "Type of hole:",15,40,180,20
+    UI_INFIELD "D",190,40,105,20
+    IF d="Rectangular" THEN
+        UI_PICT "rect.pict",110,33,60,30
+        UI_OUTFIELD "Width of hole",15,70,180,20
+        UI_INFIELD "E", 190,70,105,20
+        UI_OUTFIELD "Height of hole",15,100,180,20
+        UI_INFIELD "F", 190,100,105,20
+        UI_OUTFIELD "Distance between holes",15,130,180,20
+        UI_INFIELD "G", 190,130,105,20
+    ELSE
+        UI_PICT "circle.pict",110,33,60,30
+        UI_OUTFIELD "Diameter of hole circle",15,70,180,20
+        UI_INFIELD "J", 190,70,105,20
+        UI_OUTFIELD "Distance of hole centers", 15,100,180,20
+        UI_INFIELD "K", 190,100,105,20
+        UI_OUTFIELD "Resolution of hole circle", 15,130,180,20
+        UI_INFIELD "M", 190,130,105,20
+    ENDIF
+    UI_OUTFIELD "Number of holes",15,160,180,20
+    UI_INFIELD "I", 190,160,105,20
+ENDIF
+UI_SEPARATOR 50,195,250,195
+UI_OUTFIELD "Material of beam", 15,210,180,20
+UI_INFIELD "MAT", 190,210,105,20
+UI_OUTFIELD "Pen of beam", 15,240,180,20
+UI_INFIELD "P", 190,240,105,20</pre><div class="informaltable"><table border="0"><colgroup><col/><col/></colgroup><tbody><tr><td>
+										<div style="text-align: center"><img src="Images/GDL_Images/NonGeom_ui_ex1_rect.PNG" style="text-align: middle" alt="Images/GDL_Images/NonGeom_ui_ex1_rect.PNG"/></div>
+									</td><td>
+										<div style="text-align: center"><img src="Images/GDL_Images/NonGeom_ui_ex1_circ.PNG" style="text-align: middle" alt="Images/GDL_Images/NonGeom_ui_ex1_circ.PNG"/></div>
+									</td></tr></tbody></table></div></div></div>
+				<div class="example"><a id="id527547"/><p class="title"><b>Example 2:
+</b></p><div class="example-contents"><pre class="programlisting">! Parameter Script:
+VALUES "myParameter" "Two", "Three", "Five", CUSTOM
+
+! Interface Script:
+px = 80
+py = 60
+cx = px + 3
+cy = py + 25
+
+UI_INFIELD{3} "myParameter", 10, 10, 4 * cx + 21, cy + 5,
+        1, "myPicture", 6,
+        1, cx, cy, px, py,
+        1, "1 - one", "One",
+        2, "2 - two", "Two",
+        3, "3 - three", "Three",
+        4, "4 - four", "Four",
+        5, "5 - five", "Five",
+        6, "custom value", CUSTOM</pre></div></div>
+				<div class="example"><a id="id527544"/><p class="title"><b>Example 3:
+</b></p><div class="example-contents"><pre class="programlisting">! Parameter Script:
+VALUES "myParameter" "Two", "Three", "Five", CUSTOM
+
+! Interface Script:
+px = 80
+py = 60
+cx = px + 3
+cy = py + 25
+
+paramNameVar = "myParameter"
+UI_INFIELD{4} paramNameVar, 10, 10, 4 * cx + 21, cy + 5,
+        1, "myPicture", 6,
+        1, cx, cy, px, py,
+        1, "1 - one", "One",
+        2, "2 - two", "Two",
+        3, "3 - three", "Three",
+        4, "4 - four", "Four",
+        5, "5 - five", "Five",
+        6, "custom value", CUSTOM</pre></div></div>
+				<div class="example"><a id="id527568"/><p class="title"><b>Example 4:
+</b></p><div class="example-contents"><pre class="programlisting">! Master Script
+dim picIdxValuesUI[]
+dim textValuesUI[]
+dim parameterValues[]
+
+if myTypeParameter = 1 then
+    picIdxValuesUI[1] = 6
+    picIdxValuesUI[2] = 7
+    picIdxValuesUI[3] = 8
+
+    textValuesUI[1] = "6 - six"
+    textValuesUI[2] = "7 - seven"
+    textValuesUI[3] = "8 - eight"
+
+    parameterValues[1] = "Six"
+    parameterValues[2] = "Seven"
+    parameterValues[3] = "Eight"
+else
+    picIdxValuesUI[1] = 6
+    picIdxValuesUI[2] = 7
+
+    textValuesUI[1] = "6 - six"
+    textValuesUI[2] = "7 - seven"
+
+    parameterValues[1] = "Six"
+    parameterValues[2] = "Seven"
+endif
+					</pre><pre class="programlisting">! Parameter Script:
+VALUES "myTypeParameter" 1, 2
+VALUES "myStringParameter" "Two", "Three", "Five", parameterValues, CUSTOM
+
+! Interface Script:
+px = 80
+py = 60
+cx = px + 3
+cy = py + 25
+
+paramNameVar = "myStringParameter"
+UI_INFIELD{4} paramNameVar, 10, 10, 4 * cx + 21, cy + 5,
+        1, "myPicture", 6,
+        1, cx, cy, px, py,
+        1, "1 - one", "One",
+        2, "2 - two", "Two",
+        3, "3 - three", "Three",
+        4, "4 - four", "Four",
+        5, "5 - five", "Five",
+        picIdxValuesUI, textValuesUI, parameterValues,
+        9, "custom value", CUSTOM</pre></div></div>
+			<hr/><a href="002.012.html#UI_INFIELD4_gdlcommand">Related in Non-Geometric Scripts</a><p>
+				<span class="bold"><strong>GDL Reference Guide</strong></span>
+			</p><p>
+				<span class="trademark">Copyright</span><sup>©</sup> 2021 by GRAPHISOFT, all rights reserved.
+				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+			</p></body></html>

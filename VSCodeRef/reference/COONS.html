@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>COONS</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="COONS_gdlcommand">COONS</h3>
+				
+				<pre class="programlisting"><b id="COONS_keyword_2.7.5.41.4.1">COONS</b> n, m, mask,
+        x11, y11, z11, ..., x1n, y1n, z1n,
+        x21, y21, z21, ..., x2n, y2n, z2n,
+        x31, y31, z31, ..., x3m, y3m, z3m,
+        x41, y41, z41, ..., x4m, y4m, z4m</pre>
+				
+					<p>A Coons patch generated from four boundary curves.</p>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>mask: </b></code></div><div><code>mask = 4*j<sub>3</sub> + 8*j<sub>4</sub> + 16*j<sub>5</sub> + 32*j<sub>6</sub> + 64*j<sub>7</sub></code>, where each j can be 0 or 1.
+	</div>
+						<div><code>j<sub>3</sub>: </code>edges of the 1st boundary (x1, y1, z1) are visible (effective only if j7 is set),</div>
+						<div><code>j<sub>4</sub>: </code>edges of the 2nd boundary (x2, y2, z2) are visible (effective only if j7 is set),</div>
+						<div><code>j<sub>5</sub>: </code>edges of the 3rd boundary (x3, y3, z3) are visible (effective only if j7 is set),</div>
+						<div><code>j<sub>6</sub>: </code>edges of the 4th boundary (x4, y4, z4) are visible (effective only if j7 is set),</div>
+						<div><code>j<sub>7</sub>: </code>edges on surface are visible, surface is not smooth.</div>
+						<p>
+							In case the edges on the surface are invisible (bit j7 is set to zero), 
+						    all boundary edges become visible, with the bits j3-j6 becoming ineffective.
+						    To define boundary edge visibility independent of surface edge visibility, use <a class="xref" href="reference/COONS2.html">the COONS{2} command</a>.
+						</p>
+					</div>
+					<div style="text-align: center"><img src="Images/GDL_Images/3Dshapes_coons_mask.png" style="text-align: middle" alt="Images/GDL_Images/3Dshapes_coons_mask.png"/></div>
+					<p>The orientation of the boundaries is obligatory: curves 1 and 2 must go from curve 3 towards 4, and curves 3 and 4 must go from curve 1 towards 2. The corner coordinates have to be the same in the respective curves.</p>
+					
+						<pre class="programlisting">n &gt; 1, m &gt; 1</pre>
+					
+				
+				<div class="example"><a id="id503463"/><p class="title"><b>Example 1:
+</b></p><div class="example-contents"><div class="informaltable"><table border="0"><colgroup><col/><col/></colgroup><tbody><tr><td>
+										<pre class="programlisting">COONS 6, 6, 4+8+16+32+64,
+        ! 1st boundary, n=6
+        0, 0, 5,
+        1, 0, 4,
+        2, 0, 3,
+        3, 0, 2,
+        4, 0, 1,
+        5, 0, 0,
+        ! 2nd boundary, n=6
+        0, 5, 0,
+        1, 5, 1,
+        2, 5, 2,
+        3, 5, 3,
+        4, 5, 4,
+        5, 5, 5,
+        ! 3rd boundary, m=6
+        0, 0, 5,
+        0, 1, 4,
+        0, 2, 3,
+        0, 3, 2,
+        0, 4, 1,
+        0, 5, 0,
+        ! 4th boundary, m=6
+        5, 0, 0,
+        5, 1, 1,
+        5, 2, 2,
+        5, 3, 3,
+        5, 4, 4,
+        5, 5, 5</pre>
+									</td><td style="text-align: center">
+										<div style="text-align: center"><img src="Images/GDL_Images/3Dshapes_coons_ex1.png" style="text-align: middle" alt="Images/GDL_Images/3Dshapes_coons_ex1.png"/></div>
+									</td></tr></tbody></table></div></div></div>
+				<div class="example"><a id="id503487"/><p class="title"><b>Example 2:
+</b></p><div class="example-contents"><div class="informaltable"><table border="0"><colgroup><col/><col/></colgroup><tbody><tr><td>
+										<pre class="programlisting">COONS 7, 6, 4+8+16+32+64,
+        ! 1st boundary, n=7
+        1, 2, 0,
+        0.5, 1, 0,
+        0.2, 0.5, 0,
+        -0.5, 0, 0,
+        0.2, -0.5, 0,
+        0.5, -1, 0,
+        1, -2, 0,
+        ! 2nd boundary, n=7
+        6, 10, -2,
+        6.5, 4, -1.5,
+        5, 1, -1.2,
+        4, 0, -1,
+        5, -1, -1.2,
+        6.5, -4, -1.5,
+        6, -10, -2,
+        ! 3rd boundary, m=6
+        1, 2, 0,
+        2, 4, -0.5,
+        3, 6, -1,
+        4, 8, -1.5,
+        5, 9, -1.8,
+        6, 10, -2,
+        ! 4th boundary, m=6
+        1, -2, 0,
+        2, -4, -0.5,
+        3, -6, -1,
+        4, -8, -1.5,
+        5, -9, -1.8,
+        6, -10, -2</pre>
+									</td><td style="text-align: center">
+										<div style="text-align: center"><img src="Images/GDL_Images/3Dshapes_coons_ex2.png" style="text-align: middle" alt="Images/GDL_Images/3Dshapes_coons_ex2.png"/></div>
+									</td></tr></tbody></table></div></div></div>
+			<hr/><a href="002.007.html#COONS_gdlcommand">Related in 3D Shapes</a><p>
+				<span class="bold"><strong>GDL Reference Guide</strong></span>
+			</p><p>
+				<span class="trademark">Copyright</span><sup>©</sup> 2021 by GRAPHISOFT, all rights reserved.
+				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+			</p></body></html>

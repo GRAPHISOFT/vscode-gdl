@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>DEFINE MATERIAL</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="DEFINEMATERIAL_gdlcommand">DEFINE MATERIAL</h3>
+					
+					<pre class="programlisting"><b id="DEFINEMATERIAL_keyword_2.11.4.6.2.4.1">DEFINE MATERIAL</b> name type,
+        surface_red, surface_green, surface_blue
+        [, ambient_ce, diffuse_ce, specular_ce, transparent_ce,
+         shining, transparency_attenuation
+         [, specular_red, specular_green, specular_blue,
+          emission_red, emission_green, emission_blue, emission_att]]
+        [, fill_index [, fillcolor_index, texture_index]]</pre>
+					
+						<div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3>This command can contain additional data definition.</div>
+						<p>
+							<span class="italic">See <a class="xref" href="002.011.html#AdditionalData_section" title="Additional Data">the section called “Additional Data”</a> for details.</span>
+						</p>
+						<p>
+							Any GDL script can include material definitions prior to the first reference to that material name.
+							This material can only be used for 3D elements in its own script and its second generation scripts.
+						</p>
+						<div style="margin-left: 1em">
+							<div style="text-indent: -1em"><code><b>name: </b></code>name of the material.</div>
+						</div>
+						<div style="margin-left: 1em">
+							<div style="text-indent: -1em"><code><b>type: </b></code>
+								type of the material. The actual number (n) of parameters that define the material is different, depending on the type.
+								The meaning of the parameters and their limits are explained in the examples’ comments.
+							</div>
+							<div><code>0: </code>general definition, n=16,</div>
+							<div><code>1: </code>simple definition, n=9 (extra parameters are constants or calculated from given values),</div>
+							<div><code>2-7: </code>
+								predefined material types, n=3.
+								The three values are the RGB components of the surface color. Other parameters are constants or calculated from the color.
+							</div>
+							<div><code>2: </code>matte,</div>
+							<div><code>3: </code>metal,</div>
+							<div><code>4: </code>plastic,</div>
+							<div><code>5: </code>glass,</div>
+							<div><code>6: </code>glowing,</div>
+							<div><code>7: </code>constant,</div>
+							<div><code>10: </code>general definition with fill parameter, n=17,</div>
+							<div><code>11: </code>simple definition with fill parameter, n=10,</div>
+							<div><code>12-17: </code>predefined material types with fill parameter, n=4,</div>
+							<div><code>20: </code>general definition with fill, color index of fill and index of texture parameters, n=19,</div>
+							<div><code>21: </code>simple definition with fill, color index of fill and index of texture parameters, n=12,</div>
+							<div><code>22-27: </code>predefined material types with fill, color index of fill and index of texture parameters, n=6.</div>
+							<div><code>20-27: </code>
+								Special meanings for types 20-27: If the pen number is zero, vectorial hatches will be generated with the active pen.
+								Zero value for a texture or fill index allows you to define materials without a vectorial hatch or texture.
+							</div>
+						</div>
+					
+					<div class="example"><a id="id521270"/><p class="title"><b>Example 1:
+Materials with solid colors</b></p><div class="example-contents"><pre class="programlisting">DEFINE MATERIAL "water" 0,
+        0.5284, 0.5989, 0.6167,! surface RGB [0.0..1.0]
+        1.0,                   ! ambient coefficient [0.0..1.0]
+        0.5,                   ! diffuse coefficient [0.0..1.0]
+        0.5,                   ! specular coeff. [0.0..1.0]
+        0.9,                   ! transparent coeff. [0.0..1.0]
+        2.0,                   ! shining [0.0..100.0]
+        1,                     ! transparency atten. [0.0..4.0]
+        0.5284, 0.5989, 0.6167,! specular RGB [0.0..1.0]
+        0, 0, 0,               ! emission RGB [0.0..1.0]
+        0.0                    ! emission atten. [0.0..65.5]</pre><pre class="programlisting">DEFINE MATERIAL "asphalt" 1,
+        0.1995, 0.2023, 0.2418,! surface RGB [0.0..1.0]
+        1.0, 1.0, 0.0, 0.0,
+        !      ambient, diffuse, specular, transparent
+        !      coefficients [0.0..1.0]
+        0,               ! shining [0..100]
+        0                ! transparency attenuation [0..4]</pre><pre class="programlisting">DEFINE MATERIAL "matte red" 2,
+        1.0, 0.0, 0.0    ! surface RGB [0.0..1.0]</pre></div></div>
+					<div class="example"><a id="id521273"/><p class="title"><b>Example 2:
+Material with fill</b></p><div class="example-contents"><pre class="programlisting">DEFINE MATERIAL "Brick-Red" 10,
+        0.878294, 0.398199, 0.109468,
+        0.58, 0.85, 0.0, 0.0,
+        0,
+        0.0,
+        0.878401, 0.513481, 0.412253,
+        0.0, 0.0, 0.0,
+        0,
+        IND(FILL, "common brick")    ! fill index</pre></div></div>
+					<div class="example"><a id="id521296"/><p class="title"><b>Example 3:
+Material with fill and texture</b></p><div class="example-contents"><pre class="programlisting">DEFINE MATERIAL "Yellow Brick+*" 20,
+        1, 1, 0,         ! surface RGB [0.0 .. 1.0]
+        0.58, 0.85, 0, 0,
+        !      ambient, diffuse, specular, transparent
+        !      coefficients [0.0 .. 1.0]
+        0,               ! shining [0.0 .. 100.0]
+        0,               ! transparency attenuation [0.0 .. 4.0]
+        0.878401, 0.513481, 0.412253, ! specular RGB [0.0 .. 1.0]
+        0, 0, 0,         ! emission RGB [0.0 .. 1.0]
+        0,               ! emission attenuation [0.0 .. 65.5]
+        IND(FILL, "common brick"), 61,
+        IND(TEXTURE, "Brick")
+        !      Fill index, color index, texture index</pre></div></div>
+				<hr/><a href="002.011.html#DEFINEMATERIAL_gdlcommand">Related in Attributes</a><p>
+				<span class="bold"><strong>GDL Reference Guide</strong></span>
+			</p><p>
+				<span class="trademark">Copyright</span><sup>©</sup> 2021 by GRAPHISOFT, all rights reserved.
+				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+			</p></body></html>

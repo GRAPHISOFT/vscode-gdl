@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>RULEDSEGMENTED</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="RULEDSEGMENTED_gdlcommand">RULEDSEGMENTED</h3>
+				
+				<pre class="programlisting"><b id="RULEDSEGMENTED_keyword_2.7.5.35.4.1">RULEDSEGMENTED</b> n, mask,
+        x11, y11, z11, s1,..., x1n, y1n, z1n, sn,
+        x21, y21, z21, ..., x2n, y2n, z2n</pre>
+				
+					<p>
+						<span class="italic">Compatibility: introduced in ARCHICAD 21.</span>
+					</p>
+					<p>
+						RULEDSEGMENTED creates a surface based on two arbitrary-shaped polyline in 3D space. The two polylines must consist of the same number of vertices.
+						It generates a sequence of doubly ruled surfaces, like RULED, but with less restriction on input polylines and with a subdivision of better quality.
+					</p>
+					<p>
+						Corresponding vertices of the two profiles are connected with straight lines. Corresponding pair of skew segments of the profiles are connected by a doubly ruled surface (mathematically hyperbolic paraboloid), with segmentation in both directions, resulting much smoother renderings and cross-sections.
+ 					</p>
+					<p>
+						Conditions of profile polylines:
+					</p>
+						<div class="itemizedlist"><ul class="itemizedlist"><li class="listitem"><p>both are 3D polylines, does not need to be coplanar</p></li><li class="listitem"><p>each may be closed but, neither may contain holes</p></li><li class="listitem"><p>each may contain identical vertices, even multiple consecutive ones resulting in fan-shaped surface</p></li><li class="listitem"><p>if a profile polyline is closed and coplanar, closing polygon can be generated</p></li></ul></div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>n: </b></code>number of polyline nodes in each curve.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>x1i, y1i, z1i: </b></code>3D positions of vertices on first profile polyline.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>x2i, y2i, z2i: </b></code>3D positions of vertices on second profile polyline.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>mask: </b></code>
+							controls the existence of the bottom, top and side polygon and the visibility of the edges on the generator polylines.
+							The side polygon connects the first and last nodes of the curves, if any of them are not closed.
+						</div><div><code>mask = j<sub>1</sub> + 2*j<sub>2</sub> + 4*j<sub>3</sub> + 16*j<sub>5</sub> + 32*j<sub>6</sub> + 64*j<sub>7</sub></code>, where each j can be 0 or 1.
+	</div>
+						<div><code>j<sub>1</sub>: </code>base surface is present (not effective if the first polyline is not coplanar and j3 is not set),</div>
+						<div><code>j<sub>2</sub>: </code>top surface is present (not effective if the second polyline is not coplanar and j3 is not set),</div>
+						<div><code>j<sub>3</sub>: </code>closing side surface is present (surface on additional segments between the last and first nodes),</div>
+						<div><code>j<sub>5</sub>: </code>edges on the first profile polyline are visible,</div>
+						<div><code>j<sub>6</sub>: </code>edges on the second profile polyline are visible,</div>
+						<div><code>j<sub>7</sub>: </code>edges on the surface are visible, surface is not smooth.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>si: </b></code>status of the generatrices (lateral edges between one node on first profile polyline and corresponding node on second polyline).</div>
+						<div><code>0: </code>generatrix is visible,</div>
+						<div><code>1: </code>generatrix is used for showing the contour,</div>
+						<div><code>2: </code>generatrix visible and defines a break in rendering.</div>
+					</div>
+					
+						<pre class="programlisting">n &gt; 1</pre>
+					
+				
+				<div class="example"><a id="id502425"/><p class="title"><b>Example:
+</b></p><div class="example-contents"><pre class="programlisting">
+RULEDSEGMENTED 4, 16+32,
+               0, 0, 0, 2,
+               1, 0, 0, 2,
+               1, 1, 0, 2,
+               1, 1, 1, 2,
+               0, 0, 1,
+               0, 1, 1,
+               0, 1, 2,
+               1, 2, 2</pre></div></div>
+			<hr/><a href="002.007.html#RULEDSEGMENTED_gdlcommand">Related in 3D Shapes</a><p>
+				<span class="bold"><strong>GDL Reference Guide</strong></span>
+			</p><p>
+				<span class="trademark">Copyright</span><sup>©</sup> 2021 by GRAPHISOFT, all rights reserved.
+				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+			</p></body></html>

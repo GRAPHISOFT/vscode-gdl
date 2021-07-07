@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>RULEDSHELL{2}</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="RULEDSHELL2_gdlcommand">RULEDSHELL{2}</h3>
+				
+				<pre class="programlisting"><b id="RULEDSHELL2_keyword_2.7.5.59.4.1">RULEDSHELL{2}</b> topMat, bottomMat,
+        sideMat_1, sideMat_2, sideMat_3, sideMat_4, defaultMat,
+        n, m, g, status,
+        offset, thickness, flipped, trimmingBody,
+        preThickenTran_11, preThickenTran_12, preThickenTran_13, preThickenTran_14,
+        preThickenTran_21, preThickenTran_22, preThickenTran_23, preThickenTran_24,
+        preThickenTran_31, preThickenTran_32, preThickenTran_33, preThickenTran_34,
+        firstpolyX_1, firstpolyY_1, firstpolyS_1,
+        ...
+        firstpolyX_n, firstpolyY_n, firstpolyS_n,
+        secondpolyX_1, secondpolyY_1, secondpolyS_1,
+        ...
+        secondpolyX_m, secondpolyY_m, secondpolyS_m,
+        profile2Tran_11, profile2Tran_12, profile2Tran_13, profile2Tran_14
+        profile2Tran_21, profile2Tran_22, profile2Tran_23, profile2Tran_24
+        profile2Tran_31, profile2Tran_32, profile2Tran_33, profile2Tran 34
+        generatrixFirstIndex_1, generatrixSecondIndex_1,
+        ...
+        generatrixFirstIndex_g, generatrixSecondIndex_g</pre>
+				
+					<p>
+						RULEDSHELL{2} is an extension of <a class="xref" href="reference/RULEDSHELL.html">the RULEDSHELL command</a> with the possibility of hiding edges of surfaces, and edges between original and thickened surface.
+					</p>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>status: </b></code>Status bits:</div><div><code>status = j<sub>1</sub> + 2*j<sub>2</sub></code>, where each j can be 0 or 1.
+	</div>
+						<div><code>j<sub>1</sub>: </code>Make edges invisible between original and thickened surface.</div>
+						<div><code>j<sub>2</sub>: </code>Make edges invisible on surfaces.</div>
+					</div>
+				
+				<div class="example"><a id="id506692"/><p class="title"><b>Example:
+</b></p><div class="example-contents"><div style="text-align: center"><img src="Images/GDL_Images/3Dshapes_ruledshell_ex.png" style="text-align: middle" alt="Images/GDL_Images/3Dshapes_ruledshell_ex.png"/></div><pre class="programlisting">RULEDSHELL "Paint-14", "Paint-14",
+        "Paint-14", "Paint-14", "Paint-14", "Paint-14", "Paint-14",
+        4,      3,      3,
+        0.00,   0.30,      0, 0,
+        ! transformation matrix
+        1.00,   0.00,   0.00,   0.00,
+        0.00,   0.00,  -1.00,   0.00,
+        0.00,   1.00,   0.00,   0.00,
+        ! profile 1 polyline
+        0.00,   0.00,      2,
+        2.00,   2.00,      2,
+        4.00,   0.00,      2,
+        6.00,   0.00,      2,
+        ! profile 2 polyline
+        0.00,   0.00,      2,
+        2.00,   2.00,      2,
+        6.00,   1.00,      2,
+        ! transformation matrix
+        1.00,   0.00,   0.00,   0.00,
+        0.00,   1.00,   0.00,   0.00,
+        0.00,   0.00,   1.00, -10.00,
+        ! generatrices
+        1,      1,
+        2,      2,
+        4,      3</pre></div></div>
+			<hr/><a href="002.007.html#RULEDSHELL2_gdlcommand">Related in 3D Shapes</a><p>
+				<span class="bold"><strong>GDL Reference Guide</strong></span>
+			</p><p>
+				<span class="trademark">Copyright</span><sup>©</sup> 2021 by GRAPHISOFT, all rights reserved.
+				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+			</p></body></html>

@@ -1,0 +1,1854 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+	<dict>
+		<key>fileTypes</key>
+		<array>
+			<string>gdl</string>
+			<string>xml</string>
+		</array>
+		<key>name</key>
+		<string>gdl</string>
+		<key>patterns</key>
+		<array>
+			<dict>
+				<key>comment</key>
+				<string>comment</string>
+				<key>begin</key>
+				<string>!</string>
+				<key>end</key>
+				<string>$</string>
+				<key>name</key>
+				<string>comment.line.gdl</string>
+			</dict>
+			<dict>
+				<key>comment</key>
+				<string>GUID</string>
+				<key>match</key>
+				<string>(?i)(?&lt;=&lt;MainGUID&gt;)([0-9a-z]{8}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{12})(?=&lt;\/MainGUID&gt;)</string>
+				<key>name</key>
+				<string>entity.name.function.gdl</string>
+			</dict>
+			<dict>
+				<key>comment</key>
+				<string>0varname except 1E-2</string>
+				<key>match</key>
+				<string>(?i)(\b|\.)([\d]+(([_a-df-z]+)|(e(?![+-]\d(?!\.)))))</string>
+				<key>name</key>
+				<string>invalid.illegal.gdl</string>
+			</dict>
+			<dict>
+				<key>comment</key>
+				<string>varname"</string>
+				<key>match</key>
+				<string>(?i)(\b|\.)[_a-z][_0-9a-z]*["'`´“”’‘]</string>
+				<key>name</key>
+				<string>invalid.illegal.gdl</string>
+			</dict>
+			<dict>
+				<key>comment</key>
+				<string>.field</string>
+				<key>match</key>
+				<string>(?i)(^|[\.\s]+)\.[_a-z][_0-9a-z]*</string>
+				<key>name</key>
+				<string>invalid.illegal.gdl</string>
+			</dict>
+			<dict>
+				<key>comment</key>
+				<string>longline</string>
+				<key>match</key>
+				<string>^.{257,}</string>
+				<key>name</key>
+				<string>invalid.illegal.gdl</string>
+			</dict>
+			<dict>
+				<key>comment</key>
+				<string>deprecated commands</string>
+				<key>match</key>
+				<string>(?ix)\b
+						(	BAS |
+							BOX |
+							CONT |
+							FILTER |
+							GDLBIN |
+							HIP_ROOFS |
+							(LIN|NOD)E? |
+							ORIGO |
+							PARS |
+							PAUSE |
+							PLOTMAKER |
+							PLOTTER |
+							RECT_ |
+							SFLINE |
+							TET(RA)? |
+							TRI |
+							UI_(CANCEL|OK) |
+							VOCA |
+							WALL_ |
+							MIGRATIONWARNING |
+							COOR(?!\{3\})(\{2\})? |
+							REF(?!\s*(\\|DESCRIPTOR|COMPONENT))
+						)(?=[\s!\\*/%=#&lt;&gt;+\-&amp;|^@,()\[\]:$])</string>
+				<key>name</key>
+				<string>invalid.deprecated.gdl</string>
+			</dict>
+			<dict>
+				<key>comment</key>
+				<string>deprecated globals</string>
+				<key>match</key>
+				<string>(?ix)\b
+						(	(BEAM|COLU)_CROSSSECTION_TYPE |
+							GLOB_	(	CONTEXT |
+										INTID
+									) |
+							LABEL_	(	ALWAYS_READABLE |
+										ANCHOR_POS |
+										ARROW_(PEN|LINETYPE) |
+										CUSTOM_ARROW |
+										FONT_(NAME|STYLE(2)?) |
+										FRAME_(OFFSET|ON) |
+										ROTANGLE |
+										TEXT_	(	ALIGN |
+													(BG_)?PEN |
+													(CHARSPACE|WIDTH)_FACT |
+													LEADING |
+													SIZE |
+													WRAP
+												)
+									) |
+							SKYL_ROTANGLE |
+							[A-Z][_~] |
+							CWFRAME_(CLASS|MAT) |
+							CWPANEL_(CLASS|TYPE|MAT_(OUTER|INNER|CUT))
+						)(?=[\s!\\*/%=#&lt;&gt;+\-&amp;|^@,()\[\]:$])</string>
+				<key>name</key>
+				<string>invalid.deprecated.gdl</string>
+			</dict>
+			<dict>
+				<key>comment</key>
+				<string>deprecated fixed-name variables</string>
+				<key>match</key>
+				<string>(?ix)\b
+						(	ac_	(	(bottom|top)ConnPlane |
+									(beam|colu)_crosssection_type |
+									disable_controls
+								) |
+							gs_	(	(right|front)Offset |
+									originOffset[XY]
+								) |
+							ifc_(	CapacityBy(Weight|Number) |
+									predefinedtype
+								) |
+							ROOM_LSIZE
+						)(?=[\s!\\*/%=#&lt;&gt;+\-&amp;|^@,()\[\]:$])</string>
+				<key>name</key>
+				<string>invalid.deprecated.gdl</string>
+			</dict>			<dict>
+				<key>comment</key>
+				<string>functions requiring ()</string>
+				<key>begin</key>
+				<string>(?ix)
+						(	ABS |
+							ACS |
+							APPLICATION_QUERY |
+							ASN |
+							ATN |
+							(ADD|ISECT|SUB)GROUP |
+							BIT(SET|TEST) |
+							CALLFUNCTION |
+							CEIL |
+							CREATEGROUPWITHMATERIAL |
+							COS |
+							(DELETED|STORED)_PAR_VALUE |
+							EXP |
+							FRA |
+							GET |
+							IND |
+							INITADDONSCOPE |
+							INPUT |
+							ISECTLINES |
+							(HAS|REMOVE)KEY |
+							LGT |
+							LIBRARYGLOBAL |
+							(?&lt;!UI_DIA)LOG |
+							MAX |
+							MIN |
+							NOT |
+							NTR |
+							OPEN |
+							REQ |
+							REQUEST |
+							RND |
+							(ROUND_)?INT |
+							SGN |
+							SIN |
+							SPLIT |
+							SQR |
+							STR(LEN|STR|SUB|TO(UPPER|LOWER))?(?!LEN|STR|SUB|TO(UPPER|LOWER)) |
+							STW |
+							SUB |
+							SURFACE3D |
+							SWEEPGROUP |
+							TAN |
+							VAR(DIM[12]|TYPE) |
+							VOLUME3D
+						)(?![_a-z0-9\{]+)(?!\s*[\(\\])</string>
+				<key>beginCaptures</key>
+				<array>
+					<dict>
+						<key>name</key>
+						<string>keyword.incomplete.gdl</string>
+					</dict>
+				</array>
+				<key>end</key>
+				<string>$</string>
+				<key>contentName</key>
+				<string>invalid.illegal.gdl</string>
+			</dict>
+			<dict>
+				<key>comment</key>
+				<string>functions{n} requiring ()</string>
+				<key>begin</key>
+				<string>(?ix)
+						(	(ADD|ISECT|SUB)GROUP\{[23]\} |
+							REQUEST\{[2-4]\} |
+							STR\{2\} |
+							SWEEPGROUP\{[2-5]\}
+						)(?!\s*[\(\\])</string>
+				<key>beginCaptures</key>
+				<array>
+					<dict>
+						<key>name</key>
+						<string>keyword.incomplete.gdl</string>
+					</dict>
+				</array>
+				<key>end</key>
+				<string>$</string>
+				<key>contentName</key>
+				<string>invalid.illegal.gdl</string>
+			</dict>
+			<dict>
+				<key>comment</key>
+				<string>subroutine label numbered</string>
+				<key>match</key>
+				<string>(?i)^\s*?([0-9]+)\s*:</string>
+				<key>name</key>
+				<string>entity.name.function.gdl</string>
+			</dict>
+			<dict>
+				<key>comment</key>
+				<string>subroutine label named</string>
+				<key>match</key>
+				<string>(?i)^\s*?(["'`´“”’‘])[^"'`´“”’‘]+\1\s*:</string>
+				<key>name</key>
+				<string>entity.name.function.gdl</string>
+			</dict>
+			<dict>
+				<key>comment</key>
+				<string>macro call by name</string>
+				<key>match</key>
+				<string>(?i)(?&lt;=call)(\s*(["'`´“”’‘])[^"'`´“”’‘]+\2)</string>
+				<key>name</key>
+				<string>entity.name.function.gdl</string>
+			</dict>
+			<dict>
+				<key>comment</key>
+				<string>subroutine call by name</string>
+				<key>match</key>
+				<string>(?i)(?&lt;=GOTO|THEN)(\s*(["'`´“”’‘])[^"'`´“”’‘]+\2\s*)(?=$|\\|:|!)</string>
+				<key>name</key>
+				<string>entity.name.function.gdl</string>
+			</dict>
+			<dict>
+				<key>comment</key>
+				<string>subroutine call by name</string>
+				<key>match</key>
+				<string>(?i)(?&lt;=GOSUB)(\s*(["'`´“”’‘])[^"'`´“”’‘]+\2\s*)(?=$|\\|:|!)</string>
+				<key>name</key>
+				<string>entity.name.function.gdl</string>
+			</dict>
+			<dict>
+				<key>comment</key>
+				<string>subroutine call by label</string>
+				<key>match</key>
+				<string>(?i)(?&lt;=GOTO|THEN)(\s+[0-9]+)(?=[\s!\\*/%=#&lt;&gt;+\-&amp;|^@:$])</string>
+				<key>name</key>
+				<string>entity.name.function.gdl</string>
+			</dict>
+			<dict>
+				<key>comment</key>
+				<string>subroutine call by label</string>
+				<key>match</key>
+				<string>(?i)(?&lt;=GOSUB)(\s+[0-9]+)(?=[\s!\\*/%=#&lt;&gt;+\-&amp;|^@:$])</string>
+				<key>name</key>
+				<string>entity.name.function.gdl</string>
+			</dict>
+			<dict>
+				<key>comment</key>
+				<string>constant 1.2'-.4"</string>
+				<key>match</key>
+				<string>(\b|(?=\.))[0-9]*\.?[0-9]+['](-[0-9]*\.?[0-9]+["])?(?=[\s!\\*/%=#&lt;&gt;+\-&amp;|^@,()\[\]:$])</string>
+				<key>name</key>
+				<string>constant.numeric.imperial.gdl</string>
+			</dict>
+			<dict>
+				<key>comment</key>
+				<string>constant 1/2'-3/4"</string>
+				<key>match</key>
+				<string>\b[0-9]+/[0-9]+['](-[0-9]+/[0-9]+["])?(?=[\s!\\*/%=#&lt;&gt;+\-&amp;|^@,()\[\]:$])</string>
+				<key>name</key>
+				<string>constant.numeric.imperial.gdl</string>
+			</dict>
+			<dict>
+				<key>comment</key>
+				<string>constant 3.4"</string>
+				<key>match</key>
+				<string>(\b|(?=\.))([0-9]*\.?)[0-9]+["]</string>
+				<key>name</key>
+				<string>constant.numeric.imperial.gdl</string>
+			</dict>
+			<dict>
+				<key>comment</key>
+				<string>constant 3/4"</string>
+				<key>match</key>
+				<string>\b[0-9]+/[0-9]+["]</string>
+				<key>name</key>
+				<string>constant.numeric.imperial.gdl</string>
+			</dict>
+			<dict>
+				<key>comment</key>
+				<string>constant 3.4E-009</string>
+				<key>match</key>
+				<string>(\b|(?=\.))([0-9]*\.?[0-9]+(E[-+]?\d{1,3})?)(?=[\s!\\*/%=#&lt;&gt;+\-&amp;|^@,()\[\]:$])</string>
+				<key>name</key>
+				<string>constant.numeric.metric.gdl</string>
+			</dict>
+			<dict>
+				<key>comment</key>
+				<string>fixed-name parameters as parameter or as exact string</string>
+				<key>include</key>
+				<string>#fixnamepars</string>
+			</dict>
+			<dict>
+				<key>comment</key>
+				<string>fixed-name constant parameters as parameter or as exact string</string>
+				<key>include</key>
+				<string>#fixnameconstpars</string>
+			</dict>
+			<dict>
+				<key>comment</key>
+				<string>add-on fixed-name parameters as parameter or as exact string</string>
+				<key>include</key>
+				<string>#addonpars</string>
+			</dict>
+			<dict>
+				<key>comment</key>
+				<string>strings including requests, appqueries and autotexts</string>
+				<key>include</key>
+				<string>#doublestring</string>
+			</dict>
+			<dict>
+				<key>comment</key>
+				<string>strings for localization</string>
+				<key>include</key>
+				<string>#singlestring</string>
+			</dict>
+			<dict>
+				<key>match</key>
+				<string>(?i)(,|\+|-|\^|\*{1,2}|/|=|&lt;|&gt;|&lt;=|&gt;=|&lt;&gt;|#|%|&amp;|\||@)|(?&lt;=^|\s)(MOD|AND|OR|EXOR)(?=$|\s|\(|\\)</string>
+				<key>name</key>
+				<string>keyword.operator.gdl</string>
+			</dict>
+			<dict>
+				<key>comment</key>
+				<string>for-next with loop variable matching</string>
+				<key>begin</key>
+				<string>(?i)(FOR)\s+(\w+)\s*(?=\=)</string>
+				<key>beginCaptures</key>
+				<dict>
+					<key>1</key>
+					<dict>
+						<key>name</key>
+						<string>keyword.control.flow.gdl</string>
+					</dict>
+					<key>2</key>
+					<dict>
+						<key>patterns</key>
+						<array>
+							<dict>
+								<key>include</key>
+								<string>#varname</string>
+							</dict>
+						</array>
+					</dict>
+				</dict>
+				<key>end</key>
+				<string>(?i)(NEXT)\s+(\2)</string>
+				<key>endCaptures</key>
+				<dict>
+					<key>1</key>
+					<dict>
+						<key>name</key>
+						<string>keyword.control.flow.gdl</string>
+					</dict>
+					<key>2</key>
+					<dict>
+						<key>patterns</key>
+						<array>
+							<dict>
+								<key>include</key>
+								<string>#varname</string>
+							</dict>
+						</array>
+					</dict>
+				</dict>
+				<key>patterns</key>
+				<array>
+					<dict>
+						<key>include</key>
+						<string>$self</string>
+					</dict>
+				</array>
+			</dict>
+			<dict>
+				<key>comment</key>
+				<string>control keywords</string>
+				<key>match</key>
+				<string>(?i)(?&lt;=^|[\s!\\*/%=#&lt;&gt;+\-&amp;|^@,()\[\]:])(TO|STEP|THEN|DO|WHILE|(END(WHILE|IF|GROUP)?)|GROUP|REPEAT|UNTIL|IF|ELSE|GO(TO|SUB)|RETURN|EXIT|BREAKPOINT|(END)?PARAGRAPH)(?=\b|$)</string>
+				<key>name</key>
+				<string>keyword.control.flow.gdl</string>
+			</dict>
+			<dict>
+				<key>comment</key>
+				<string>control characters</string>
+				<key>match</key>
+				<string>(?i)(?&lt;=^|[\s!\\*/%=#&lt;&gt;+\-&amp;|^@,()\[\]:_a-z0-9])(\\|:)(?=[\s!\\*/%=#&lt;&gt;+\-&amp;|^@,()\[\]:_a-z0-9])</string>
+				<key>name</key>
+				<string>keyword.control.flow.gdl</string>
+			</dict>
+			<dict>
+				<key>comment</key>
+				<string>2D-only transformations</string>
+				<key>match</key>
+				<string>(?i)(?&lt;=^|\s|:)((ADD|ROT|MUL)2)(?=\b)</string>
+				<key>name</key>
+				<string>keyword.dd.transform.gdl</string>
+			</dict>
+			<dict>
+				<key>comment</key>
+				<string>3D-only transformations</string>
+				<key>match</key>
+				<string>(?i)(?&lt;=^|\s|:)((ADD|ROT|MUL)[XYZ]?|XFORM)(?=\b)</string>
+				<key>name</key>
+				<string>keyword.ddd.transform.gdl</string>
+			</dict>
+			<dict>
+				<key>comment</key>
+				<string>other transformation keywords</string>
+				<key>match</key>
+				<string>(?i)(?&lt;=^|\s|:)(DEL|TOP|NTR)(?=\b)</string>
+				<key>name</key>
+				<string>keyword.transform.gdl</string>
+			</dict>
+			<dict>
+				<key>comment</key>
+				<string>property script keywords</string>
+				<key>match</key>
+				<string>(?ix)(?&lt;=^|\s|:)
+						(	BINARYPROP |
+							DATABASE_SET |
+							DRAWING[23]? |
+							DRAWING3\{[23]\} |
+							POSITION |
+							(REF\s+)?(DESCRIPTOR|COMPONENT) |
+							(SURFACE|VOLUME)3D
+						)(?=[\s!\\*/%=#&lt;&gt;+\-&amp;|^@,()\[\]:$])</string>
+				<key>name</key>
+				<string>keyword.properties.gdl</string>
+			</dict>
+			<dict>
+				<key>comment</key>
+				<string>property script keywords</string>
+				<key>match</key>
+				<string>(?ix)(?&lt;=^|\s)
+						(	BEAMS |
+							CEILS |
+							COLUMNS |
+							DOORS |
+							HATCHES |
+							LIGHTS |
+							MESHES |
+							OBJECTS |
+							PITCHED_ROOFS |
+							ROOMS |
+							WALLS |
+							WINDOWS
+						)(?=\b)</string>
+				<key>name</key>
+				<string>variable.language.gdl</string>
+			</dict>
+			<dict>
+				<key>comment</key>
+				<string>math and str functions</string>
+				<key>match</key>
+				<string>(?ix)(?&lt;=^|[\s!\\*/%=#&lt;&gt;+\-&amp;|^@,()\[\]:$])
+						(	ABS |
+							ACS |
+							ASN |
+							ATN |
+							BIT(TEST|SET) |
+							CEIL |
+							COS |
+							EXP |
+							FRA |
+							INT |
+							LGT |
+							MAX |
+							MIN |
+							NOT |
+							RND |
+							ROUND_INT |
+							LOG |
+							SGN |
+							SIN |
+							SQR |
+							STR(\{2\}|LEN|STR|SUB|TO(UPPER|LOWER))? |
+							SPLIT |
+							STW |
+							TAN
+						)(?=\s*[\(\\])</string>
+				<key>name</key>
+				<string>keyword.other.gdl</string>
+			</dict>
+			<dict>
+				<key>include</key>
+				<string>#range</string>
+			</dict>
+			<dict>
+				<key>include</key>
+				<string>#parentheses</string>
+			</dict>
+			<dict>
+				<key>include</key>
+				<string>#arraydim</string>
+			</dict>
+			<dict>
+				<key>comment</key>
+				<string>2D basic commands</string>
+				<key>match</key>
+				<string>(?ix)(?&lt;=^|\s|:)
+						(	(	LINE |
+								RECT |
+								ARC |
+								CIRCLE |
+								WALL(LINE|ARC)
+							)2 |
+							SPLINE2[A]? |
+							(	PICTURE |
+								WALL(HOLE|BLOCK)
+							)2(\{2\})? |
+							POLY2(_?(A|B(\{[2-6]\})?)?)
+						)(?=[\s!\\*/%=#&lt;&gt;+\-&amp;|^@,()\[\]:$])</string>
+				<key>name</key>
+				<string>keyword.dd.basic.gdl</string>
+			</dict>
+			<dict>
+				<key>comment</key>
+				<string>2d symbols</string>
+				<key>match</key>
+				<string>(?i)(?&lt;=^|\s|:)(FRAGMENT2|PROJECT2(\{[2-4]\})?)(?=[\s!\\*/%=#&lt;&gt;+\-&amp;|^@,()\[\]:$])</string>
+				<key>name</key>
+				<string>keyword.dd.symbol.gdl</string>
+			</dict>
+			<dict>
+				<key>comment</key>
+				<string>2d text</string>
+				<key>match</key>
+				<string>(?i)(?&lt;=^|\s|:)(RICH)?TEXT2(?=\b)</string>
+				<key>name</key>
+				<string>keyword.dd.text.gdl</string>
+			</dict>
+			<dict>
+				<key>comment</key>
+				<string>2d hotspots</string>
+				<key>match</key>
+				<string>(?i)(?&lt;=^|\s|:)HOT(SPOT|LINE|ARC)2(?=\b)</string>
+				<key>name</key>
+				<string>keyword.dd.hotedit.gdl</string>
+			</dict>
+			<dict>
+				<key>comment</key>
+				<string>3d hotspots</string>
+				<key>match</key>
+				<string>(?i)(?&lt;=^|\s|:)HOT(SPOT|LINE|ARC)(?=\b)</string>
+				<key>name</key>
+				<string>keyword.ddd.hotedit.gdl</string>
+			</dict>
+			<dict>
+				<key>comment</key>
+				<string>3d basic commands</string>
+				<key>match</key>
+				<string>(?i)(?&lt;=^|\s|:)(BLOCK|BRICK|CYLIND|CONE|SPHERE|ELLIPS|ELBOW|ARMC|ARME)(?=\b)</string>
+				<key>name</key>
+				<string>keyword.ddd.basic.gdl</string>
+			</dict>
+			<dict>
+				<key>comment</key>
+				<string>3d planar</string>
+				<key>match</key>
+				<string>(?i)(?&lt;=^|\s|:)((PLANE|POLY)(_?)|ARC|CIRCLE|LIN_|RECT)(?=\b)</string>
+				<key>name</key>
+				<string>keyword.ddd.planar.gdl</string>
+			</dict>
+			<dict>
+				<key>comment</key>
+				<string>3d complex</string>
+				<key>match</key>
+				<string>(?i)(?&lt;=^|\s|:)(SLAB(_?)|CSLAB_|CROOF_(\{[234]\})?|[CB]WALL_|XWALL_(\{[23]\})?|BEAM|MESH|POLYROOF(\{[234]\})?|POINTCLOUD)(?=[\s!\\*/%=#&lt;&gt;+\-&amp;|^@,()\[\]:$])</string>
+				<key>name</key>
+				<string>keyword.ddd.complex.gdl</string>
+			</dict>
+			<dict>
+				<key>comment</key>
+				<string>3d primitives</string>
+				<key>match</key>
+				<string>(?i)(?&lt;=^|\s|:)(BASE|BODY|COOR\{3\}|EDGE|PGON(\{[23]\})?|PIPG|TEVE|VECT|VERT(\{2\})?)(?=[\s!\\*/%=#&lt;&gt;+\-&amp;|^@,()\[\]:$])</string>
+				<key>name</key>
+				<string>keyword.ddd.primitive.gdl</string>
+			</dict>
+			<dict>
+				<key>comment</key>
+				<string>3d prisms</string>
+				<key>match</key>
+				<string>(?i)(?&lt;=^|\s|:)(PRISM_?|[BFH]PRISM_|[CS]PRISM_(\{[234]\})?)(?=[\s!\\*/%=#&lt;&gt;+\-&amp;|^@,()\[\]:$])</string>
+				<key>name</key>
+				<string>keyword.ddd.prism.gdl</string>
+			</dict>
+			<dict>
+				<key>comment</key>
+				<string>3d nurbs</string>
+				<key>match</key>
+				<string>(?ix)(?&lt;=^|\s|:)(NURBS
+						(	BODY |
+							CURVE[23]D |
+							EDGE |
+							FACE(\{2\})? |
+							LUMP |
+							SURFACE |
+							TRIM(SINGULAR)? |
+							VERT
+						))(?=[\s!\\*/%=#&lt;&gt;+\-&amp;|^@,()\[\]:$])</string>
+				<key>name</key>
+				<string>keyword.ddd.nurbs.gdl</string>
+			</dict>
+			<dict>
+				<key>comment</key>
+				<string>3d polygon-based</string>
+				<key>match</key>
+				<string>(?i)(?&lt;=^|\s|:)(WALL(HOLE|NICHE)|PYRAMID|RULED(\{2\}|SEGMENTED(\{2\})?)?|EXTRUDE|SWEEP|TUBE(\{[23]\}|A)?|MASS(\{2\})?|COONS(\{2\})?|REVOLVE(\{[2-5]\})?|(EXTRUDED|REVOLVED|RULED)SHELL(\{[23]\})?|REVOLVEDSHELLANGULAR(\{[23]\})?)(?=[\s!\\*/%=#&lt;&gt;+\-&amp;|^@,()\[\]:$])</string>
+				<key>name</key>
+				<string>keyword.ddd.poly.gdl</string>
+			</dict>
+			<dict>
+				<key>comment</key>
+				<string>3d cuts</string>
+				<key>match</key>
+				<string>(?i)(?&lt;=^|\s|:)(CUT(PLANE(\{[23]\})?|POLY[A]?|FORM(\{2\})?|SHAPE|END))(?=[\s!\\*/%=#&lt;&gt;+\-&amp;|^@,()\[\]:$])</string>
+				<key>name</key>
+				<string>keyword.ddd.cut.gdl</string>
+			</dict>
+			<dict>
+				<key>comment</key>
+				<string>3D SEO commands</string>
+				<key>match</key>
+				<string>(?ix)(?&lt;=^|\s|:)
+						(	(PLACE|KILL)GROUP |
+							CREATEGROUPWITHMATERIAL
+						)(?=[\s!\\*/%=#&lt;&gt;+\-&amp;|^@,()\[\]:$])</string>
+				<key>name</key>
+				<string>keyword.ddd.seo.gdl</string>
+			</dict>
+			<dict>
+				<key>comment</key>
+				<string>3D SEO functions</string>
+				<key>match</key>
+				<string>(?ix)(?&lt;=^|[\s!\\*/%=#&lt;&gt;+\-&amp;|^@,()\[\]:])
+						(	(ADD|ISECT|SUB)GROUP(\{[23]\})? |
+							SWEEPGROUP(\{[2-5]\})? |
+							ISECTLINES
+						)(?=\s*[\(\\])</string>
+				<key>name</key>
+				<string>keyword.ddd.seo.gdl</string>
+			</dict>
+			<dict>
+				<key>comment</key>
+				<string>3d text</string>
+				<key>match</key>
+				<string>(?i)(?&lt;=^|\s|:)(RICH)?TEXT(?=\b)</string>
+				<key>name</key>
+				<string>keyword.ddd.text.gdl</string>
+			</dict>
+			<dict>
+				<key>comment</key>
+				<string>3d rendering</string>
+				<key>match</key>
+				<string>(?i)(?&lt;=^|\s|:)(LIGHT|PICTURE|BINARY)(?=\b)</string>
+				<key>name</key>
+				<string>keyword.ddd.render.gdl</string>
+			</dict>
+			<dict>
+				<key>comment</key>
+				<string>attribute manipulation</string>
+				<key>match</key>
+				<string>(?i)(?&lt;=^|\s|:)(DEFINE|SET|BASED_ON|PEN|RESOL|RADIUS|TOLER|MODEL|WIRE|SURFACE(?!3D)|SOLID|SHADOW|ON|OFF|AUTO|DRAWINDEX|IND|LINE_(TYPE|PROPERTY)|SYMBOL_(LINE|FILL)|FILL[A]?|(EMPTY|SOLID|TRANSLUCENT|IMAGE|(LINEAR|RADIAL)_GRADIENT)_FILL|FILLTYPES_MASK|(BUILDING_)?MATERIAL|TEXTURE|STYLE(\{2\})?|TEXTBLOCK(_)?|ADDITIONAL_DATA|SECT_(FILL|ATTRS(\{2\})?))(?=[\s!\\*/%=#&lt;&gt;+\-&amp;|^@,()\[\]:$])</string>
+				<key>name</key>
+				<string>keyword.style.gdl</string>
+			</dict>
+			<dict>
+				<key>comment</key>
+				<string>attribute index request</string>
+				<key>match</key>
+				<string>(?i)\b((BUILDING_)?MATERIAL|FILL|LINE_TYPE|STYLE|TEXTURE|PROFILE_ATTR)\b</string>
+				<key>name</key>
+				<string>keyword.style.gdl</string>
+			</dict>
+			<dict>
+				<key>comment</key>
+				<string>built-in variable-like</string>
+				<key>match</key>
+				<string>(?i)\b(DEFAULT|ALL|CUSTOM|PI)\b</string>
+				<key>name</key>
+				<string>variable.language.gdl</string>
+			</dict>
+			<dict>
+				<key>comment</key>
+				<string>UI_BUTTON types</string>
+				<key>match</key>
+				<string>(?i)\b(UI_(NEXT|PREV|FUNCTION|LINK))\b</string>
+				<key>name</key>
+				<string>variable.language.gdl</string>
+			</dict>
+			<dict>
+				<key>comment</key>
+				<string>param script commands</string>
+				<key>match</key>
+				<string>(?i)(?&lt;=^|\s|:)(VALUES(\{2\})?|PROFILETYPES_MASK|RANGE|LOCK|HIDEPARAMETER|PARVALUE_DESCRIPTION)(?=[\s!\\*/%=#&lt;&gt;+\-&amp;|^@,()\[\]:$])</string>
+				<key>name</key>
+				<string>keyword.parameter.gdl</string>
+			</dict>
+			<dict>
+				<key>comment</key>
+				<string>UI script commands</string>
+				<key>match</key>
+				<string>(?ix)(?&lt;=^|\s|:)
+						(	UI_	(	DIALOG |
+									(CURRENT_)?PAGE |
+									(PICT_)?BUTTON |
+									SEPARATOR |
+									GROUPBOX |
+									PICT(_(PUSHCHECK|RADIO)BUTTON(\{2\})?)? |
+									STYLE |
+									OUTFIELD |
+									INFIELD(\{[2-4]\})? |
+									CUSTOM_POPUP_(INFIELD|LISTITEM)(\{[2]\})? |
+									TEXTSTYLE_INFIELD(\{[2]\})? |
+									RADIOBUTTON(\{[2]\})? |
+									TOOLTIP |
+									LISTFIELD |
+									LISTITEM(\{2\})? |
+									COLORPICKER(\{2\})? |
+									SLIDER(\{2\})?
+								)
+						)(?=[\s!\\*/%=#&lt;&gt;+\-&amp;|^@,()\[\]:$])</string>
+				<key>name</key>
+				<string>keyword.ui.gdl</string>
+			</dict>
+			<dict>
+				<key>comment</key>
+				<string>migration script commands</string>
+				<key>match</key>
+				<string>(?i)(?&lt;=^|\s|:)(MIGRATIONWARNING|NEWPARAMETER|SETMIGRATIONGUID|(DELETED|STORED)_PAR_VALUE)(?=\b)</string>
+				<key>name</key>
+				<string>keyword.migration.gdl</string>
+			</dict>
+			<dict>
+				<key>comment</key>
+				<string>input-output-related commands</string>
+				<key>match</key>
+				<string>(?i)(?&lt;=^|\s|:)(OPEN|INPUT|OUTPUT|CLOSE|CALL|FILE_DEPENDENCE|PARAMETERS|RETURNED_PARAMETERS|(INIT|CLOSE)ADDONSCOPE|(CALL|PREPARE)FUNCTION)(?=\b)</string>
+				<key>name</key>
+				<string>keyword.storage.gdl</string>
+			</dict>
+			<dict>
+				<key>comment</key>
+				<string>communication with AC</string>
+				<key>match</key>
+				<string>(?i)(?&lt;=^|\s|:)(APPLICATION_QUERY|LIBRARYGLOBAL|REQ((UEST)(\{[2-4]\})?)?)(?=[\s!\\*/%=#&lt;&gt;+\-&amp;|^@,()\[\]:$])</string>
+				<key>name</key>
+				<string>support.function.gdl</string>
+			</dict>
+			<dict>
+				<key>comment</key>
+				<string>globals</string>
+				<key>match</key>
+				<string>(?ix)(?&lt;=^|[\s!\\*/%=#&lt;&gt;+\-&amp;|^@,()\[\]:$])
+						(	(FROM|TO)_GUID |
+							BEAM_	(	BMAT(_NAME)? |
+										DIRECTION |
+										ELEVATION_(TOP|BOTTOM) |
+										FILL(_PEN)? |
+										HEIGHT |
+										HOLE(S_(NR|SURF|VOLUME)|_EDGE_SURF) |
+										LENGTH_(RIGHT|LEFT) |
+										MAT_(RIGHT|LEFT|TOP|BOTTOM|END) |
+										(OUTLINE|AXES)_LINETYPE |
+										PRIORITY |
+										POSITION |
+										PROFILE_NAME |
+										REFLINE_OFFSET |
+										(RIGHT|LEFT|TOP|BOTTOM|END)_SURF |
+										(SECT|FBGD)_PEN |
+										THICKNESS |
+										VOLUME(_CON)?
+									) |
+							(BEAM|COLU)_SEGMENT_(INDEX|INFO) |
+							COLU_	(	AREA |
+										CORE(_  (	BMAT(_NAME)? |
+													FBGD_PEN |
+													FILL(_PEN)? |
+													((GROSS(_TOPBOT)?|TOP|BOT)_)?SURF |
+													(GROSS_)?VOL |
+													X |
+													Y
+												)
+											)? |
+										DIM[12] |
+										(GROSS_)?VOLUME |
+										LINETYPE |
+										MAT |
+										((MIN|MAX)_)?HEIGHT |
+										PERIMETER |
+										PROFILE_NAME |
+										(SECT|VIEW)_PEN |
+										VENEER_	(	BMAT(_NAME)? |
+													FBGD_PEN |
+													FILL(_PEN)? |
+													((GROSS(_TOPBOT)?|TOP|BOT)_)?SURF |
+													(GROSS_)?VOL |
+													VOL |
+													WIDTH
+												)
+									) |
+							CW_BOUNDARY_PLACEMENT |
+							CW(ACC|JUNC)_TYPE |
+							CWALL_	(	((CONTOUR|(MAIN|SEC)AXIS|CUSTOM)_)?FRAMES_LENGTH |
+										HEIGHT |
+										ID |
+										LENGTH |
+										PANELS_NR |
+										PANELS_SURF(_([NSEW]|[NS][EW]))? |
+										PATTERN_ANGLE |
+										SLANT_ANGLE |
+										SURF(_BOUNDARY)? |
+										THICKNESS
+									) |
+							CWFRAME_	(	(BOTTOM|TOP)_CUT(PLANE|POLYLINE|TYPE) |
+											DEPTH |
+											DIRECTION |
+											LENGTH |
+											POSITION |
+											TYPE |
+											WIDTH
+										) |
+							CWPANEL_ 	(	DEPTH |
+											FUNCTION |
+											((GROSS|NOMINAL)_)?SURF |
+											LENGTH |
+											(NOMINAL_)?(WIDTH|HEIGHT) |
+											ORIENTATION |
+											PERIMETER |
+											POSITION |
+											THICKNESS |
+											(VERTICAL|HORIZONTAL)_DIRECTION
+										) |
+							FILL_	(	BMAT(_NAME)? |
+										(FBGD_)?PEN |
+										FILL_CATEGORY |
+										FILL(_PEN)? |
+										HOLES_(NR|AREA|PRM) |
+										LINETYPE |
+										PERIMETER |
+										SEGMENT_NR |
+										SURF
+									) |
+							GLOB_	(	CH_STORY_DIST |
+										CONTEXT |
+										CUTPLANES_INFO |
+										DIAGNOSTICS_MODE |
+										DRAWING_BGD_PEN |
+										ELEVATION |
+										ELEM_TYPE |
+										(EYE|TARG)POS_[XYZ] |
+										FILL_INDEX_(SOLID|BACKGROUND) |
+										FRAME_NR|(FIRST|LAST)_FRAME |
+										[HC]STORY_(ELEV|HEIGHT) |
+										(INTGU)?ID |
+										(ISSUE|CHANGE)_SCHEME |
+										LAYER |
+										MODPAR_NAME |
+										MVO_CW(ACC|FRAME|JUNCT|PANEL)_DETLEVEL |
+										MVO_RAILING_PLAN_COMP |
+										MVO_STAIR_FLOOR_PLAN_(OPT|COMP) |
+										NORTH_DIR |
+										(PREVIEW|FEEDBACK|SEO_TOOL)_MODE |
+										PROJECT_((LONG|LAT|ALT)ITUDE|DATE) |
+										SCALE |
+										SCRIPT_TYPE |
+										STRUCTURE_DISPLAY |
+										SUN_A(ZIMUTH|LTITUDE) |
+										UI_BUTTON_ID |
+										USER_(1?[1-9]|[12]0) |
+										VIEW_TYPE |
+										WORLD_ORIGO_OFFSET_[XY]
+									) |
+							LABEL_	(	ALWAYS_READABLE |
+										ANCHOR_POS |
+										ARROW(HEAD)?_PEN |
+										ARROW_LINETYPE |
+										ASSOC_ELEM_(ORIENTATION|GEOMETRY) |
+										CHARSPACE_FACT |
+										CUSTOM_ARROW |
+										FONT_(NAME|STYLE[2]?) |
+										FRAME_(ON|OFFSET) |
+										HAS_POINTER |
+										POSITION |
+										ROTANGLE |
+										TEXT_	(	SIZE |
+													(BG_)?PEN |
+													ALIGN |
+													LEADING |
+													(WIDTH|CHARSPACE)_FACT |
+													WRAP
+												)
+									) |
+							LAYOUT_	(	CURRENTREVISION_OPEN |
+										(REVISION|CHANGE)_HISTORY
+									) |
+							LIGHT_	(	BLUE |
+										GREEN |
+										INTENSITY |
+										ON |
+										RED
+									) |
+							MARKER_HEAD_(ANGLE|ROT_MODE) |
+							MESH_	(	BMAT(_NAME)? |
+										BASE_OFFSET |
+										FILL(_PEN)? |
+										FBGD_PEN |
+										HOLES_(NR|AREA|PRM) |
+										(LINE)?TYPE |
+										MAT_(TOP|EDGE|BOTT) |
+										PERIMETER |
+										SEGMENTS_NR |
+										(TOP|EDGE|BOTTOM)_SURF |
+										(USEREDGE|TRIEDGE|SECT|VIEW)_PEN |
+										VOLUME
+									) |
+							MORPH_	(	BMAT(_NAME)? |
+										(CASTS|RECEIVES)_SHADOW |
+										FILL |
+										(FILL|FBGD|SECT|VIEW)_PEN |
+										FLOOR_PERIMETER |
+										MAT_DEFAULT |
+										(SECT_)?LINETYPE |
+										SOLID |
+										SURFACE |
+										VOLUME
+									) |
+							OPENING_(	SYMBOL_(GEOMETRY|DISPLAY) |
+										HEIGHT |
+										WIDTH |
+										(HEADER|CENTER|SILL)HEIGHT_VALUES
+									) |
+							RAIL_	(	COMPONENTS |
+										CONNECTING_POSTS(_NUM)? |
+										(DISCONNECTED_)?CUTS |
+										POLYLINE_GEOMETRY |
+										SEGMENT_FLAGS |
+										SLANT_ANGLE |
+										TYPE
+									) |
+							RAIL2D_	(	CUSTOMDISPLAY |
+										(FULL|LOWER|MIDDLE|UPPER)_	(	POLY(GON|LINE)_(FLAGS|GEOM) |
+																		VISIBILITY
+																	)
+									) |
+							RAILINGEND_DIRECTION_AND_ANGLE |
+							RAILINGPANEL_	(	FLAGS |
+												(UNCUT_)?GEOMETRY |
+												SIDE_OFFSETS |
+												(SKEW|SLANT)_ANGLE |
+												TYPE
+											) |
+							RAILINGPOST_	(	(SEGMENT_)?CUTS |
+												TOP_COORD |
+												TYPE
+											) |
+							RAILPOST2D_VISIBILITY |
+							RAILING_	(	(3D|HORIZONTAL_)LENGTH |
+											HEIGHT |
+											NR_OF_(BALUSTERS|PANELS|POSTS|RAILS|SEGMENTS) |
+											REFLINE_DISTANCE |
+											VOLUME
+										) |
+							RISER_	(	BMATS |
+										CUT |
+										FRONT_AREA |
+										HEIGHT |
+										SLANT_ANGLE |
+										STEP_INDEX |
+										THICKNESS |
+										VOLUME |
+										WIDTH
+									) |
+							ROOF_	(	ANGLE |
+										BMAT(_NAME)? |
+										COMPS_NAME |
+										CONTOUR_AREA |
+										EAVES |
+										EDGE_SURF |
+										END_WALL |
+										(FBGD|SECT|VIEW)+_PEN |
+										GABLE |
+										GROSS_(TOP|BOTTOM|EDGE)_SURF |
+										GROSS_VOLUME |
+										HIP |
+										HOLES_(NR|AREA|PRM) |
+										INSU_THICKNESS |
+										LINETYPE|FILL(_PEN)? |
+										MAT_(TOP|EDGE|BOTT) |
+										PEAK |
+										PERIMETER |
+										RIDGE |
+										SEGMENTS_NR |
+										SIDE_WALL |
+										SKINS_(NUMBER|PARAMS|BMAT_NAMES) |
+										THICKNESS |
+										(TOP|BOTTOM)_SURF(_CON)? |
+										TRANSITION_(DOME|HOLLOW) |
+										VALLEY |
+										VOLUME(_CON)?
+									) |
+							SHELLBASE_ 	(	BMAT(_NAME)? |
+											COMPS_NAME |
+											((COND|GROSS)_)?(OPPOSITE|REFERENCE)_SURF |
+											((COND|GROSS)_)?VOLUME |
+											EAVES |
+											FILL |
+											(FILL|FBGD|SECT|VIEW)_PEN |
+											GABLE |
+											(GROSS_)?EDGE_SURF |
+											HIP |
+											HOLES_PRM |
+											(HOLES|OPENINGS)_(NR|SURF) |
+											INSU_THICKNESS |
+											LINETYPE |
+											MAT_(EDGE|OPPOSITE|REFERENCE) |
+											PEAK |
+											PERIMETER |
+											RIDGE |
+											(SIDE|END)_WALL |
+											SKINS_(NUMBER|PARAMS|BMAT_NAMES) |
+											THICKNESS |
+											TRANSITION_(DOME|HOLLOW) |
+											VALLEY
+										) |
+							SKYL_	(	(HEADER|SILL)_HEIGHT |
+										MARKER_TXT |
+										OPENING_(SURF|VOLUME|HEIGHT|WIDTH) ) |
+										SLAB_ ( BMAT(_NAME)? |
+										COMPS_NAME |
+										EDGE_SURF |
+										ELEVATION_(TOP|BOTTOM) |
+										(FBGD|SECT|VIEW)+_PEN |
+										GROSS_(TOP|BOT|EDGE)_SURF(_WITH_HOLES)? |
+										GROSS_VOLUME(_WITH_HOLES)? |
+										HOLES_(NR|AREA|PRM) |
+										LINETYPE|FILL(_PEN)? |
+										MAT_(TOP|EDGE|BOTT) |
+										PERIMETER |
+										SEGMENTS_NR |
+										SKINS_(NUMBER|PARAMS|BMAT_NAMES) |
+										(TOP|BOT)_SURF(_CON)? |
+										THICKNESS |
+										VOLUME(_CON)?
+									) |
+							STAIR2D_	(	BREAKMARK_(ANGLE|FLAGS|GEOM) |
+											CURRSTORY_LOCATION |
+											CUSTOMDISPLAY |
+											DESCRIPTION_POSITION |
+											(	DRAIN_TPOLYGON |
+												(EXT|FULL|LOWER|MIDDLE|UPPER)_(RPOLYLINE|TPOLYGON) |
+												FULL_SPOLY(LINE|GON) |
+												(FULL|LOWER|MIDDLE|UPPER)_WALKLINE |
+												POLYLINES
+											)_(FLAGS|GEOM) |
+											(FULL|LOWER|MIDDLE|UPPER)_BOUNDARY_GEOM |
+											LAYOUT_TYPES |
+											(MONOLITH|STRUCT)_ATTRIBUTES |
+											VISIBILITY ) |
+							STAIR_	(	AREA |
+										BREAKMARK_GEOMETRY |
+										DEFAULT_(GOING_DEPTH|RISER_HEIGHT|TREAD_THICKNESS|WIDTH) |
+										(END|START)_WITH_RISER |
+										HEIGHT |
+										LANDING_NUMBER |
+										(NOSING|RISER|TREAD)_EXIST |
+										NR_OF_(RISERS|TREADS)(_IN_FLIGHTS)? |
+										RISER_GEOMETRY |
+										RULE_(FLAGS|LIMITS) |
+										STAIR_GRADIENT |
+										STRINGER_PATH_OFFSET |
+										STRUCTURE_CONN_(FLAGS|OFFSETS) |
+										(STRUCTURE|TREAD)_(FLAGS|GEOMETRY) |
+										VOLUME |
+										WALKLINE_LENGTH
+									) |
+							STRUCTURE_	(	3DLENGTH |
+											HEIGHT |
+											THICKNESS |
+											VOLUME |
+											WIDTH
+										) |
+							SYMB_	(	[ABZ]_SIZE |
+										LINETYPE |
+										FILL(_PEN)? |
+										(FBGD|SECT|VIEW)_PEN |
+										MAT |
+										POS_([XYZ]|FROM_SURVEY_POINT) |
+										ROTANGLE |
+										MIRRORED
+									) |
+							TREAD_	(	(FRONT_)?AREA |
+										BMATS |
+										ELEVATION |
+										GOING |
+										(LOWER|UPPER)_RISER_(HEIGHT|SLANT_ANGLE|THICKNESS) |
+										NOSING(_BY_SLANTING|_METHOD)? |
+										STEP_INDEX |
+										THICKNESS |
+										VOLUME
+									) |
+							WALL_	(	(AIR|INSU)_THICKNESS |
+										AREA |
+										BMAT(_NAME)? |
+										CENTER_LENGTH |
+										COMPS_NAME |
+										CROSSSECTION_TYPE |
+										DIRECTION |
+										(DOORS|WINDS|HOLES|COLUMNS)_NR |
+										(DOORS|WINDS)_SURF |
+										EDGE_SURF |
+										FILL(_PEN)? |
+										FLIPPED |
+										GROSS_SURFACE_[AB] |
+										GROSS_VOLUME |
+										HOLES_(SURF(_[AB])?|VOLUME) |
+										ID |
+										INCL |
+										INTGUID |
+										(LENGTH|SURFACE)_[AB](_CON)? |
+										LINETYPE |
+										MAT_(A|B|EDGE) |
+										((MIN|MAX)_)?HEIGHT |
+										PERIMETER |
+										POSITION |
+										RESOL |
+										(SECT|VIEW|FBGD)_PEN |
+										SKIN_((MIN|MAX)_HEIGHT|THICKNESS)_[AB] |
+										SKINS_(PARAMS|NUMBER|BMAT_NAMES) |
+										((START|END)_)?THICKNESS |
+										TEXTURE_WRAP |
+										VOLUME(_[AB])?(_CON)? |
+										(WINDS|DOORS)_WID
+									) |
+							WIDO_	(	(FRAME|SUBFL)_THICKNESS |
+										GROSS_(SURFACE|VOLUME) |
+										ORIENTATION |
+										MARKER_TXT |
+										PREFIX |
+										CUSTOM_MARKER |
+										(N_)?(R|OPR)SIDE_(WIDTH|HEIGHT|SURF) |
+										ORIG_DIST |
+										POSITION |
+										PWALL_INSET |
+										REVEAL_(ON|SIDE) |
+										(RIGHT|LEFT)_JAMB |
+										((R|OPR)SIDE_)?HEAD_HEIGHT |
+										(R|OPR)SIDE_SILL_HEIGHT |
+										SILL(_HEIGHT)? |
+										(THRES|HEAD)_DEPTH |
+										VOLUME
+									)
+						)(?=\b)</string>
+				<key>name</key>
+				<string>support.constant.gdl</string>
+			</dict>
+			<dict>
+				<key>comment</key>
+				<string>memory management</string>
+				<key>match</key>
+				<string>(?i)(?&lt;=^|[\s!\\*/%=#&lt;&gt;+\-&amp;|^@,()\[\]:])(PRINT|DIM|DICT|LET|PUT|GET|USE|NSP|VAR(DIM[12]|TYPE)|(HAS|REMOVE)KEY)(?=\b)</string>
+				<key>name</key>
+				<string>keyword.memory.gdl</string>
+			</dict>
+			<dict>
+				<key>comment</key>
+				<string>valid dict.field names</string>
+				<key>include</key>
+				<string>#dictname</string>
+			</dict>
+			<dict>
+				<key>comment</key>
+				<string>valid variable names</string>
+				<key>include</key>
+				<string>#varname</string>
+			</dict>
+		</array>
+		<key>repository</key>
+		<dict>
+			<key>guidstring</key>
+			<dict>
+				<key>comment</key>
+				<string>"GUID"</string>
+				<key>patterns</key>
+				<array>
+					<dict>
+						<key>match</key>
+						<string>(?i)(?&lt;=")([0-9a-z]{8}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{12})(?=")</string>
+						<key>name</key>
+						<string>entity.name.function.gdl</string>
+					</dict>
+				</array>
+			</dict>
+
+			<key>requeststring</key>
+			<dict>
+				<key>comment</key>
+				<string>reqs and requests</string>
+				<key>patterns</key>
+				<array>
+					<dict>
+						<key>match</key>
+						<string>(?ix)(?&lt;=(["“”]))
+								(	(Blue|Red|Green)_of_material\s+\w+\s? |
+									(Blue|Red|Green)_of_pen\s+\d+\s? |
+									ANCESTRY_INFO |
+									(ANGULAR_(LENGTH_)?|AREA_|RADIAL_|SILL_HEIGHT_)DIMENSION |
+									(ASSOCEL|MATCHING)_PROPERTIES |
+									ASSOCLP_(NAME|PARVALUE(_WITH_DESCRIPTION)?) |
+									AUTOTEXT_LIST |
+									BUILDING_MATERIAL_INFO |
+									CALC_(ANGLE|AREA|LENGTH|VOLUME)_UNIT |
+									CLASS_OF_FILL |
+									CLEAN_INTERSECTIONS |
+									CONSTR_FILLS_DISPLAY |
+									COMPONENT_(PROJECTED_AREA|VOLUME|(IDS|PROPERT(IES|Y_VALUES))_OF_PARENT) |
+									CONFIGURATION_NUMBER |
+									CUSTOM_AUTO_LABEL |
+									DATETIME |
+									DOOR_SHOW_DIM |
+									(ELEVATION|LEVEL|LINEAR)_DIMENSION |
+									FLOOR_PLAN_OPTION |
+									FONTNAMES_LIST |
+									FULL_ID_OF_PARENT |
+									GDL_version |
+									HEIGHT_OF_STYLE |
+									HOME(_STORY(_OF_OPENING)?|DB_INFO) |
+									ID_OF_MAIN |
+									INTERNAL_ID |
+									(MODEL|LAYOUT)_(LENGTH|TEXT_SIZE)_UNIT |
+									MATERIAL_INFO |
+									Model_size |
+									NAME_OF_((BUILDING_)?MATERIAL|FILL|LINE_TYPE|LISTED|MACRO|MAIN|PLAN|PROFILE|PROGRAM|STYLE) |
+									Pen_of_RGB\s+[01](\.\d+)?\s+[01](\.\d+)?\s+[01](\.\d+)?\s? |
+									Program |
+									PROGRAM_INFO |
+									Profile_ ( component(s|_info) |
+									default_(boundingbox|geometry) ) |
+									PROPERTIES_OF_PARENT |
+									PROPERTY_(NAME|VALUE(S)?_OF_PARENT) |
+									(Component_)?Property_Tree_Of_Parent |
+									REFERENCE_LEVEL_DATA |
+									RGB_OF_(MATERIAL|PEN) |
+									Serial_number |
+									SUM_WITH_ROUNDING |
+									STORY(_INFO)? |
+									(STYLE|TEXTBLOCK)_INFO |
+									VIEW_ROTANGLE |
+									WINDOW_(DOOR_(DIMENSION|SHOW_DIM|ZONE_RELEV(_OF_OWNER)?)|SHOW_DIM) |
+									WORKING_(ANGLE|LENGTH)_UNIT |
+									ZONE_(CATEGORY|COLUS_AREA|RELATIONS(_OF_OWNER)?)
+								)(?=["“”])</string>
+						<key>name</key>
+						<string>support.function.gdl</string>
+					</dict>
+				</array>
+			</dict>
+			<key>appquerystring</key>
+			<dict>
+				<key>comment</key>
+				<string>APPLICATION_QUERY strings - case sensitive (TODO?)</string>
+				<key>patterns</key>
+				<array>
+					<dict>
+						<key>match</key>
+						<string>(?x)(?&lt;=["“”])
+								(	document_feature |
+									view_direction |
+									MEPSYSTEM |
+									GetMEPSystems\([12]\) |
+									GetDomain\([1-7]\) |
+									Get ( (Contour|Fill|Bg|CenterLine)Pen |
+									(Fill|CenterLine)Type |
+									(System|Insulation)Material )\(\d+\) |
+									MEPMODELER |
+									IsAvailable\(\) |
+									MEPCONNECTIONTYPE |
+									GetConnection(Types|TypeStyle)\([123]\) |
+									MEPFLEXIBLESEGMENT |
+									StartSectioning\(\) |
+									AddControlPoint\(.*?\) |
+									AddDirectionAndWidthVector\(.*?\) |
+									EndSectioning\(.*?\) |
+									MEPBEND |
+									GetBendTypeNames\(\) |
+									parameter_script |
+									firstoccasion_in_progress |
+									(Own|Parent)CustomParameters |
+									GetParameterFolderNames\(\) |
+									GetParameter(Names)?\(.*?\) |
+									LIBRARY_MANAGER |
+									IES_FILES |
+									USER_IMAGE_FILES
+								)(?=["“”])</string>
+						<key>name</key>
+						<string>support.function.gdl</string>
+					</dict>
+				</array>
+			</dict>
+			<key>builtinpropertyidstring</key>
+			<dict>
+				<key>comment</key>
+				<string>built-in property IDs - case sensitive</string>
+				<key>patterns</key>
+				<array>
+					<dict>
+						<key>match</key>
+						<string>(?x)(?&lt;=["“”])Builtin\.
+								(	General_(
+										Area |
+										Height |
+										Width |
+										ElevationTo(ProjectZero|((First|Second)Reference|Sea)Level|Story) | 
+										(Top|Bottom)ElevationTo(ProjectZero|((First|Second)Reference|Sea)Level|HomeStory) |
+										(Home|Top)Offset |
+										SurfaceArea |
+										3DLength |
+										Thickness |
+										(Net|Gross|Conditional)Volume |
+										InsulationSkinThickness |
+										((Holes)?3D|FloorPlan(Holes)?)Perimeter |
+										SlantAngle |
+										OpeningNumber |
+										CrossSection(Height|Width)At((Begin|End)(Perpendicular|Cut)) |
+										CrossSectionAreaAt(Begin|End)Cut ) |
+									Component_(
+										Thickness |
+										CrossSection(Height|Width|Area) |
+										(Net|Gross|Conditional)(Volume|ProjectedArea) )
+								)(?=["“”])</string>
+						<key>name</key>
+						<string>support.function.gdl</string>
+					</dict>
+				</array>
+			</dict>
+			<key>autotext</key>
+			<dict>
+				<key>comment</key>
+				<string>autotexts, case sensitive</string>
+				<key>patterns</key>
+				<array>
+					<dict>
+						<key>match</key>
+						<string>(?x)&lt;
+								(	ARCHITECT(POSITION|WEB) |
+									(ARCHITECT|CLIENT)(NAME|COMPANY|EMAIL|PHONE|FAX) |
+									(ARCHITECT|CLIENT|SITE)(FULLADDRESS|ADDRESS[123]|CITY|STATE|POSTCODE|COUNTRY) |
+									(BACKREFSHEETNUMBER|MARKER((SHEET|DRAWING)NUMBER(90|110)?))_R |
+									CADTECHNICIAN |
+									(CHANGE|(CURRENT)?ISSUE|(CURRENT)?REVISION)ID |
+									(CHANGE|(CURRENT)?ISSUE)DESCRIPTION |
+									(CURRENT)?ISSUE(DATE|DBY) |
+									DATEOFISSUE |
+									(	(DRAWING|ORIGINAL)SCALE |
+										FILE(NAME|PATH) |
+										LAYOUTNUMBER |
+										(LAYOUT|SUBSET|DRAWING)(NAME|ID) |
+										MAGNIFICATION |
+										RENOVATIONFILTER
+									)(_R)? |
+									KEYWORD |
+									LASTSAVED(AT|BY) |
+									NOTES |
+									NUMOFLAYOUTS |
+									PROJECT(NAME|NUMBER|STATUS) |
+									(SHORT|LONG)DATE |
+									TIME
+								)&gt;</string>
+						<key>name</key>
+						<string>support.variable.gdl</string>
+					</dict>
+				</array>
+			</dict>
+            <key>dictname</key>
+			<dict>
+				<key>comment</key>
+				<string>valid .field names</string>
+				<key>patterns</key>
+				<array>
+					<dict>
+						<key>match</key>
+						<string>(?i)\._[_0-9a-z]*(?=\b|\.)</string>
+						<key>name</key>
+						<string>variable.other.temp.dict.gdl</string>
+					</dict>
+					<dict>
+						<key>match</key>
+						<string>\.[A-Z][_0-9A-Z]*(?=\b|\.)</string>
+						<key>name</key>
+						<string>variable.other.const.dict.gdl</string>
+					</dict>
+					<dict>
+						<key>match</key>
+						<string>(?i)\.[a-z][_0-9a-z]*(?=\b|\.)</string>
+						<key>name</key>
+						<string>variable.dict.gdl</string>
+					</dict>
+				</array>
+			</dict>
+			<key>varname</key>
+			<dict>
+				<key>comment</key>
+				<string>valid variable names excluding fixnameconstpars</string>
+				<key>patterns</key>
+				<array>
+					<dict>
+						<key>include</key>
+						<string>#fixnamepars</string>
+					</dict>
+					<dict>
+						<key>include</key>
+						<string>#addonpars</string>
+					</dict>
+					<dict>
+						<key>match</key>
+						<string>(?i)(?&lt;!\.)_[_0-9a-z]*</string>
+						<key>name</key>
+						<string>variable.other.temp.gdl</string>
+					</dict>
+					<dict>
+						<key>match</key>
+						<string>(?&lt;!\.)[A-Z][_0-9A-Z]*\b</string>
+						<key>name</key>
+						<string>variable.other.const.gdl</string>
+					</dict>
+					<dict>
+						<key>match</key>
+						<string>(?i)(?&lt;!\.)[a-z][_0-9a-z]*</string>
+						<key>name</key>
+						<string>variable.gdl</string>
+					</dict>
+				</array>
+			</dict>
+			<key>fixnamepars</key>
+			<dict>
+				<key>comment</key>
+				<string>variables read by archicad</string>
+				<key>patterns</key>
+				<array>
+					<dict>
+						<key>match</key>
+						<string>(?ix)(["“”]|\b)
+								(	[AB] |
+									ZZYZX |
+									ac_ (	aSizeIsWithClamp |
+											AutoSchematicModel |
+											(beam|post|rail|railend)(ProfileID) |
+											bButtGlazedFrame |
+											bCustomPointerConnection |
+											bDisableLabelFrameDisplay |
+											capProfileID |
+											clamp(Width|Depth) |
+											CWFrame(BuildMat|CutLine(Pen|Type)) |
+											custom_component_type_name |
+											DisableLabelOrientationVal |
+											height |
+											hole(_hotspot_control|MaterialCurved|SideMaterial) |
+											iCWFrameType |
+											frame((Back)?Depth|OffsetSide|Width) |
+											nominal(Height|Width) |
+											openingDir |
+											originIsFrameCenter |
+											panel_type |
+											panelThickness |
+											plane_definition |
+											(post|rail|railend)(Height|Width) |
+											post_boundingbox_(inside|left|right|outside) |
+											(rail|railend)_boundingbox_(bottom|left|right|top) |
+											special_2d_symbol |
+											thickness |
+											treadClassifications |
+											stairStructure(Thickness|Width) |
+											symb_(display_option|show_projection_to) |
+											(top|bottom)level |
+											wido_	(	sill |
+														hide_options |
+														flip_(once|disable) |
+														mirror_once
+													) |
+											width
+										)
+								)(\1)(?!\w)</string>
+						<key>name</key>
+						<string>variable.language.gdl</string>
+					</dict>
+				</array>
+			</dict>
+			<key>fixnameconstpars</key>
+			<dict>
+				<key>comment</key>
+				<string>variables set by archicad</string>
+				<key>patterns</key>
+				<array>
+					<dict>
+						<key>match</key>
+						<string>(?ix)(["“”]|\b)
+								(	ac_	(	programVersion |
+											accessoryFlipped |
+											backReferenceGUIDList |
+											beam_uncut_pen |
+											bLabel(AlwaysReadable|Frame|OpaqueFill|TextWrap) |
+											clamp(FreeRegion|Vector) |
+											(colu|beam)_(inclination|twist_angle) |
+											drawing(Name|Number|Scale) |
+											enableBackReference |
+											frame	(	AxisCoords |
+														Dirs |
+														Width(Left|Right|Front|Back)
+													) |
+											glob_elevation |
+											globalZDir |
+											hole_	(	cut_linetype |
+														display_option |
+														direction_type |
+														(overhead_|uncut_)(pen|linetype) |
+														position_angle
+													) |
+											Label	(	FrameOffset |
+														LabelPointerLineType |
+														Orientation |
+														Pointer(Connection|Pen) |
+														TextBgrPen
+													) |
+											magnification |
+											nConnectingPanels |
+											openingside |
+											originalDrawingScale |
+											panel(Coords|Offsets|Presences) |
+											RiserPosition |
+											revealToWallCore |
+											roof_	(	display_option |
+														overhead_(pen|linetype) |
+														show_projection_to
+													) |
+											sill_to_(curr_story|anchor_level) |
+											show(boundary|DrawingReferences) |
+											sourceFile(Name|Path) |
+											symb_rotangle |
+											Text	(	Font |
+														Alignment |
+														Char(Space|Width)Factor |
+														Leading |
+														Pen |
+														Size |
+														Style
+													)_1 |
+											(valid)?CellAngle[12] |
+											(vert|reveal)AnchorPos |
+											wall_(elevation|slant_angle[12]|direction_type|thickness) |
+											(wall|colu|beam)_	(	overhead_(pen|linetype) |
+																	display_option |
+																	profile_name |
+																	show_projection_to |
+																	uncut_linetype
+																) |
+											wall(Type|ContourPolygon|_crosssection_type) |
+											wido_	(	[abz]_size |
+														id |
+														mirrored |
+														orientation |
+														oversize_[lrtb] |
+														reveal_side(_2)? |
+														rotation |
+														subfl_thickness |
+														type
+													) |
+											windowInWallContour
+										) |
+									ROOM_	(	AREA(_FACTOR)? |
+												BASELEV |
+												CONCAVES |
+												CORNERS |
+												(DOORS|WINDS)_(WID|SURF) |
+												FL_THICK |
+												HEIGHT |
+												(HOLES|WALLS)_PRM |
+												LSIZE |
+												NAME |
+												NET_(AREA|PERIMETER) |
+												NUMBER |
+												PERIM |
+												POLY_STATUS |
+												(TOP|BOT)_SURFACE |
+												VOLUME |
+												(WALLS|BOUNDARY|(ROOF|SLAB|BEAM)_(TOP|BOT)|WALL_IN_(TOP|BACK|SIDE))_SURF |
+												((WALL|COLUMN|FILL|LOW|TOTAL)_EXTR|REDUCED|CALC)_AREA
+											)
+								)(\1)(?!\w)</string>
+						<key>name</key>
+						<string>support.constant.gdl</string>
+					</dict>
+				</array>
+			</dict>
+			<key>addonpars</key>
+			<dict>
+				<key>comment</key>
+				<string>add-on parameters TODO constant or read-write?</string>
+				<key>patterns</key>
+				<array>
+					<dict>
+						<key>match</key>
+						<string>(?ix)(["“”]|\b)
+								(	ac_	(	edge_(lower|upper)_(type|angle) |
+											cw_function |
+											corner_(window|angle) |
+											(diff_)?con_wall_thk |
+											cw_debug |
+											con_wall_(skins_(number|params)|direction_type)
+										) |
+									IFC2x_ConstEnum |
+									ifc_	(	(Casing|Threshold)(Depth|Thickness) |
+												ConstEnum |
+												(Door|Window)Panel |
+												Lining(Depth|Thickness|Offset) |
+												MullionThickness |
+												NumberOf(Riser|Treads) |
+												optype(str)? |
+												RiserHeight |
+												StairType |
+												subtype |
+												(Threshold|Transom|(First|Second)(Mullion|Transom))Offset |
+												TransomThickness |
+												TreadLength
+											)
+								)(\1)(?!\w)</string>
+						<key>name</key>
+						<string>variable.language.gdl</string>
+					</dict>
+				</array>
+			</dict>
+			<key>doublestring</key>
+			<dict>
+				<key>comment</key>
+				<string>double-quoted strings including special meanings</string>
+				<key>begin</key>
+				<string>["“”]</string>
+				<key>end</key>
+				<string>\0</string>
+				<key>name</key>
+				<string>string.quoted.double.gdl</string>
+				<key>patterns</key>
+				<array>
+					<dict>
+						<key>include</key>
+						<string>#autotext</string>
+					</dict>
+					<dict>
+						<key>include</key>
+						<string>#appquerystring</string>
+					</dict>
+					<dict>
+						<key>include</key>
+						<string>#builtinpropertyidstring</string>
+					</dict>
+					<dict>
+						<key>include</key>
+						<string>#requeststring</string>
+					</dict>
+					<dict>
+						<key>include</key>
+						<string>#stringchars</string>
+					</dict>
+					<dict>
+						<key>include</key>
+						<string>#guidstring</string>
+					</dict>
+				</array>
+			</dict>
+			<key>singlestring</key>
+			<dict>
+				<key>comment</key>
+				<string>single-quoted strings for localization</string>
+				<key>name</key>
+				<string>string.quoted.single.gdl</string>
+				<key>begin</key>
+				<string>['`´’‘]</string>
+				<key>end</key>
+				<string>\0</string>
+				<key>patterns</key>
+				<array>
+					<dict>
+						<key>include</key>
+						<string>#stringchars</string>
+					</dict>
+				</array>
+			</dict>
+			<key>stringchars</key>
+			<dict>
+				<key>comment</key>
+				<string>valid string characters</string>
+				<key>patterns</key>
+				<array>
+					<dict>
+						<key>include</key>
+						<string>#escapechar</string>
+					</dict>
+					<dict>
+						<key>match</key>
+						<string>["'`´“”’‘]</string>
+					</dict>
+				</array>
+			</dict>
+			<key>escapechar</key>
+			<dict>
+				<key>comment</key>
+				<string>escape characters</string>
+				<key>name</key>
+				<string>constant.character.escape.gdl</string>
+				<key>match</key>
+				<string>\\[nt\\]</string>
+			</dict>
+			<key>range</key>
+			<dict>
+				<key>comment</key>
+				<string>range (, ]</string>
+				<key>begin</key>
+				<string>(?i)(?&lt;=range)\s*[(\[]</string>
+				<key>beginCaptures</key>
+				<array>
+					<dict>
+						<key>name</key>
+						<string>keyword.parameter.gdl</string>
+					</dict>
+				</array>
+				<key>end</key>
+				<string>[)\]]</string>
+				<key>endCaptures</key>
+				<array>
+					<dict>
+						<key>name</key>
+						<string>keyword.parameter.gdl</string>
+					</dict>
+				</array>
+				<key>patterns</key>
+				<array>
+					<dict>
+						<key>include</key>
+						<string>$self</string>
+					</dict>
+				</array>
+			</dict>
+			<key>arraydim</key>
+			<dict>
+				<key>comment</key>
+				<string>array dimension</string>
+				<key>begin</key>
+				<string>(?i)(?&lt;=[_a-z0-9\]\s])\[</string>
+				<key>beginCaptures</key>
+				<array>
+					<dict>
+						<key>name</key>
+						<string>keyword.other.gdl</string>
+					</dict>
+				</array>
+				<key>end</key>
+				<string>\]</string>
+				<key>endCaptures</key>
+				<array>
+					<dict>
+						<key>name</key>
+						<string>keyword.other.gdl</string>
+					</dict>
+				</array>
+				<key>patterns</key>
+				<array>
+					<dict>
+						<key>include</key>
+						<string>$self</string>
+					</dict>
+				</array>
+				<key>name</key>
+				<string>meta.gdl.arrayitem</string>
+			</dict>
+			<key>parentheses</key>
+			<dict>
+				<key>comment</key>
+				<string>function() calls excluded</string>
+				<key>begin</key>
+				<string>\(</string>
+				<key>beginCaptures</key>
+				<array>
+					<dict>
+						<key>name</key>
+						<string>keyword.operator.gdl</string>
+					</dict>
+				</array>
+				<key>end</key>
+				<string>\)</string>
+				<key>endCaptures</key>
+				<array>
+					<dict>
+						<key>name</key>
+						<string>keyword.operator.gdl</string>
+					</dict>
+				</array>
+				<key>patterns</key>
+				<array>
+					<dict>
+						<key>include</key>
+						<string>#functions</string>
+					</dict>
+					<dict>
+						<key>include</key>
+						<string>$self</string>
+					</dict>
+				</array>
+				<key>name</key>
+				<string>meta.gdl.grouping</string>
+			</dict>
+		</dict>
+		<key>scopeName</key>
+		<string>source.gdl</string>
+	</dict>
+</plist>

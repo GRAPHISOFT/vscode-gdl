@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>XFORM</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="XFORM_gdlcommand">XFORM</h3>
+				
+				<pre class="programlisting"><b id="XFORM_keyword_2.6.7.19.4.1">XFORM</b> newx_x, newy_x, newz_x, offset_x,
+      newx_y, newy_y, newz_y, offset_y,
+      newx_z, newy_z, newz_z, offset_z</pre>
+				
+					<p>
+						Defines a complete transformation matrix. It is mainly used in
+						automatic GDL code generation. It has only one entry in the stack.
+					</p>
+					<p>
+						x' = newx_x * x + newy_x * y + newz_x * z + offset_x
+					</p>
+					<p>
+						y' = newx_y * x + newy_y * y + newz_y * z + offset_y
+					</p>
+					<p>
+						z' = newx_z * x + newy_z * y + newz_z * z + offset_z
+					</p>
+				
+				<div class="example"><a id="id493514"/><p class="title"><b>Example:
+</b></p><div class="example-contents"><div class="informaltable"><table border="0"><colgroup><col/><col/></colgroup><tbody><tr><td>
+										<pre class="programlisting">A=60
+B=30
+XFORM 2, COS(A), COS(B)*0.6, 0,
+      0, SIN(A), SIN(B)*0.6, 0,
+      0, 0, 1, 0
+BLOCK 1, 1, 1</pre>
+									</td><td style="text-align: center">
+										<div style="text-align: center"><img src="Images/GDL_Images/cordtrans_blockxform.png" style="text-align: middle" alt="Images/GDL_Images/cordtrans_blockxform.png"/></div>
+									</td></tr></tbody></table></div></div></div>
+			<hr/><a href="002.006.html#XFORM_gdlcommand">Related in Coordinate Transformations</a><p>
+				<span class="bold"><strong>GDL Reference Guide</strong></span>
+			</p><p>
+				<span class="trademark">Copyright</span><sup>©</sup> 2021 by GRAPHISOFT, all rights reserved.
+				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+			</p></body></html>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>STORED_PAR_VALUE</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="STORED_PAR_VALUE_gdlcommand">STORED_PAR_VALUE</h3>
+				
+				<pre class="programlisting"><b id="STORED_PAR_VALUE_keyword_2.12.6.7.4.1">STORED_PAR_VALUE</b> ("oldparname", outputvalue)</pre>
+				
+					<p>
+						Retrieves the value of a parameter, which is present in the migrated object, and present or deleted in the new version object.
+						This command form is suggested for those parameters present in the new object as well.
+						To get the value of an old array Parameter, the outputvalue parameter must be initialized as an array (with the dim command).
+					</p>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>oldparname: </b></code>string expression, name of the parameter in the old parameter list.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>outputvalue: </b></code>output variable to store the value of the parameter.</div>
+					</div>
+					<p>
+						Return value: 1 on success, 0 otherwise (for example, if there is no parameter with that name in the parameter list of the old object).
+						During checking the script the return value is always 0, because the old Parameters section is not known.
+					</p>
+				
+			<hr/><a href="002.012.html#STORED_PAR_VALUE_gdlcommand">Related in Non-Geometric Scripts</a><p>
+				<span class="bold"><strong>GDL Reference Guide</strong></span>
+			</p><p>
+				<span class="trademark">Copyright</span><sup>©</sup> 2021 by GRAPHISOFT, all rights reserved.
+				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+			</p></body></html>

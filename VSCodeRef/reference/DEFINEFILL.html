@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>DEFINE FILL</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="DEFINEFILL_gdlcommand">DEFINE FILL</h3>
+					
+					<pre class="programlisting"><b id="DEFINEFILL_keyword_2.11.4.7.2.4.1">DEFINE FILL</b> name [[,] <b id="FILLTYPES_MASK_keyword_2.11.4.7.2.4.3">FILLTYPES_MASK</b> fill_types,]
+        pattern1, pattern2, pattern3, pattern4,
+        pattern5, pattern6, pattern7, pattern8,
+        spacing, angle, n,
+        frequency1, direction1, offset_x1, offset_y1, m1,
+        length11, ..., length1m,
+        ...
+        frequencyn, directionn, offset_xn,
+        lengthn1, ..., lengthnm</pre>
+					
+						<div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3>This command can contain additional data definition.</div>
+						<p>
+							<span class="italic">See <a class="xref" href="002.011.html#AdditionalData_section" title="Additional Data">the section called “Additional Data”</a> for details.</span>
+						</p>
+						<p>
+							Any GDL script may include fill definitions prior to the first reference to that fill name.
+							The fill defined this way can be used only for 2D elements in the script in which it was defined and its subsequent second generation-scripts.
+						</p>
+						<div style="text-align: center"><img src="Images/GDL_Images/Attributes_defineFill_params1.png" style="text-align: middle" alt="Images/GDL_Images/Attributes_defineFill_params1.png"/></div>
+						<div style="margin-left: 1em">
+							<div style="text-indent: -1em"><code><b>name: </b></code>name of the fill.</div>
+						</div>
+						<div style="margin-left: 1em">
+							<div style="text-indent: -1em"><code><b>fill_types: </b></code></div><div><code>fill_types = j<sub>1</sub> + 2*j<sub>2</sub> + 4*j<sub>3</sub></code>, where each j can be 0 or 1.
+	</div>
+							<div><code>j<sub>1</sub>: </code>cut fills,</div>
+							<div><code>j<sub>2</sub>: </code>cover fills,</div>
+							<div><code>j<sub>3</sub>: </code>drafting fills.</div>
+						</div>
+						<p>If the j bit is set, the defined fill can be used corresponding to its specified type. Default is all fills (0).</p>
+						<div style="margin-left: 1em">
+							<div style="text-indent: -1em"><code><b>pattern definition: pattern1, pattern2, pattern3, pattern4, pattern5, pattern6, pattern7, pattern8: </b></code>
+								8 numbers between 0 and 255 representing binary values. Defines the bitmap pattern of the fill.
+							</div>
+						</div>
+						<div style="text-align: center"><img src="Images/GDL_Images/Attributes_defineFill_params2.png" style="text-align: middle" alt="Images/GDL_Images/Attributes_defineFill_params2.png"/></div>
+						<div style="margin-left: 1em">
+							<div style="text-indent: -1em"><code><b>spacing: </b></code>
+								hatch spacing - defines a global scaling factor for the whole fill.
+								All values will be multiplied by this number in both the x and y direction.
+							</div>
+						</div>
+						<div style="margin-left: 1em">
+							<div style="text-indent: -1em"><code><b>angle: </b></code>global rotation angle in degrees.</div>
+						</div>
+						<div style="margin-left: 1em">
+							<div style="text-indent: -1em"><code><b>n: </b></code>number of hatch lines.</div>
+						</div>
+						<div style="margin-left: 1em">
+							<div style="text-indent: -1em"><code><b>frequencyi: </b></code>frequency of the line (the distance between two lines is spacing * frequencyi).</div>
+						</div>
+						<div style="margin-left: 1em">
+							<div style="text-indent: -1em"><code><b>diri: </b></code>direction angle of the line in degrees.</div>
+						</div>
+						<div style="margin-left: 1em">
+							<div style="text-indent: -1em"><code><b>offset_xi, offset_yi: </b></code>offset of the line from the origin.</div>
+						</div>
+						<div style="margin-left: 1em">
+							<div style="text-indent: -1em"><code><b>mi: </b></code>number of line parts.</div>
+						</div>
+						<div style="margin-left: 1em">
+							<div style="text-indent: -1em"><code><b>lengthij: </b></code>
+								length of the line parts (the real length is spacing * lengthij). Line parts are segments and spaces following each other.
+								First line part is a segment, zero length means a dot.
+							</div>
+						</div>
+						<p>
+							The bitmap pattern is only defined by the pattern1... pattern8 parameters and is used when the display options for Polygon Fills are set
+							to "Bitmap Pattern". To define it, choose the smallest unit of the fill, and represent it as dots and empty spaces using a rectangular grid with 8x8 locations.
+							The 8 pattern parameters are decimal representations of the binary values in the lines of the grid (a dot is 1, an empty space is 0).
+						</p>
+						<p>
+							The vectorial hatch is defined by the second part of the fill definition as a collection of dashed lines repeated with a given frequency (frequencyi).
+							Each line of the collection is described by its direction (directioni), its offset from the origin (offset_xi, offset_yi)
+							and the dashed line definition which contains segments and spaces with the given length (lengthij) following each other.
+						</p>
+						<div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3>
+							Only simple fills can be defined with the DEFINE FILL command.
+							There is no possibility to define symbol fills with this command.
+						</div>
+					
+					<div class="example"><a id="id521757"/><p class="title"><b>Example:
+</b></p><div class="example-contents"><pre class="programlisting">DEFINE FILL "brick" 85, 255, 136, 255,
+        34, 255, 136, 255,
+        0.08333, 0.0, 4,
+        1.0, 0.0, 0.0, 0.0, 0,
+        3.0, 90.0, 0.0, 0.0, 2,
+        1.0, 1.0,
+        3.0, 90.0, 1.5, 1.0, 4,
+        1.0, 3.0, 1.0, 1.0,
+        1.5, 90.0, 0.75, 3.0, 2,
+        1.0, 5.0</pre><p>Bitmap pattern:</p><pre class="programlisting">Pattern:         Binary value:
+pattern1 = 85    01010101  • • • •
+pattern2 = 255   11111111 ••••••••
+pattern3 = 136   10001000 •   •
+pattern4 = 255   11111111 ••••••••
+pattern5 = 34    00100010   •   •
+pattern6 = 255   11111111 ••••••••
+pattern7 = 136   10001000 •   •
+pattern8 = 255   11111111 ••••••••</pre><div class="informaltable"><table border="0"><colgroup><col/><col/></colgroup><tbody><tr><td>
+											<p>View:</p>
+										</td><td>
+											<p>Vectorial hatch:</p>
+										</td></tr><tr><td>
+											<div style="text-align: center"><img src="Images/GDL_Images/Attributes_defineFill_ex1.png" style="text-align: middle" alt="Images/GDL_Images/Attributes_defineFill_ex1.png"/></div>
+										</td><td>
+											<div style="text-align: center"><img src="Images/GDL_Images/Attributes_defineFill_ex2.png" style="text-align: middle" alt="Images/GDL_Images/Attributes_defineFill_ex2.png"/></div>
+										</td></tr></tbody></table></div></div></div>
+				<hr/><a href="002.011.html#DEFINEFILL_gdlcommand">Related in Attributes</a><p>
+				<span class="bold"><strong>GDL Reference Guide</strong></span>
+			</p><p>
+				<span class="trademark">Copyright</span><sup>©</sup> 2021 by GRAPHISOFT, all rights reserved.
+				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+			</p></body></html>

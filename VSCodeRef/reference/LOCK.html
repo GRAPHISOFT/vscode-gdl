@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>LOCK</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="LOCK_gdlcommand">LOCK</h3>
+				
+				<pre class="programlisting"><b id="LOCK_keyword_2.12.4.7.4.1">LOCK</b> "name1" [, "name2", ..., "namen"]</pre>
+				
+					<p>
+						Locks the named parameter(s) in the settings dialog box.
+						A locked parameter will appear grayed in the dialog box and its value cannot be modified by the user.
+					</p>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>namen: </b></code>string expression, name of the parameter to be locked.</div>
+					</div>
+					<p>
+						<span class="italic">Compatibility: starting from ARCHICAD 22, the locking/hiding of selected ARCHICAD interface controls is extended.</span>
+					</p>
+					<p>
+						 The extended feature can be activated with "Enable hide/lock of specific fix named optional parameters" setting (see "Details/Compatibility Options" dialog of the object in the Library Part Editor). The extended selection contains fix named optional parameters corresponding to:
+					</p>
+					<div class="itemizedlist"><ul class="itemizedlist"><li class="listitem"><p>
+								standard text handling controls of "Text Style" settings dialog panel - see  <a class="xref" href="002.015.html#TextHandlingACParameters_section" title="Parameters for Text Handling">the section called “Parameters for Text Handling”</a>,
+							</p></li><li class="listitem"><p>
+								extended label styling controls of "Text Style" settings dialog panel in Label tool - see <a class="xref" href="002.015.html#LabelACParameters_section" title="Parameters for Labels">the section called “Parameters for Labels”</a>,
+							</p></li><li class="listitem"><p>
+								and selected label pointer controls of "Pointer" settings dialog panel - see <a class="xref" href="002.015.html#LabelACParameters_section" title="Parameters for Labels">the section called “Parameters for Labels”</a>.
+							</p></li></ul></div>
+				
+				<pre class="programlisting"><b id="LOCK_keyword_2.12.4.7.8.1">LOCK</b> <b id="ALL_keyword_2.12.4.7.8.3">ALL</b> ["name1" [, "name2", ..., "namen"]]</pre>
+				
+					<p>
+						Locks all parameters in the settings dialog box, except those listed after the ALL keyword.
+					</p>
+				
+			<hr/><a href="002.012.html#LOCK_gdlcommand">Related in Non-Geometric Scripts</a><p>
+				<span class="bold"><strong>GDL Reference Guide</strong></span>
+			</p><p>
+				<span class="trademark">Copyright</span><sup>©</sup> 2021 by GRAPHISOFT, all rights reserved.
+				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+			</p></body></html>

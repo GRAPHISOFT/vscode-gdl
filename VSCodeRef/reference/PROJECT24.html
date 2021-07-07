@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>PROJECT2{4}</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="PROJECT24_gdlcommand">PROJECT2{4}</h3>
+				
+				<pre class="programlisting"><b id="PROJECT24_keyword_2.8.6.5.4.1">PROJECT2{4}</b> projection_code, angle,
+							useTransparency, statusParts,
+							numCutplanes,
+							cutplaneHeight1, ..., cutplaneHeightn,
+
+							method1, parts1,
+							cutFillIndex1,
+							cutFillFgPen1, cutFillBgPen1,
+							cutFillOrigoX1, cutFillOrigoY1, cutFillDirection1,
+							cutLinePen1, cutLineType1,
+							projectedFillIndex1,
+							projectedFillFgPen1, projectedFillBgPen1,
+							projectedFillOrigoX1, projectedFillOrigoY1,
+							projectedFillDirection1,
+							projectedLinePen1, projectedLineType1,
+							...
+							method(numCutplanes+1)), parts(numCutplanes+1),
+							cutFillIndex(numCutplanes+1),
+							cutFillFgPen(numCutplanes+1), cutFillBgPen(numCutplanes+1),
+							cutFillOrigoX(numCutplanes+1), cutFillOrigoY(numCutplanes+1),
+							cutFillDirection(numCutplanes+1),
+							cutLinePen(numCutplanes+1), cutLineType(numCutplanes+1),
+							projectedFillIndex(numCutplanes+1),
+							projectedFillFgPen(numCutplanes+1), projectedFillBgPen(numCutplanes+1),
+							projectedFillOrigoX(numCutplanes+1), projectedFillOrigoY(numCutplanes+1),
+							projectedFillDirection(numCutplanes+1),
+							projectedLinePen(numCutplanes+1), projectedLineType(numCutplanes+1)</pre>
+				
+					<p>
+						<span class="italic">Compatibility: introduced in ARCHICAD 20.</span>
+					</p>
+					<p>
+						Creates a projection of the 3D script in the same library part and adds the generated lines to the 2D parametric symbol.
+						The fourth version, PROJECT2{4}, adds the possibility to define multiple cutting planes parallel to the X-Y plane,
+						and to control the attributes of the cut and projected parts of the slices, including the line type, pens and fills.
+						The number of cutplanes can be zero, creating exactly one uncut slice (numCutplanes+1).
+					</p>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>useTransparency: </b></code>can be 0 (no transparency) or positive integer (1: transparency enabled).</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>statusParts: </b></code>defines the status parts to generate (hotlines, hotspots, hotarcs). The 1+2 value means all parts. Setting is applied for all slices.</div><div><code>statusParts = j<sub>1</sub> + 2*j<sub>2</sub></code>, where each j can be 0 or 1.
+	</div>
+						<p>
+							The j1, j2 numbers represent whether the corresponding status parts of the projected model are present (1) or omitted (0):
+						</p>
+						<div><code>j<sub>1</sub>: </code>project 3D hotspots as static 2D hotspots,</div>
+						<div><code>j<sub>2</sub>: </code>project 3D hotlines and hotarcs (including related 3D hotspots converted to static 2D hotspots).</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>numCutplanes: </b></code>the number of defined cutplanes. Can be zero, but preferably more.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>cutplaneHeighti: </b></code>the position of each individually defined cutplane. Measured as length perpendicularly from the X-Y plane of the object.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>method: </b></code>the chosen imaging method. If invalid or none is set, the default is hidden lines (2).</div>
+						<div><code>0: </code>the current slice is not part of the projection,</div>
+						<div><code>1: </code>wireframe,</div>
+						<div><code>2: </code>hidden lines (analytic),</div>
+						<div><code>3: </code>shading,</div>
+						<div><code>4: </code>hidden lines with polygon: the polygon does not eliminate any polygon or line belonging to parts created with shading method, but will cover/eliminate polygons and lines belonging to other wireframe/hidden line parts. Set it to Air Space for best result. Such exploded polygons will behave in 2D according to slice order (will cover, but not eliminate shaded parts).</div>
+						<div><code>16: </code>addition modifier: draws vectorial hatches (effective only in hidden line modes and shaded mode),</div>
+						<div><code>32: </code>addition modifier: use current attributes instead of attributes from 3D (effective only in shading mode and hidden line with polygon mode),</div>
+						<div><code>64: </code>addition modifier: local fill orientation (effective only in shading mode and hidden line with polygon mode),</div>
+						<div><code>128: </code>addition modifier: lines are all inner lines (effective only together with 32). Default is generic.</div>
+						<div><code>256: </code>addition modifier: lines are all contour lines (effective only together with 32, if 128 is not set). Default is generic.</div>
+						<div><code>512: </code>addition modifier: fills are all cut (effective only together with 32). Default is drafting fills.</div>
+						<div><code>1024: </code>addition modifier: fills are all cover (effective only together with 32, if 512 is not set). Default is drafting fills.</div>
+						<div><code>2048: </code>addition modifier: modifiers 16, 32, 64, 128, 256, 512, 1024 and fill attribute parameters are effective only for the view part of the projection. By default they are effective for all parts.</div>
+						<div><code>4096: </code>addition modifier: modifiers 16, 32, 64, 128, 256, 512, 1024 and fill attribute parameters are effective only for the cut part of the projection. By default they are effective for all parts.</div>
+						<div><code>8192: </code>addition modifier: cut fills are slanted.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>partsi: </b></code>defines the parts to generate. The 1+2+4+8+64 value means all parts.</div><div><code>partsi = j<sub>1</sub> + 2*j<sub>2</sub> + 4*j<sub>3</sub> + 8*j<sub>4</sub> + 64*j<sub>7</sub></code>, where each j can be 0 or 1.
+	</div>
+						<p>
+							The j1, j2, j3, j4, j7 numbers represent whether the corresponding parts of the projected model are present (1) or omitted (0):
+						</p>
+						<div><code>j<sub>1</sub>: </code>cut polygons (effective only in shading mode),</div>
+						<div><code>j<sub>2</sub>: </code>cut polygon edges,</div>
+						<div><code>j<sub>3</sub>: </code>view polygons,</div>
+						<div><code>j<sub>4</sub>: </code>view polygon edges,</div>
+						<div><code>j<sub>7</sub>: </code>project pointclouds.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>cutFillIndexi: </b></code>fill type index of the cut part of the current slice.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>cutFillFgPeni: </b></code>fill pen of the cut part of the current slice.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>cutFillBgPeni: </b></code>fill background pen of the cut part of the current slice.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>cutFillOrigoXi: </b></code>X coordinate of the cut fill origin of the current slice.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>cutFillOrigoYi: </b></code>Y coordinate of the cut fill origin of the current slice.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>cutFillDirectioni: </b></code>direction angle of the cut fill of the current slice.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>cutLinePeni: </b></code>pen index of cut lines of the current slice.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>cutLineTypei: </b></code>line type of cut lines of the current slice.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>projectedFillIndexi: </b></code>fill type index of the projected part of the current slice.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>projectedFillFgPeni: </b></code>fill pen of the projected part of the current slice.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>projectedFillBgPeni: </b></code>fill background pen of the projected part of the current slice.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>projectedFillOrigoXi: </b></code>X coordinate of the projected fill origin of the current slice.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>projectedFillOrigoYi: </b></code>Y coordinate of the projected fill origin of the current slice.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>projectedFillDirectioni: </b></code>direction angle of the projected fill of the current slice.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>projectedLinePeni: </b></code>pen index of projected lines of the current slice.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>projectedLineTypei: </b></code>line type of projected lines of the current slice.</div>
+					</div>
+				
+			<hr/><a href="002.008.html#PROJECT24_gdlcommand">Related in 2D Shapes</a><p>
+				<span class="bold"><strong>GDL Reference Guide</strong></span>
+			</p><p>
+				<span class="trademark">Copyright</span><sup>©</sup> 2021 by GRAPHISOFT, all rights reserved.
+				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+			</p></body></html>

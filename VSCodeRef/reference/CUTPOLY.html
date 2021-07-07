@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>CUTPOLY</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="CUTPOLY_gdlcommand">CUTPOLY</h3>
+				
+				<pre class="programlisting"><b id="CUTPOLY_keyword_2.7.11.5.4.1">CUTPOLY</b> n,
+        x1, y1, ..., xn, yn
+        [, x, y, z]
+[statement1
+statement2
+...
+statementn]
+<b id="CUTEND_keyword_2.7.11.5.4.3">CUTEND</b></pre>
+				
+					<p>
+						Similarly to <a class="xref" href="reference/CUTPLANE.html">the CUTPLANE command</a>, parameters of CUTPOLY refer to the current coordinate system.
+						The polygon cannot be self-intersecting. The direction of cutting is the Z axis or an optional (x, y, z) vector can be specified.
+						Mirroring transformations affect the cutting direction in an unexpected way - to get a more straightforward result,
+						use <a class="xref" href="reference/CUTFORM.html">the CUTFORM command</a>.
+					</p>
+				
+				<div class="example"><a id="id510487"/><p class="title"><b>Example 1:
+</b></p><div class="example-contents"><div style="text-align: center"><img src="Images/GDL_Images/3Dshapes_cutpoly_ex1.png" style="text-align: middle" alt="Images/GDL_Images/3Dshapes_cutpoly_ex1.png"/></div><pre class="programlisting">ROTX 90
+MULZ -1
+CUTPOLY 3,
+        0.5, 1,
+        2, 2,
+        3.5, 1,
+        -1.8, 0, 1
+DEL 1
+BPRISM_ "Brick-Red", "Brick-Red", "Brick-White",
+        4, 0.9, 7,
+        0.0, 0.0, 15,
+        6.0, 0.0, 15,
+        6.0, 3.0, 15,
+        0.0, 3.0, 15
+CUTEND</pre></div></div>
+				<div class="example"><a id="id510507"/><p class="title"><b>Example 2:
+</b></p><div class="example-contents"><div class="informaltable"><table border="0"><colgroup><col/><col/></colgroup><tbody><tr><td>
+										<pre class="programlisting">a=1.0
+d=0.1
+GOSUB "rect_cut"
+ROTX 90
+GOSUB "rect_cut"
+DEL 1
+ROTY -90
+GOSUB "rect_cut"
+DEL 1
+BLOCK a, a, a
+CUTEND
+CUTEND
+CUTEND
+END
+"rect_cut":
+    CUTPOLY 4,
+            d, d,
+            a-d, d,
+            a-d, a-d,
+            d, a-d
+    RETURN</pre>
+									</td><td>
+										<div style="text-align: center"><img src="Images/GDL_Images/3Dshapes_cutpoly_ex2.png" style="text-align: middle" alt="Images/GDL_Images/3Dshapes_cutpoly_ex2.png"/></div>
+									</td></tr></tbody></table></div></div></div>
+				<div class="example"><a id="id510528"/><p class="title"><b>Example 3:
+</b></p><div class="example-contents"><div class="informaltable"><table border="0"><colgroup><col/><col/></colgroup><tbody><tr><td>
+										<pre class="programlisting">ROTX 90
+FOR i=1 TO 3
+    FOR j=1 TO 5
+        CUTPOLY 4,
+                0, 0, 1, 0,
+                1, 1, 0, 1
+        ADDX 1.2
+    NEXT j
+    DEL 5
+    ADDY 1.2
+NEXT i
+DEL NTR()-1
+ADD -0.2, -0.2, 0
+BRICK 6.2, 3.8, 1
+FOR k=1 TO 15
+    CUTEND
+NEXT k
+DEL TOP</pre>
+									</td><td>
+										<div style="text-align: center"><img src="Images/GDL_Images/3Dshapes_cutpoly_ex3.png" style="text-align: middle" alt="Images/GDL_Images/3Dshapes_cutpoly_ex3.png"/></div>
+									</td></tr></tbody></table></div></div></div>
+			<hr/><a href="002.007.html#CUTPOLY_gdlcommand">Related in 3D Shapes</a><p>
+				<span class="bold"><strong>GDL Reference Guide</strong></span>
+			</p><p>
+				<span class="trademark">Copyright</span><sup>©</sup> 2021 by GRAPHISOFT, all rights reserved.
+				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+			</p></body></html>

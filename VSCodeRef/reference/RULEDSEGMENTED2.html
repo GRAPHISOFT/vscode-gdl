@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>RULEDSEGMENTED{2}</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="RULEDSEGMENTED2_gdlcommand">RULEDSEGMENTED{2}</h3>
+				
+				<pre class="programlisting"><b id="RULEDSEGMENTED2_keyword_2.7.5.36.4.1">RULEDSEGMENTED{2}</b> top_material, bottom_material,
+        n, mask, textureMode,
+        x11, y11, z11, s1, mat1..., x1n, y1n, z1n, sn, matn,
+        x21, y21, z21, ..., x2n, y2n, z2n</pre>
+				
+					<p>
+						<span class="italic">Compatibility: introduced in ARCHICAD 23.</span>
+					</p>
+					<p>
+						RULEDSEGMENTED{2} is an extension of <a class="xref" href="reference/RULEDSEGMENTED.html">the RULEDSEGMENTED command</a> with the possibility of controlling the surface attributes of the generated surfaces in segment detail and applying custom texture projection.
+					</p>
+					<p>
+						Additional parameters:
+					</p>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>top_material: </b></code>surface attribute index of the base surface (if the first polyline is coplanar and j1+j3 are set).</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>bottom_material: </b></code>surface attribute index of the top surface (if the second polyline is coplanar and j2+j3 are set).</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>textureMode: </b></code>texture projection mode</div>
+						<div><code>0: </code>automatic, optimized for curved surfaces, the same as with <a class="xref" href="reference/RULEDSEGMENTED.html">the RULEDSEGMENTED command</a>.</div>
+						<div><code>1: </code>custom, defined by <a class="xref" href="reference/COOR.html">the COOR command</a>.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>mati: </b></code>surface attribute index of generated surface segment i.</div>
+					</div>
+				
+				<div class="example"><a id="id502528"/><p class="title"><b>Example:
+</b></p><div class="example-contents"><pre class="programlisting">
+_topMatIndex = 22
+_bottomMatIndex = 34
+_segmentMatIndex_1 = 55
+_segmentMatIndex_2 = 44
+
+RULEDSEGMENTED{2} _topMatIndex, _bottomMatIndex,
+               4, 1+2+16+32, 0, 
+               0, 0, 0, 2, _segmentMatIndex_1,
+               1, 0, 0, 2, _segmentMatIndex_2,
+               1, 1, 0, 2, _segmentMatIndex_1,
+               0, 1, 0, 2, _segmentMatIndex_2,
+               1, 0, 1,
+               1, 1, 1,
+               0, 1, 1,
+ 	           0, 0, 1</pre></div></div>
+			<hr/><a href="002.007.html#RULEDSEGMENTED2_gdlcommand">Related in 3D Shapes</a><p>
+				<span class="bold"><strong>GDL Reference Guide</strong></span>
+			</p><p>
+				<span class="trademark">Copyright</span><sup>©</sup> 2021 by GRAPHISOFT, all rights reserved.
+				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+			</p></body></html>

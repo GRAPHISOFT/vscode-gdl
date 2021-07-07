@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>STR{2}</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="STR2_gdlcommand">STR{2}</h3>
+					
+					<pre class="programlisting"><b id="STR2_keyword_2.13.5.9.3.4.1">STR{2}</b> (format_string, numeric_expression [, extra_accuracy_string])</pre>
+					
+						<p>
+							This function creates a formatted string representation of the current value of the numeric expression.
+							Formatting is specified by format_string which can either be a variable or a string literal.
+							If the format is empty, the output is formatted as meters, with an accuracy of three decimals (displaying 0s).
+							If the extra accuracy flags are set in the format_string, the STR{2} function will return the corresponding extra accuracy string in the 3rd parameter.
+						</p>
+						<div style="margin-left: 1em">
+							<div style="text-indent: -1em"><code><b>format_string: </b></code>"%[0 or more flags][field_width][.precision] conv_spec"</div>
+						</div>
+						<div style="margin-left: 1em">
+							<div style="text-indent: -1em"><code><b>flags: </b></code>(for m, mm, cm, dm, e, df, di, sqm, sqcm, sqf, sqi, dd, gr, rad, cum, l, cucm, cumm, cuf, cui, cuy, gal):</div>
+							<div><code>(none): </code>right justify (default),</div>
+							<div><code>-: </code>left justify,</div>
+							<div><code>+: </code>explicit plus sign,</div>
+							<div><code>(space): </code>in place of a + sign,</div>
+							<div><code>'*0': </code>extra accuracy Off (default),</div>
+							<div><code>'*1': </code>extra accuracy .5,</div>
+							<div><code>'*2': </code>extra accuracy .25,</div>
+							<div><code>'*3': </code>extra accuracy .1,</div>
+							<div><code>'*4': </code>extra accuracy .01,</div>
+							<div><code>'*5': </code>rounding to .5 within displayed decimal range, no returned extra accuracy string, (used for area calculations),</div>
+							<div><code>'*6': </code>rounding to .25 within displayed decimal range, no returned extra accuracy string, (used for area calculations),</div>
+							<div><code>'*7': </code>fills the fractional part of numeric_expression into the extra_accuracy_string in case of fi or ffi, while the returned expression of the function does not contain the fractional parts,</div>
+							<div><code>'#': </code>don’t display 0s (for m, mm, cm, dm, ffi, fdi, fi, df, di, sqm, sqcm, sqf, sqi, dd, fr, rad, cum, l, cucm, cumm, cuf, cui, cuy, gal),</div>
+							<div><code>'0': </code>display 0 inches (for ffi, fdi, fi),</div>
+							<div><code>'~': </code>hide 0 decimals (effective only if the '#' flag is not specified) (for m, mm, cm, dm, fdi, df, di, sqm, sqcm, sqf, sqi, dd, fr, rad, cum, l, cucm, cumm, cuf, cui, cuy, gal),</div>
+							<div><code>'^': </code>
+								do not change decimal separator and digit grouping characters
+								(if not specified, these characters will be replaced as set in the current system).
+							</div>
+							<div><code>'[1*j1+2*j2+4*j3]': </code>
+								display 0 inches before fractions, effective if the '0' flag is not specified (for ffi, fdi, fi)
+							</div>
+							<div><code>j1: </code>display 0 inches before fractions (0 3/4"), effective when value is smaller than 1 foot and not displaying 0 foot (the '#' flag is specified)</div>
+							<div><code>j2: </code>display 0 whole inches after feet (1'-0"), effective when value is at least 1 foot</div>
+							<div><code>j3: </code>display 0 inches before fractions (1'-0 3/4"), effective when value is at least 1 foot</div>
+						</div>
+						<div style="margin-left: 1em">
+							<div style="text-indent: -1em"><code><b>field_width: </b></code>unsigned decimal integer, the minimum number of characters to generate.</div>
+						</div>
+						<div style="margin-left: 1em">
+							<div style="text-indent: -1em"><code><b>precision: </b></code>unsigned decimal integer, the number of fraction digits to generate.</div>
+						</div>
+						<div style="margin-left: 1em">
+							<div style="text-indent: -1em"><code><b>conv_spec: </b></code>(conversion specifier):</div>
+							<div><code>e: </code>exponential format (meter),</div>
+							<div><code>m: </code>meters,</div>
+							<div><code>mm: </code>millimeters,</div>
+							<div><code>cm: </code>centimeters,</div>
+							<div><code>dm: </code>decimeters,</div>
+								<p>
+									<span class="italic">Compatibility: decimeters introduced in ARCHICAD 22.</span>
+                         	   </p>
+							<div><code>ffi: </code>feet &amp; fractional inches,</div>
+							<div><code>fdi: </code>feet &amp; decimal inches,</div>
+							<div><code>df: </code>decimal feet,</div>
+							<div><code>fi: </code>fractional inches,</div>
+							<div><code>di: </code>decimal inches,</div>
+							<div><code>pt: </code>points,</div>
+							<p>for areas:</p>
+							<div><code>sqm: </code>square meters,</div>
+							<div><code>sqcm: </code>square centimeters,</div>
+							<div><code>sqmm: </code>square millimeters,</div>
+							<div><code>sqf: </code>square feet,</div>
+							<div><code>sqi: </code>square inches,</div>
+							<p>for angles:</p>
+							<div><code>dd: </code>decimal degrees,</div>
+							<div><code>dms: </code>degrees, minutes, seconds,</div>
+							<div><code>gr: </code>grads,</div>
+							<div><code>rad: </code>radians,</div>
+							<div><code>surv: </code>surveyors unit,</div>
+							<p>for volumes:</p>
+							<div><code>cum: </code>cubic meters,</div>
+							<div><code>l: </code>liters,</div>
+							<div><code>cucm: </code>cubic centimeters,</div>
+							<div><code>cumm: </code>cubic millimeters,</div>
+							<div><code>cuf: </code>cubic feet,</div>
+							<div><code>cui: </code>cubic inches,</div>
+							<div><code>cuy: </code>cubic yards,</div>
+							<div><code>gal: </code>gallons.</div>
+						</div>
+					
+					<div class="example"><a id="id535680"/><p class="title"><b>Example:
+</b></p><div class="example-contents"><pre class="programlisting">nr = 0.345678
+TEXT2 0, 23, STR{2} ("%m", nr)            !0.346
+TEXT2 0, 22, STR{2} ("%#10.2m", nr)       !35
+TEXT2 0, 21, STR{2} ("%.4cm", nr)         !34.5678
+TEXT2 0, 20, STR{2} ("%12.4cm", nr)       !  34.5678
+TEXT2 0, 19, STR{2} ("%.6mm", nr)         !345.678000
+TEXT2 0, 18, STR{2} ("%+15e", nr)         !+3.456780e-01
+TEXT2 0, 17, STR{2} ("%ffi", nr)          !1'-2"
+TEXT2 0, 16, STR{2} ("%0.16ffi", nr)      !1'-1 5/8"
+TEXT2 0, 15, STR{2} ("% .3fdi", nr)       ! 1'-1.609"
+TEXT2 0, 14, STR{2} ("% -10.4df", nr)     ! 1.1341'
+TEXT2 0, 13, STR{2} ("%0.64fi", nr)       !13 39/64"
+TEXT2 0, 12, STR{2} ("%+12.4di", nr)      !+13.6094"
+TEXT2 0, 11, STR{2} ("%#.3sqm", nr)       !346
+TEXT2 0, 10, STR{2} ("%+sqcm", nr)        !+3,456.78
+TEXT2 0,  9, STR{2} ("% .2sqmm", nr)      ! 345,678.00
+TEXT2 0,  8, STR{2} ("%-12sqf", nr)       !3.72
+TEXT2 0,  7, STR{2} ("%10sqi", nr)        ! 535.80
+TEXT2 0,  6, STR{2} ("%.2pt", nr)         !0.35
+
+alpha = 88.657
+TEXT2 0,  5, STR{2} ("%+10.3dd", alpha)   !+88.657°
+TEXT2 0,  4, STR{2} ("%.1dms", alpha)     !88°39'
+TEXT2 0,  3, STR{2} ("%.2dms", alpha)     !88°39'25"
+TEXT2 0,  2, STR{2} ("%10.4gr", alpha)    ! 98.5078G
+TEXT2 0,  1, STR{2} ("%rad", alpha)       !1.55R
+TEXT2 0,  0, STR{2} ("%.2surv", alpha)    !N 1°20'35" E</pre><pre class="programlisting">nr = 0'-0 3/4"
+TEXT2 0, -1, STR{2} ("%#[1].16ffi", nr)   !0 3/4"
+nr = 1'-0"
+TEXT2 0, -2, STR{2} ("%[2].16ffi", nr)    !1'-0"
+nr = 1'-0 3/4"
+TEXT2 0, -3, STR{2} ("%[4].16ffi", nr)    !1'-0 3/4"
+
+! use system digit separators, default
+nr = 1234.5678
+TEXT2 0, -4, STR{2} ("%8.6m", nr)         !1 234,5678
+! ignore system digit separators
+TEXT2 0, -5, STR{2} ("%^8.6m", nr)        !1234.5678</pre><pre class="programlisting">
+nr = 0.34278
+TEXT2 0, -6, STR{2} ("%*5 .4m", nr)       ! 0.3430
+
+! split to integral and fractional parts
+extra_accuracy_string = ""
+nr  = 1'-0 3/4"
+TEXT2 0, -7, STR{2}("%*7.16ffi", nr, extra_accuracy_string) !1'-
+TEXT2 0, -8, extra_accuracy_string                          !3/4"
+nr  = -0.07
+TEXT2 0, -9, STR{2} ("%*1.1", nr, extra_accuracy_string)    !-0,0
+TEXT2 0, -10, extra_accuracy_string                         !5</pre></div></div>
+				<hr/><a href="002.013.html#STR2_gdlcommand">Related in Expressions and Functions</a><p>
+				<span class="bold"><strong>GDL Reference Guide</strong></span>
+			</p><p>
+				<span class="trademark">Copyright</span><sup>©</sup> 2021 by GRAPHISOFT, all rights reserved.
+				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+			</p></body></html>

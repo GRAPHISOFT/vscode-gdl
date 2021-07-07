@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>COOR{2}</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="COOR2_gdlcommand">COOR{2}</h3>
+				
+				<pre class="programlisting"><b id="COOR2_keyword_2.7.8.25.4.1">COOR{2}</b> wrap_method, wrap_flags, vert1, vert2, vert3, vert4</pre>
+				
+					<p><span class="italic">Deprecated. See <a class="xref" href="reference/COOR3.html">the COOR{3} command</a>.</span></p>
+					<p>Similar to <a class="xref" href="reference/COOR.html">the COOR command</a>, changing <code class="literal">wrap</code> to two parameters <code class="literal">wrap_method</code> and <code class="literal">wrap_flags</code>, and also extending the possibilities of it.</p>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>wrap_method: </b></code>Wrapping modes are the same as described in the <a class="xref" href="reference/COOR.html">the COOR command</a>. Projection types don't apply, use <code class="literal">wrap_flags</code> instead.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>wrap_flags: </b></code>Wrapping flags</div><div><code>wrap_flags = 4*j<sub>3</sub> + 8*j<sub>4</sub> + 16*j<sub>5</sub> + 32*j<sub>6</sub> + 64*j<sub>7</sub> + 128*j<sub>8</sub></code>, where each j can be 0 or 1.
+	</div>
+						<div><code>j<sub>3</sub>: </code>quadratic texture projection (recommended),</div>
+						<div><code>j<sub>4</sub>: </code>linear texture projection based on the average distance,</div>
+						<div><code>j<sub>5</sub>: </code>linear texture projection based on normal triangulation,</div>
+
+						
+						
+						<div><code>j<sub>8</sub>: </code>translate the origin of the texture coordinate system closest to the global origin in the direction of the X, Y or Z axis respectively. For example, <code class="literal">j6</code> makes the origin translating in the direction of the X axis (along <code class="literal">v2 - v1</code> vector) so that it will be the orthogonal projection of the global origin to the line of the X axis. That is, if all <code class="literal">j6</code>, <code class="literal">j7</code> and <code class="literal">j8</code> are <code class="literal">1</code>, the origin is translated into the global origin (same as if projection type is <code class="literal">256</code> in the <a class="xref" href="reference/COOR.html">the COOR command</a>).</div>
+					</div>
+					<div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3>The <code class="literal">j3</code>, <code class="literal">j4</code> and <code class="literal">j5</code> flags are only effective if <code class="literal">wrap_method</code> is <code class="literal">0</code> and only one of them can be <code class="literal">1</code>. The <code class="literal">j6</code>, <code class="literal">j7</code> and <code class="literal">j8</code> flags are only effective if <code class="literal">wrap_method</code> is not <code class="literal">0</code>. These can be <code class="literal">1</code> at the same time in any combination.</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>vert1, vert2, vert3, vert4: </b></code>like in <a class="xref" href="reference/COOR.html">the COOR command</a>.</div>
+					</div>
+
+				
+			<hr/><a href="002.007.html#COOR2_gdlcommand">Related in 3D Shapes</a><p>
+				<span class="bold"><strong>GDL Reference Guide</strong></span>
+			</p><p>
+				<span class="trademark">Copyright</span><sup>©</sup> 2021 by GRAPHISOFT, all rights reserved.
+				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+			</p></body></html>

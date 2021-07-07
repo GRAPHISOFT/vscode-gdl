@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>DEFINE MATERIAL BASED_ON</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="DEFINEMATERIALBASED_ON_gdlcommand">DEFINE MATERIAL BASED_ON</h3>
+					
+					<pre class="programlisting"><b id="DEFINEMATERIAL_keyword_2.11.4.6.3.4.1">DEFINE MATERIAL</b> name [,] <b id="BASED_ON_keyword_2.11.4.6.3.4.3">BASED_ON</b> orig_name [,] PARAMETERS name1 = expr1 [, ...]
+        [[,] <b id="ADDITIONAL_DATA_keyword_2.11.4.6.3.4.5">ADDITIONAL_DATA</b> name1 = expr1 [, ...]]</pre>
+					
+						<p>
+							Material definition based on an existing material.
+							Specified parameters of the original material will be overwritten by the new values, other parameters remain untouched.
+							Using the command without actual parameters results in a material exactly the same as the original, but with a different name.
+							Parameter values of a material can be obtained using the REQUEST{2} ("Material_info", ...) function.
+						</p>
+						<div style="margin-left: 1em">
+							<div style="text-indent: -1em"><code><b>orig_name: </b></code>name of the original material (name of an existing, previously defined GDL or floor plan material).</div>
+						</div>
+						<div style="margin-left: 1em">
+							<div style="text-indent: -1em"><code><b>namei: </b></code>material parameter name to be overwritten by a new value. Names corresponding to parameters of material definition:</div>
+							<div><code>gs_mat_surface_r, gs_mat_surface_g, gs_mat_surface_b: </code>(surface RGB [0.0..1.0])</div>
+							<div><code>gs_mat_ambient: </code>(ambient coefficient [0.0..1.0])</div>
+							<div><code>gs_mat_diffuse: </code>(diffuse coefficient [0.0..1.0])</div>
+							<div><code>gs_mat_specular: </code>(specular coefficient [0.0..1.0])</div>
+							<div><code>gs_mat_transparent: </code>(transparent coefficient [0.0..1.0])</div>
+							<div><code>gs_mat_shining: </code>(shininess [0.0..100.0])</div>
+							<div><code>gs_mat_transp_att: </code>(transparency attenuation [0.0..4.0])</div>
+							<div><code>gs_mat_specular_r, gs_mat_specular_g, gs_mat_specular_b: </code>(specular color RGB [0.0..1.0])</div>
+							<div><code>gs_mat_emission_r, gs_mat_emission_g, gs_mat_emission_b: </code>(emission color RGB [0.0..1.0])</div>
+							<div><code>gs_mat_emission_att: </code>(emission attenuation [0.0..65.5])</div>
+							<div><code>gs_mat_fill_ind: </code>(fill index)</div>
+							<div><code>gs_mat_fillcolor_ind: </code>(fill color index)</div>
+							<div><code>gs_mat_texture_ind: </code>(texture index)</div>
+						</div>
+						<div style="margin-left: 1em">
+							<div style="text-indent: -1em"><code><b>expri: </b></code>new value to overwrite the specified parameter of the material. Value ranges are the same as at the material definition.</div>
+						</div>
+					
+					<div class="example"><a id="id521411"/><p class="title"><b>Example:
+</b></p><div class="example-contents"><pre class="programlisting">n = REQUEST{2} ("Material_info", "Brick-Face", "gs_mat_emission_rgb",
+        em_r, em_g, em_b)
+em_r = em_r + (1 - em_r) / 3
+em_g = em_g + (1 - em_g) / 3
+em_b = em_b + (1 - em_b) / 3
+DEFINE MATERIAL "Brick-Face light" [,] BASED_ON "Brick-Face" \
+        PARAMETERS gs_mat_emission_r = em_r,
+        gs_mat_emission_g = em_g, gs_mat_emission_b = em_b
+SET MATERIAL "Brick-Face"
+BRICK a, b, zzyzx
+ADDX a
+SET MATERIAL "Brick-Face light"
+BRICK a, b, zzyzx</pre></div></div>
+				<hr/><a href="002.011.html#DEFINEMATERIALBASED_ON_gdlcommand">Related in Attributes</a><p>
+				<span class="bold"><strong>GDL Reference Guide</strong></span>
+			</p><p>
+				<span class="trademark">Copyright</span><sup>©</sup> 2021 by GRAPHISOFT, all rights reserved.
+				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+			</p></body></html>

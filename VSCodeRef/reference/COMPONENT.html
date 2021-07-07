@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>COMPONENT</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="COMPONENT_gdlcommand">COMPONENT</h3>
+				
+				<pre class="programlisting"><b id="COMPONENT_keyword_2.12.3.7.4.1">COMPONENT</b> name, quantity, unit [, proportional_with, code, keycode, unitcode]</pre>
+				
+					<p>Local component definition. Scripts can include any number of COMPONENTs.</p>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>name: </b></code>the name of the component (max. 128 characters).</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>quantity: </b></code>a numeric expression.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>unit: </b></code>the string used for unit description.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>proportional_with: </b></code>
+							a code between 1 and 6.
+							When listing, the component quantity defined above will be automatically multiplied by a value calculated for the current listed element:
+						</div>
+						<div><code>1: </code>item,</div>
+						<div><code>2: </code>length,</div>
+						<div><code>3: </code>surface A,</div>
+						<div><code>4: </code>surface B,</div>
+						<div><code>5: </code>surface,</div>
+						<div><code>6: </code>volume.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>code: </b></code>string, defines a code for the component.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>keycode: </b></code>string, reference to a key in an external database. The key will be assigned to the component.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>unitcode: </b></code>
+							string, reference to a unit in an external database that controls the output format of the component quantity.
+							This will replace the locally defined unit string.
+						</div>
+					</div>
+				
+			<hr/><a href="002.012.html#COMPONENT_gdlcommand">Related in Non-Geometric Scripts</a><p>
+				<span class="bold"><strong>GDL Reference Guide</strong></span>
+			</p><p>
+				<span class="trademark">Copyright</span><sup>©</sup> 2021 by GRAPHISOFT, all rights reserved.
+				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+			</p></body></html>

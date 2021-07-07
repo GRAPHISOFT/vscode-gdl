@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>CPRISM_{3}</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="CPRISM_3_gdlcommand">CPRISM_{3}</h3>
+				
+				<pre class="programlisting"><b id="CPRISM_3_keyword_2.7.3.12.4.1">CPRISM_{3}</b> top_material, bottom_material, side_material, mask,
+          n, h,
+          x1, y1, alpha1, s1, mat1,
+          ...
+          xn, yn, alphan, sn, matn</pre>
+				
+					<p>
+						CPRISM_{3} is an extension of <a class="xref" href="reference/CPRISM_2.html">the CPRISM_{2} command</a> with the possibility of controlling the global behavior of the generated prism.
+					</p>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>mask: </b></code>controls the global behavior of the generated prism.</div><div><code>mask = j<sub>1</sub> + 2*j<sub>2</sub> + 4*j<sub>3</sub> + 8*j<sub>4</sub></code>, where each j can be 0 or 1.
+	</div>
+						<div><code>j<sub>1</sub>: </code>top edge in line elimination.</div>
+						<div><code>j<sub>2</sub>: </code>bottom edge in line elimination.</div>
+						<div><code>j<sub>3</sub>: </code>side edge in line elimination.</div>
+						<div><code>j<sub>4</sub>: </code>side edge and surface is smooth in curved sections of the profile. <span class="italic">Compatibility: introduced in ARCHICAD 21.</span></div>
+					</div>
+				
+				<div class="example"><a id="id496383"/><p class="title"><b>Example 1:
+</b></p><div class="example-contents"><div class="informaltable"><table border="0"><colgroup><col/><col/></colgroup><tbody><tr><td>
+										<pre class="programlisting">PEN 1
+mat = IND (MATERIAL, "Metal-Aluminium")
+FOR i=1 TO 4 STEP 1
+  IF i = 1 THEN mask = 1+2+4
+  IF i = 2 THEN mask = 1
+  IF i = 3 THEN mask = 2
+  IF i = 4 THEN mask = 4
+  CPRISM_{3} mat, mat, mat, mask,
+      5, 1,
+      0, 0, 0, 15, mat,
+      1, 0, 0, 15, mat,
+      1, 1, 0, 15, mat,
+      0, 1, 0, 15, mat,
+      0, 0, 0, -1, mat
+  BODY -1
+  DEL TOP
+  IF i = 1 THEN ADDY 1
+  IF i = 2 THEN ADDX -1
+  IF i = 3 THEN ADDX 1
+NEXT i</pre>
+									</td><td style="text-align: center">
+										<div style="text-align: center"><img src="Images/GDL_Images/3Dshapes_sprism_3_ex.png" style="text-align: middle" alt="Images/GDL_Images/3Dshapes_sprism_3_ex.png"/></div>
+									</td></tr></tbody></table></div></div></div>
+				<div class="example"><a id="id496405"/><p class="title"><b>Example 2:
+</b></p><div class="example-contents"><div class="informaltable"><table border="0"><colgroup><col/><col/></colgroup><tbody><tr><td>
+										<pre class="programlisting">PEN 1
+mat = IND (MATERIAL, "Metal-Aluminium")
+!visible side segment edges
+mask = 1 + 2 + 4
+_secondStat = 15
+CPRISM_{3} mat, mat, mat, mask,
+	6,	 1,
+	0,	 0,   0, 15,			mat,
+	1,	 0,   0, _secondStat,	mat,
+	0.5, 0.5, 0, 900,			mat,
+	1,   1,   0, 3015,			mat,
+	0,   1,   0, 15,			mat,
+	0,   0,   0, -1,			mat</pre>
+									</td><td style="text-align: center">
+										
+									</td></tr><tr><td>
+										<pre class="programlisting">!smooth edges using first node status copy
+mask = 1 + 2 + 4
+_secondStat = 15 + 64
+CPRISM_{3} mat, mat, mat, mask,
+	6,	 1,
+	0,	 0,   0, 15,			mat,
+	1,	 0,   0, _secondStat,	mat,
+	0.5, 0.5, 0, 900,			mat,
+	1,   1,   0, 3015,			mat,
+	0,   1,   0, 15,			mat,
+	0,   0,   0, -1,			mat</pre>
+									</td><td style="text-align: center">
+										
+									</td></tr><tr><td>
+										<pre class="programlisting">!smooth edges using mask, first edge is not smooth
+mask = 1 + 2 + 4 + 8
+_secondStat = 15
+CPRISM_{3} mat, mat, mat, mask,
+	6,	 1,
+	0,	 0,   0, 15,			mat,
+	1,	 0,   0, _secondStat,	mat,
+	0.5, 0.5, 0, 900,			mat,
+	1,   1,   0, 3015,			mat,
+	0,   1,   0, 15,			mat,
+	0,   0,   0, -1,			mat</pre>
+									</td><td style="text-align: center">
+										
+									</td></tr></tbody></table></div></div></div>
+			<hr/><a href="002.007.html#CPRISM_3_gdlcommand">Related in 3D Shapes</a><p>
+				<span class="bold"><strong>GDL Reference Guide</strong></span>
+			</p><p>
+				<span class="trademark">Copyright</span><sup>©</sup> 2021 by GRAPHISOFT, all rights reserved.
+				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+			</p></body></html>

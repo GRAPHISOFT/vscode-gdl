@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>POLYROOF{3}</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="POLYROOF3_gdlcommand">POLYROOF{3}</h3>
+				
+				<pre class="programlisting"><b id="POLYROOF3_keyword_2.7.5.47.4.1">POLYROOF{3}</b> defaultMat, mask, k, m, n,
+          offset, thickness, totalThickness, applyContourInsidePivot,
+          z_1, ..., z_k,
+          pivotX_1, pivotY_1, pivotMask_1,
+          roofAngle_11, gableOverhang_11, topMat_11, bottomMat_11,
+          ...
+          roofAngle_1k, gableOverhang_1k, topMat_1k, bottomMat_1k,
+          ...
+          pivotX_m, pivotY_m, pivotMask_m,
+          roofAngle_m1, gableOverhang_m1, topMat_m1, bottomMat_m1,
+          ...
+          roofAngle_mk, gableOverhang_mk, topMat_mk, bottomMat_mk,
+          contourX_1, contourY_1, contourMask_1, edgeTrim_1, edgeAngle_1, edgeMat_1,
+          ...
+          contourX_n, contourY_n, contourMask_n, edgeTrim_n, edgeAngle_n, edgeMat_n</pre>
+				
+					<p>
+						POLYROOF{3} is an extension of <a class="xref" href="reference/POLYROOF2.html">the POLYROOF{2} command</a> with the possibility of controlling the global behavior of the generated roof.
+					</p>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>mask: </b></code>controls the global behavior of the generated roof.</div><div><code>mask = j<sub>1</sub> + 2*j<sub>2</sub></code>, where each j can be 0 or 1.
+	</div>
+						<div><code>j<sub>1</sub>: </code>edges participate in line elimination.</div>
+						<div><code>j<sub>2</sub>: </code>Make all edges invisible.</div>
+					</div>
+				
+				<div class="example"><a id="id504220"/><p class="title"><b>Example:
+</b></p><div class="example-contents"><div class="informaltable"><table border="0"><colgroup><col/><col/></colgroup><tbody><tr><td>
+										<pre class="programlisting">pen 1
+mat = IND (MATERIAL, "Metal-Aluminium")
+a = -0.4242640691048 : b =  4.424264068326
+c =  6.424264068326
+POLYROOF{3} mat,1, 2,  5,  5,
+  0, 0.3, 0.3,  1, 0, 1,
+  a, b, 0, 45, 0, mat, mat, 90, 0, mat, mat,
+  a, a, 0, 45, 0, mat, mat, 90, 0, mat, mat,
+  c, a, 0, 45, 0, mat, mat, 90, 0, mat, mat,
+  c, b, 0, 45, 0, mat, mat, 90, 0, mat, mat,
+  a, b, -1,45, 0, mat, mat, 90,  0, mat, mat,
+  -0.8, -0.8,  0,  2,  0, mat,
+  6.8, -0.8,  0,  2,  0, mat,
+  6.8,  4.8,  0,  2,  0, mat,
+  -0.8,  4.8,  0,  2,  0, mat,
+  -0.8, -0.8, -1,  2,  0, mat
+
+a = 0.1514718617904 : b = 3.848528136652
+c = 5.848528136652 : q = 0.5757359305057
+w = 5.424264067936 :  e = 3.424264056692
+POLYROOF{3} mat,1, 1,  5,  5,
+  0,   0.3,  0.3,  1, 0.5757359312847,
+  a, b, 0, 45,  0, mat, mat,
+  a, a, 0, 45,  0, mat, mat,
+  c, a, 0, 45,  0, mat, mat,
+  c, b, 0, 45,  0, mat, mat,
+  a, b, -1, 45,  0, mat, mat,
+  q, q,   0,  0,  0, mat,
+  w, q,   0,  0,  0, mat,
+  w, e,   0,  0,  0, mat,
+  q, e,   0,  0,  0, mat,
+  q, q,  -1,  0,  0, mat</pre>
+									</td><td style="text-align: center">
+										<div style="text-align: center"><img src="Images/GDL_Images/3Dshapes_polyroof_3_ex.png" style="text-align: middle" alt="Images/GDL_Images/3Dshapes_polyroof_3_ex.png"/></div>
+									</td></tr></tbody></table></div></div></div>
+			<hr/><a href="002.007.html#POLYROOF3_gdlcommand">Related in 3D Shapes</a><p>
+				<span class="bold"><strong>GDL Reference Guide</strong></span>
+			</p><p>
+				<span class="trademark">Copyright</span><sup>©</sup> 2021 by GRAPHISOFT, all rights reserved.
+				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+			</p></body></html>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>REVOLVE{4}</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="REVOLVE4_gdlcommand">REVOLVE{4}</h3>
+				
+				<pre class="programlisting"><b id="REVOLVE4_keyword_2.7.5.31.4.1">REVOLVE{4}</b> n, alphaOffset, alpha, betaOffset, beta, mask, sideMat,
+        x1, y1, s1, mat1, ..., xn, yn, sn, matn</pre>
+				
+					<p>
+						REVOLVE{4} is an extension of the REVOLVE{3} command with the possibility of hiding all edges.
+					</p>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>mask: </b></code>
+							controls the existence of the bottom, top and (in the case of alpha &lt; 360°) side polygons.
+						</div><div><code>mask = 4*j<sub>3</sub> + 8*j<sub>4</sub> + 16*j<sub>5</sub> + 32*j<sub>6</sub> + 64*j<sub>7</sub> + 128*j<sub>8</sub> + 256*j<sub>9</sub> + 512*j<sub>10</sub> + 1024*j<sub>11</sub></code>, where each j can be 0 or 1.
+	</div>
+						<div><code>j<sub>3</sub>: </code>base closing side (in profile plane) is present,</div>
+						<div><code>j<sub>4</sub>: </code>end closing side (in revolved plane) is present,</div>
+						<div><code>j<sub>5</sub>: </code>base edges (in profile plane) are visible,</div>
+						<div><code>j<sub>6</sub>: </code>end edges (in revolved plane) are visible,</div>
+						<div><code>j<sub>7</sub>: </code>cross-section edges are visible, surface is articulated,</div>
+						<div><code>j<sub>8</sub>: </code>horizontal edge in line elimination,</div>
+						<div><code>j<sub>9</sub>: </code>vertical edge in line elimination,</div>
+						<div><code>j<sub>10</sub>: </code>hide all edges of revolve,</div>
+						<div><code>j<sub>11</sub>: </code>side edge and surface is smooth in curved sections of the profile. <span class="italic">Compatibility: introduced in ARCHICAD 21.</span></div>
+					</div>
+				
+			<hr/><a href="002.007.html#REVOLVE4_gdlcommand">Related in 3D Shapes</a><p>
+				<span class="bold"><strong>GDL Reference Guide</strong></span>
+			</p><p>
+				<span class="trademark">Copyright</span><sup>©</sup> 2021 by GRAPHISOFT, all rights reserved.
+				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+			</p></body></html>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>CPRISM_</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="CPRISM__gdlcommand">CPRISM_</h3>
+				
+				<pre class="programlisting"><b id="CPRISM__keyword_2.7.3.10.4.1">CPRISM_</b> top_material, bottom_material, side_material,
+        n, h,
+        x1, y1, s1, ..., xn, yn, sn</pre>
+				
+					<p>
+						Extension of <a class="xref" href="reference/PRISM_.html">the PRISM_ command</a>. The first three parameters are used for the material name/index of the top, bottom and side surfaces.
+						The other parameters are the same as above in <a class="xref" href="reference/PRISM_.html">the PRISM_ command</a>.
+					</p>
+					
+						<pre class="programlisting">n &gt;= 3</pre>
+					
+					<p>
+						<span class="italic">See also <a class="xref" href="002.011.html#Materials_section" title="Materials">the section called “Materials”</a>.</span>
+					</p>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>si: </b></code>
+							status code that allows you to control the visibility of polygon edges and side surfaces.
+							You can also define holes and create segments and arcs in the polyline using special constraints.
+						</div>
+					</div>
+					<p>
+						<span class="italic">See <a class="xref" href="002.010.html#StatusCodes_chapter" title="Chapter 7. Status Codes">Chapter 7, <i>Status Codes</i></a> for details.</span>
+					</p>
+				
+				<div class="example"><a id="id496202"/><p class="title"><b>Example:
+Material referencing a predefined material by name, index and global variable</b></p><div class="example-contents"><div style="text-align: center"><img src="Images/GDL_Images/3Dshapes_cprism_ex.png" style="text-align: middle" alt="Images/GDL_Images/3Dshapes_cprism_ex.png"/></div><pre class="programlisting">CPRISM_ "Mtl-Iron", 0, SYMB_MAT,
+        13, 0.2,
+        0, 0, 15,
+        2, 0, 15,
+        2, 2, 15,
+        0, 2, 15,
+        0, 0, -1,            !end of the contour
+        0.2, 0.2, 15,
+        1.8, 0.2, 15,
+        1.0, 0.9, 15,
+        0.2, 0.2, -1,        !end of first hole
+        0.2, 1.8, 15,
+        1.8, 1.8, 15,
+        1.0, 1.1, 15,
+        0.2, 1.8, -1         !end of second hole</pre></div></div>
+			<hr/><a href="002.007.html#CPRISM__gdlcommand">Related in 3D Shapes</a><p>
+				<span class="bold"><strong>GDL Reference Guide</strong></span>
+			</p><p>
+				<span class="trademark">Copyright</span><sup>©</sup> 2021 by GRAPHISOFT, all rights reserved.
+				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+			</p></body></html>

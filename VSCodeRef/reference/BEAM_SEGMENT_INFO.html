@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>BEAM_SEGMENT_INFO</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlglobal"><table width="100%" id="BEAM_SEGMENT_INFO_gdlglobal" style="&#10;&#9;&#9;font-size: 90%;&#10;&#9;&#9;border-color: black;&#10;&#9;&#9;border-bottom-style: solid;&#10;&#9;&#9;border-bottom-width: 2pt;&#10;&#9;&#9;">
+					<tr><td style="width:37%"><b>BEAM_SEGMENT_INFO</b></td><td style="width:63%">dictionary, contains all the Beam Segments' geometric settings which can determine the availability of other global variables, and further Beam Segment geometric data. Not available in parameter and property scripts.</td></tr>
+					<tr><td colspan="2" style="padding-left:1em; font-style: italic">
+						<p>
+							When placed on a Beam Segment, BEAM_SEGMENT_INFO.segments[BEAM_SEGMENT_INDEX] contains the information about the labeled segment.
+						</p>
+						<div class="itemizedlist"><ul class="itemizedlist"><li class="listitem"><p>
+									<code class="literal">.segments[n].curvature</code>: axis curvature (integer): 0 - straight, 1 - horizontally curved, 2 - vertically curved
+								</p></li><li class="listitem"><p>
+									<code class="literal">.segments[n].tapered</code>: (integer): 0 - uniform cross-section, 1 - tapered cross-section
+								</p></li><li class="listitem"><p>
+									<code class="literal">.segments[n].refLineLength</code>: 3D length of the beam segment reference line (length)
+								</p></li><li class="listitem"><p>
+									<code class="literal">.segments[n].crossSection{}</code>: (dictionary) cross-section data of segment
+								</p></li><li class="listitem"><p>
+									<code class="literal">.segments[n].crossSection.type</code>: (integer) cross-section type: 1 - rectangular, 2 - circular, 3 - complex profile
+								</p></li><li class="listitem"><p>
+									<code class="literal">.segments[n].crossSection.startWidth</code>: (length) bounding cross-section width of the start of the segment. The direction of the segment is defined by its reference line.
+								</p></li><li class="listitem"><p>
+									<code class="literal">.segments[n].crossSection.startHeight</code>: (length) bounding cross-section height of the start of the segment. The direction of the segment is defined by its reference line.
+								</p></li><li class="listitem"><p>
+									<code class="literal">.segments[n].crossSection.endWidth</code>: (length) bounding cross-section width of the end of the segment. The direction of the segment is defined by its reference line.
+								</p></li><li class="listitem"><p>
+									<code class="literal">.segments[n].crossSection.endHeight</code>: (length) bounding cross-section height of the end of the segment. The direction of the segment is defined by its reference line.
+								</p></li></ul></div>
+						<p>
+							</p><div class="informaltable"><table border="1"><colgroup><col width="120"/><col width="120"/><col width="120"/></colgroup><tbody><tr><td style="text-align: center"><img src="Images/GDL_Images/GDL_CheckIcon.png" alt="Images/GDL_Images/GDL_CheckIcon.png"/> Beam Segment (28)</td><td style="text-align: center"><img src="Images/GDL_Images/GDL_CheckIcon.png" alt="Images/GDL_Images/GDL_CheckIcon.png"/> Single-segment Beam (12)</td><td style="text-align: center"><img src="Images/GDL_Images/GDL_CheckIcon.png" alt="Images/GDL_Images/GDL_CheckIcon.png"/> Multi-segment Beam (12)</td></tr></tbody></table></div><p>
+						</p>
+						<p>
+							<span class="italic">Compatibility: introduced in ARCHICAD 23.</span>
+						</p>
+					</td></tr>
+				</table><hr/><a href="002.015.html#BEAM_SEGMENT_INFO_gdlglobal">Related in Miscellaneous</a><p>
+				<span class="bold"><strong>GDL Reference Guide</strong></span>
+			</p><p>
+				<span class="trademark">Copyright</span><sup>©</sup> 2021 by GRAPHISOFT, all rights reserved.
+				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+			</p></body></html>

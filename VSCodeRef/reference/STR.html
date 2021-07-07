@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>STR</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="STR_gdlcommand">STR</h3>
+					
+					<pre class="programlisting"><b id="STR_keyword_2.13.5.9.2.4.1">STR</b> (numeric_expression, length, fractions)</pre>
+					
+						<p>
+							This form of the function creates a string from the current value of the numeric expression.
+							The minimum number for numerical characters in the string is length, while fractions represents the numbers following the floating point.
+							If the converted value has more than length characters, it is expanded as required.
+							If it has fewer characters, it is padded on the left (length &gt; 0) or on the right (length &lt; 0).
+						</p>
+						
+							<pre class="programlisting">length &gt;= -100, length &lt;= 100
+fractions &lt;= 20, fractions &lt; length</pre>
+						
+					
+					<div class="example"><a id="id535333"/><p class="title"><b>Example:
+</b></p><div class="example-contents"><pre class="programlisting">a=4.5
+b=2.345
+TEXT2 0, 2, STR(a, 8, 2)   ! 4.50
+TEXT2 0, 1, STR(b, 8, 2)   ! 2.34
+TEXT2 0, 0, STR(a*b, 8, 2) ! 10.55</pre></div></div>
+					<pre class="programlisting"><b id="STR_keyword_2.13.5.9.2.10.1">STR</b> (format_string, numeric_expression)</pre>
+					
+						<p><span class="italic">This form is deprecated, use <a class="xref" href="reference/STR2.html">the STR{2} command</a>.</span></p>
+						<p>
+							In this form the format_string can either be a variable or a constant.
+							If the format is empty, it is interpreted as meters, with an accuracy of three decimals (displaying 0s).
+							Using extra accuracy flags can give incorrect results.
+						</p>
+					
+				<hr/><a href="002.013.html#STR_gdlcommand">Related in Expressions and Functions</a><p>
+				<span class="bold"><strong>GDL Reference Guide</strong></span>
+			</p><p>
+				<span class="trademark">Copyright</span><sup>©</sup> 2021 by GRAPHISOFT, all rights reserved.
+				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+			</p></body></html>

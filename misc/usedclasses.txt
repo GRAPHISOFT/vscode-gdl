@@ -1,0 +1,104 @@
+--------------------
+GDL syntax tree
+--------------------
+
++ are used in VsCode default themes, only child uses for gdl
+- are used in VsCode default themes, unused for gdl
+o used for gdl (eg. constant.character.escape.gdl)
+  blank leaves are unused
+
+										light		dark		examples
+
+o	editor.background					#ffffff		#1e1e1e
+o	editor.foreground					#000000		#d4d4d4
+
+
++	comment.
+o		line.gdl						#5c7a52 I	#8fad85 I	!
+
+
+	constant.
++			escape
+o				gdl						#777777		#878787		\n, \t
++		numeric.
+o			imperial.gdl				#09885a		#85e0bf		15"-5'
+o			metric.gdl					#0088ff		#add6eb		45.146, 3.4E-009
+
+
+	entity
+		name
++			function
+o				gdl						#990000 B	#d6c25c B	"subroutine":, 123:, "macro", GUID
+
+
++	invalid.
+o		deprecated.gdl					#f7ab94		#6d2008		deprecated functions, globals
+o		illegal.gdl						#f7ab94 BIU	#6d2008 BIU	0ab, function a
+
+
+-	keyword
+o		incomplete.gdl					#f7ab94 BIU	#6d2008	BIU	function a
+-		control
+o			flow.gdl					#000088 B	#ffffff B	for, if, return, group, paragraph...
+		dd
+o			basic.gdl					#a73818		#cc7c66		line...
+o			hotedit.gdl					#a73818		#cc7c66		hotspot2...
+o			symbol.gdl					#a73818		#cc7c66		fragment2, project2
+o			text.gdl					#a73818		#cc7c66		text2
+o			transform.gdl				#a73818 B	#cc7c66	B	add2...
+		ddd
+o			basic.gdl					#d07504		#e0a052		block...
+o			cut.gdl						#000088 B	#ffffff	B	cutplane...
+o			complex.gdl					#d07504		#e0a052		slab_...
+o			hotedit.gdl					#d07504		#e0a052		hotspot...
+o			nurbs.gdl					#d07504		#e0a052		nurbs...
+o			planar.gdl					#d07504		#e0a052		lin_...
+o			primitive.gdl				#d07504		#e0a052		vert...
+o			prism.gdl					#d07504		#e0a052		prism_...
+o			poly.gdl					#d07504		#e0a052		tube...
+o			render.gdl					#d07504		#e0a052		light, picture, binary
+o			seo.gdl						#d07504		#e0a052		addgroup...
+o			text.gdl					#d07504		#e0a052		text...
+o			transform.gdl				#d07504 B	#e0a052	B	add...
+o		memory.gdl						#0088ff		#b3cee6		dim, put, vardim...
+o		migration.gdl					#8c5820		#c9a982		newparameter...
+o		style.gdl						#008800		#d9f7d3		pen, shadow, resol...
+o		transform.gdl					#000000 B	#d4d4d4	B	del, ntr
++		operator
+o			gdl							#0088ff		#b3cee6		+, -...
+o		parameter.gdl					#d07504		#fb9e2d		values, lock, range...
+o		properties.gdl					#8c5820		#c9a982		descriptor...
+o		storage.gdl						#8c5820		#c9a982		print, open, call...
+		other
+o			gdl							#000088		#ffffff		[] int, str, sin...
+o		ui.gdl							#a63093		#c982be		ui_infield...
+
+
+	meta.
+		gdl
+o			arrayitem					#000000		#d4d4d4		[inside]
+o			grouping					#000000		#d4d4d4		(inside)
+
+
+-	string
+		quoted
+o			double.gdl					#990000		#e49181		'`´’‘
+o			single.gdl					#df1178 I	#f0758a I	"“”
+
+
+	support
+		constant
+o			gdl							#3385cc B	#709cc2		globals, fixed name read-only pars		
+-		function
+o			gdl							#3385cc B	#709cc2		request strings, app query strings, requests, appquery, libraryglobal
+-		variable
+o			gdl							#3385cc B	#709cc2		autotexts 
+
+
+-	variable
+o		gdl								#000000		#d4d4d4		variables
+		other
+o			temp.gdl					#555555	I	#ababab		_variables
+o			const.gdl					#0088ff		#b3cee6		VARIABLES
++		language
+o			gdl							#000088		#d2e8f3		A, B, ZZYZX, fixed name pars read/read-write by AC, add-on pars, default, all, custom, pi, ui_next..., beams...

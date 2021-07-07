@@ -1,0 +1,12 @@
+**/node_modules/**
+**/package-lock.json
+**/images/unused/**
+**/.vscode
+**/src/**
+**/test/**
+**/out/*.map
+**/tsconfig.json
+**/tslint.json
+**/.vscodeignore.txt
+**/*.code-workspace
+*.vsix

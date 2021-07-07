@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>NURBSFACE</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="NURBSFACE_gdlcommand">NURBSFACE</h3>
+					
+					<pre class="programlisting"><b id="NURBSFACE_keyword_2.7.9.17.7.4.1">NURBSFACE</b> n, surface, tolerance,
+								trim1, trim2, ..., trimn</pre>
+					
+						<p>
+							Face of a NURBS body.
+							Different from any polygon created by <a class="xref" href="reference/PGON.html">the PGON command</a>, indexed separately from those.
+							Can be used in NURBS bodies only, excluding planar-face bodies.
+						</p>
+						<div style="margin-left: 1em">
+							<div style="text-indent: -1em"><code><b>n: </b></code>number of bounding edges (including optional hole-separator zeros).</div>
+						</div>
+						<div style="margin-left: 1em">
+							<div style="text-indent: -1em"><code><b>surface: </b></code>gdl-index of a NURBS surface supporting the face.
+								Positive index, orientation of face is always identical to the orientation of surface.</div>
+						</div>
+						<div style="margin-left: 1em">
+							<div style="text-indent: -1em"><code><b>trimi: </b></code>gdl-index of NURBS trim bounding the face.</div>
+							<div class="itemizedlist"><ul class="itemizedlist"><li class="listitem"><p>The trims are listed in a counter-clocwise (mathematical positive) order on the surface for the outer contour loop and clockwise (negative) for hole contour loop(s).</p></li><li class="listitem"><p>May be zero, which indicates end of contour (hole-separator).</p></li><li class="listitem"><p>Negative index means trim and the contour (of face) have opposite orientation.</p></li></ul></div>
+						</div>
+						<div style="margin-left: 1em">
+							<div style="text-indent: -1em"><code><b>tolerance: </b></code>if negative, tolerance will be some predefined default.</div>
+						</div>
+						<p>
+							The trims must connect at common vertices: the end vertex of a trim is the same as the begin vertex of the next trim in the face.
+							(The vertices of a trim are the vertices of the edge of the trim for a non-singular trim.)
+						</p>
+						<p>
+							The consecutive trims - as 2D curves - also connect in the domain (parameter space) of the face, defining one or more closed contour loops on it.
+							The first loop is always an outer loop which separates an infinite outer and a finite inner region on the plane.
+							The potential subsequent loops are hole contours.
+						</p>
+						<p>
+							The 2D curve of each trim should completely lie inside the usable domain of the surface of the face and should not intersect itself or curves of other trims of the face.
+							Each trim must be used in only one face.
+						</p>
+						<p>
+							The material and section attributes of a face are determined by the last MATERIAL and <a class="xref" href="reference/SECT_ATTRS.html"><code>SECT_ATTRS</code></a> (or SECT_FILL) statements respectively.
+							The color of the edges inside the face created for polygonal segmentations is defined by the last <a class="xref" href="reference/PEN.html"><code>PEN</code></a> statement.
+							This is practically visible on silhouettes coming from the internal of this face.
+						</p>
+					
+				<hr/><a href="002.007.html#NURBSFACE_gdlcommand">Related in 3D Shapes</a><p>
+				<span class="bold"><strong>GDL Reference Guide</strong></span>
+			</p><p>
+				<span class="trademark">Copyright</span><sup>©</sup> 2021 by GRAPHISOFT, all rights reserved.
+				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+			</p></body></html>

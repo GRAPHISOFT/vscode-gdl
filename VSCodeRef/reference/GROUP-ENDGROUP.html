@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>GROUP - ENDGROUP</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="GROUP-ENDGROUP_gdlcommand">GROUP - ENDGROUP</h3>
+				
+				<pre class="programlisting"><b id="GROUP_keyword_2.7.12.20.4.1">GROUP</b> "name"
+    [statement1 ... statementn]
+<b id="ENDGROUP_keyword_2.7.12.20.4.3">ENDGROUP</b></pre>
+				
+					<p>
+						Group definition. All bodies between the corresponding GROUP - ENDGROUP statements will be part of the "name" group.
+						Groups are not actually generated (placed), they can be used in group operations or placed explicitly using <a class="xref" href="reference/PLACEGROUP.html">the PLACEGROUP command</a>.
+						Group definitions cannot be nested, but macro calls containing group definitions and PLACEGROUP commands using other groups can be included.
+					</p>
+					<p>
+						Group names must be unique inside the current script.
+						Transformations, cutplanes outside the group definition have no effect on the group parts;
+						transformations, cutplanes used inside have no effect on the bodies outside the definition.
+						Group definitions are transparent to attribute DEFINEs and SETs (pens, materials, fills);
+						attributes defined/set before the definition and those defined/set inside the definition are all effective.
+					</p>
+				
+			<hr/><a href="002.007.html#GROUP-ENDGROUP_gdlcommand">Related in 3D Shapes</a><p>
+				<span class="bold"><strong>GDL Reference Guide</strong></span>
+			</p><p>
+				<span class="trademark">Copyright</span><sup>©</sup> 2021 by GRAPHISOFT, all rights reserved.
+				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+			</p></body></html>

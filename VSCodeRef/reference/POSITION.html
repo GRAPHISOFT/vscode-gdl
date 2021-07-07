@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>POSITION</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="POSITION_gdlcommand">POSITION</h3>
+				
+				<pre class="programlisting"><b id="POSITION_keyword_2.12.3.12.4.1">POSITION</b> position_keyword</pre>
+				
+					<p>Effective only in the Component List.</p>
+					<p>
+						Changes only the type of the element the following descriptors and components are associated to.
+						If there are no such directives in the Properties script, descriptors and components will be listed with their default element types.
+					</p>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>position_keyword: </b></code>keywords are the following:</div>
+						<div><code>WALLS</code></div>
+						<div><code>COLUMNS</code></div>
+						<div><code>BEAMS</code></div>
+						<div><code>DOORS</code></div>
+						<div><code>WINDOWS</code></div>
+						<div><code>OBJECTS</code></div>
+						<div><code>CEILS</code></div>
+						<div><code>PITCHED_ROOFS</code></div>
+						<div><code>LIGHTS</code></div>
+						<div><code>HATCHES</code></div>
+						<div><code>ROOMS</code></div>
+						<div><code>MESHES</code></div>
+					</div>
+					<p>
+						A directive remains valid for all succeeding DESCRIPTORs and COMPONENTs until the next directive is ascribed.
+						A script can include any number of directives.
+					</p>
+				
+				<div class="example"><a id="id525515"/><p class="title"><b>Example:
+</b></p><div class="example-contents"><pre class="programlisting">DESCRIPTOR "\tPainted box.\n\t Properties:\n\
+\t\t - swinging doors\n\
+\t\t - adjustable height\n\
+\t\t - scratchproof"
+REF DESCRIPTOR "0001"
+s = SURFACE3D () !wardrobe surface
+COMPONENT "glue", 1.5, "kg"
+COMPONENT "handle", 2*c, "nb" !c number of doors
+COMPONENT "paint", 0.5*s, "kg"
+POSITION WALLS
+REF COMPONENT "0002"</pre></div></div>
+			<hr/><a href="002.012.html#POSITION_gdlcommand">Related in Non-Geometric Scripts</a><p>
+				<span class="bold"><strong>GDL Reference Guide</strong></span>
+			</p><p>
+				<span class="trademark">Copyright</span><sup>©</sup> 2021 by GRAPHISOFT, all rights reserved.
+				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+			</p></body></html>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>PICTURE</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="PICTURE_gdlcommand">PICTURE</h3>
+				
+				<pre class="programlisting"><b id="PICTURE_keyword_2.7.6.3.4.1">PICTURE</b> expression, a, b, mask</pre>
+				
+					<p>A picture element for photorendering.</p>
+					<div style="text-align: center"><img src="Images/GDL_Images/3Dshapes_picture.png" style="text-align: middle" alt="Images/GDL_Images/3Dshapes_picture.png"/></div>
+					<p>
+						A string type expression means a file name, a numeric expression or the index of a picture stored in the library part.
+						A 0 index is a special value that refers to the preview picture of the library part.
+						Other pictures can only be stored in library parts when saving the project or selected elements containing pictures as GDL Objects.
+					</p>
+					<p>
+						Indexed picture reference cannot be used in the MASTER_GDL script when attributes are merged into the current attribute set.
+						The image is fitted on a rectangle treated as a RECT in any other 3D projection method.
+					</p>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>mask: </b></code>alpha + distortion</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>alpha: </b></code>alpha channel control.</div>
+						<div><code>0: </code>do not use alpha channel; picture is a rectangle,</div>
+						<div><code>1: </code>use alpha channel; parts of the picture may be transparent.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>distortion: </b></code>distortion control.</div>
+						<div><code>0: </code>fit the picture into the given rectangle,</div>
+						<div><code>2: </code>fit the picture in the middle of the rectangle using the natural aspect ratio of the picture,</div>
+						<div><code>4: </code>fill the rectangle with the picture in a central position using natural aspect ratio of the picture.</div>
+					</div>
+					<div class="informaltable"><table border="0"><colgroup><col/><col/><col/></colgroup><tbody><tr><td style="text-align: center">
+										distortion=0
+									</td><td style="text-align: center">
+										distortion=2
+									</td><td style="text-align: center">
+										distortion=4
+									</td></tr><tr><td style="text-align: center">
+										<div style="text-align: center"><img src="Images/GDL_Images/3Dshapes_picture_distortion.png" style="text-align: middle" alt="Images/GDL_Images/3Dshapes_picture_distortion.png"/></div>
+									</td><td style="text-align: center">
+										<div style="text-align: center"><img src="Images/GDL_Images/3Dshapes_picture_fillrect1.png" style="text-align: middle" alt="Images/GDL_Images/3Dshapes_picture_fillrect1.png"/></div>
+									</td><td style="text-align: center">
+										<div style="text-align: center"><img src="Images/GDL_Images/3Dshapes_picture_fillrect2.png" style="text-align: middle" alt="Images/GDL_Images/3Dshapes_picture_fillrect2.png"/></div>
+									</td></tr></tbody></table></div>
+				
+			<hr/><a href="002.007.html#PICTURE_gdlcommand">Related in 3D Shapes</a><p>
+				<span class="bold"><strong>GDL Reference Guide</strong></span>
+			</p><p>
+				<span class="trademark">Copyright</span><sup>©</sup> 2021 by GRAPHISOFT, all rights reserved.
+				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+			</p></body></html>

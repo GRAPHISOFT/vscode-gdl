@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>SPLIT</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="SPLIT_gdlcommand">SPLIT</h3>
+					
+					<pre class="programlisting"><b id="SPLIT_keyword_2.13.5.9.4.4.1">SPLIT</b> (string, format, variable1 [, variable2, ..., variablen])</pre>
+					
+						<p>
+							Splits the string parameter according to the format in one or more numeric or string parts.
+							The split process stops when the first non-matching part is encountered. Returns the number of successfully read values (integer).
+						</p>
+						<div style="margin-left: 1em">
+							<div style="text-indent: -1em"><code><b>string: </b></code>the string to be split.</div>
+						</div>
+						<div style="margin-left: 1em">
+							<div style="text-indent: -1em"><code><b>format: </b></code>
+								any combination of constant strings, %s, %n and %^n -s.
+								Parts in the string must fit the constant strings, %s denotes any string value delimited by spaces or tabs,
+								while %n or %^n denotes any numeric value. If the '^' flag is present, current system settings for decimal separator and
+								digit grouping characters are taken into consideration when matching the actual numerical value.
+							</div>
+						</div>
+						<div style="margin-left: 1em">
+							<div style="text-indent: -1em"><code><b>variablei: </b></code>names of the variables to store the split string parts.</div>
+						</div>
+					
+					<div class="example"><a id="id535742"/><p class="title"><b>Example:
+</b></p><div class="example-contents"><pre class="programlisting">ss = "3 pieces 2x5 beam"
+n = SPLIT (ss, "%n pieces %nx%n %s", num, ss1, size1, ss2, size2, name)
+IF n = 6 THEN
+    PRINT num, ss1, size1, ss2, size2, name ! 3 pieces 2 x 5 beam
+ELSE
+    PRINT "ERROR"
+ENDIF</pre></div></div>
+				<hr/><a href="002.013.html#SPLIT_gdlcommand">Related in Expressions and Functions</a><p>
+				<span class="bold"><strong>GDL Reference Guide</strong></span>
+			</p><p>
+				<span class="trademark">Copyright</span><sup>©</sup> 2021 by GRAPHISOFT, all rights reserved.
+				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+			</p></body></html>

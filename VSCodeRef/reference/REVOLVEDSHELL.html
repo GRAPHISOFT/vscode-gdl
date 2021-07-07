@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>REVOLVEDSHELL</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="REVOLVEDSHELL_gdlcommand">REVOLVEDSHELL</h3>
+				
+				<pre class="programlisting"><b id="REVOLVEDSHELL_keyword_2.7.5.52.4.1">REVOLVEDSHELL</b> topMat, bottomMat, sideMat_1, sideMat_2, sideMat_3, sideMat_4,
+        defaultMat,
+        n, offset, thickness, flipped, trimmingBody, alphaOffset, alpha,
+        preThickenTran_11, preThickenTran_12, preThickenTran_13, preThickenTran_14,
+        preThickenTran_21, preThickenTran_22, preThickenTran_23, preThickenTran_24,
+        preThickenTran_31, preThickenTran_32, preThickenTran_33, preThickenTran_34,
+        x_1, y_1, s_1,
+        ...
+        x_n, y_n, s_n</pre>
+				
+					<p>Surface created by rotating a polyline defined in the x-y plane around the x axis, then adding thickness to it.</p>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>topMat, bottomMat, sideMat_1, sideMat_2, sideMat_3, sideMat_4: </b></code>Materials on the top, bottom and four sides of the object.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>defaultMat: </b></code>
+							the numeric index of the "inner" material of the object.
+							This material becomes visible at cut surfaces, e.g., if the object is cut by a plane.
+						</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>n: </b></code>number of profile base polyline vertices.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>offset: </b></code>an offset for the thickness of the shell. Cannot be negative.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>thickness: </b></code>the thickness of the shell.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>flipped: </b></code></div>
+						<div><code>1: </code>if the shell should be flipped,</div>
+						<div><code>0: </code>otherwise. </div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>trimmingBody: </b></code></div>
+						<div><code>1: </code>if the shell is to be closed for trimming purposes,</div>
+						<div><code>0: </code>otherwise. </div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>alphaOffset: </b></code>the sweep start angle.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>alpha: </b></code>the sweep angle length in degrees, may be negative.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>preThickenTran_i: </b></code>a transformation executed before thickening. See <a class="xref" href="reference/XFORM.html">the XFORM command</a> for the meaning of parameters.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>x_i, y_i, s_i: </b></code>
+							X and Y coordinates and status values for the base profile polyline. See <a class="xref" href="reference/EXTRUDE.html">the EXTRUDE command</a> for details.
+							The visibility of the sides cannot be controlled with the status.
+						</div>
+					</div>
+				
+			<hr/><a href="002.007.html#REVOLVEDSHELL_gdlcommand">Related in 3D Shapes</a><p>
+				<span class="bold"><strong>GDL Reference Guide</strong></span>
+			</p><p>
+				<span class="trademark">Copyright</span><sup>©</sup> 2021 by GRAPHISOFT, all rights reserved.
+				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+			</p></body></html>

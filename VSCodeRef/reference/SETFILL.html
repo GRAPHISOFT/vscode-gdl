@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>[SET] FILL</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="SETFILL_gdlcommand">[SET] FILL</h3>
+					
+					<pre class="programlisting">[<b id="SET_keyword_2.11.3.5.3.4.2">SET</b>] <b id="FILL_keyword_2.11.3.5.3.4.4">FILL</b> name_string</pre>
+					<pre class="programlisting">[<b id="SET_keyword_2.11.3.5.3.6.2">SET</b>] <b id="FILL_keyword_2.11.3.5.3.6.4">FILL</b> index</pre>
+					
+						<p>All the 2D polygons generated afterwards will represent that fill until the next SET FILL statement.</p>
+						<p>
+							The index is a constant referring to a fill stack in the internal data structure.
+							This stack is modified during GDL analysis and can also be modified from within the program.
+							The use of the index instead of the fill name is only recommended with the prior use of the <a class="xref" href="reference/IND.html"><code>IND</code></a> function.
+						</p>
+						<p>
+							<span class="italic">Default:</span>
+						</p>
+						<pre class="programlisting">SET FILL 0</pre>
+						<p>i.e., empty fill, if there is no SET FILL statement in the script.</p>
+					
+				<hr/><a href="002.011.html#SETFILL_gdlcommand">Related in Attributes</a><p>
+				<span class="bold"><strong>GDL Reference Guide</strong></span>
+			</p><p>
+				<span class="trademark">Copyright</span><sup>©</sup> 2021 by GRAPHISOFT, all rights reserved.
+				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+			</p></body></html>

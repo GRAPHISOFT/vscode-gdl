@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>UI_LISTFIELD</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="UI_LISTFIELD_gdlcommand">UI_LISTFIELD</h3>
+				
+				<pre class="programlisting"><b id="UI_LISTFIELD_keyword_2.12.5.29.4.1">UI_LISTFIELD</b> fieldID, x, y, width, height [, iconFlag [, description_header [, value_header]]]</pre>
+				
+					<p>
+						Generates a control for the parameter input as a scrollable list containing an arbitrary number of rows, with the following columns:
+						icon, description and input field for the parameter value.
+						Lines of the list can be defined with the UI_LISTITEM command. UI_LISTFIELD and UI_LISTITEM definitions can be scripted in an arbitrary order.
+						Empty listfields (with no list items) are not displayed.
+					</p>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>fieldID: </b></code>
+							the unique identifier of the listfield. This ID also used in the UI_LISTITEM commands specifies the listfield the listitems belong to.
+							Duplicates within a user interface script are not allowed.
+						</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>x, y: </b></code>
+							position of the listfield's top left corner.
+						</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>width, height: </b></code>
+							width and height in pixels.
+						</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>iconFlag: </b></code></div>
+							<p> <code class="literal">iconFlag = 0:</code> icon column is not generated for this listfield.</p>
+							<p> <code class="literal">iconFlag = 1:</code> icon column is generated for this listfield (default value if not specified).</p>
+					</div>
+					<p>
+						If the Custom Settings panel has only one control and this control is a listfield, the x, y, width, height parameters have no effect.
+						In this case the width of the listfield equals to the width of the Custom Settings panel.
+					</p>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>description_header: </b></code>
+							the title of the Description column.
+						</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>value_header: </b></code>
+							the title of the Value column.
+						</div>
+					</div>
+					<p>
+						If both description_header and value_header are empty strings or not specified, the listfield is generated without a header.
+						If the strings contain at least one space, the listfield is generated with an empty header.
+					</p>
+				
+			<hr/><a href="002.012.html#UI_LISTFIELD_gdlcommand">Related in Non-Geometric Scripts</a><p>
+				<span class="bold"><strong>GDL Reference Guide</strong></span>
+			</p><p>
+				<span class="trademark">Copyright</span><sup>©</sup> 2021 by GRAPHISOFT, all rights reserved.
+				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+			</p></body></html>

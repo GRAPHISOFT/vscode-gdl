@@ -1,0 +1,2619 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><title>Non-Geometric Scripts – GDL Reference Guide</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="index.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/><link rel="StyleSheet" href="dtree.css" type="text/css"/><script type="text/javascript" src="dtree.js">
+					 //Fake content to keep the end script tag 
+				</script></head><body onload="followLink(document.location.href);" onhashchange="followLink(document.location.href);" class="chapter"><div class="hoveringtoc"><script type="text/javascript">
+			//&lt;![CDATA[
+			GDLManualTOC = new dTree('GDLManualTOC');
+			GDLManualTOC.config.useIcons = false;
+			GDLManualTOC.add(0, -1, "GDL Reference Guide", "index.html","GDL Reference Guide");
+			
+			GDLManualTOC.add(1, 0, "General Overview", "002.004.html", "General Overview");
+			
+			GDLManualTOC.add(101, 1, "Starting Out", "002.004.html#StartingOut_section", "Starting Out");
+			
+			GDLManualTOC.add(102, 1, "Scripting", "002.004.html#Scripting_section", "Scripting");
+			
+			GDLManualTOC.add(103, 1, "3D Generation", "002.004.html#id492471", "3D Generation");
+			
+			GDLManualTOC.add(2, 0, "GDL Syntax", "002.005.html", "GDL Syntax");
+			
+			GDLManualTOC.add(201, 2, "Rules of GDL Syntax", "002.005.html#RulesofGDLSyntax_section", "Rules of GDL Syntax");
+			
+			GDLManualTOC.add(202, 2, "Statements", "002.005.html#Statements_section", "Statements");
+			
+			GDLManualTOC.add(203, 2, "Line", "002.005.html#Line_section", "Line");
+			
+			GDLManualTOC.add(204, 2, "Label", "002.005.html#Label_section", "Label");
+			
+			GDLManualTOC.add(205, 2, "Characters", "002.005.html#Characters_section", "Characters");
+			
+			GDLManualTOC.add(206, 2, "Strings", "002.005.html#Strings_section", "Strings");
+			
+			GDLManualTOC.add(207, 2, "Identifiers", "002.005.html#Identifiers_section", "Identifiers");
+			
+			GDLManualTOC.add(208, 2, "Variables", "002.005.html#Variables_section", "Variables");
+			
+			GDLManualTOC.add(209, 2, "Parameters", "002.005.html#Parameters_section", "Parameters");
+			
+			GDLManualTOC.add(210, 2, "Simple Types", "002.005.html#SimpleTypes_section", "Simple Types");
+			
+			GDLManualTOC.add(211, 2, "Derived Types", "002.005.html#DerivedTypes_section", "Derived Types");
+			
+			GDLManualTOC.add(212, 2, "Structured Types", "002.005.html#StructuredTypes_section", "Structured Types");
+			
+			GDLManualTOC.add(213, 2, "Conventions used in this book", "002.005.html#Conventionsusedinthisbook_section", "Conventions used in this book");
+			
+			GDLManualTOC.add(3, 0, "Coordinate Transformations", "002.006.html", "Coordinate Transformations");
+			
+			GDLManualTOC.add(301, 3, "2D Transformations", "002.006.html#id493161", "2D Transformations");
+			
+			GDLManualTOC.add(302, 3, "3D Transformations", "002.006.html#id493226", "3D Transformations");
+			
+			GDLManualTOC.add(303, 3, "Managing the Transformation Stack", "002.006.html#ManagingtheTransformationStack_section", "Managing the Transformation Stack");
+			
+			GDLManualTOC.add(4, 0, "3D Shapes", "002.007.html", "3D Shapes");
+			
+			GDLManualTOC.add(401, 4, "Basic Shapes", "002.007.html#BasicShapes_section", "Basic Shapes");
+			
+			GDLManualTOC.add(402, 4, "Planar Shapes in 3D", "002.007.html#PlanarShapesin3D_section", "Planar Shapes in 3D");
+			
+			GDLManualTOC.add(403, 4, "Shapes Generated from Polylines", "002.007.html#ShapesGeneratedfromPolylines_section", "Shapes Generated from Polylines");
+			
+			GDLManualTOC.add(404, 4, "Elements for Visualization", "002.007.html#ElementsforVisualization_section", "Elements for Visualization");
+			
+			GDLManualTOC.add(405, 4, "3D Text Elements", "002.007.html#id507009", "3D Text Elements");
+			
+			GDLManualTOC.add(406, 4, "Primitive Elements", "002.007.html#PrimitiveElements_section", "Primitive Elements");
+			
+			GDLManualTOC.add(407, 4, "NURBS Primitive Elements", "002.007.html#NurbsPrimitiveElements_section", "NURBS Primitive Elements");
+			
+			GDLManualTOC.add(40701, 407, "NURBS Face trimming", "002.007.html#NurbsFaceTrim_section", "NURBS Face trimming");
+			
+			GDLManualTOC.add(40702, 407, "NURBS Geometry Commands", "002.007.html#NurbsGeometryCommand_section", "NURBS Geometry Commands");
+			
+			GDLManualTOC.add(40703, 407, "NURBS Topology Commands", "002.007.html#NurbsTopologyCommand_section", "NURBS Topology Commands");
+			
+			GDLManualTOC.add(408, 4, "Point Clouds", "002.007.html#PointClouds_section", "Point Clouds");
+			
+			GDLManualTOC.add(409, 4, "Cutting in 3D", "002.007.html#Cuttingin3D_section", "Cutting in 3D");
+			
+			GDLManualTOC.add(410, 4, "Solid Geometry Commands", "002.007.html#SolidGeometryCommand_section", "Solid Geometry Commands");
+			
+			GDLManualTOC.add(411, 4, "Binary 3D", "002.007.html#Binary3D_section", "Binary 3D");
+			
+			GDLManualTOC.add(5, 0, "2D Shapes", "002.008.html", "2D Shapes");
+			
+			GDLManualTOC.add(501, 5, "Drawing Elements", "002.008.html#DrawingElements_section", "Drawing Elements");
+			
+			GDLManualTOC.add(502, 5, "Text Element", "002.008.html#TextElement_section", "Text Element");
+			
+			GDLManualTOC.add(503, 5, "Binary 2D", "002.008.html#Binary2D_section", "Binary 2D");
+			
+			GDLManualTOC.add(504, 5, "3D Projections in 2D", "002.008.html#id516136", "3D Projections in 2D");
+			
+			GDLManualTOC.add(505, 5, "Drawings in the List", "002.008.html#DrawingsintheList_section", "Drawings in the List");
+			
+			GDLManualTOC.add(6, 0, "Graphical Editing Using Hotspots", "002.009.html", "Graphical Editing Using Hotspots");
+			
+			GDLManualTOC.add(7, 0, "Status Codes", "002.010.html", "Status Codes");
+			
+			GDLManualTOC.add(701, 7, "Status Code Syntax", "002.010.html#StatusCodeSyntax_section", "Status Code Syntax");
+			
+			GDLManualTOC.add(702, 7, "Additional Status Codes", "002.010.html#AdditionalStatusCodes_section", "Additional Status Codes");
+			
+			GDLManualTOC.add(70201, 702, "Previous part of the polyline: current position and tangent is defined", "002.010.html#id517571", "Previous part of the polyline: current position and tangent is defined");
+			
+			GDLManualTOC.add(70202, 702, "Segment by absolute endpoint", "002.010.html#id517597", "Segment by absolute endpoint");
+			
+			GDLManualTOC.add(70203, 702, "Segment by relative endpoint", "002.010.html#id517600", "Segment by relative endpoint");
+			
+			GDLManualTOC.add(70204, 702, "Segment by length and direction", "002.010.html#id517622", "Segment by length and direction");
+			
+			GDLManualTOC.add(70205, 702, "Tangential segment by length", "002.010.html#id517618", "Tangential segment by length");
+			
+			GDLManualTOC.add(70206, 702, "Set start point", "002.010.html#id517640", "Set start point");
+			
+			GDLManualTOC.add(70207, 702, "Close polyline", "002.010.html#id517676", "Close polyline");
+			
+			GDLManualTOC.add(70208, 702, "Set tangent", "002.010.html#id517677", "Set tangent");
+			
+			GDLManualTOC.add(70209, 702, "Set centerpoint", "002.010.html#id517679", "Set centerpoint");
+			
+			GDLManualTOC.add(70210, 702, "Tangential arc to endpoint", "002.010.html#id517705", "Tangential arc to endpoint");
+			
+			GDLManualTOC.add(70211, 702, "Tangential arc by radius and angle", "002.010.html#id517719", "Tangential arc by radius and angle");
+			
+			GDLManualTOC.add(70212, 702, "Arc using centerpoint and point on the final radius", "002.010.html#id517720", "Arc using centerpoint and point on the final radius");
+			
+			GDLManualTOC.add(70213, 702, "Arc using centerpoint and angle", "002.010.html#id517730", "Arc using centerpoint and angle");
+			
+			GDLManualTOC.add(70214, 702, "Full circle using centerpoint and radius", "002.010.html#id517732", "Full circle using centerpoint and radius");
+			
+			GDLManualTOC.add(8, 0, "Attributes", "002.011.html", "Attributes");
+			
+			GDLManualTOC.add(801, 8, "Directives", "002.011.html#Directives_section", "Directives");
+			
+			GDLManualTOC.add(80101, 801, "Directives for 3D and 2D Scripts", "002.011.html#Directivesfor3Dand2DScripts_section", "Directives for 3D and 2D Scripts");
+			
+			GDLManualTOC.add(80102, 801, "Directives Used in 3D Scripts Only", "002.011.html#DirectivesUsedin3DScriptsOnly_section", "Directives Used in 3D Scripts Only");
+			
+			GDLManualTOC.add(80103, 801, "Directives Used in 2D Scripts Only", "002.011.html#DirectivesUsedin2DScriptsOnly_section", "Directives Used in 2D Scripts Only");
+			
+			GDLManualTOC.add(802, 8, "Inline Attribute Definition", "002.011.html#InlineAttributeDefinition_section", "Inline Attribute Definition");
+			
+			GDLManualTOC.add(80201, 802, "Materials", "002.011.html#Materials_section", "Materials");
+			
+			GDLManualTOC.add(80202, 802, "Fills", "002.011.html#Fills_section", "Fills");
+			
+			GDLManualTOC.add(80203, 802, "Line Types", "002.011.html#LineTypes_section", "Line Types");
+			
+			GDLManualTOC.add(80204, 802, "Text Styles and Text Blocks", "002.011.html#TextStylesandTextBlocks_section", "Text Styles and Text Blocks");
+			
+			GDLManualTOC.add(80205, 802, "Additional Data", "002.011.html#AdditionalData_section", "Additional Data");
+			
+			GDLManualTOC.add(803, 8, "External file dependence", "002.011.html#Externalfiledependence_section", "External file dependence");
+			
+			GDLManualTOC.add(9, 0, "Non-Geometric Scripts", "002.012.html", "Non-Geometric Scripts");
+			
+			GDLManualTOC.add(901, 9, "The Properties Script", "002.012.html#ThePropertiesScript_section", "The Properties Script");
+			
+			GDLManualTOC.add(902, 9, "The Parameter Script", "002.012.html#TheParameterScript_section", "The Parameter Script");
+			
+			GDLManualTOC.add(903, 9, "The User Interface Script", "002.012.html#TheUserInterfaceScript_section", "The User Interface Script");
+			
+			GDLManualTOC.add(904, 9, "The Forward Migration Script", "002.012.html#TheForwardMigrationScript_section", "The Forward Migration Script");
+			
+			GDLManualTOC.add(905, 9, "The Backward Migration Script", "002.012.html#TheBackwardMigrationScript_section", "The Backward Migration Script");
+			
+			GDLManualTOC.add(10, 0, "Expressions and Functions", "002.013.html", "Expressions and Functions");
+			
+			GDLManualTOC.add(1001, 10, "Expressions", "002.013.html#Expressions_section", "Expressions");
+			
+			GDLManualTOC.add(1002, 10, "Operators", "002.013.html#Operators_section", "Operators");
+			
+			GDLManualTOC.add(100201, 1002, "Arithmetical Operators", "002.013.html#ArithmeticalOperators_section", "Arithmetical Operators");
+			
+			GDLManualTOC.add(100202, 1002, "Relational Operators", "002.013.html#RelationalOperators_section", "Relational Operators");
+			
+			GDLManualTOC.add(100203, 1002, "Boolean Operators", "002.013.html#BooleanOperators_section", "Boolean Operators");
+			
+			GDLManualTOC.add(1003, 10, "Functions", "002.013.html#Functions_section", "Functions");
+			
+			GDLManualTOC.add(100301, 1003, "Arithmetical Functions", "002.013.html#ArithmeticalFunction_section", "Arithmetical Functions");
+			
+			GDLManualTOC.add(100302, 1003, "Circular Functions", "002.013.html#CircularFunctions_section", "Circular Functions");
+			
+			GDLManualTOC.add(100303, 1003, "Transcendental Functions", "002.013.html#TranscendentalFunctions_section", "Transcendental Functions");
+			
+			GDLManualTOC.add(100304, 1003, "Boolean Functions", "002.013.html#BooleanFunctions_section", "Boolean Functions");
+			
+			GDLManualTOC.add(100305, 1003, "Statistical Functions", "002.013.html#StatisticalFunctions_section", "Statistical Functions");
+			
+			GDLManualTOC.add(100306, 1003, "Bit Functions", "002.013.html#BitFunctions_section", "Bit Functions");
+			
+			GDLManualTOC.add(100307, 1003, "Special Functions", "002.013.html#SpecialFunctions_section", "Special Functions");
+			
+			GDLManualTOC.add(100308, 1003, "String Functions", "002.013.html#StringFunctions_section", "String Functions");
+			
+			GDLManualTOC.add(11, 0, "Control Statements", "002.014.html", "Control Statements");
+			
+			GDLManualTOC.add(1101, 11, "Flow Control Statements", "002.014.html#FlowControlStatements_section", "Flow Control Statements");
+			
+			GDLManualTOC.add(1102, 11, "Parameter Buffer Manipulation", "002.014.html#ParameterBufferManipulation_section", "Parameter Buffer Manipulation");
+			
+			GDLManualTOC.add(1103, 11, "Macro Objects", "002.014.html#MacroObjects_section", "Macro Objects");
+			
+			GDLManualTOC.add(1104, 11, "Output in an Alert Box or Report Window", "002.014.html#OutputinanAlertBox_section", "Output in an Alert Box or Report Window");
+			
+			GDLManualTOC.add(1105, 11, "File Operations", "002.014.html#FileOperations_section", "File Operations");
+			
+			GDLManualTOC.add(1106, 11, "Using Deterministic Add-Ons", "002.014.html#UsingDeterministicAdd-Ons_section", "Using Deterministic Add-Ons");
+			
+			GDLManualTOC.add(12, 0, "Miscellaneous", "002.015.html", "Miscellaneous");
+			
+			GDLManualTOC.add(1201, 12, "Global Variables", "002.015.html#GlobalVariables_section", "Global Variables");
+			
+			GDLManualTOC.add(120101, 1201, "Script compatibility", "002.015.html#GlobalParamScriptCompatibility_section", "Script compatibility");
+			
+			GDLManualTOC.add(120102, 1201, "General environment information", "002.015.html#Generalenvironmentinformation_section", "General environment information");
+			
+			GDLManualTOC.add(120103, 1201, "Story information", "002.015.html#Storyinformation_section", "Story information");
+			
+			GDLManualTOC.add(120104, 1201, "Fly-through information", "002.015.html#Fly-throughinformation_section", "Fly-through information");
+			
+			GDLManualTOC.add(120105, 1201, "General element parameters", "002.015.html#Generalelementparameters_section", "General element parameters");
+			
+			GDLManualTOC.add(120106, 1201, "Object, Lamp, Door, Window, Wall End, Skylight parameters", "002.015.html#id539632", "Object, Lamp, Door, Window, Wall End, Skylight parameters");
+			
+			GDLManualTOC.add(120107, 1201, "Object, Lamp, Door, Window, Wall End, Skylight, Curtain Wall Accessory parameters - available for listing and labels only", "002.015.html#id539806", "Object, Lamp, Door, Window, Wall End, Skylight, Curtain Wall Accessory parameters - available for listing and labels only");
+			
+			GDLManualTOC.add(120108, 1201, "Object, Lamp, Curtain Wall Accessory parameters - available for listing and labels only", "002.015.html#id539854", "Object, Lamp, Curtain Wall Accessory parameters - available for listing and labels only");
+			
+			GDLManualTOC.add(120109, 1201, "Object parameters", "002.015.html#id539882", "Object parameters");
+			
+			GDLManualTOC.add(120110, 1201, "Opening parameters - available for listing and labels only", "002.015.html#id537719", "Opening parameters - available for listing and labels only");
+			
+			GDLManualTOC.add(120111, 1201, "Opening symbol parameters", "002.015.html#id542696", "Opening symbol parameters");
+			
+			GDLManualTOC.add(120112, 1201, "Window, Door and Wall End parameters", "002.015.html#id542875", "Window, Door and Wall End parameters");
+			
+			GDLManualTOC.add(120113, 1201, "Window, Door parameters - available for listing and labels only", "002.015.html#id543173", "Window, Door parameters - available for listing and labels only");
+			
+			GDLManualTOC.add(120114, 1201, "Lamp parameters - available for listing and labels only", "002.015.html#id543289", "Lamp parameters - available for listing and labels only");
+			
+			GDLManualTOC.add(120115, 1201, "Marker parameters (Detail, Worksheet and Change Markers)", "002.015.html#id543294", "Marker parameters (Detail, Worksheet and Change Markers)");
+			
+			GDLManualTOC.add(120116, 1201, "Label parameters", "002.015.html#id543434", "Label parameters");
+			
+			GDLManualTOC.add(120117, 1201, "Wall parameters - available for Doors/Windows, listing and labels", "002.015.html#WallGlobals_section", "Wall parameters - available for Doors/Windows, listing and labels");
+			
+			GDLManualTOC.add(120118, 1201, "Wall parameters - available for listing and labels only", "002.015.html#id544250", "Wall parameters - available for listing and labels only");
+			
+			GDLManualTOC.add(120119, 1201, "Column parameters - available for listing and labels only", "002.015.html#ColumnGlobals_section", "Column parameters - available for listing and labels only");
+			
+			GDLManualTOC.add(120120, 1201, "Beam parameters - available for listing and labels only", "002.015.html#BeamGlobals_section", "Beam parameters - available for listing and labels only");
+			
+			GDLManualTOC.add(120121, 1201, "Slab parameters - available for listing and labels only", "002.015.html#SlabGlobals_section", "Slab parameters - available for listing and labels only");
+			
+			GDLManualTOC.add(120122, 1201, "Stair component parameters", "002.015.html#StairGlobals_section", "Stair component parameters");
+			
+			GDLManualTOC.add(12012201, 120122, "General stair variables - available for listing and labels", "002.015.html#StairGlobalsGeneral_section", "General stair variables - available for listing and labels");
+			
+			GDLManualTOC.add(12012202, 120122, "General tread variables - available for listing and labels", "002.015.html#TreadGlobalsGeneral_section", "General tread variables - available for listing and labels");
+			
+			GDLManualTOC.add(12012203, 120122, "General riser variables - available for listing and labels", "002.015.html#RiserGlobalsGeneral_section", "General riser variables - available for listing and labels");
+			
+			GDLManualTOC.add(12012204, 120122, "Stair structure variables - available for listing and labels", "002.015.html#StairStructureGlobalsGeneral_section", "Stair structure variables - available for listing and labels");
+			
+			GDLManualTOC.add(12012205, 120122, "Stair Model View Options variables", "002.015.html#StairGlobalsMVO_section", "Stair Model View Options variables");
+			
+			GDLManualTOC.add(12012206, 120122, "Stair 2D variables - available for floor plan representation only", "002.015.html#Stair2DGlobals_section", "Stair 2D variables - available for floor plan representation only");
+			
+			GDLManualTOC.add(1201220601, 12012206, "Stair grid variables", "002.015.html#Stair2DGridGlobals_section", "Stair grid variables");
+			
+			GDLManualTOC.add(1201220602, 12012206, "Stair walking line symbol variables", "002.015.html#Stair2DWalklineGlobals_section", "Stair walking line symbol variables");
+			
+			GDLManualTOC.add(1201220603, 12012206, "Stair break mark symbol variables", "002.015.html#Stair2DBreakmarkGlobals_section", "Stair break mark symbol variables");
+			
+			GDLManualTOC.add(1201220604, 12012206, "Rise and Run description variables", "002.015.html#Stair2DRiseRunDescGlobals_section", "Rise and Run description variables");
+			
+			GDLManualTOC.add(1201220605, 12012206, "Stair draining 2D variables", "002.015.html#Stair2DDrainExtGlobals_section", "Stair draining 2D variables");
+			
+			GDLManualTOC.add(1201220606, 12012206, "Stair structure 2D variables - Beam Structures", "002.015.html#StairStructure2DGlobalsGeneral_section", "Stair structure 2D variables - Beam Structures");
+			
+			GDLManualTOC.add(1201220607, 12012206, "Stair structure 2D variables - Monolithic Structure", "002.015.html#StairStructure2DGlobalsMonolith_section", "Stair structure 2D variables - Monolithic Structure");
+			
+			GDLManualTOC.add(1201220608, 12012206, "General 2D related variables", "002.015.html#Stair2DGeneralGlobals_section", "General 2D related variables");
+			
+			GDLManualTOC.add(12012207, 120122, "Stair 3D variables - available for 3D representation (and connecting viewpoints) only", "002.015.html#Stair3DGlobals_section", "Stair 3D variables - available for 3D representation (and connecting viewpoints) only");
+			
+			GDLManualTOC.add(1201220701, 12012207, "Stair riser 3D variables", "002.015.html#Stair3DRiserGlobals_section", "Stair riser 3D variables");
+			
+			GDLManualTOC.add(1201220702, 12012207, "Stair tread 2D-3D variables", "002.015.html#Stair3DTreadGlobals_section", "Stair tread 2D-3D variables");
+			
+			GDLManualTOC.add(1201220703, 12012207, "Stair structure variables", "002.015.html#StairStructureGlobals_section", "Stair structure variables");
+			
+			GDLManualTOC.add(120123, 1201, "Railing component parameters", "002.015.html#RailingGlobals_section", "Railing component parameters");
+			
+			GDLManualTOC.add(12012301, 120123, "General railing variables - available for listing and labels", "002.015.html#RailingGlobalsGeneral_section", "General railing variables - available for listing and labels");
+			
+			GDLManualTOC.add(12012302, 120123, "Railing 3D variables", "002.015.html#Railing3DGlobalsGeneral_section", "Railing 3D variables");
+			
+			GDLManualTOC.add(12012303, 120123, "Railing 2D variables", "002.015.html#Railing2DGlobalsGeneral_section", "Railing 2D variables");
+			
+			GDLManualTOC.add(120124, 1201, "Roof parameters - available for skylights, listing and labels", "002.015.html#RoofGlobals_section", "Roof parameters - available for skylights, listing and labels");
+			
+			GDLManualTOC.add(120125, 1201, "Roof parameters - available for listing and labels only", "002.015.html#id563683", "Roof parameters - available for listing and labels only");
+			
+			GDLManualTOC.add(120126, 1201, "Fill parameters - available for listing and labels only", "002.015.html#FillGlobals_section", "Fill parameters - available for listing and labels only");
+			
+			GDLManualTOC.add(120127, 1201, "Mesh parameters - available for listing and labels only", "002.015.html#MeshGlobals_section", "Mesh parameters - available for listing and labels only");
+			
+			GDLManualTOC.add(120128, 1201, "Curtain Wall component parameters", "002.015.html#CWComponentGlobals_section", "Curtain Wall component parameters");
+			
+			GDLManualTOC.add(120129, 1201, "Curtain Wall parameters - available for listing and labels only", "002.015.html#id564654", "Curtain Wall parameters - available for listing and labels only");
+			
+			GDLManualTOC.add(120130, 1201, "Curtain Wall Frame parameters", "002.015.html#CWFrameGlobals_section", "Curtain Wall Frame parameters");
+			
+			GDLManualTOC.add(12013001, 120130, "General Curtain Wall Frame variables - available for listing and labels only", "002.015.html#CWFrameGlobalsGeneral_section", "General Curtain Wall Frame variables - available for listing and labels only");
+			
+			GDLManualTOC.add(12013002, 120130, "Curtain Wall Frame 3D variables", "002.015.html#CWFrame3DGlobals_section", "Curtain Wall Frame 3D variables");
+			
+			GDLManualTOC.add(120131, 1201, "Curtain Wall Panel variables", "002.015.html#id565584", "Curtain Wall Panel variables");
+			
+			GDLManualTOC.add(120132, 1201, "Curtain Wall Panel parameters - available for listing and labels only", "002.015.html#id565628", "Curtain Wall Panel parameters - available for listing and labels only");
+			
+			GDLManualTOC.add(120133, 1201, "Curtain Wall Junction parameters - available for listing and labels only", "002.015.html#id565769", "Curtain Wall Junction parameters - available for listing and labels only");
+			
+			GDLManualTOC.add(120134, 1201, "Curtain Wall Accessory parameters - available for listing and labels only", "002.015.html#id565746", "Curtain Wall Accessory parameters - available for listing and labels only");
+			
+			GDLManualTOC.add(120135, 1201, "Migration parameters - available for migration scripts only", "002.015.html#id565806", "Migration parameters - available for migration scripts only");
+			
+			GDLManualTOC.add(120136, 1201, "Skylight parameters - available for listing and labels only", "002.015.html#id565814", "Skylight parameters - available for listing and labels only");
+			
+			GDLManualTOC.add(120137, 1201, "Common Parameters for Shells and Roofs - available for listing and labels only", "002.015.html#ShellGlobals_section", "Common Parameters for Shells and Roofs - available for listing and labels only");
+			
+			GDLManualTOC.add(120138, 1201, "Parameters for Morphs - available for listing and labels only", "002.015.html#MorphGlobals_section", "Parameters for Morphs - available for listing and labels only");
+			
+			GDLManualTOC.add(120139, 1201, "Free users’ globals", "002.015.html#id566808", "Free users’ globals");
+			
+			GDLManualTOC.add(120140, 1201, "Example usage of global variables", "002.015.html#id566962", "Example usage of global variables");
+			
+			GDLManualTOC.add(120141, 1201, "Deprecated Global Variables", "002.015.html#DeprecatedGlobals_section", "Deprecated Global Variables");
+			
+			GDLManualTOC.add(12014101, 120141, "Deprecated Beam/Column Global Variables - available for listing and labels only", "002.015.html#DeprecatedBeamColumnGlobals_section", "Deprecated Beam/Column Global Variables - available for listing and labels only");
+			
+			GDLManualTOC.add(12014102, 120141, "Deprecated Label Global Variables", "002.015.html#DeprecatedLabelGlobals_section", "Deprecated Label Global Variables");
+			
+			GDLManualTOC.add(12014103, 120141, "Deprecated Curtain Wall Global Variables - available for listing and labels only", "002.015.html#DeprecatedCWGlobals_section", "Deprecated Curtain Wall Global Variables - available for listing and labels only");
+			
+			GDLManualTOC.add(12014104, 120141, "Old Global Variables", "002.015.html#id567504", "Old Global Variables");
+			
+			GDLManualTOC.add(1202, 12, "Fix named optional parameters", "002.015.html#FixNameParameters_section", "Fix named optional parameters");
+			
+			GDLManualTOC.add(120201, 1202, "Parameters set by ARCHICAD", "002.015.html#ACSetParameters_section", "Parameters set by ARCHICAD");
+			
+			GDLManualTOC.add(12020101, 120201, "Parameters for D/W attributes (available for Door, Window, Label, Listing)", "002.015.html#DWAttributeParameters_section", "Parameters for D/W attributes (available for Door, Window, Label, Listing)");
+			
+			GDLManualTOC.add(1202010101, 12020101, "Floor plan display", "002.015.html#DWFloorPlanDisplay_section", "Floor plan display");
+			
+			GDLManualTOC.add(1202010102, 12020101, "Direction", "002.015.html#DWDirection_section", "Direction");
+			
+			GDLManualTOC.add(1202010103, 12020101, "Polygonal wall data", "002.015.html#PolyWallData_section", "Polygonal wall data");
+			
+			GDLManualTOC.add(1202010104, 12020101, "Hole position", "002.015.html#DWHolePosition_section", "Hole position");
+			
+			GDLManualTOC.add(1202010105, 12020101, "Anchor data", "002.015.html#DWAnchorData_section", "Anchor data");
+			
+			GDLManualTOC.add(12020102, 120201, "Parameters for WALL attributes (available for Door, Window, Label, Listing)", "002.015.html#WallAttributeParameters_section", "Parameters for WALL attributes (available for Door, Window, Label, Listing)");
+			
+			GDLManualTOC.add(1202010201, 12020102, "Floor plan display", "002.015.html#WallFloorPlanDisplay_section", "Floor plan display");
+			
+			GDLManualTOC.add(1202010202, 12020102, "Geometric data", "002.015.html#WallGeometric_section", "Geometric data");
+			
+			GDLManualTOC.add(12020103, 120201, "Parameters for COLUMN attributes (available for Label, Listing)", "002.015.html#ColumnAttributeParameters_section", "Parameters for COLUMN attributes (available for Label, Listing)");
+			
+			GDLManualTOC.add(1202010301, 12020103, "Floor plan display", "002.015.html#ColumnFloorPlanDisplay_section", "Floor plan display");
+			
+			GDLManualTOC.add(1202010302, 12020103, "Geometric data", "002.015.html#ColumnGeometric_section", "Geometric data");
+			
+			GDLManualTOC.add(12020104, 120201, "Parameters for BEAM attributes (available for Label, Listing)", "002.015.html#BeamAttributeParameters_section", "Parameters for BEAM attributes (available for Label, Listing)");
+			
+			GDLManualTOC.add(1202010401, 12020104, "Floor plan display", "002.015.html#BeamFloorPlanDisplay_section", "Floor plan display");
+			
+			GDLManualTOC.add(1202010402, 12020104, "Geometric data", "002.015.html#BeamGeometric_section", "Geometric data");
+			
+			GDLManualTOC.add(12020105, 120201, "Parameters for ROOF attributes (available for Label, Listing)", "002.015.html#RoofAttributeParameters_section", "Parameters for ROOF attributes (available for Label, Listing)");
+			
+			GDLManualTOC.add(1202010501, 12020105, "Floor plan display", "002.015.html#RoofFloorPlanDisplay_section", "Floor plan display");
+			
+			GDLManualTOC.add(12020106, 120201, "Door/Window Marker attributes", "002.015.html#DWMArkerAttributeParameters_section", "Door/Window Marker attributes");
+			
+			GDLManualTOC.add(12020107, 120201, "Detail/Worksheet Marker attributes", "002.015.html#DetailMArkerAttributes_section", "Detail/Worksheet Marker attributes");
+			
+			GDLManualTOC.add(12020108, 120201, "Drawing Title attributes", "002.015.html#DrawingTitleAttributes_section", "Drawing Title attributes");
+			
+			GDLManualTOC.add(12020109, 120201, "General running context", "002.015.html#GeneralRunningContext_section", "General running context");
+			
+			GDLManualTOC.add(12020110, 120201, "Room parameters (available for Zone Stamps)", "002.015.html#RoomParametersForZones_section", "Room parameters (available for Zone Stamps)");
+			
+			GDLManualTOC.add(12020111, 120201, "Stair related parameters", "002.015.html#StairACSet_section", "Stair related parameters");
+			
+			GDLManualTOC.add(1202011101, 12020111, "Flight / Landing Side Supported subtypes", "002.015.html#StairStringerACSet_section", "Flight / Landing Side Supported subtypes");
+			
+			GDLManualTOC.add(1202011102, 12020111, "Riser Component subtype", "002.015.html#RiserComponentACSet_section", "Riser Component subtype");
+			
+			GDLManualTOC.add(1202011103, 12020111, "Stair 2D Component subtypes", "002.015.html#Stair2DACSet_section", "Stair 2D Component subtypes");
+			
+			GDLManualTOC.add(120202, 1202, "Parameters set/read by ARCHICAD", "002.015.html#ACSetReadParameters_section", "Parameters set/read by ARCHICAD");
+			
+			GDLManualTOC.add(12020201, 120202, "Stair related parameters", "002.015.html#StairACSetRead_section", "Stair related parameters");
+			
+			GDLManualTOC.add(1202020101, 12020201, "Structure subtype", "002.015.html#StairStructureACSetRead_section", "Structure subtype");
+			
+			GDLManualTOC.add(120203, 1202, "Parameters read by ARCHICAD", "002.015.html#ACReadParameters_section", "Parameters read by ARCHICAD");
+			
+			GDLManualTOC.add(12020301, 120203, "Objects on Floor Plan", "002.015.html#ObjectOnFloorPlan_section", "Objects on Floor Plan");
+			
+			GDLManualTOC.add(1202030101, 12020301, "Floor plan cutting of planar elements (i.e. skylight object, roof accessory objects)", "002.015.html#FloorPlanCutting_section", "Floor plan cutting of planar elements (i.e. skylight object, roof accessory objects)");
+			
+			GDLManualTOC.add(12020302, 120203, "Door/Window objects", "002.015.html#DWObjects_section", "Door/Window objects");
+			
+			GDLManualTOC.add(12020303, 120203, "Custom Component Template", "002.015.html#CustomComponentTemp_section", "Custom Component Template");
+			
+			GDLManualTOC.add(12020304, 120203, "Stair related parameters", "002.015.html#StairFixNamedParams_section", "Stair related parameters");
+			
+			GDLManualTOC.add(1202030401, 12020304, "Structure subtype", "002.015.html#StairStructureACRead_section", "Structure subtype");
+			
+			GDLManualTOC.add(1202030402, 12020304, "Flight / Landing Under Supported subtype", "002.015.html#StairFlightUnderSupportACRead_section", "Flight / Landing Under Supported subtype");
+			
+			GDLManualTOC.add(1202030403, 12020304, "Flight Under Supported Cantilever / Landing Cantilever Supported subtypes", "002.015.html#StairCantileveredACRead_section", "Flight Under Supported Cantilever / Landing Cantilever Supported subtypes");
+			
+			GDLManualTOC.add(12020305, 120203, "Railing related parameters", "002.015.html#RailingFixNamedParams_section", "Railing related parameters");
+			
+			GDLManualTOC.add(1202030501, 12020305, "Railing Panel Component subtype", "002.015.html#RailingPanelNamedParams_section", "Railing Panel Component subtype");
+			
+			GDLManualTOC.add(1202030502, 12020305, "Railing Rail Component subtype", "002.015.html#RailingRailNamedParams_section", "Railing Rail Component subtype");
+			
+			GDLManualTOC.add(1202030503, 12020305, "Railing Post Component subtype", "002.015.html#RailingPostNamedParams_section", "Railing Post Component subtype");
+			
+			GDLManualTOC.add(1202030504, 12020305, "Railing End Component subtype", "002.015.html#RailingEndNamedParams_section", "Railing End Component subtype");
+			
+			GDLManualTOC.add(120204, 1202, "Parameters for Curtain Wall", "002.015.html#CurtainWallParameters_section", "Parameters for Curtain Wall");
+			
+			GDLManualTOC.add(12020401, 120204, "Curtain Wall Parameters set and read by ARCHICAD", "002.015.html#ACSetAndReadCWParameters_section", "Curtain Wall Parameters set and read by ARCHICAD");
+			
+			GDLManualTOC.add(1202040101, 12020401, "Curtain Wall Frame parameters", "002.015.html#CurtainWallFrameSetAndRead_section", "Curtain Wall Frame parameters");
+			
+			GDLManualTOC.add(12020402, 120204, "Curtain Wall Parameters set by ARCHICAD", "002.015.html#ACSetCWParameters_section", "Curtain Wall Parameters set by ARCHICAD");
+			
+			GDLManualTOC.add(1202040201, 12020402, "Curtain Wall Frame parameters", "002.015.html#CurtainWallFrameSet_section", "Curtain Wall Frame parameters");
+			
+			GDLManualTOC.add(1202040202, 12020402, "Curtain Wall Panel parameters", "002.015.html#CurtainWallPanelSet_section", "Curtain Wall Panel parameters");
+			
+			GDLManualTOC.add(1202040203, 12020402, "Curtain Wall Junction parameters", "002.015.html#CurtainWallJunctionSet_section", "Curtain Wall Junction parameters");
+			
+			GDLManualTOC.add(1202040204, 12020402, "Curtain Wall Accessory parameters", "002.015.html#CurtainWallAccessorySet_section", "Curtain Wall Accessory parameters");
+			
+			GDLManualTOC.add(1202040205, 12020402, "Curtain Wall Frame Deprecated parameters", "002.015.html#CurtainWallFrameDepreceatedSet_section", "Curtain Wall Frame Deprecated parameters");
+			
+			GDLManualTOC.add(12020403, 120204, "Curtain Wall Parameters read by ARCHICAD", "002.015.html#ACReadCWParameters_section", "Curtain Wall Parameters read by ARCHICAD");
+			
+			GDLManualTOC.add(1202040301, 12020403, "Curtain Wall Panel and Frame parameters", "002.015.html#CWPanelandFrameRead_section", "Curtain Wall Panel and Frame parameters");
+			
+			GDLManualTOC.add(1202040302, 12020403, "Curtain Wall Frame parameters", "002.015.html#CWFrameRead_section", "Curtain Wall Frame parameters");
+			
+			GDLManualTOC.add(1202040303, 12020403, "Curtain wall panel parameters", "002.015.html#CWPanelRead_section", "Curtain wall panel parameters");
+			
+			GDLManualTOC.add(120205, 1202, "Parameters for add-ons", "002.015.html#AddOnParameters_section", "Parameters for add-ons");
+			
+			GDLManualTOC.add(12020501, 120205, "Parameters of Skylight add-on", "002.015.html#SkylightAddOnParameters_section", "Parameters of Skylight add-on");
+			
+			GDLManualTOC.add(1202050101, 12020501, "Hole edge cut manipulation", "002.015.html#HoleEdgeCutManipulation_section", "Hole edge cut manipulation");
+			
+			GDLManualTOC.add(12020502, 120205, "Parameters of Corner Window add-on", "002.015.html#CornerWindowAddOnParameters_section", "Parameters of Corner Window add-on");
+			
+			GDLManualTOC.add(1202050201, 12020502, "Basic parameters of Corner Window objects", "002.015.html#CornerWindowBasicParameters_section", "Basic parameters of Corner Window objects");
+			
+			GDLManualTOC.add(1202050202, 12020502, "Wall skins data parameters of Corner Window objects (available from ARCHICAD 12)", "002.015.html#CornerWindowWallSkinParameters_section", "Wall skins data parameters of Corner Window objects (available from ARCHICAD 12)");
+			
+			GDLManualTOC.add(12020503, 120205, "Parameters of IFC add-on", "002.015.html#IFCAddOnParameters_section", "Parameters of IFC add-on");
+			
+			GDLManualTOC.add(1202050301, 12020503, "Common basic parameters of Door and Window objects", "002.015.html#IFCCommonBasicParameters_section", "Common basic parameters of Door and Window objects");
+			
+			GDLManualTOC.add(1202050302, 12020503, "Basic parameters of Door objects", "002.015.html#IFCDoorBasicParameters_section", "Basic parameters of Door objects");
+			
+			GDLManualTOC.add(1202050303, 12020503, "Basic parameters of Window objects", "002.015.html#IFCWindowBasicParameters_section", "Basic parameters of Window objects");
+			
+			GDLManualTOC.add(1202050304, 12020503, "Basic parameters of Transport Elements", "002.015.html#IFCTransportBasicParameters_section", "Basic parameters of Transport Elements");
+			
+			GDLManualTOC.add(1202050305, 12020503, "Basic parameters of Lift objects", "002.015.html#IFCLiftBasicParameters_section", "Basic parameters of Lift objects");
+			
+			GDLManualTOC.add(1202050306, 12020503, "Basic parameters of Stair objects", "002.015.html#IFCStairsBasicParameters_section", "Basic parameters of Stair objects");
+			
+			GDLManualTOC.add(1202050307, 12020503, "Basic parameters of MEP elements", "002.015.html#IFCMEPBasicParameters_section", "Basic parameters of MEP elements");
+			
+			GDLManualTOC.add(120206, 1202, "Parameters for Text Handling", "002.015.html#TextHandlingACParameters_section", "Parameters for Text Handling");
+			
+			GDLManualTOC.add(120207, 1202, "Parameters for Labels", "002.015.html#LabelACParameters_section", "Parameters for Labels");
+			
+			GDLManualTOC.add(12020701, 120207, "Parameters set or read by ARCHICAD", "002.015.html#LabelACParamsSetRead_section", "Parameters set or read by ARCHICAD");
+			
+			GDLManualTOC.add(12020702, 120207, "Parameters read by ARCHICAD", "002.015.html#LabelACParamsRead_section", "Parameters read by ARCHICAD");
+			
+			GDLManualTOC.add(120208, 1202, "Deprecated parameters", "002.015.html#DeprecatedACParameters_section", "Deprecated parameters");
+			
+			GDLManualTOC.add(12020801, 120208, "Deprecated Beam/Column parameters - available for listing and labels only", "002.015.html#DeprecatedBeamColumnParameters_section", "Deprecated Beam/Column parameters - available for listing and labels only");
+			
+			GDLManualTOC.add(12020802, 120208, "Deprecated Zone Stamp parameters", "002.015.html#DeprecatedParametersForZones_section", "Deprecated Zone Stamp parameters");
+			
+			GDLManualTOC.add(12020803, 120208, "Deprecated IFC add-on parameters", "002.015.html#DeprecatedParametersIFCAddOn_section", "Deprecated IFC add-on parameters");
+			
+			GDLManualTOC.add(1203, 12, "REQUEST Options", "002.015.html#REQUESTOptions_section", "REQUEST Options");
+			
+			GDLManualTOC.add(120301, 1203, "Request Parameter Script Compatibility", "002.015.html#REQUESTCompatibility_section", "Request Parameter Script Compatibility");
+			
+			GDLManualTOC.add(120302, 1203, "
+					Details of Requests
+				", "002.015.html#REQUESTDetaile_section", "
+					Details of Requests
+				");
+			
+			GDLManualTOC.add(120303, 1203, "Profile Requests", "002.015.html#ProfileRequestOptions", "Profile Requests");
+			
+			GDLManualTOC.add(120304, 1203, "Deprecated Requests", "002.015.html#DeprecatedRequestOptions", "Deprecated Requests");
+			
+			GDLManualTOC.add(1204, 12, "Application Query Options", "002.015.html#APPQUERYOptions_section", "Application Query Options");
+			
+			GDLManualTOC.add(120401, 1204, "Document feature", "002.015.html#id590768", "Document feature");
+			
+			GDLManualTOC.add(12040101, 120401, "View direction", "002.015.html#id590770", "View direction");
+			
+			GDLManualTOC.add(120402, 1204, "MEP System", "002.015.html#id590809", "MEP System");
+			
+			GDLManualTOC.add(12040201, 120402, "Get MEP Systems", "002.015.html#id590847", "Get MEP Systems");
+			
+			GDLManualTOC.add(12040202, 120402, "Get Domain", "002.015.html#id590908", "Get Domain");
+			
+			GDLManualTOC.add(12040203, 120402, "Get Contour Pen", "002.015.html#id590967", "Get Contour Pen");
+			
+			GDLManualTOC.add(12040204, 120402, "Get Fill Pen", "002.015.html#id591004", "Get Fill Pen");
+			
+			GDLManualTOC.add(12040205, 120402, "Get Background Pen", "002.015.html#id591064", "Get Background Pen");
+			
+			GDLManualTOC.add(12040206, 120402, "Get Fill Type", "002.015.html#id591105", "Get Fill Type");
+			
+			GDLManualTOC.add(12040207, 120402, "Get Center Line Type", "002.015.html#id591117", "Get Center Line Type");
+			
+			GDLManualTOC.add(12040208, 120402, "Get Center Line Pen", "002.015.html#id591158", "Get Center Line Pen");
+			
+			GDLManualTOC.add(12040209, 120402, "Get System Material", "002.015.html#id591150", "Get System Material");
+			
+			GDLManualTOC.add(12040210, 120402, "Get Insulation Material", "002.015.html#id591214", "Get Insulation Material");
+			
+			GDLManualTOC.add(120403, 1204, "MEP Modeler", "002.015.html#id591248", "MEP Modeler");
+			
+			GDLManualTOC.add(12040301, 120403, "Is Available", "002.015.html#id591278", "Is Available");
+			
+			GDLManualTOC.add(120404, 1204, "MEP Connection Type", "002.015.html#id591295", "MEP Connection Type");
+			
+			GDLManualTOC.add(12040401, 120404, "Get Connection Types", "002.015.html#id591316", "Get Connection Types");
+			
+			GDLManualTOC.add(12040402, 120404, "Get Connection Type Style", "002.015.html#id591364", "Get Connection Type Style");
+			
+			GDLManualTOC.add(120405, 1204, "MEP Flexible Segment", "002.015.html#id591386", "MEP Flexible Segment");
+			
+			GDLManualTOC.add(12040501, 120405, "Start Sectioning", "002.015.html#id591409", "Start Sectioning");
+			
+			GDLManualTOC.add(12040502, 120405, "Add Control Point", "002.015.html#id591421", "Add Control Point");
+			
+			GDLManualTOC.add(12040503, 120405, "Add Direction and Width Vector", "002.015.html#id591483", "Add Direction and Width Vector");
+			
+			GDLManualTOC.add(12040504, 120405, "End Sectioning", "002.015.html#id591556", "End Sectioning");
+			
+			GDLManualTOC.add(120406, 1204, "MEP Bend", "002.015.html#id591609", "MEP Bend");
+			
+			GDLManualTOC.add(12040601, 120406, "Start Sectioning", "002.015.html#id591646", "Start Sectioning");
+			
+			GDLManualTOC.add(120407, 1204, "Parameter Script", "002.015.html#id591754", "Parameter Script");
+			
+			GDLManualTOC.add(12040701, 120407, "First Occasion in Progress", "002.015.html#id591747", "First Occasion in Progress");
+			
+			GDLManualTOC.add(120408, 1204, "Core &amp; IFC Properties", "002.015.html#id591750", "Core &amp; IFC Properties");
+			
+			GDLManualTOC.add(12040801, 120408, "Get Parameter Folder Names", "002.015.html#GetParameterFolderNames_section", "Get Parameter Folder Names");
+			
+			GDLManualTOC.add(12040802, 120408, "Get Parameter Names", "002.015.html#GetParameterNames_section", "Get Parameter Names");
+			
+			GDLManualTOC.add(12040803, 120408, "Get Parameter", "002.015.html#id591853", "Get Parameter");
+			
+			GDLManualTOC.add(120409, 1204, "Library manager", "002.015.html#id591940", "Library manager");
+			
+			GDLManualTOC.add(12040901, 120409, "Ies files", "002.015.html#id591942", "Ies files");
+			
+			GDLManualTOC.add(12040902, 120409, "User image files", "002.015.html#id591936", "User image files");
+			
+			GDLManualTOC.add(1205, 12, "GDL Style Guide", "002.015.html#GDLStyleGuide_section", "GDL Style Guide");
+			
+			GDLManualTOC.add(120501, 1205, "Introduction", "002.015.html#GDLStyleGuideIntro_section", "Introduction");
+			
+			GDLManualTOC.add(120502, 1205, "Naming Conventions", "002.015.html#GDLStyleGuideNaming_section", "Naming Conventions");
+			
+			GDLManualTOC.add(12050201, 120502, "General rules", "002.015.html#id591956", "General rules");
+			
+			GDLManualTOC.add(12050202, 120502, "Variable names", "002.015.html#id592024", "Variable names");
+			
+			GDLManualTOC.add(12050203, 120502, "Capitalization", "002.015.html#id592183", "Capitalization");
+			
+			GDLManualTOC.add(120503, 1205, "Expressions", "002.015.html#GDLStyleGuideExpressions_section", "Expressions");
+			
+			GDLManualTOC.add(120504, 1205, "Control flow statements", "002.015.html#GDLStyleGuideControlFlow_section", "Control flow statements");
+			
+			GDLManualTOC.add(12050401, 120504, "if - else - endif", "002.015.html#id592394", "if - else - endif");
+			
+			GDLManualTOC.add(12050402, 120504, "for - next, do - while, while - endwhile, repeat - until", "002.015.html#id590241", "for - next, do - while, while - endwhile, repeat - until");
+			
+			GDLManualTOC.add(120505, 1205, "Subroutines", "002.015.html#GDLStyleGuideSubroutines_section", "Subroutines");
+			
+			GDLManualTOC.add(120506, 1205, "Writing comments", "002.015.html#GDLStyleGuideComments_section", "Writing comments");
+			
+			GDLManualTOC.add(12050601, 120506, "Script header", "002.015.html#id594080", "Script header");
+			
+			GDLManualTOC.add(12050602, 120506, "Section divide", "002.015.html#id594165", "Section divide");
+			
+			GDLManualTOC.add(120507, 1205, "Script structure", "002.015.html#GDLStyleGuideScriptStructure_section", "Script structure");
+			
+			GDLManualTOC.add(12050701, 120507, "Bad Solution", "002.015.html#id594301", "Bad Solution");
+			
+			GDLManualTOC.add(12050702, 120507, "Good Solution", "002.015.html#id594287", "Good Solution");
+			
+			GDLManualTOC.add(1206, 12, "Basic Technical Standards", "002.015.html#BasicTechnicalStandards_section", "Basic Technical Standards");
+			
+			GDLManualTOC.add(120601, 1206, "Introduction", "002.015.html#BTSIntroduction_section", "Introduction");
+			
+			GDLManualTOC.add(120602, 1206, "Library part format", "002.015.html#BTSLibPartFormat_section", "Library part format");
+			
+			GDLManualTOC.add(12060201, 120602, "File extension", "002.015.html#id594378", "File extension");
+			
+			GDLManualTOC.add(12060202, 120602, "Identification", "002.015.html#id594369", "Identification");
+			
+			GDLManualTOC.add(120603, 1206, "General scripting issues", "002.015.html#BTSGeneralScripting_section", "General scripting issues");
+			
+			GDLManualTOC.add(12060301, 120603, "Numeric types - Precision", "002.015.html#id594545", "Numeric types - Precision");
+			
+			GDLManualTOC.add(12060302, 120603, "Trigonometry functions", "002.015.html#id594621", "Trigonometry functions");
+			
+			GDLManualTOC.add(12060303, 120603, "GDL warnings", "002.015.html#GDLWarningSection", "GDL warnings");
+			
+			GDLManualTOC.add(12060304, 120603, "Hotspot and Hotline IDs", "002.015.html#id594817", "Hotspot and Hotline IDs");
+			
+			GDLManualTOC.add(1206030401, 12060304, "Purpose of hotspot/hotline/hotarc identification", "002.015.html#id594835", "Purpose of hotspot/hotline/hotarc identification");
+			
+			GDLManualTOC.add(1206030402, 12060304, "Problem of old-school hotspots/hotlines", "002.015.html#id594809", "Problem of old-school hotspots/hotlines");
+			
+			GDLManualTOC.add(1206030403, 12060304, "Correct hotspot/hotline/hotarc scripting", "002.015.html#id594813", "Correct hotspot/hotline/hotarc scripting");
+			
+			GDLManualTOC.add(12060305, 120603, "Editable hotspots", "002.015.html#id594869", "Editable hotspots");
+			
+			GDLManualTOC.add(1206030501, 12060305, "Editable hotspot example - Shoe / Shoe-rack", "002.015.html#id594859", "Editable hotspot example - Shoe / Shoe-rack");
+			
+			GDLManualTOC.add(12060306, 120603, "GDL execution contexts", "002.015.html#GDLExecutionContext_section", "GDL execution contexts");
+			
+			GDLManualTOC.add(12060307, 120603, "Communicating values with ARCHICAD", "002.015.html#id595111", "Communicating values with ARCHICAD");
+			
+			GDLManualTOC.add(1206030701, 12060307, "Information flow from ARCHICAD", "002.015.html#id595075", "Information flow from ARCHICAD");
+			
+			GDLManualTOC.add(1206030702, 12060307, "Global variables", "002.015.html#id595080", "Global variables");
+			
+			GDLManualTOC.add(1206030703, 12060307, "Fix named optional parameters", "002.015.html#id595135", "Fix named optional parameters");
+			
+			GDLManualTOC.add(1206030704, 12060307, "Requests and Application Queries", "002.015.html#id595142", "Requests and Application Queries");
+			
+			GDLManualTOC.add(1206030705, 12060307, "Information coming from the library part", "002.015.html#id595155", "Information coming from the library part");
+			
+			GDLManualTOC.add(12060308, 120603, "Model View Options, Library Global", "002.015.html#id595169", "Model View Options, Library Global");
+			
+			GDLManualTOC.add(1206030801, 12060308, "Internal Model View Options", "002.015.html#id595183", "Internal Model View Options");
+			
+			GDLManualTOC.add(1206030802, 12060308, "Library Global View Options", "002.015.html#id595153", "Library Global View Options");
+			
+			GDLManualTOC.add(120604, 1206, "Script type specific issues", "002.015.html#BTSSpecificScriptingIssues_section", "Script type specific issues");
+			
+			GDLManualTOC.add(12060401, 120604, "Master script", "002.015.html#id595260", "Master script");
+			
+			GDLManualTOC.add(12060402, 120604, "2D script", "002.015.html#id595235", "2D script");
+			
+			GDLManualTOC.add(1206040201, 12060402, "Execution context", "002.015.html#id595237", "Execution context");
+			
+			GDLManualTOC.add(1206040202, 12060402, "General recommendation", "002.015.html#id595266", "General recommendation");
+			
+			GDLManualTOC.add(1206040203, 12060402, "Defining line and fill properties", "002.015.html#id595310", "Defining line and fill properties");
+			
+			GDLManualTOC.add(12060403, 120604, "3D script", "002.015.html#id595375", "3D script");
+			
+			GDLManualTOC.add(1206040301, 12060403, "Execution context", "002.015.html#id595376", "Execution context");
+			
+			GDLManualTOC.add(1206040302, 12060403, "General recommendation", "002.015.html#id595394", "General recommendation");
+			
+			GDLManualTOC.add(1206040303, 12060403, "Modeling transparent bodies", "002.015.html#id595429", "Modeling transparent bodies");
+			
+			GDLManualTOC.add(1206040304, 12060403, "Texture mapping", "002.015.html#id595527", "Texture mapping");
+			
+			GDLManualTOC.add(1206040305, 12060403, "Picture elements", "002.015.html#id595860", "Picture elements");
+			
+			GDLManualTOC.add(1206040306, 12060403, "Group operations", "002.015.html#id595933", "Group operations");
+			
+			GDLManualTOC.add(12060404, 120604, "Parameter script", "002.015.html#ParamScriptTechSection", "Parameter script");
+			
+			GDLManualTOC.add(1206040401, 12060404, "Execution context", "002.015.html#id595937", "Execution context");
+			
+			GDLManualTOC.add(1206040402, 12060404, "General recommendation", "002.015.html#id596030", "General recommendation");
+			
+			GDLManualTOC.add(1206040403, 12060404, "Font type names", "002.015.html#id596034", "Font type names");
+			
+			GDLManualTOC.add(1206040404, 12060404, "Setting limits for array parameters", "002.015.html#id596094", "Setting limits for array parameters");
+			
+			GDLManualTOC.add(12060405, 120604, "User Interface script", "002.015.html#id596075", "User Interface script");
+			
+			GDLManualTOC.add(1206040501, 12060405, "Execution context", "002.015.html#id596090", "Execution context");
+			
+			GDLManualTOC.add(1206040502, 12060405, "General recommendation", "002.015.html#id593930", "General recommendation");
+			
+			GDLManualTOC.add(1206040503, 12060405, "Thumbnail control pictures", "002.015.html#id593943", "Thumbnail control pictures");
+			
+			GDLManualTOC.add(1206040504, 12060405, "Tab page handling", "002.015.html#id594018", "Tab page handling");
+			
+			GDLManualTOC.add(1206040505, 12060405, "Thumbnail controls with dynamic items", "002.015.html#id597297", "Thumbnail controls with dynamic items");
+			
+			GDLManualTOC.add(1206040506, 12060405, "Transparent UI pictures", "002.015.html#id597385", "Transparent UI pictures");
+			
+			GDLManualTOC.add(1206040507, 12060405, "Font sizes on the UI", "002.015.html#id597426", "Font sizes on the UI");
+			
+			GDLManualTOC.add(12060406, 120604, "Forward Migration script", "002.015.html#ForwardMigration_section", "Forward Migration script");
+			
+			GDLManualTOC.add(1206040601, 12060406, "Execution context", "002.015.html#id597451", "Execution context");
+			
+			GDLManualTOC.add(1206040602, 12060406, "General recommendation", "002.015.html#id597459", "General recommendation");
+			
+			GDLManualTOC.add(12060407, 120604, "Backward Migration script", "002.015.html#BackwardMigration_section", "Backward Migration script");
+			
+			GDLManualTOC.add(1206040701, 12060407, "Execution context", "002.015.html#id597510", "Execution context");
+			
+			GDLManualTOC.add(1206040702, 12060407, "General recommendation", "002.015.html#id597486", "General recommendation");
+			
+			GDLManualTOC.add(12060408, 120604, "Migration table", "002.015.html#MigrationTable_section", "Migration table");
+			
+			GDLManualTOC.add(120605, 1206, "Writing macros", "002.015.html#id597528", "Writing macros");
+			
+			GDLManualTOC.add(12060501, 120605, "Macro return parameters", "002.015.html#id597574", "Macro return parameters");
+			
+			GDLManualTOC.add(12060502, 120605, "Advanced parameters all", "002.015.html#id597584", "Advanced parameters all");
+			
+			GDLManualTOC.add(12060503, 120605, "Faster macro call", "002.015.html#id597620", "Faster macro call");
+			
+			GDLManualTOC.add(12060504, 120605, "Macro call example", "002.015.html#id597619", "Macro call example");
+			
+			GDLManualTOC.add(120606, 1206, "Background Conversion Issues", "002.015.html#MultithreadOptionsIssues", "Background Conversion Issues");
+			
+			GDLManualTOC.add(120607, 1206, "Speed Issues", "002.015.html#BTSSPeedIssues", "Speed Issues");
+			
+			GDLManualTOC.add(120608, 1206, "Windows-Macintosh compatibility", "002.015.html#id597806", "Windows-Macintosh compatibility");
+			
+			GDLManualTOC.add(12060801, 120608, "Changing platform with binary libraries", "002.015.html#id597783", "Changing platform with binary libraries");
+			
+			GDLManualTOC.add(12060802, 120608, "Images and HDPI support in GDL", "002.015.html#GDLImageHDPIOptions", "Images and HDPI support in GDL");
+			
+			GDLManualTOC.add(1207, 12, "Doors and Windows", "002.015.html#DoorsandWindows_section", "Doors and Windows");
+			
+			GDLManualTOC.add(120701, 1207, "General Guidelines", "002.015.html#id597907", "General Guidelines");
+			
+			GDLManualTOC.add(120702, 1207, "Positioning", "002.015.html#id597967", "Positioning");
+			
+			GDLManualTOC.add(120703, 1207, "Creation of Door/Window Library Parts", "002.015.html#id598167", "Creation of Door/Window Library Parts");
+			
+			GDLManualTOC.add(12070301, 120703, "Rectangular Doors/Windows in Straight Walls", "002.015.html#id598209", "Rectangular Doors/Windows in Straight Walls");
+			
+			GDLManualTOC.add(12070302, 120703, "3D Related Challenges", "002.015.html#id598245", "3D Related Challenges");
+			
+			GDLManualTOC.add(1207030201, 12070302, "Non-Rectangular Doors/Windows in Straight Walls", "002.015.html#id598255", "Non-Rectangular Doors/Windows in Straight Walls");
+			
+			GDLManualTOC.add(1207030202, 12070302, "Rectangular Doors/Windows in Curved Walls", "002.015.html#id598630", "Rectangular Doors/Windows in Curved Walls");
+			
+			GDLManualTOC.add(1207030203, 12070302, "Non-Rectangular Doors/Windows in Curved Walls", "002.015.html#id598669", "Non-Rectangular Doors/Windows in Curved Walls");
+			
+			GDLManualTOC.add(12070303, 120703, "2D Related Challenges", "002.015.html#id598681", "2D Related Challenges");
+			
+			GDLManualTOC.add(1207030301, 12070303, "Cutting custom wall opening", "002.015.html#id598700", "Cutting custom wall opening");
+			
+			GDLManualTOC.add(1207030302, 12070303, "Extending the wall polygon", "002.015.html#id598880", "Extending the wall polygon");
+			
+			GDLManualTOC.add(1208, 12, "GDL Created from the Floor Plan", "002.015.html#GDLCreatedfromtheFloorPlan_section", "GDL Created from the Floor Plan");
+			
+			GDLManualTOC.add(1209, 12, "Keywords", "002.015.html#Keywords_section", "Keywords");
+			
+			GDLManualTOC.add(120901, 1209, "Common Keywords", "002.015.html#id598970", "Common Keywords");
+			
+			GDLManualTOC.add(120902, 1209, "Reserved Keywords", "002.015.html#id599019", "Reserved Keywords");
+			
+			GDLManualTOC.add(120903, 1209, "3D Use Only", "002.015.html#id599023", "3D Use Only");
+			
+			GDLManualTOC.add(120904, 1209, "2D Use Only", "002.015.html#id599038", "2D Use Only");
+			
+			GDLManualTOC.add(120905, 1209, "2D and 3D Use", "002.015.html#id599017", "2D and 3D Use");
+			
+			GDLManualTOC.add(120906, 1209, "Non-Geometric Scripts", "002.015.html#id599083", "Non-Geometric Scripts");
+			
+			GDLManualTOC.add(12090601, 120906, "Properties Script", "002.015.html#id599053", "Properties Script");
+			
+			GDLManualTOC.add(12090602, 120906, "Parameter Script", "002.015.html#id599072", "Parameter Script");
+			
+			GDLManualTOC.add(12090603, 120906, "Interface Script", "002.015.html#id599055", "Interface Script");
+			
+			GDLManualTOC.add(12090604, 120906, "Forward and Backward Migration Scripts", "002.015.html#id599058", "Forward and Backward Migration Scripts");
+			
+			GDLManualTOC.add(1210, 12, "GDL Data I/O Add-On", "002.015.html#GDLDataIOAdd-On_section", "GDL Data I/O Add-On");
+			
+			GDLManualTOC.add(121001, 1210, "Description of Database", "002.015.html#id599122", "Description of Database");
+			
+			GDLManualTOC.add(121002, 1210, "Opening a Database", "002.015.html#id599092", "Opening a Database");
+			
+			GDLManualTOC.add(121003, 1210, "Reading Values from Database", "002.015.html#id599222", "Reading Values from Database");
+			
+			GDLManualTOC.add(121004, 1210, "Writing Values into Database", "002.015.html#id599239", "Writing Values into Database");
+			
+			GDLManualTOC.add(121005, 1210, "Closing Database", "002.015.html#id599283", "Closing Database");
+			
+			GDLManualTOC.add(1211, 12, "GDL Datetime Add-On", "002.015.html#GDLDatetimeAdd-On_section", "GDL Datetime Add-On");
+			
+			GDLManualTOC.add(121101, 1211, "Opening Channel", "002.015.html#GDLDatetimeAdd-OnOpen_section", "Opening Channel");
+			
+			GDLManualTOC.add(121102, 1211, "Reading Information", "002.015.html#id600723", "Reading Information");
+			
+			GDLManualTOC.add(121103, 1211, "Closing Channel", "002.015.html#id600724", "Closing Channel");
+			
+			GDLManualTOC.add(1212, 12, "GDL File Manager I/O Add-On", "002.015.html#GDLFileManagerIOAdd-On-section", "GDL File Manager I/O Add-On");
+			
+			GDLManualTOC.add(121201, 1212, "Specifying Folder", "002.015.html#id600767", "Specifying Folder");
+			
+			GDLManualTOC.add(121202, 1212, "Getting File/Folder Name", "002.015.html#id600843", "Getting File/Folder Name");
+			
+			GDLManualTOC.add(121203, 1212, "Finishing Folder Scanning", "002.015.html#id600863", "Finishing Folder Scanning");
+			
+			GDLManualTOC.add(1213, 12, "GDL Text I/O Add-On", "002.015.html#GDLTextIOAdd-On_section", "GDL Text I/O Add-On");
+			
+			GDLManualTOC.add(121301, 1213, "Opening File", "002.015.html#id600922", "Opening File");
+			
+			GDLManualTOC.add(121302, 1213, "Reading Values", "002.015.html#id601017", "Reading Values");
+			
+			GDLManualTOC.add(121303, 1213, "Writing Values", "002.015.html#id601096", "Writing Values");
+			
+			GDLManualTOC.add(121304, 1213, "Closing File", "002.015.html#id601150", "Closing File");
+			
+			GDLManualTOC.add(1214, 12, "Property GDL Add-On", "002.015.html#PropertyGDLAdd-On_section", "Property GDL Add-On");
+			
+			GDLManualTOC.add(121401, 1214, "Open property database", "002.015.html#id601187", "Open property database");
+			
+			GDLManualTOC.add(121402, 1214, "Close property database", "002.015.html#id601275", "Close property database");
+			
+			GDLManualTOC.add(121403, 1214, "Input to property database", "002.015.html#id601265", "Input to property database");
+			
+			GDLManualTOC.add(121404, 1214, "Output to property database", "002.015.html#id601443", "Output to property database");
+			
+			GDLManualTOC.add(1215, 12, "GDL XML Extension", "002.015.html#GDLXMLExtension_section", "GDL XML Extension");
+			
+			GDLManualTOC.add(121501, 1215, "Opening an XML Document", "002.015.html#OpeninganXMLDocument_section", "Opening an XML Document");
+			
+			GDLManualTOC.add(121502, 1215, "Reading an XML Document", "002.015.html#id601730", "Reading an XML Document");
+			
+			GDLManualTOC.add(121503, 1215, "Modifying an XML Document", "002.015.html#id602019", "Modifying an XML Document");
+			
+			GDLManualTOC.add(1216, 12, "Polygon Operations Extension", "002.015.html#PolygonOperationsExtension_section", "Polygon Operations Extension");
+			
+			GDLManualTOC.add(121601, 1216, "Opening a channel", "002.015.html#id602595", "Opening a channel");
+			
+			GDLManualTOC.add(121602, 1216, "Container management", "002.015.html#id602637", "Container management");
+			
+			GDLManualTOC.add(12160201, 121602, "CreateContainer", "002.015.html#PolygonOperationsExtension_CreateContainer_section", "CreateContainer");
+			
+			GDLManualTOC.add(12160202, 121602, "DeleteContainer", "002.015.html#PolygonOperationsExtension_DeleteContainer_section", "DeleteContainer");
+			
+			GDLManualTOC.add(12160203, 121602, "EmptyContainer", "002.015.html#PolygonOperationsExtension_EmptyContainer_section", "EmptyContainer");
+			
+			GDLManualTOC.add(12160204, 121602, "SetSourceContainer", "002.015.html#PolygonOperationsExtension_SetSourceContainer_section", "SetSourceContainer");
+			
+			GDLManualTOC.add(12160205, 121602, "SetDestinationContainer", "002.015.html#PolygonOperationsExtension_SetDestinationContainer_section", "SetDestinationContainer");
+			
+			GDLManualTOC.add(121603, 1216, "Polygon / polyline management", "002.015.html#id602684", "Polygon / polyline management");
+			
+			GDLManualTOC.add(12160301, 121603, "Array", "002.015.html#id602666", "Array");
+			
+			GDLManualTOC.add(12160302, 121603, "Dictionary", "002.015.html#PolygonOperationsExtension_PolyManagementDict_section", "Dictionary");
+			
+			GDLManualTOC.add(12160303, 121603, "Store", "002.015.html#PolygonOperationsExtension_Store_section", "Store");
+			
+			GDLManualTOC.add(12160304, 121603, "StorePolyline", "002.015.html#PolygonOperationsExtension_StorePolyline_section", "StorePolyline");
+			
+			GDLManualTOC.add(12160305, 121603, "StoreDictPolygon", "002.015.html#PolygonOperationsExtension_StoreDictPolygon_section", "StoreDictPolygon");
+			
+			GDLManualTOC.add(12160306, 121603, "StoreDictPolyline", "002.015.html#PolygonOperationsExtension_StoreDictPolyline_section", "StoreDictPolyline");
+			
+			GDLManualTOC.add(12160307, 121603, "Dispose", "002.015.html#PolygonOperationsExtension_Dispose_section", "Dispose");
+			
+			GDLManualTOC.add(121604, 1216, "Polygon / polyline operation settings", "002.015.html#id605487", "Polygon / polyline operation settings");
+			
+			GDLManualTOC.add(12160401, 121604, "HalfPlaneParams", "002.015.html#PolygonOperationsExtension_HalfPlaneParams_section", "HalfPlaneParams");
+			
+			GDLManualTOC.add(12160402, 121604, "OffsetParams", "002.015.html#PolygonOperationsExtension_OffsetParams_section", "OffsetParams");
+			
+			GDLManualTOC.add(12160403, 121604, "MultipleEdgeOffsetParams", "002.015.html#PolygonOperationsExtension_MultipleEdgeOffsetParams_section", "MultipleEdgeOffsetParams");
+			
+			GDLManualTOC.add(12160404, 121604, "PolylineOffsetVectors", "002.015.html#PolygonOperationsExtension_PolylineOffsetVectors_section", "PolylineOffsetVectors");
+			
+			GDLManualTOC.add(121605, 1216, "Polygon / polyline operations", "002.015.html#id605682", "Polygon / polyline operations");
+			
+			GDLManualTOC.add(12160501, 121605, "+ - /", "002.015.html#PolygonOperationsExtension_OP_section", "+ - /");
+			
+			GDLManualTOC.add(12160502, 121605, "ClipPolyline", "002.015.html#PolygonOperationsExtension_ClipPolyline_section", "ClipPolyline");
+			
+			GDLManualTOC.add(12160503, 121605, "CopyPolygon", "002.015.html#PolygonOperationsExtension_CopyPolygon_section", "CopyPolygon");
+			
+			GDLManualTOC.add(12160504, 121605, "Regularize", "002.015.html#PolygonOperationsExtension_Regularize_section", "Regularize");
+			
+			GDLManualTOC.add(12160505, 121605, "PolyCut", "002.015.html#PolygonOperationsExtension_PolyCut_section", "PolyCut");
+			
+			GDLManualTOC.add(12160506, 121605, "OffsetEdge", "002.015.html#PolygonOperationsExtension_OffsetEdge_section", "OffsetEdge");
+			
+			GDLManualTOC.add(12160507, 121605, "OffsetMultipleEdges", "002.015.html#PolygonOperationsExtension_OffsetMultipleEdges_section", "OffsetMultipleEdges");
+			
+			GDLManualTOC.add(12160508, 121605, "OffsetPolyline", "002.015.html#PolygonOperationsExtension_OffsetPolyline_section", "OffsetPolyline");
+			
+			GDLManualTOC.add(12160509, 121605, "OffsetPolylineWithVectors", "002.015.html#PolygonOperationsExtension_OffsetPolylineWithVectors_section", "OffsetPolylineWithVectors");
+			
+			GDLManualTOC.add(12160510, 121605, "ResizeContour", "002.015.html#PolygonOperationsExtension_ResizeContour_section", "ResizeContour");
+			
+			GDLManualTOC.add(12160511, 121605, "CentreOfGravity", "002.015.html#PolygonOperationsExtension_CentreOfGravity_section", "CentreOfGravity");
+			
+			GDLManualTOC.add(121606, 1216, "Get resulting polygons / polylines", "002.015.html#id605986", "Get resulting polygons / polylines");
+			
+			GDLManualTOC.add(12160601, 121606, "Array", "002.015.html#id605989", "Array");
+			
+			GDLManualTOC.add(1216060101, 12160601, "GetSourcePolygons, GetSourcePolylines", "002.015.html#PolygonOperationsExtension_GetSourcePolygons_section", "GetSourcePolygons, GetSourcePolylines");
+			
+			GDLManualTOC.add(1216060102, 12160601, "GetDestinationPolygons, GetDestinationPolylines", "002.015.html#PolygonOperationsExtension_GetDestinationPolygons_section", "GetDestinationPolygons, GetDestinationPolylines");
+			
+			GDLManualTOC.add(1216060103, 12160601, "GetVertices, GetPolylineVertices", "002.015.html#PolygonOperationsExtension_GetVertices_section", "GetVertices, GetPolylineVertices");
+			
+			GDLManualTOC.add(1216060104, 12160601, "GetContourEnds", "002.015.html#PolygonOperationsExtension_GetContourEnds_section", "GetContourEnds");
+			
+			GDLManualTOC.add(1216060105, 12160601, "GetInhEdgeInfos, GetPolylineInhEdgeInfos", "002.015.html#PolygonOperationsExtension_GetInhEdgeInfos_section", "GetInhEdgeInfos, GetPolylineInhEdgeInfos");
+			
+			GDLManualTOC.add(12160602, 121606, "Dictionary", "002.015.html#id606069", "Dictionary");
+			
+			GDLManualTOC.add(1216060201, 12160602, "GetSourceDictPolygon, GetSourceDictPolyline", "002.015.html#PolygonOperationsExtension_GetSourceDictPolygon_section", "GetSourceDictPolygon, GetSourceDictPolyline");
+			
+			GDLManualTOC.add(1216060202, 12160602, "GetDestinationDictPolygon, GetDestinationDictPolyline", "002.015.html#PolygonOperationsExtension_GetDestinationDictPolygon_section", "GetDestinationDictPolygon, GetDestinationDictPolyline");
+			
+			GDLManualTOC.add(121607, 1216, "Closing channel", "002.015.html#id606108", "Closing channel");
+			
+			GDLManualTOC.add(1217, 12, "Autotext Guide", "002.015.html#id606103", "Autotext Guide");
+			
+			GDLManualTOC.add(121701, 1217, "Project info keywords", "002.015.html#id606105", "Project info keywords");
+			
+			GDLManualTOC.add(121702, 1217, "General", "002.015.html#id606400", "General");
+			
+			GDLManualTOC.add(121703, 1217, "Layout autotexts", "002.015.html#id606420", "Layout autotexts");
+			
+			GDLManualTOC.add(121704, 1217, "Drawing autotexts", "002.015.html#id606478", "Drawing autotexts");
+			
+			GDLManualTOC.add(121705, 1217, "Reference type autotexts", "002.015.html#id606489", "Reference type autotexts");
+			
+			GDLManualTOC.add(121706, 1217, "Marker type autotexts", "002.015.html#id606562", "Marker type autotexts");
+			
+			GDLManualTOC.add(121707, 1217, "Change related autotexts", "002.015.html#id606605", "Change related autotexts");
+			
+			GDLManualTOC.add(121708, 1217, "Layout revision related autotexts", "002.015.html#id606637", "Layout revision related autotexts");
+			
+			GDLManualTOC.add(1218, 12, "Built-in Property Guide", "002.015.html#builtin_propertyids_section", "Built-in Property Guide");
+			
+			GDLManualTOC.add(121801, 1218, "Element-related built-in property IDs", "002.015.html#id606754", "Element-related built-in property IDs");
+			
+			GDLManualTOC.add(121802, 1218, "Component-related built-in property IDs", "002.015.html#id605203", "Component-related built-in property IDs");
+			
+			GDLManualTOC.add(13, 0, "New GDL Features in ARCHICAD 25", "002.016.html", "New GDL Features in ARCHICAD 25");
+			
+			GDLManualTOC.add(1301, 13, "New property type: BUILTINPROPERTY", "002.016.html#id609660", "New property type: BUILTINPROPERTY");
+			
+			GDLManualTOC.add(1302, 13, "New Property Requests", "002.016.html#id609676", "New Property Requests");
+			
+			GDLManualTOC.add(1303, 13, "New Global Variables", "002.016.html#id609690", "New Global Variables");
+			
+			GDLManualTOC.add(1304, 13, "New localizable container called Library Package", "002.016.html#id609716", "New localizable container called Library Package");
+			
+			GDLManualTOC.add(14, 0, "Index", "002.017.html", "Index");
+			
+			GDLManualTOC.add(1401, 14, "Syntax Listing of GDL Commands", "002.017.html#SyntaxListing_section", "Syntax Listing of GDL Commands");
+			
+			document.write(GDLManualTOC);
+			
+			function followLink(url)
+			{
+				var filename = url.substring(url.lastIndexOf('/') + 1, url.length);
+				GDLManualTOC.openTo(filename, true);
+			}
+			//]]&gt;
+		</script></div><table><tr><td style="width:33%" align="left"><a href="002.011.html">&lt;&lt; Attributes</a></td><td style="width:33%" align="center"><a href="index.html">Back to the main page</a></td><td style="width:33%" align="right"><a href="002.013.html">Expressions and Functions &gt;&gt;</a></td></tr></table><hr/><div class="titlepage"><div><div><h2 class="title"><a id="Non-GeometricScripts_chapter"/>Chapter 9. Non-Geometric Scripts</h2></div></div></div><p>
+			In addition to the 3D and 2D script windows that define the appearance of the GDL Object,
+			further scripts are available for adding complementary information to it.
+			These are the Properties Script used for quantity calculations,
+			the Parameter Script that includes the list of possible values for different parameters,
+			and the User Interface Script for creating a custom interface for parameter entry,
+			Forward Migration Script and Backward Migration Scripts to define how to migrate an old instance forward to the actual
+			element or how to migrate the element backward to an older one.
+			The commands available for all these script types are detailed on the following pages.
+		</p><div class="section"><div class="titlepage"><div><div><h2 class="title"><a id="ThePropertiesScript_section"/>The Properties Script</h2></div></div></div><p>
+				Library parts have a GDL window reserved for the Properties script.
+				This script allows you to make library part properties dependent on parameters, and, through a directive, define their place in the final
+				component list. By using a few commands,
+				it is possible to define in the script local descriptors and components.
+				Descriptors and components from external databases can also be referenced.
+				Code lengths cannot exceed 32 characters.
+			</p><p>In the Properties script, you can use any GDL command that does not generate a shape.</p><h3 id="DATABASE_SET_gdlcommand">DATABASE_SET</h3>
+				
+				<pre class="programlisting"><b id="DATABASE_SET_keyword_2.12.3.4.4.1">DATABASE_SET</b> set_name [, descriptor_name, component_name, unit_name, key_name,
+        criteria_name, list_set_name]</pre>
+				
+					<p>
+						Database set definition or Database set selection.
+						If this command is placed in a MASTER_GDL script, it will define a Database set
+						containing Descriptor, Component, Unit, Key, Criteria and List Scheme files.
+					</p>
+					<p>
+						This Database set name can then be referenced from Properties Scripts
+						using the same command with only the set_name parameter as a directive,
+						by selecting the actual Database set that REF COMPONENTs and REF DESCRIPTORs refer to.
+						The default Database set name is "Default Set", and will be used if no other set has been selected.
+						The default Database set file names are: DESCDATA, COMPDATA, COMPUNIT, LISTKEY, LISTCRIT, LISTSET.
+						All these names get translated in localized ARCHICAD versions.
+					</p>
+					<p>Scripts can include any number of DATABASE_SET selections.</p>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>set_name: </b></code>database set name.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>descriptor_name: </b></code>descriptor data file name.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>component_name: </b></code>component data file name.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>unit_name: </b></code>unit data file name.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>key_name: </b></code>key data file name.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>criteria_name: </b></code>criteria file name.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>list_set_name: </b></code>list Scheme file name.</div>
+					</div>
+				
+			<h3 id="DESCRIPTOR_gdlcommand">DESCRIPTOR</h3>
+				
+				<pre class="programlisting"><b id="DESCRIPTOR_keyword_2.12.3.5.4.1">DESCRIPTOR</b> name [, code, keycode]</pre>
+				
+					<p>Local descriptor definition. Scripts can include any number of DESCRIPTORs.</p>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>name: </b></code>
+							can extend to more than one line. New lines can be defined by the character '\n' and tabulators by '\t'.
+							Adding '\' to the end of a line allows you to continue the string in the next line without adding a new line.
+							Inside the string, if the '\' character is doubled (\\), it will lose its control function and simply mean '\'.
+							The length of the string (including the new line characters) cannot exceed 255 characters:
+							additional characters will be simply cut by the compiler. If you need a longer text, use several DESCRIPTORs.
+						</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>code: </b></code>string, defines a code for the descriptor.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>keycode: </b></code>string, reference to a key in an external database.</div>
+					</div>
+					<p>The key will be assigned to the descriptor.</p>
+				
+			<h3 id="REFDESCRIPTOR_gdlcommand">REF DESCRIPTOR</h3>
+				
+				<pre class="programlisting"><b id="REFDESCRIPTOR_keyword_2.12.3.6.4.1">REF DESCRIPTOR</b> code [, keycode]</pre>
+				
+					<p>Reference by code and keycode string to a descriptor in an external database.</p>
+				
+			<h3 id="COMPONENT_gdlcommand">COMPONENT</h3>
+				
+				<pre class="programlisting"><b id="COMPONENT_keyword_2.12.3.7.4.1">COMPONENT</b> name, quantity, unit [, proportional_with, code, keycode, unitcode]</pre>
+				
+					<p>Local component definition. Scripts can include any number of COMPONENTs.</p>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>name: </b></code>the name of the component (max. 128 characters).</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>quantity: </b></code>a numeric expression.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>unit: </b></code>the string used for unit description.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>proportional_with: </b></code>
+							a code between 1 and 6.
+							When listing, the component quantity defined above will be automatically multiplied by a value calculated for the current listed element:
+						</div>
+						<div><code>1: </code>item,</div>
+						<div><code>2: </code>length,</div>
+						<div><code>3: </code>surface A,</div>
+						<div><code>4: </code>surface B,</div>
+						<div><code>5: </code>surface,</div>
+						<div><code>6: </code>volume.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>code: </b></code>string, defines a code for the component.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>keycode: </b></code>string, reference to a key in an external database. The key will be assigned to the component.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>unitcode: </b></code>
+							string, reference to a unit in an external database that controls the output format of the component quantity.
+							This will replace the locally defined unit string.
+						</div>
+					</div>
+				
+			<h3 id="REFCOMPONENT_gdlcommand">REF COMPONENT</h3>
+				
+				<pre class="programlisting"><b id="REFCOMPONENT_keyword_2.12.3.8.4.1">REF COMPONENT</b> code [, keycode [, numeric_expression]]</pre>
+				
+					<p>
+						Reference by code and keycode string to a component in an external database.
+						The value to multiply by in the component database can be overwritten by the optional numeric expression specified here.
+					</p>
+				
+			<h3 id="BINARYPROP_gdlcommand">BINARYPROP</h3>
+				
+				<pre class="programlisting"><b id="BINARYPROP_keyword_2.12.3.9.4.1">BINARYPROP</b></pre>
+				
+					<p>
+						Binaryprop is a reference to the binary properties data (components and descriptors)
+						defined in the library part in the Components and Descriptors sections.
+					</p>
+					<p>
+						DATABASE_SET directives have no effect on the binary
+						data.
+					</p>
+				
+			<h3 id="SURFACE3D_gdlcommand">SURFACE3D</h3>
+				
+				<pre class="programlisting"><b id="SURFACE3D_keyword_2.12.3.10.4.1">SURFACE3D</b> ()</pre>
+				
+					<p>The Surface 3D () function gives you the surface of the 3D shape of the library part.</p>
+					<p>
+						Warning: If you place two or more shapes in the same location with the same parameters,
+						this function will give you the total sum of all shapes’ surfaces.
+					</p>
+				
+			<h3 id="VOLUME3D_gdlcommand">VOLUME3D</h3>
+				
+				<pre class="programlisting"><b id="VOLUME3D_keyword_2.12.3.11.4.1">VOLUME3D</b> ()</pre>
+				
+					<p>The Volume 3D () function gives you the volume of the 3D shape of the library part.</p>
+					<p>
+						Warning: If you place two or more shapes in the same location with the same parameters,
+						this function will give you the total sum of all shapes’ volumes.
+					</p>
+				
+			<h3 id="POSITION_gdlcommand">POSITION</h3>
+				
+				<pre class="programlisting"><b id="POSITION_keyword_2.12.3.12.4.1">POSITION</b> position_keyword</pre>
+				
+					<p>Effective only in the Component List.</p>
+					<p>
+						Changes only the type of the element the following descriptors and components are associated to.
+						If there are no such directives in the Properties script, descriptors and components will be listed with their default element types.
+					</p>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>position_keyword: </b></code>keywords are the following:</div>
+						<div><code>WALLS</code></div>
+						<div><code>COLUMNS</code></div>
+						<div><code>BEAMS</code></div>
+						<div><code>DOORS</code></div>
+						<div><code>WINDOWS</code></div>
+						<div><code>OBJECTS</code></div>
+						<div><code>CEILS</code></div>
+						<div><code>PITCHED_ROOFS</code></div>
+						<div><code>LIGHTS</code></div>
+						<div><code>HATCHES</code></div>
+						<div><code>ROOMS</code></div>
+						<div><code>MESHES</code></div>
+					</div>
+					<p>
+						A directive remains valid for all succeeding DESCRIPTORs and COMPONENTs until the next directive is ascribed.
+						A script can include any number of directives.
+					</p>
+				
+				<div class="example"><a id="id525515"/><p class="title"><b>Example:
+</b></p><div class="example-contents"><pre class="programlisting">DESCRIPTOR "\tPainted box.\n\t Properties:\n\
+\t\t - swinging doors\n\
+\t\t - adjustable height\n\
+\t\t - scratchproof"
+REF DESCRIPTOR "0001"
+s = SURFACE3D () !wardrobe surface
+COMPONENT "glue", 1.5, "kg"
+COMPONENT "handle", 2*c, "nb" !c number of doors
+COMPONENT "paint", 0.5*s, "kg"
+POSITION WALLS
+REF COMPONENT "0002"</pre></div></div>
+			<h3 id="DRAWING_gdlcommand">DRAWING</h3>
+				
+				<pre class="programlisting"><b id="DRAWING_keyword_2.12.3.13.4.1">DRAWING</b></pre>
+				
+					<p>DRAWING: Refers to the drawing described in the 2D script of the same library part. Use it to place drawings in your bill of materials.</p>
+				
+			</div><div class="section"><div class="titlepage"><div><div><h2 class="title"><a id="TheParameterScript_section"/>The Parameter Script</h2></div></div></div><p>
+				Parameter lists are sets of possible numerical or string values.
+				They can be applied to the parameters as defined in the Parameter Script of the Library Part, in the ARCHICAD_LibraryMaster object or the MASTER_GDL script.
+				Type compatibility is verified by the GDL compiler.
+			</p><p>
+				The Parameter Script will be interpreted each time a value list type parameter value is to be changed,
+				and the possible values defined in the script will appear in a pop-up menu. For numerical parameters pop-up menu item
+				values can be defined as strings using the VALUES{2} command.
+			</p><h3 id="VALUES_gdlcommand">VALUES</h3>
+				
+				<pre class="programlisting"><b id="VALUES_keyword_2.12.4.4.4.1">VALUES</b> "parameter_name" [,]value_definition1 [, value_definition2, ...]</pre>
+				<pre class="programlisting"><b id="VALUES_keyword_2.12.4.4.6.1">VALUES</b> "fill_parameter_name" [[,] <b id="FILLTYPES_MASK_keyword_2.12.4.4.6.3">FILLTYPES_MASK</b> fill_types], value_definition1
+			[, value_definition2, ...]</pre>
+                <pre class="programlisting"><b id="VALUES_keyword_2.12.4.4.8.1">VALUES</b> "profile_parameter_name" [[,] <b id="PROFILETYPES_MASK_keyword_2.12.4.4.8.3">PROFILETYPES_MASK</b> profile_types], value_definition1
+            [, value_definition2, ...]</pre>
+				
+					<p>Defines a value restriction for a parameter (except dictionary types). The command has a special syntax for fill type and profile type parameters. If used on an array parameter, the restriction will be applied to all items individually.</p>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>parameter_name: </b></code>name of an existing parameter</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>fill_parameter_name: </b></code>name of an existing fillpattern type parameter</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>fill_types: </b></code></div><div><code>fill_types = j<sub>1</sub> + 2*j<sub>2</sub> + 4*j<sub>3</sub></code>, where each j can be 0 or 1.
+	</div>
+						<div><code>j<sub>1</sub>: </code>cut fills,</div>
+						<div><code>j<sub>2</sub>: </code>cover fills,</div>
+						<div><code>j<sub>3</sub>: </code>drafting fills.</div>
+					</div>
+					<p>
+						Can be used for fill-pattern type parameters only.
+						The fill popup for this parameter will contain only those types of fills which are specified by the bits set to 1.
+						Default is all fills (0).
+					</p>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>profile_parameter_name: </b></code>name of an existing profile type parameter</div>
+                    </div>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>profile_types: </b></code></div><div><code>profile_types = j<sub>1</sub> + 2*j<sub>2</sub> + 4*j<sub>3</sub> + 8*j<sub>4</sub> + 16*j<sub>5</sub></code>, where each j can be 0 or 1.
+	</div>
+                        <div><code>j<sub>1</sub>: </code>wall,</div>
+                        <div><code>j<sub>2</sub>: </code>beam,</div>
+                        <div><code>j<sub>3</sub>: </code>column,</div>
+                        <div><code>j<sub>4</sub>: </code>handrail,</div>
+                        <div><code>j<sub>5</sub>: </code>other.</div>
+                   </div>
+                    <p>
+                        Can be set for profile type parameters only.
+                        The value list for any profile type parameter includes all existing profiles of the planfile automatically, no individual VALUES definition is needed.
+                        Using VALUES without masking (0) has the exact same result.
+                        Using VALUES with masking can filter the value list, leaving only the corresponding profiles of the bits set to 1.
+                        Individual profile indexes can be listed as regular value definitions as well.
+                    </p>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>value_definitioni: </b></code>value definition, can be:</div>
+						<div><code>expression: </code>numerical or string expression, or</div>
+						<div><code>CUSTOM: </code>keyword, meaning that any custom value can be entered, or</div>
+						<div><code>RANGE: </code>range definition, with optional step</div>
+						<p>
+							<code class="literal">RANGE left_delimiter[lower_limit], [upper_limit]right_delimiter [STEP step_start_value, step_value]</code>
+						</p>
+						<p>
+							left_delimiter: [, meaning &gt;=, or (, meaning &gt;;
+							lower_limit: lower limit expression;
+							upper_limit: upper limit expression;
+							right_delimiter: ], meaning &lt;=, or ), meaning &lt;;
+							step_start_value: starting value;
+							step_value: step value.
+						</p>
+					</div>
+				
+			<h3 id="VALUES2_gdlcommand">VALUES{2}</h3>
+				
+				<pre class="programlisting"><b id="VALUES2_keyword_2.12.4.5.4.1">VALUES{2}</b> "parameter_name" [,]num_expression1, description1,
+			[, num_expression2, description2, ...]</pre>
+				<pre class="programlisting"><b id="VALUES2_keyword_2.12.4.5.6.1">VALUES{2}</b> "parameter_name" [,]num_values_array1, descriptions_array1
+			[, num_values_array2, descriptions_array2, ...]</pre>
+				
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>parameter_name: </b></code>name of an existing angle, length, real, or integer type parameter</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>num_expressioni, num_values_arrayi: </b></code>
+							simple value definition for a numerical parameter, or array expression containing multiple numerical values. Available only for VALUES{2}</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>descriptioni, descriptions_arrayi: </b></code>description string of the numerical value i, or array expression containing multiple description strings of
+						the values defined by num_values_arrayi (array dimensions must match). Available only for VALUES{2}</div>
+					</div>
+				
+				<div class="example"><a id="id525792"/><p class="title"><b>Example 1:
+Simple value lists</b></p><div class="example-contents"><pre class="programlisting">VALUES "par1" 1, 2, 3
+VALUES "par2" "a", "b"
+VALUES "par3" 1, CUSTOM, SIN (30)
+VALUES "par4" 4, RANGE(5, 10], 12, RANGE(,20] STEP 14.5, 0.5, CUSTOM</pre></div></div>
+				<div class="example"><a id="id525808"/><p class="title"><b>Example 2:
+Read all string values from a file for use in a value list</b></p><div class="example-contents"><pre class="programlisting">DIM sarray[]
+! file in the library, containing parameter data
+filename = "ProjectNotes.txt"
+ch1 = OPEN ("text", filename, "MODE=RO, LIBRARY")
+i = 1
+j = 1
+sarray[1] = ""
+! collect all strings
+DO
+    n = INPUT (ch1, i, 1, var)
+    IF n &gt; 0 AND VARTYPE (var) = 2 THEN
+        sarray[j] = var
+        j = j + 1
+    ENDIF
+    i = i + 1
+WHILE n &gt; 0
+CLOSE ch1
+! parameter popup with strings read from the file
+VALUES "RefNote" sarray</pre></div></div>
+			<h3 id="PARAMETERS_gdlcommand">PARAMETERS</h3>
+				
+				<pre class="programlisting"><b id="PARAMETERS_keyword_2.12.4.6.4.1">PARAMETERS</b> name1 = expression1 [,
+        name2 = expression2, ...,
+        namen = expressionn]</pre>
+				
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>namei: </b></code>the name of the parameter.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>expressioni: </b></code>the new value of the parameter.</div>
+					</div>
+					<p>Using this command, the parameter values of a Library Part can be modified by the Parameter Script.</p>
+					<p>
+						The modification will only be effective for the next interpretation. Commands in macros refer to the caller’s parameters.
+						If the parameter is a value list, the value chosen will be either an existing value, the custom value, or the first value from the value list.
+					</p>
+					<p>In addition, the global string variable GLOB_MODPAR_NAME contains the name of the last user-modified parameter.</p>
+				
+			<h3 id="LOCK_gdlcommand">LOCK</h3>
+				
+				<pre class="programlisting"><b id="LOCK_keyword_2.12.4.7.4.1">LOCK</b> "name1" [, "name2", ..., "namen"]</pre>
+				
+					<p>
+						Locks the named parameter(s) in the settings dialog box.
+						A locked parameter will appear grayed in the dialog box and its value cannot be modified by the user.
+					</p>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>namen: </b></code>string expression, name of the parameter to be locked.</div>
+					</div>
+					<p>
+						<span class="italic">Compatibility: starting from ARCHICAD 22, the locking/hiding of selected ARCHICAD interface controls is extended.</span>
+					</p>
+					<p>
+						 The extended feature can be activated with "Enable hide/lock of specific fix named optional parameters" setting (see "Details/Compatibility Options" dialog of the object in the Library Part Editor). The extended selection contains fix named optional parameters corresponding to:
+					</p>
+					<div class="itemizedlist"><ul class="itemizedlist"><li class="listitem"><p>
+								standard text handling controls of "Text Style" settings dialog panel - see  <a class="xref" href="002.015.html#TextHandlingACParameters_section" title="Parameters for Text Handling">the section called “Parameters for Text Handling”</a>,
+							</p></li><li class="listitem"><p>
+								extended label styling controls of "Text Style" settings dialog panel in Label tool - see <a class="xref" href="002.015.html#LabelACParameters_section" title="Parameters for Labels">the section called “Parameters for Labels”</a>,
+							</p></li><li class="listitem"><p>
+								and selected label pointer controls of "Pointer" settings dialog panel - see <a class="xref" href="002.015.html#LabelACParameters_section" title="Parameters for Labels">the section called “Parameters for Labels”</a>.
+							</p></li></ul></div>
+				
+				<pre class="programlisting"><b id="LOCK_keyword_2.12.4.7.8.1">LOCK</b> <b id="ALL_keyword_2.12.4.7.8.3">ALL</b> ["name1" [, "name2", ..., "namen"]]</pre>
+				
+					<p>
+						Locks all parameters in the settings dialog box, except those listed after the ALL keyword.
+					</p>
+				
+			<h3 id="HIDEPARAMETER_gdlcommand">HIDEPARAMETER</h3>
+				
+				<pre class="programlisting"><b id="HIDEPARAMETER_keyword_2.12.4.8.4.1">HIDEPARAMETER</b> "name1" [, "name2", ..., "namen"]</pre>
+				
+					<p>
+						Hides the named parameter(s) and its child parameters in the settings dialog box.
+						A parameter hidden using this command in the parameter script will automatically disappear from the parameter list.
+					</p>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>namen: </b></code>string expression, name of the parameter to be hidden.</div>
+					</div>
+					<p>
+						<span class="italic">Compatibility: starting from ARCHICAD 22, the locking/hiding of selected ARCHICAD interface controls is extended. For details, see <a class="xref" href="reference/LOCK.html">the LOCK command</a>.</span>
+					</p>
+				
+				<pre class="programlisting"><b id="HIDEPARAMETER_keyword_2.12.4.8.8.1">HIDEPARAMETER</b> <b id="ALL_keyword_2.12.4.8.8.3">ALL</b> ["name1" [, "name2", ..., "namen"]]</pre>
+				
+					<p>
+						Hides all parameters and its child parameters in the settings dialog box, except those (and their children) listed after the ALL keyword.
+					</p>
+				
+			</div><div class="section"><div class="titlepage"><div><div><h2 class="title"><a id="TheUserInterfaceScript_section"/>The User Interface Script</h2></div></div></div><p>
+				Using the following GDL commands, you can define a custom interface for a Library Part’s Custom Settings panel in the settings dialog box.
+				If you click the <span class="italic">Set as default</span> button in the Library Part editor,
+				the custom interface will be used by default in the Object’s (Door’s, Window’s, etc.) settings dialog box.
+				Parameters with custom control are not hidden automatically on the original parameter list,
+				but they can be hidden manually in the library part editor.
+			</p><div class="informaltable"><table border="0"><colgroup><col/><col/></colgroup><tbody><tr><td>
+								<div style="text-align: center"><img src="Images/GDL_Images/NonGeom_CustomDialog_inactive.png" style="text-align: middle" alt="Images/GDL_Images/NonGeom_CustomDialog_inactive.png"/></div>
+							</td><td>
+								<div style="text-align: center"><img src="Images/GDL_Images/NonGeom_CustomDialog_active.png" style="text-align: middle" alt="Images/GDL_Images/NonGeom_CustomDialog_active.png"/></div>
+							</td></tr></tbody></table></div><p>The origin of the coordinate system is in the top-left corner. Sizes and coordinate values are measured in pixels.</p><h3 id="UI_DIALOG_gdlcommand">UI_DIALOG</h3>
+				
+				<pre class="programlisting"><b id="UI_DIALOG_keyword_2.12.5.5.4.1">UI_DIALOG</b> title [, size_x, size_y]</pre>
+				
+					<p>
+						Defines the title of the dialog box. The default title is 'Custom Settings'.
+						Currently, the size of the available area is fixed at 444 x 296 pixels, and the size_x and size_y parameters are not used.
+					</p>
+					<p>Restriction: The Interface Script should contain only one UI_DIALOG command.</p>
+				
+			<h3 id="UI_PAGE_gdlcommand">UI_PAGE</h3>
+				
+				<pre class="programlisting"><b id="UI_PAGE_keyword_2.12.5.6.4.1">UI_PAGE</b> page_number [, parent_id, page_title [, image]]</pre>
+				
+					<p>
+						Page directive, defines the page that the interface elements are placed on. Default page numbering starts at 1, but any starting number is usable.
+						If there is no UI_PAGE command in the Interface Script, each element will be displayed on the first page by default.
+						Moving between pages can be defined in different ways:
+					</p>
+					<div class="itemizedlist"><ul class="itemizedlist"><li class="listitem"><p>
+								The easiest way is to let ARCHICAD do it:
+								in the object editor, press the "Hierarchical Pages" button in the User Interface Script window, and fill in the optional parameters of the UI_PAGE command.
+								In this case the page_number of the page selected from the tree is passed to the library part through the "gs_ui_current_page" parameter. No need to set a value list for the paging parameter:
+								ARCHICAD collects and sorts all valid page ID-s from the UI_PAGE command's parameters by pre-reading the object's ui script.
+							</p></li><li class="listitem"><p>
+								Another method is to use two buttons created with the UI_NEXT and UI_PREV commands, placing them on every page to manipulate the value of the "gs_ui_current_page" parameter.
+								See <a class="xref" href="reference/UI_BUTTON.html">the UI_BUTTON command</a> for more information.
+							</p></li><li class="listitem"><p>
+								In case the new hierarchical page setup is not required, to create dynamic page handling, use the <a class="xref" href="reference/UI_INFIELD3.html">the UI_INFIELD{3} command</a>.
+								Set a value list for "gs_ui_current_page" parameter, and place a popup using its values on every page.
+							</p></li></ul></div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>page_number: </b></code>the page number, a positive integer. Following interface elements are placed on this page.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>parent_id: </b></code>positive integer, the parent id of the page. The special value -1 value means root parent. Only evaluated if "Hierarchical Pages" is set.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>page_title: </b></code>title string of the page, appears on the top of the page and the tree view popup of the pages. Only evaluated if "Hierarchical Pages" is set.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>image: </b></code>file name or index number of a picture stored in the library part. If specified and not empty or 0, this icon associated
+							to the page is displayed on the top of the page and in tree view popup of the pages, next to the title.  Only evaluated if "Hierarchical Pages" is set.</div>
+					</div>
+					<p>
+						Warning: In the simple way of paging, any break of continuity in the page numbering forces the insertion of a new page without buttons,
+						and therefore there will be no possibility to go to any other page from there.
+						This restriction can be circumvented using <a class="xref" href="reference/UI_CURRENT_PAGE.html">the UI_CURRENT_PAGE command</a>.
+					</p>
+				
+			<h3 id="UI_CURRENT_PAGE_gdlcommand">UI_CURRENT_PAGE</h3>
+				
+				<pre class="programlisting"><b id="UI_CURRENT_PAGE_keyword_2.12.5.7.4.1">UI_CURRENT_PAGE</b> index</pre>
+				
+					<p>Definition of the current tabpage to display.</p>
+					<p>
+						Warning: Jumping to a non-existent page forces the insertion of a new page without buttons and controls,
+						and therefore there is no possibility to go to any other page from there.
+					</p>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>index: </b></code>valid index of the UI_PAGE to display.</div>
+					</div>
+				
+			<h3 id="UI_BUTTON_gdlcommand">UI_BUTTON</h3>
+				
+				<pre class="programlisting"><b id="UI_BUTTON_keyword_2.12.5.8.4.1">UI_BUTTON</b> type, text, x, y [, width, height, id [, url]]</pre>
+				
+					<p>
+						Button definition on current page. Buttons can be used for various purposes:
+						moving from page to page, opening a web page or performing some parameter-script defined action.
+						Buttons can contain text.
+					</p>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>type: </b></code>type of the button as follows:</div>
+						<div><code>UI_PREV: </code>if pressed, the previous page is displayed,</div>
+						<div><code>UI_NEXT: </code>if pressed, the next page is displayed,</div>
+						<div><code>UI_FUNCTION: </code>if pressed, the GLOB_UI_BUTTON_ID global variable is set to the button id specified in expression,</div>
+						<div><code>UI_LINK: </code>if pressed, the URL in expression is opened in the default web browser,</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>text: </b></code>the text that should appear on the button.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>x, y: </b></code>the position of the button.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>width, height: </b></code>width and height of the button in pixels.
+						If not specified (for compatibility reasons) the default values are 60 pixels for width and 20 pixels for height.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>id: </b></code>an integer unique identifier.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>url: </b></code>a string containing a URL.</div>
+					</div>
+					<p>
+						UI_PREV and UI_NEXT buttons are disabled if the previous/next page is not present.
+						If these buttons are pushed, the gs_ui_current_page parameter of the library part is set
+						to the index of the page to show - if there’s a parameter with this name.
+					</p>
+				
+				<div class="example"><a id="id526792"/><p class="title"><b>Example:
+</b></p><div class="example-contents"><pre class="programlisting">! UI script
+UI_CURRENT_PAGE gs_ui_current_page
+UI_BUTTON UI_FUNCTION, "Go to page 9", 200,150, 70,20, 3
+UI_BUTTON UI_LINK, "Visit Website", 200,180, 100,20, 0,
+        "https://graphisoft.com"
+! parameter script
+if GLOB_UI_BUTTON_ID = 3 then
+        parameters gs_ui_current_page = 9, ...
+endif</pre></div></div>
+			<h3 id="UI_PICT_BUTTON_gdlcommand">UI_PICT_BUTTON</h3>
+				
+				<pre class="programlisting"><b id="UI_PICT_BUTTON_keyword_2.12.5.9.4.1">UI_PICT_BUTTON</b> type, text, picture_reference,
+        x, y, width, height [, id [, url]]</pre>
+				
+					<p>
+						Similar to <a class="xref" href="reference/UI_BUTTON.html">the UI_BUTTON command</a>. But this type of buttons can contain pictures.
+					</p>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>picture_reference: </b></code>
+							file name or index number of the picture stored in the library part.
+							The index 0 refers to the preview picture of the library part.
+							Pixel transparency is allowed in the picture.
+						</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>text: </b></code>
+							has no effect for picture buttons.
+						</div>
+					</div>
+				
+			<h3 id="UI_SEPARATOR_gdlcommand">UI_SEPARATOR</h3>
+				
+				<pre class="programlisting"><b id="UI_SEPARATOR_keyword_2.12.5.10.4.1">UI_SEPARATOR</b> x1, y1, x2, y2</pre>
+				
+					<p>Generates a separator rectangle. The rectangle becomes a single (vertical or horizontal) separator line if x1 = x2 or y1 = y2</p>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>x1, y1: </b></code>upper left node coordinates (starting point coordinates of the line).</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>x2, y2: </b></code>lower right node coordinates (endpoint coordinates of the line).</div>
+					</div>
+				
+			<h3 id="UI_GROUPBOX_gdlcommand">UI_GROUPBOX</h3>
+				
+				<pre class="programlisting"><b id="UI_GROUPBOX_keyword_2.12.5.11.4.1">UI_GROUPBOX</b> text, x, y, width, height</pre>
+				
+					<p>A groupbox is a rectangular separator with caption text. It can be used to visually group logically related parameters.</p>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>text: </b></code>the title of the groupbox.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>x, y: </b></code>the position of upper left corner.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>width, height: </b></code>width and height in pixels.</div>
+					</div>
+				
+			<h3 id="UI_PICT_gdlcommand">UI_PICT</h3>
+				
+				<pre class="programlisting"><b id="UI_PICT_keyword_2.12.5.12.4.1">UI_PICT</b> picture_reference, x, y [, width, height [, mask]]</pre>
+				
+					<p>Picture element in the dialog box. The picture file must be located in one of the loaded libraries.</p>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>picture_reference: </b></code>
+							file name or index number of the picture stored in the library part.
+							The index 0 refers to the preview picture of the library part.
+						</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>x, y: </b></code>position of the top left corner of the picture.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>width, height: </b></code>optional width and height in pixels; by default, the picture’s original width and height values will be used.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>mask: </b></code>alpha + distortion.</div>
+					</div>
+					<p>
+						<span class="italic">See <a class="xref" href="reference/PICTURE.html">the PICTURE command</a> for full explanation.</span>
+					</p>
+				
+			<h3 id="UI_STYLE_gdlcommand">UI_STYLE</h3>
+				
+				<pre class="programlisting"><b id="UI_STYLE_keyword_2.12.5.13.4.1">UI_STYLE</b> fontsize, face_code</pre>
+				
+					<p>All the UI_OUTFIELDs and UI_INFIELDs generated after this keyword will represent this style until the next UI_STYLE statement.</p>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>fontsize: </b></code>one of the following font size values:</div>
+						<div><code>0: </code>small,</div>
+						<div><code>1: </code>extra small,</div>
+						<div><code>2: </code>large.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>face_code: </b></code>similar to <a class="xref" href="reference/DEFINESTYLE.html">the DEFINE STYLE command</a>, but the values cannot be used in combination.</div>
+						<div><code>0: </code>normal,</div>
+						<div><code>1: </code>bold,</div>
+						<div><code>2: </code>italic,</div>
+						<div><code>4: </code>underline.</div>
+					</div>
+				
+			<h3 id="UI_OUTFIELD_gdlcommand">UI_OUTFIELD</h3>
+				
+				<pre class="programlisting"><b id="UI_OUTFIELD_keyword_2.12.5.14.4.1">UI_OUTFIELD</b> expression, x, y [, width, height [, flags]]</pre>
+				
+					<p>Generates a static text.</p>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>expression: </b></code>numerical or string expression.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>x, y: </b></code>position of the text block’s top left corner.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>width, height: </b></code>width and height of the text box.
+							If omitted, the text box will wrap around the text as tight as possible for the given font.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>flags: </b></code></div><div><code>flags = j<sub>1</sub> + 2*j<sub>2</sub> + 4*j<sub>3</sub></code>, where each j can be 0 or 1.
+	</div>
+						<div><code>j<sub>1</sub>: </code>horizontal alignment (with j2),</div>
+						<div><code>j<sub>2</sub>: </code>horizontal alignment (with j1):</div>
+						<p><code class="literal">j1 = 0, j2 = 0:</code> Aligns to the left edge (default),</p>
+						<p><code class="literal">j1 = 1, j2 = 0:</code> Aligns to the right edge,</p>
+						<p><code class="literal">j1 = 0, j2 = 1:</code> Aligns to the center,</p>
+						<p><code class="literal">j1 = 1, j2 = 1:</code> Not used,</p>
+						<div><code>j<sub>3</sub>: </code>grayed text.</div>
+					</div>
+				
+			<h3 id="UI_INFIELD_gdlcommand">UI_INFIELD</h3>
+				
+				<pre class="programlisting"><b id="UI_INFIELD_keyword_2.12.5.15.4.1">UI_INFIELD</b> "name", x, y, width, height [,
+        method, picture_name,
+        images_number,
+        rows_number, cell_x, cell_y,
+        image_x, image_y,
+        expression_image1, text1,
+        ...
+        expression_imagen, textn]</pre>
+			<h3 id="UI_INFIELD2_gdlcommand">UI_INFIELD{2}</h3>
+				
+				<pre class="programlisting"><b id="UI_INFIELD2_keyword_2.12.5.16.4.1">UI_INFIELD{2}</b> name, x, y, width, height [,
+        method, picture_name,
+        images_number,
+        rows_number, cell_x, cell_y,
+        image_x, image_y,
+        expression_image1, text1,
+        ...
+        expression_imagen, textn]</pre>
+			<h3 id="UI_INFIELD3_gdlcommand">UI_INFIELD{3}</h3>
+				
+				<pre class="programlisting"><b id="UI_INFIELD3_keyword_2.12.5.17.4.1">UI_INFIELD{3}</b> name, x, y, width, height [,
+        method, picture_name,
+        images_number,
+        rows_number, cell_x, cell_y,
+        image_x, image_y,
+        expression_image1, text1, value_definition1,
+        ...
+        [picIdxArray, textArray, valuesArray,
+        ...]
+        expression_imagen, textn, value_definitionn]</pre>
+			<h3 id="UI_INFIELD4_gdlcommand">UI_INFIELD{4}</h3>
+				
+				<pre class="programlisting"><b id="UI_INFIELD4_keyword_2.12.5.18.4.1">UI_INFIELD{4}</b> "name", x, y, width, height [,
+        method, picture_name,
+        images_number,
+        rows_number, cell_x, cell_y,
+        image_x, image_y,
+        expression_image1, text1, value_definition1,
+        ...
+        [picIdxArray, textArray, valuesArray,
+        ...]
+        expression_imagen, textn, value_definitionn]</pre>
+				
+					<p>
+						Generates an edit text or a pop-up menu for the parameter input.
+						A pop-up is generated if the parameter type is value list, material, fill, line type or pencolor.
+					</p>
+					<p>
+						If the optional parameters of the command are present, value lists can be alternatively displayed as thumbnail view fields.
+						Different thumbnail control types are available.
+						They display the specified images and associated texts and allow the selection of one single item at a time, just like in a pop-up menu.
+					</p>
+					<p>In the version 1 and 2 infield, the thumbnail items and the value list items are associated by indices.</p>
+					<p>
+						The version 3 and version 4 infield defines value association which binds the thumbnail items to value list items of the associated parameter.
+						If a value defined in a thumbnail item isn’t present in the parameter’s value list, it won’t be displayed in the control.
+						Identical sized arrays can be used for lines of definition as well.
+					</p>
+					<p>The Interface Script is rebuilt with the new value after any parameter is modified.</p>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>name: </b></code>
+							parameter name as string expression (all 4 command versions),
+							with parameter name option for UI_INFIELD{2} and UI_INFIELD{3},
+							and parameter name as text array value option for UI_INFIELD{4}.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>x, y: </b></code>the position of the edit text, pop-up or control.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>width, height: </b></code>width and height in pixels.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>method: </b></code>the type of the control.</div>
+						<div><code>1: </code>List view control.</div>
+						<div style="text-align: center"><img src="Images/GDL_Images/NonGeom_infield3_method1_List_view_control.png" style="text-align: middle" alt="Images/GDL_Images/NonGeom_infield3_method1_List_view_control.png"/></div>
+						<div><code>2: </code>Popup menu control.</div>
+						<div style="text-align: center"><img src="Images/GDL_Images/NonGeom_infield3_method2_Popup_menu_control.png" style="text-align: middle" alt="Images/GDL_Images/NonGeom_infield3_method2_Popup_menu_control.png"/></div>
+						<div><code>3: </code>Popup icon radio control (arrow on picture).</div>
+						<div style="text-align: center"><img src="Images/GDL_Images/NonGeom_infield3_method3_popupIconRadioControl_ArrowOnPic.png" style="text-align: middle" alt="Images/GDL_Images/NonGeom_infield3_method3_popupIconRadioControl_ArrowOnPic.png"/></div>
+						<div><code>4: </code>Push icon radio control.</div>
+						<div style="text-align: center"><img src="Images/GDL_Images/NonGeom_infield3_method4_pushIconRadioControl.PNG" style="text-align: middle" alt="Images/GDL_Images/NonGeom_infield3_method4_pushIconRadioControl.PNG"/></div>
+						<div><code>5: </code>Pushbutton with text.</div>
+						<div style="text-align: center"><img src="Images/GDL_Images/NonGeom_infield3_method5_pushbuttonWithText.PNG" style="text-align: middle" alt="Images/GDL_Images/NonGeom_infield3_method5_pushbuttonWithText.PNG"/></div>
+						<div><code>6: </code>Pushbutton with picture.</div>
+						<div style="text-align: center"><img src="Images/GDL_Images/NonGeom_infield3_method6_pushButtonWithPicture.PNG" style="text-align: middle" alt="Images/GDL_Images/NonGeom_infield3_method6_pushButtonWithPicture.PNG"/></div>
+						<div><code>7: </code>Checkbox with text.</div>
+						<div style="text-align: center"><img src="Images/GDL_Images/NonGeom_infield3_method7_checkboxWithText.PNG" style="text-align: middle" alt="Images/GDL_Images/NonGeom_infield3_method7_checkboxWithText.PNG"/></div>
+						<div><code>8: </code>Popup list with text.</div>
+						<div style="text-align: center"><img src="Images/GDL_Images/NonGeom_infield3_method8_popupListWithText.PNG" style="text-align: middle" alt="Images/GDL_Images/NonGeom_infield3_method8_popupListWithText.PNG"/></div>
+                        <div><code>9: </code>Popup icon radio control (arrow next to picture).</div>
+						<div style="text-align: center"><img src="Images/GDL_Images/NonGeom_infield3_method9_popupIconRadioControl_ArrowNextToPic.png" style="text-align: middle" alt="Images/GDL_Images/NonGeom_infield3_method9_popupIconRadioControl_ArrowNextToPic.png"/></div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>picture_name: </b></code>name of the common image file containing a matrix of concatenated images, or empty string.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>images_number: </b></code>number of images in the matrix, for boolean parameters it can be 0 or 2.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>rows_number: </b></code>number of rows of the matrix.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>cell_x, cell_y: </b></code>width and height of a cell within the thumbnail view field, including image and text.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>image_x, image_y: </b></code>width and height of the image in the cell.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>expression_imagei: </b></code>
+							index of image number i in the matrix, or individual file name.
+							If a common image file name was specified, indices must be used here.
+							Combination of indices and individual file names does not work.
+						</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>texti: </b></code>text in cell number i.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>value_definitioni: </b></code>value definition which matches the cell with a value list item by value:</div>
+						<div><code>expression: </code>numerical or string expression, or</div>
+						<div><code>CUSTOM: </code>keyword, meaning that any custom value can be entered.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>picIdxArray: </b></code>Dynamic array of picture names (strings) or indexes (integers) in cells. Do not use mixed types in array</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>textArray: </b></code>Dynamic array of texts in cells</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>valueArray: </b></code>Dynamic array of parameter values in cells</div>
+					</div>
+				
+				<div class="example"><a id="id527491"/><p class="title"><b>Example 1:
+</b></p><div class="example-contents"><pre class="programlisting">IF c THEN
+    UI_DIALOG "Hole definition parameters"
+    UI_OUTFIELD "Type of hole:",15,40,180,20
+    UI_INFIELD "D",190,40,105,20
+    IF d="Rectangular" THEN
+        UI_PICT "rect.pict",110,33,60,30
+        UI_OUTFIELD "Width of hole",15,70,180,20
+        UI_INFIELD "E", 190,70,105,20
+        UI_OUTFIELD "Height of hole",15,100,180,20
+        UI_INFIELD "F", 190,100,105,20
+        UI_OUTFIELD "Distance between holes",15,130,180,20
+        UI_INFIELD "G", 190,130,105,20
+    ELSE
+        UI_PICT "circle.pict",110,33,60,30
+        UI_OUTFIELD "Diameter of hole circle",15,70,180,20
+        UI_INFIELD "J", 190,70,105,20
+        UI_OUTFIELD "Distance of hole centers", 15,100,180,20
+        UI_INFIELD "K", 190,100,105,20
+        UI_OUTFIELD "Resolution of hole circle", 15,130,180,20
+        UI_INFIELD "M", 190,130,105,20
+    ENDIF
+    UI_OUTFIELD "Number of holes",15,160,180,20
+    UI_INFIELD "I", 190,160,105,20
+ENDIF
+UI_SEPARATOR 50,195,250,195
+UI_OUTFIELD "Material of beam", 15,210,180,20
+UI_INFIELD "MAT", 190,210,105,20
+UI_OUTFIELD "Pen of beam", 15,240,180,20
+UI_INFIELD "P", 190,240,105,20</pre><div class="informaltable"><table border="0"><colgroup><col/><col/></colgroup><tbody><tr><td>
+										<div style="text-align: center"><img src="Images/GDL_Images/NonGeom_ui_ex1_rect.PNG" style="text-align: middle" alt="Images/GDL_Images/NonGeom_ui_ex1_rect.PNG"/></div>
+									</td><td>
+										<div style="text-align: center"><img src="Images/GDL_Images/NonGeom_ui_ex1_circ.PNG" style="text-align: middle" alt="Images/GDL_Images/NonGeom_ui_ex1_circ.PNG"/></div>
+									</td></tr></tbody></table></div></div></div>
+				<div class="example"><a id="id527547"/><p class="title"><b>Example 2:
+</b></p><div class="example-contents"><pre class="programlisting">! Parameter Script:
+VALUES "myParameter" "Two", "Three", "Five", CUSTOM
+
+! Interface Script:
+px = 80
+py = 60
+cx = px + 3
+cy = py + 25
+
+UI_INFIELD{3} "myParameter", 10, 10, 4 * cx + 21, cy + 5,
+        1, "myPicture", 6,
+        1, cx, cy, px, py,
+        1, "1 - one", "One",
+        2, "2 - two", "Two",
+        3, "3 - three", "Three",
+        4, "4 - four", "Four",
+        5, "5 - five", "Five",
+        6, "custom value", CUSTOM</pre></div></div>
+				<div class="example"><a id="id527544"/><p class="title"><b>Example 3:
+</b></p><div class="example-contents"><pre class="programlisting">! Parameter Script:
+VALUES "myParameter" "Two", "Three", "Five", CUSTOM
+
+! Interface Script:
+px = 80
+py = 60
+cx = px + 3
+cy = py + 25
+
+paramNameVar = "myParameter"
+UI_INFIELD{4} paramNameVar, 10, 10, 4 * cx + 21, cy + 5,
+        1, "myPicture", 6,
+        1, cx, cy, px, py,
+        1, "1 - one", "One",
+        2, "2 - two", "Two",
+        3, "3 - three", "Three",
+        4, "4 - four", "Four",
+        5, "5 - five", "Five",
+        6, "custom value", CUSTOM</pre></div></div>
+				<div class="example"><a id="id527568"/><p class="title"><b>Example 4:
+</b></p><div class="example-contents"><pre class="programlisting">! Master Script
+dim picIdxValuesUI[]
+dim textValuesUI[]
+dim parameterValues[]
+
+if myTypeParameter = 1 then
+    picIdxValuesUI[1] = 6
+    picIdxValuesUI[2] = 7
+    picIdxValuesUI[3] = 8
+
+    textValuesUI[1] = "6 - six"
+    textValuesUI[2] = "7 - seven"
+    textValuesUI[3] = "8 - eight"
+
+    parameterValues[1] = "Six"
+    parameterValues[2] = "Seven"
+    parameterValues[3] = "Eight"
+else
+    picIdxValuesUI[1] = 6
+    picIdxValuesUI[2] = 7
+
+    textValuesUI[1] = "6 - six"
+    textValuesUI[2] = "7 - seven"
+
+    parameterValues[1] = "Six"
+    parameterValues[2] = "Seven"
+endif
+					</pre><pre class="programlisting">! Parameter Script:
+VALUES "myTypeParameter" 1, 2
+VALUES "myStringParameter" "Two", "Three", "Five", parameterValues, CUSTOM
+
+! Interface Script:
+px = 80
+py = 60
+cx = px + 3
+cy = py + 25
+
+paramNameVar = "myStringParameter"
+UI_INFIELD{4} paramNameVar, 10, 10, 4 * cx + 21, cy + 5,
+        1, "myPicture", 6,
+        1, cx, cy, px, py,
+        1, "1 - one", "One",
+        2, "2 - two", "Two",
+        3, "3 - three", "Three",
+        4, "4 - four", "Four",
+        5, "5 - five", "Five",
+        picIdxValuesUI, textValuesUI, parameterValues,
+        9, "custom value", CUSTOM</pre></div></div>
+			<h3 id="UI_CUSTOM_POPUP_INFIELD_gdlcommand">UI_CUSTOM_POPUP_INFIELD</h3>
+				
+				<pre class="programlisting"><b id="UI_CUSTOM_POPUP_INFIELD_keyword_2.12.5.19.4.1">UI_CUSTOM_POPUP_INFIELD</b> "name", x, y, width, height,
+        storeHiddenId, treeDepth,
+        groupingMethod, selectedValDescription,
+        value1, value2, valuesArray1, .... valuen, valuesArrayn
+			</pre>
+			<h3 id="UI_CUSTOM_POPUP_INFIELD2_gdlcommand">UI_CUSTOM_POPUP_INFIELD{2}</h3>
+				
+				<pre class="programlisting"><b id="UI_CUSTOM_POPUP_INFIELD2_keyword_2.12.5.20.4.1">UI_CUSTOM_POPUP_INFIELD{2}</b> name, x, y, width, height,
+        storeHiddenId, treeDepth,
+        groupingMethod, selectedValDescription,
+        value1, value2, valuesArray1, .... valuen, valuesArrayn
+				</pre>
+				
+					<p>
+						<span class="italic">Compatibility: introduced in ARCHICAD 20.</span>
+					</p>
+					<p>Generates a popup for a value list of a parameter defined in the User Interface script to avoid using the Parameter script.</p>
+					<p>
+						Suitable for lists which can not be requested in Parameter script.
+						<span class="emphasis"><em>For the parameter script restrictions see <a class="xref" href="002.015.html#REQUESTOptions_section" title="REQUEST Options">the section called “REQUEST Options”</a>.</em></span>
+					</p>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>name: </b></code>
+							parameter name as string expression for UI_CUSTOM_POPUP_INFIELD or
+							parameter name with optional actual index values if array for UI_CUSTOM_POPUP_INFIELD{2}.
+						</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>x, y: </b></code>the position of the edit text, pop-up.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>width, height: </b></code>width and height in pixels.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>storeHiddenId, treeDepth: </b></code>to set up automatic or manual trees.</div>
+						<div><code>storeHiddenId = 0, treeDepth = 0: </code>works only with array parameters.</div>
+						<p>The "treeDepth" parameter is set automatically by the second dimension (number of columns) of the array.</p>
+						<div><code>storeHiddenId = 1, treeDepth &gt; 0: </code>works only with single parameters.</div>
+						<p>
+							There must be <span class="bold"><strong>n * (1 + treeDepth)</strong></span> values defined
+							(first one for the stored ID and the rest for defining the custom tree).
+						</p>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>groupingMethod: </b></code>grouping method for sorting the tree.</div>
+						<div><code>1: </code>does not sort the groups and values under the same parent.</div>
+						<div style="text-align: center"><img src="Images/GDL_Images/NonGeom_uiCustomPopupMethod1.PNG" style="text-align: middle" alt="Images/GDL_Images/NonGeom_uiCustomPopupMethod1.PNG"/></div>
+						<div><code>2: </code>sorts the groups and values under the same parent.</div>
+						<div style="text-align: center"><img src="Images/GDL_Images/NonGeom_uiCustomPopupMethod2.PNG" style="text-align: middle" alt="Images/GDL_Images/NonGeom_uiCustomPopupMethod2.PNG"/></div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>selectedValDescription: </b></code>the text written in the field, if empty string the text will be the stored ID of the selected item.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>valuei, valuesArrayi: </b></code>define tree values one-by-one and/or with a one dimension array.</div>
+					</div>
+					<p>
+						</p><div class="example"><a id="id527724"/><p class="title"><b>Example:
+</b></p><div class="example-contents"><pre class="programlisting">
+UI_CUSTOM_POPUP_INFIELD "stParameterName", x, y, width, height,
+    1, 3, 2, "",    ! storeHiddenId, treeDepth, groupingMethod, selectedValDescription
+    "hiddenID1",    "type1",    "group1",   "value1",
+    "hiddenID2",    "type1",    "group1",   "value2",
+    "hiddenID3",    "type2",    "group2",   "value1",
+    "hiddenID4",    "type2",    "group2",   "value2",
+    "hiddenID5",    "type2",    "",         "value3",
+    "hiddenID6",    "",         "",         "value4",
+    "hiddenID7",    "",         "",         "value5"
+							</pre><div style="text-align: left"><img src="Images/GDL_Images/NonGeom_uiCustomPopupTree.PNG" style="text-align: left" alt="Images/GDL_Images/NonGeom_uiCustomPopupTree.PNG"/></div></div></div><p>
+					</p>
+				
+			<h3 id="UI_RADIOBUTTON_gdlcommand">UI_RADIOBUTTON</h3>
+				
+				<pre class="programlisting"><b id="UI_RADIOBUTTON_keyword_2.12.5.21.4.1">UI_RADIOBUTTON</b> name, value, text, x, y, width, height</pre>
+			<h3 id="UI_RADIOBUTTON2_gdlcommand">UI_RADIOBUTTON{2}</h3>
+				
+				<pre class="programlisting"><b id="UI_RADIOBUTTON2_keyword_2.12.5.22.4.1">UI_RADIOBUTTON{2}</b> "name", value, text, x, y, width, height</pre>
+				
+					<p>
+						<span class="italic">Version {2} compatibility: introduced in ARCHICAD 20.</span>
+					</p>
+					<p>
+						Generates a radio button of a radio button group. Radio button groups are defined by the parameter name.
+						Items in the same group are mutually exclusive.
+					</p>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>name: </b></code>parameter name or name as string expression for UI_RADIOBUTTON and parameter name as string expression (or text array indexed value) for UI_RADIOBUTTON{2}.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>value: </b></code>parameter is set to this value if this radio button is set.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>text: </b></code>this text is displayed beside the radio button.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>x, y: </b></code>the position of the radio control.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>width, height: </b></code>width and height in pixels.</div>
+					</div>
+				
+				<div class="example"><a id="id527833"/><p class="title"><b>Example:
+</b></p><div class="example-contents"><pre class="programlisting">UI_RADIOBUTTON "ceilingPlan", 0, `Floor Plan`, 10, 140, 100, 20
+UI_RADIOBUTTON "ceilingPlan", 1, `Ceiling Plan`, 10, 160, 100, 20</pre><div style="text-align: center"><img src="Images/GDL_Images/NonGeom_uiRadiobutton.PNG" style="text-align: middle" alt="Images/GDL_Images/NonGeom_uiRadiobutton.PNG"/></div></div></div>
+			<h3 id="UI_PICT_RADIOBUTTON_gdlcommand">UI_PICT_RADIOBUTTON</h3>
+				
+				<pre class="programlisting"><b id="UI_PICT_RADIOBUTTON_keyword_2.12.5.23.4.1">UI_PICT_RADIOBUTTON</b> name, value, text, 
+									picture_reference, x, y, width, height [UI_TOOLTIP tooltip]</pre>
+			<h3 id="UI_PICT_RADIOBUTTON2_gdlcommand">UI_PICT_RADIOBUTTON{2}</h3>
+				
+				<pre class="programlisting"><b id="UI_PICT_RADIOBUTTON2_keyword_2.12.5.24.4.1">UI_PICT_RADIOBUTTON{2}</b> "name", value, text,
+									picture_reference, x, y, width, height [UI_TOOLTIP tooltip]</pre>
+				
+					<p>
+						<span class="italic">Compatibility: introduced in ARCHICAD 22.</span>
+					</p>
+					<p>
+						Generates one radio button with icon of a radio button group. Radio button groups are defined by the parameter name.
+						Items in the same group are mutually exclusive.
+					</p>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>name: </b></code>parameter name or name as string expression for UI_PICT_RADIOBUTTON and parameter name as string expression (or text array indexed value) for UI_PICT_RADIOBUTTON{2}.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>value: </b></code>parameter is set to this value if this radio button is set.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>text: </b></code>this text is displayed on the button if no image is declared.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>picture_reference: </b></code>file name or index number of the picture stored in the library part.
+							The index 0 refers to the preview picture of the library part.
+							Pixel transparency is allowed in the picture.
+						</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>x, y: </b></code>the position of the radio control (top left anchor).</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>width, height: </b></code>width and height of the button in pixels. Image size is not declared individually: it should fit the button, as image is not stretched automatically to fit, and is centered on the button.</div>
+					</div>
+				
+			<h3 id="UI_PICT_PUSHCHECKBUTTON_gdlcommand">UI_PICT_PUSHCHECKBUTTON</h3>
+				
+				<pre class="programlisting"><b id="UI_PICT_PUSHCHECKBUTTON_keyword_2.12.5.25.4.1">UI_PICT_PUSHCHECKBUTTON</b> name, text, picture_reference,
+									frameFlag, x, y, width, height [UI_TOOLTIP tooltip]</pre>
+			<h3 id="UI_PICT_PUSHCHECKBUTTON2_gdlcommand">UI_PICT_PUSHCHECKBUTTON{2}</h3>
+				
+				<pre class="programlisting"><b id="UI_PICT_PUSHCHECKBUTTON2_keyword_2.12.5.26.4.1">UI_PICT_PUSHCHECKBUTTON{2}</b> "name", text, picture_reference,
+									frameFlag, x, y, width, height [UI_TOOLTIP tooltip]</pre>
+				
+					<p>
+						<span class="italic">Compatibility: introduced in ARCHICAD 22.</span>
+					</p>
+					<p>
+						Generates one pushcheck button with icon for a boolean parameter.
+						Similar to <a class="xref" href="reference/UI_INFIELD3.html">the UI_INFIELD{3} command</a> with method 6, with additional option to control the visibility of the button frame.
+					</p>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>name: </b></code>parameter name or name as string expression for UI_PICT_PUSHCHECKBUTTON and parameter name as string expression (or text array indexed value) for UI_PICT_PUSHCHECKBUTTON{2}.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>text: </b></code>this text is displayed on the button if no image is declared.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>picture_reference: </b></code>file name or index number of the picture stored in the library part.
+							The index 0 refers to the preview picture of the library part.
+							Pixel transparency is allowed in the picture.
+						</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>frameFlag: </b></code>1 - frame is displayed, 0 - frame is not visible. Use this option to match the control to other User Interface items in style.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>x, y: </b></code>the position of the button (top left anchor).</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>width, height: </b></code>width and height of the button in pixels. Image size is not declared individually: it should fit the button, as image is not stretched automatically to fit, and is centered on the button.</div>
+					</div>
+				
+			<h3 id="UI_TEXTSTYLE_INFIELD_gdlcommand">UI_TEXTSTYLE_INFIELD</h3>
+				
+				<pre class="programlisting"><b id="UI_TEXTSTYLE_INFIELD_keyword_2.12.5.27.4.1">UI_TEXTSTYLE_INFIELD</b> name, faceCodeMask, x, y,
+									buttonWidth, buttonHeight[, buttonOffsetX]</pre>
+			<h3 id="UI_TEXTSTYLE_INFIELD2_gdlcommand">UI_TEXTSTYLE_INFIELD{2}</h3>
+				
+				<pre class="programlisting"><b id="UI_TEXTSTYLE_INFIELD2_keyword_2.12.5.28.4.1">UI_TEXTSTYLE_INFIELD{2}</b> "name", faceCodeMask, x, y,
+									buttonWidth, buttonHeight [, buttonOffsetX]</pre>
+				
+					<p>
+						<span class="italic">Compatibility: introduced in ARCHICAD 22.</span>
+					</p>
+					<p>
+						Generates a row of puschcheckbuttons specifically used to set font style via an integer parameter, with similar appearance as seen in the general program interface.
+						The format of the set value matches the input parameter of <a class="xref" href="reference/DEFINESTYLE2.html">the DEFINE STYLE{2} command</a>.
+						Both icons and tooltips are referenced from ARCHICAD itself, according to the localized version.
+						The enabled buttons are displayed in a single-row arrangement.
+					</p>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>name: </b></code>parameter name or name as string expression for UI_TEXTSTYLE_INFIELD and parameter name as string expression (or text array indexed value) for UI_TEXTSTYLE_INFIELD{2}.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>faceCodeMask: </b></code>used bits add the matching font style option to the control:</div><div><code>faceCodeMask = j<sub>1</sub> + 2*j<sub>2</sub> + 4*j<sub>3</sub> + 32*j<sub>6</sub> + 64*j<sub>7</sub> + 128*j<sub>8</sub></code>, where each j can be 0 or 1.
+	</div>
+						<div><code>j<sub>1</sub>: </code>bold,</div>
+						<div><code>j<sub>2</sub>: </code>italic,</div>
+						<div><code>j<sub>3</sub>: </code>underline,</div>
+						<div><code>j<sub>6</sub>: </code>superscript,</div>
+						<div><code>j<sub>7</sub>: </code>subscript,</div>
+						<div><code>j<sub>8</sub>: </code>strikethrough.</div>
+						<p>If faceCodeMask = 0, then all possible font style buttons are displayed. In case of an invalid <code class="literal">faceCodeMask</code>, "Check Script" returns with warning ("Invalid mask value used").</p>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>x, y: </b></code>the position of the first button (top left anchor).</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>buttonWidth, buttonHeight: </b></code>width and height of one button in pixels. Full width can be calculated by using the <code class="literal">faceCodeMask</code>, the <code class="literal">buttonWidth</code> and the <code class="literal">buttonOffsetX</code> values, if necessary.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>buttonOffsetX: </b></code>distance between neighboring buttons in the row, in pixels. Automatic, if not set.</div>
+					</div>
+				
+			<h3 id="UI_LISTFIELD_gdlcommand">UI_LISTFIELD</h3>
+				
+				<pre class="programlisting"><b id="UI_LISTFIELD_keyword_2.12.5.29.4.1">UI_LISTFIELD</b> fieldID, x, y, width, height [, iconFlag [, description_header [, value_header]]]</pre>
+				
+					<p>
+						Generates a control for the parameter input as a scrollable list containing an arbitrary number of rows, with the following columns:
+						icon, description and input field for the parameter value.
+						Lines of the list can be defined with the UI_LISTITEM command. UI_LISTFIELD and UI_LISTITEM definitions can be scripted in an arbitrary order.
+						Empty listfields (with no list items) are not displayed.
+					</p>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>fieldID: </b></code>
+							the unique identifier of the listfield. This ID also used in the UI_LISTITEM commands specifies the listfield the listitems belong to.
+							Duplicates within a user interface script are not allowed.
+						</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>x, y: </b></code>
+							position of the listfield's top left corner.
+						</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>width, height: </b></code>
+							width and height in pixels.
+						</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>iconFlag: </b></code></div>
+							<p> <code class="literal">iconFlag = 0:</code> icon column is not generated for this listfield.</p>
+							<p> <code class="literal">iconFlag = 1:</code> icon column is generated for this listfield (default value if not specified).</p>
+					</div>
+					<p>
+						If the Custom Settings panel has only one control and this control is a listfield, the x, y, width, height parameters have no effect.
+						In this case the width of the listfield equals to the width of the Custom Settings panel.
+					</p>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>description_header: </b></code>
+							the title of the Description column.
+						</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>value_header: </b></code>
+							the title of the Value column.
+						</div>
+					</div>
+					<p>
+						If both description_header and value_header are empty strings or not specified, the listfield is generated without a header.
+						If the strings contain at least one space, the listfield is generated with an empty header.
+					</p>
+				
+			<h3 id="UI_LISTITEM_gdlcommand">UI_LISTITEM</h3>
+				
+				<pre class="programlisting"><b id="UI_LISTITEM_keyword_2.12.5.30.4.1">UI_LISTITEM</b> itemID, fieldID, "name" [, childFlag [, image [, paramDesc]]]</pre>
+			<h3 id="UI_LISTITEM2_gdlcommand">UI_LISTITEM{2}</h3>
+				
+				<pre class="programlisting"><b id="UI_LISTITEM2_keyword_2.12.5.31.4.1">UI_LISTITEM{2}</b> itemID, fieldID, name [, childFlag [, image [, paramDesc]]]</pre>
+				
+					<p>Appends a listitem to the listfield defined by the fieldID parameter.</p>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>itemID: </b></code>
+							the unique identifier of the listitem. Listitems can be scripted in an arbitrary order and are sorted by itemID.
+							Duplicate listitem IDs within a listfield are not allowed.
+						</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>fieldID: </b></code>
+							the unique identifier of the listfield containing this listitem.
+						</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>name: </b></code>
+							parameter name as string expression for UI_LISTITEM or parameter name with optional actual index values if array for UI_LISTITEM{2}.
+						</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>childFlag: </b></code></div>
+						<p><code class="literal">childFlag = 0:</code> the listitem is a groupitem (default value if not specified).</p>
+						<p><code class="literal">childFlag = 1:</code> the listitem is a childitem. The parent item is the first groupitem above.</p>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>image: </b></code>
+							file name or index number of the picture stored in the library part.
+							If valid, it is displayed as an icon in the first column of the listfield in the associated listitem's row.
+						</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>paramDesc: </b></code>
+							the visible name of the listitem in the Description column.
+							If left empty, the description is automatically filled up from the parameter list description of the Library Part.
+							If there is no description there, the name of the parameter is displayed instead.
+						</div>
+					</div>
+					<p>
+						If "name" string is empty, the listitem is a group with bold fonttype.
+						If both "name" string and paramDesc are empty, the listitem is a separator.
+						The HIDEPARAMETER command is ineffective for list items, the script should not add the item instead of using it.
+						The LOCK command can be used and it is effective for list items.
+					</p>
+					<p>
+						For a listfield it is recommended to define different itemIDs for different parameters, groups and separators.
+					</p>
+				
+				<div class="example"><a id="id528408"/><p class="title"><b>Example:
+</b></p><div class="example-contents"><pre class="programlisting">! List with header without icon column
+
+ui_listfield 1, 10, 35, 432, 220, 0, "Description Header Text", "Value Header Text"
+
+ui_listitem 1, 1, "", 0, "", "Group Title 1" ! Group Line
+ui_listitem 2, 1, "A", 1
+ui_listitem 3, 1, "B", 1
+ui_listitem 4, 1, "ZZYZX", 1
+
+ui_listitem 5, 1, "" !separator
+ui_listitem 6, 1, "AC_show2DHotspotsIn3D", 0, "", "Group Title 2" ! Group Parameter Line
+ui_listitem 7, 1, "A", 1, "", "Custom Description A"
+ui_listitem 8, 1, "B", 1, "", "Custom Description B"
+ui_listitem 9, 1, "ZZYZX", 1, "", "Custom Description ZZYZX"</pre><div style="text-align: center"><img src="Images/GDL_Images/NonGeom_uiListField.PNG" style="text-align: middle" alt="Images/GDL_Images/NonGeom_uiListField.PNG"/></div></div></div>
+			<h3 id="UI_CUSTOM_POPUP_LISTITEM_gdlcommand">UI_CUSTOM_POPUP_LISTITEM</h3>
+				
+				<pre class="programlisting">
+					<b id="UI_CUSTOM_POPUP_LISTITEM_keyword_2.12.5.32.4.2">UI_CUSTOM_POPUP_LISTITEM</b> itemID, fieldID, "name", childFlag, image, paramDesc,
+					storeHiddenId, treeDepth,
+					groupingMethod, selectedValDescription,
+					value1, value2, valuesArray1, .... valuen, valuesArrayn
+				</pre>
+			<h3 id="UI_CUSTOM_POPUP_LISTITEM2_gdlcommand">UI_CUSTOM_POPUP_LISTITEM{2}</h3>
+				
+				<pre class="programlisting">
+					<b id="UI_CUSTOM_POPUP_LISTITEM2_keyword_2.12.5.33.4.2">UI_CUSTOM_POPUP_LISTITEM{2}</b> itemID, fieldID, name, childFlag, image, paramDesc,
+					storeHiddenId, treeDepth,
+					groupingMethod, selectedValDescription,
+					value1, value2, valuesArray1, .... valuen, valuesArrayn
+				</pre>
+				
+					<p>
+						<span class="italic">Compatibility: introduced in ARCHICAD 20.</span>
+					</p>
+					<p>Similar to the "UI_CUSTOM_POPUP_INFIELD" and the "UI_CUSTOM_POPUP_INFIELD{2}"</p>
+					<p>Generates a listitem with popup for a value list of a parameter defined in the User Interface script to avoid using the Parameter script.</p>
+					<p>
+						Suitable for lists which can not be requested in Parameter script.
+						<span class="emphasis"><em>For the parameter script restrictions see <a class="xref" href="002.015.html#REQUESTOptions_section" title="REQUEST Options">the section called “REQUEST Options”</a>.</em></span>
+					</p>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>itemID: </b></code>
+							the unique identifier of the listitem. Listitems can be scripted in an arbitrary order and are sorted by itemID.
+							Duplicate listitem IDs within a listfield are not allowed.
+						</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>fieldID: </b></code>
+							the unique identifier of the listfield containing this listitem.
+						</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>name: </b></code>
+							parameter name as string expression for UI_CUSTOM_POPUP_LISTITEM or
+							parameter name with optional actual index values if array for UI_CUSTOM_POPUP_LISTITEM{2}.
+						</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>childFlag: </b></code></div>
+						<p><code class="literal">childFlag = 0:</code> the listitem is a groupitem (default value if not specified).</p>
+						<p><code class="literal">childFlag = 1:</code> the listitem is a childitem. The parent item is the first groupitem above.</p>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>image: </b></code>
+							file name or index number of the picture stored in the library part.
+							If valid, it is displayed as an icon in the first column of the listfield in the associated listitem's row.
+						</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>paramDesc: </b></code>
+							the visible name of the listitem in the Description column.
+							If left empty, the description is automatically filled up from the parameter list description of the Library Part.
+							If there is no description there, the name of the parameter is displayed instead.
+						</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>storeHiddenId, treeDepth: </b></code>to set up automatic or manual trees.</div>
+						<div><code>storeHiddenId = 0, treeDepth = 0: </code>works only with array parameters.</div>
+						<p>The "treeDepth" parameter is set automatically by the second dimension (number of columns) of the array.</p>
+						<div><code>storeHiddenId = 1, treeDepth &gt; 0: </code>works only with single parameters.</div>
+						<p>
+							There must be <span class="bold"><strong>n * (1 + treeDepth)</strong></span> values defined
+							(first one for the stored ID and the rest for defining the custom tree).
+						</p>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>groupingMethod: </b></code>grouping method for sorting the tree.</div>
+						<div><code>1: </code>does not sort the groups and values under the same parent.</div>
+						<div style="text-align: center"><img src="Images/GDL_Images/NonGeom_uiCustomPopupMethod1.PNG" style="text-align: middle" alt="Images/GDL_Images/NonGeom_uiCustomPopupMethod1.PNG"/></div>
+						<div><code>2: </code>sorts the groups and values under the same parent.</div>
+						<div style="text-align: center"><img src="Images/GDL_Images/NonGeom_uiCustomPopupMethod2.PNG" style="text-align: middle" alt="Images/GDL_Images/NonGeom_uiCustomPopupMethod2.PNG"/></div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>selectedValDescription: </b></code>the text written in the field, if empty string the text will be the stored ID of the selected item.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>valuei, valuesArrayi: </b></code>define tree values one-by-one and/or with a one dimension array.</div>
+					</div>
+					<p>
+						</p><div class="example"><a id="id528651"/><p class="title"><b>Example:
+</b></p><div class="example-contents"><pre class="programlisting">
+UI_CUSTOM_POPUP_LISTITEM itemID, fieldID, "stParameterName", 0, "", "",
+    1, 3, 2, "",    ! storeHiddenId, treeDepth, groupingMethod, selectedValDescription
+    "hiddenID1",    "type1",    "group1",   "value1",
+    "hiddenID2",    "type1",    "group1",   "value2",
+    "hiddenID3",    "type2",    "group2",   "value1",
+    "hiddenID4",    "type2",    "group2",   "value2",
+    "hiddenID5",    "type2",    "",         "value3",
+    "hiddenID6",    "",         "",         "value4",
+    "hiddenID7",    "",         "",         "value5"
+							</pre><div style="text-align: left"><img src="Images/GDL_Images/NonGeom_uiCustomPopupTree.PNG" style="text-align: left" alt="Images/GDL_Images/NonGeom_uiCustomPopupTree.PNG"/></div></div></div><p>
+					</p>
+				
+			<h3 id="UI_TOOLTIP_gdlcommand">UI_TOOLTIP</h3>
+				
+				<pre class="programlisting"><b id="UI_BUTTON_keyword_2.12.5.34.4.1">UI_BUTTON</b> type, text, x, y, width, height [, id [, url]] [ <b id="UI_TOOLTIP_keyword_2.12.5.34.4.3">UI_TOOLTIP</b> tooltiptext ]</pre>
+				<pre class="programlisting"><b id="UI_PICT_BUTTON_keyword_2.12.5.34.6.1">UI_PICT_BUTTON</b> type, text, picture_reference,
+        x, y, width, height [, id [, url]] [ <b id="UI_TOOLTIP_keyword_2.12.5.34.6.3">UI_TOOLTIP</b> tooltiptext ]</pre>
+				<pre class="programlisting"><b id="UI_INFIELD_keyword_2.12.5.34.8.1">UI_INFIELD</b> "name", x, y, width, height [, extra parameters ... ]
+        [ <b id="UI_TOOLTIP_keyword_2.12.5.34.8.3">UI_TOOLTIP</b> tooltiptext ]</pre>
+				<pre class="programlisting"><b id="UI_INFIELD2_keyword_2.12.5.34.10.1">UI_INFIELD{2}</b> name, x, y, width, height [, extra parameters ... ]
+        [ <b id="UI_TOOLTIP_keyword_2.12.5.34.10.3">UI_TOOLTIP</b> tooltiptext ]</pre>
+				<pre class="programlisting"><b id="UI_INFIELD3_keyword_2.12.5.34.12.1">UI_INFIELD{3}</b> name, x, y, width, height [, extra parameters ... ]
+        [ <b id="UI_TOOLTIP_keyword_2.12.5.34.12.3">UI_TOOLTIP</b> tooltiptext ]</pre>
+				<pre class="programlisting"><b id="UI_INFIELD4_keyword_2.12.5.34.14.1">UI_INFIELD{4}</b> "name", x, y, width, height [, extra parameters ... ]
+        [ <b id="UI_TOOLTIP_keyword_2.12.5.34.14.3">UI_TOOLTIP</b> tooltiptext ]</pre>
+				<pre class="programlisting"><b id="UI_CUSTOM_POPUP_INFIELD_keyword_2.12.5.34.16.1">UI_CUSTOM_POPUP_INFIELD</b> "name", x, y, width, height , extra parameters ...
+        [ <b id="UI_TOOLTIP_keyword_2.12.5.34.16.3">UI_TOOLTIP</b> tooltiptext ]</pre>
+				<pre class="programlisting"><b id="UI_CUSTOM_POPUP_INFIELD2_keyword_2.12.5.34.18.1">UI_CUSTOM_POPUP_INFIELD{2}</b> name, x, y, width, height , extra parameters ...
+        [ <b id="UI_TOOLTIP_keyword_2.12.5.34.18.3">UI_TOOLTIP</b> tooltiptext ]</pre>
+				<pre class="programlisting"><b id="UI_RADIOBUTTON_keyword_2.12.5.34.20.1">UI_RADIOBUTTON</b> name, value, text, x, y, width, height [ <b id="UI_TOOLTIP_keyword_2.12.5.34.20.3">UI_TOOLTIP</b> tooltiptext ]</pre>
+				<pre class="programlisting"><b id="UI_OUTFIELD_keyword_2.12.5.34.22.1">UI_OUTFIELD</b> expression, x, y, width, height [, flags] [ <b id="UI_TOOLTIP_keyword_2.12.5.34.22.3">UI_TOOLTIP</b> tooltiptext ]</pre>
+				<pre class="programlisting"><b id="UI_PICT_keyword_2.12.5.34.24.1">UI_PICT</b> expression, x, y [, width, height [, mask]] [ <b id="UI_TOOLTIP_keyword_2.12.5.34.24.3">UI_TOOLTIP</b> tooltiptext ]</pre>
+				<pre class="programlisting"><b id="UI_LISTFIELD_keyword_2.12.5.34.26.1">UI_LISTFIELD</b> fieldID, x, y, width, height [, iconFlag [, description_header [, value_header]]]
+        [ <b id="UI_TOOLTIP_keyword_2.12.5.34.26.3">UI_TOOLTIP</b> tooltiptext ]</pre>
+				<pre class="programlisting"><b id="UI_LISTITEM_keyword_2.12.5.34.28.1">UI_LISTITEM</b> itemID, fieldID, "name" [, childFlag [, image [, paramDesc]]]
+        [ <b id="UI_TOOLTIP_keyword_2.12.5.34.28.3">UI_TOOLTIP</b> tooltiptext ]</pre>
+				<pre class="programlisting"><b id="UI_LISTITEM2_keyword_2.12.5.34.30.1">UI_LISTITEM{2}</b> itemID, fieldID, name [, childFlag [, image [, paramDesc]]]
+        [ <b id="UI_TOOLTIP_keyword_2.12.5.34.30.3">UI_TOOLTIP</b> tooltiptext ]</pre>
+				<pre class="programlisting"><b id="UI_CUSTOM_POPUP_LISTITEM_keyword_2.12.5.34.32.1">UI_CUSTOM_POPUP_LISTITEM</b> itemID, fieldID, "name", childFlag , image , paramDesc,
+        extra parameters ...
+        [ <b id="UI_TOOLTIP_keyword_2.12.5.34.32.3">UI_TOOLTIP</b> tooltiptext ]</pre>
+				<pre class="programlisting"><b id="UI_CUSTOM_POPUP_LISTITEM2_keyword_2.12.5.34.34.1">UI_CUSTOM_POPUP_LISTITEM{2}</b> itemID, fieldID, name, childFlag , image , paramDesc,
+        extra parameters ...
+        [ <b id="UI_TOOLTIP_keyword_2.12.5.34.34.3">UI_TOOLTIP</b> tooltiptext ]</pre>
+				
+					<p>
+						Defines the tooltip for the control on the user interface page.
+						Tooltips are available for buttons, infields, outfields, listfields, listitems and pictures
+						if they are not disabled by the user in the running context (e.g., in the Help menu of ARCHICAD).
+					</p>
+					<p>
+						The listfield's tooltip appears in all included listitems if an item has none declared.
+						The own tooltip of the listitem will take effect over the tooltip of the listfield (if existing) inline.
+					</p>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>tooltiptext: </b></code>the text to display as tooltip for the control.</div>
+					</div>
+				
+			<h3 id="UI_COLORPICKER_gdlcommand">UI_COLORPICKER</h3>
+				
+				<pre class="programlisting"><b id="UI_COLORPICKER_keyword_2.12.5.35.4.1">UI_COLORPICKER</b> "redParamName", "greenParamName", "blueParamName", x0, y0 [, width [, height]]</pre>
+			<h3 id="UI_COLORPICKER2_gdlcommand">UI_COLORPICKER{2}</h3>
+				
+				<pre class="programlisting"><b id="UI_COLORPICKER2_keyword_2.12.5.36.4.1">UI_COLORPICKER{2}</b> redParamName, greenParamName, blueParamName, x0, y0 [, width [, height]]</pre>
+				
+						<p>Color picker dialog to set the r, g, b components of a color and store them into the given parameters. These values can later be used in the LIGHT command.</p>
+						<div style="margin-left: 1em">
+							<div style="text-indent: -1em"><code><b>redParamName, greenParamName, blueParamName: </b></code>
+								parameter names as string expression for UI_COLORPICKER or parameter names with optional actual index values if array for UI_COLORPICKER{2}
+							</div>
+						</div>
+				<div style="margin-left: 1em">
+					<div style="text-indent: -1em"><code><b>x0, y0: </b></code>
+							position of the color picker's top left corner.
+					</div>
+				</div>
+				<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>width, height: </b></code>
+							width and height in pixels.
+						</div>
+				</div>
+				
+			<h3 id="UI_SLIDER_gdlcommand">UI_SLIDER</h3>
+				
+				<pre class="programlisting"><b id="UI_SLIDER_keyword_2.12.5.37.4.1">UI_SLIDER</b> "name", x0, y0, width, height [, nSegments [, sliderStyle]]</pre>
+			<h3 id="UI_SLIDER2_gdlcommand">UI_SLIDER{2}</h3>
+				
+				<pre class="programlisting"><b id="UI_SLIDER2_keyword_2.12.5.38.4.1">UI_SLIDER{2}</b> name, x0, y0, width, height [, nSegments [, sliderStyle]]</pre>
+				
+					<p>
+						Generates a slider control for an integer parameter defined with a range.
+						For integer parameters with undefined range lower and upper limit values are -32768 (minimum signed short) and 32767 (maximum signed short).
+					</p>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>name: </b></code>parameter name as string expression parameter or name with optional actual index values for UI_SLIDER{2}.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>x0, y0: </b></code>position of the slider.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>width, height: </b></code>slider width and height in pixels. If the width &gt; height the slider is horizontal, in the opposite case
+						it is vertical. </div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>nSegments: </b></code>optional number of segments on the slider. If 0, no segments are displayed, if omitted or negative, the number
+						of segments are calculated from the range upper and lower limit values and the step defined for the parameter.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>sliderStyle: </b></code>optional slider style (default is 0)</div>
+						<div><code>0: </code>slider points to the bottom (horizontal sliders) or to the right (vertical sliders).</div>
+						<div><code>1: </code>slider points to the top (horizontal sliders) or to the left (vertical sliders).</div>
+					</div>
+				
+			</div><div class="section"><div class="titlepage"><div><div><h2 class="title"><a id="TheForwardMigrationScript_section"/>The Forward Migration Script</h2></div></div></div><p>
+				If an element is changed completely in a newer library, compatibility can be maintained by defining the migration logic.
+				For more detailed information, please take a look at <a class="xref" href="002.015.html#ForwardMigration_section" title="Forward Migration script">the section called “Forward Migration script”</a>.
+			</p><div class="example"><a id="id532060"/><p class="title"><b>Example:
+</b></p><div class="example-contents"><pre class="programlisting">
+actualGUID = FROM_GUID
+
+! ==============================================================================
+! Subroutines
+! ==============================================================================
+
+    _startID    = "AAAA-AAAA-...AAA"
+    _endID      = "BBBB-BBBB-...BBB"
+gosub "migrationstepname_FWM"
+
+! ==============================================================================
+! Set Migration GUID
+! ==============================================================================
+
+setmigrationguid actualGUID
+
+! ==============================================================================
+end ! end ! end ! end ! end ! end ! end ! end ! end ! end ! end ! end ! end ! en
+! ==============================================================================
+
+! ==============================================================================
+! migrationstepname
+! ==============================================================================
+"migrationstepname_FWM":
+    if actualGuid = _startID then
+        newParameter = oldParameter
+        parameters newParameter = newParameter
+        actualGuid = _endID
+    endif
+return
+				</pre></div></div><p>
+				<code class="literal">FROM_GUID</code> is the global variable holding the main ID of the original object which the migration is run on.
+			</p><p>
+				In case the script succeeds, the instance gets substituted by the new element with the updated parameters.
+			</p><h3 id="SETMIGRATIONGUID_gdlcommand">SETMIGRATIONGUID</h3>
+				
+				<pre class="programlisting"><b id="SETMIGRATIONGUID_keyword_2.12.6.6.4.1">SETMIGRATIONGUID</b> guid</pre>
+				
+					<p>
+						The command tells the running environment, which element will be the matching migration element for the current object.
+						If the returned ID belongs to the current element, the migration of the object gets complete.
+					</p>
+				
+			<h3 id="STORED_PAR_VALUE_gdlcommand">STORED_PAR_VALUE</h3>
+				
+				<pre class="programlisting"><b id="STORED_PAR_VALUE_keyword_2.12.6.7.4.1">STORED_PAR_VALUE</b> ("oldparname", outputvalue)</pre>
+				
+					<p>
+						Retrieves the value of a parameter, which is present in the migrated object, and present or deleted in the new version object.
+						This command form is suggested for those parameters present in the new object as well.
+						To get the value of an old array Parameter, the outputvalue parameter must be initialized as an array (with the dim command).
+					</p>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>oldparname: </b></code>string expression, name of the parameter in the old parameter list.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>outputvalue: </b></code>output variable to store the value of the parameter.</div>
+					</div>
+					<p>
+						Return value: 1 on success, 0 otherwise (for example, if there is no parameter with that name in the parameter list of the old object).
+						During checking the script the return value is always 0, because the old Parameters section is not known.
+					</p>
+				
+			<h3 id="DELETED_PAR_VALUE_gdlcommand">DELETED_PAR_VALUE</h3>
+				
+				<pre class="programlisting"><b id="DELETED_PAR_VALUE_keyword_2.12.6.8.4.1">DELETED_PAR_VALUE</b> ("oldparname", outputvalue)</pre>
+				
+					<p>
+						Retrieves the value of a parameter, which is present in the migrated object, and present or deleted in the new version object.
+						This command form is suggested for those parameters deleted from the new object.
+						To get the value of an old array Parameter, the outputvalue parameter must be initialized as an array (with the dim command).
+					</p>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>oldparname: </b></code>string expression, name of the parameter in the old parameter list.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>outputvalue: </b></code>output variable to store the value of the parameter.</div>
+					</div>
+					<p>
+						Return value: 1 on success, 0 otherwise (for example, if there is no parameter with that name in the parameter list of the old object).
+						During checking the script the return value is always 0, because the old Parameters section is not known.
+					</p>
+				
+			</div><div class="section"><div class="titlepage"><div><div><h2 class="title"><a id="TheBackwardMigrationScript_section"/>The Backward Migration Script</h2></div></div></div><p>
+				Via the Backward Migration script you can define the backward conversion logic converting new object instances to older ones.
+				For more and detailed information, please take a look at <a class="xref" href="002.015.html#BackwardMigration_section" title="Backward Migration script">the section called “Backward Migration script”</a>.
+			</p><div class="example"><a id="id532184"/><p class="title"><b>Example:
+</b></p><div class="example-contents"><pre class="programlisting">
+targetGUID = TO_GUID
+
+! ==============================================================================
+! Subroutines
+! ==============================================================================
+
+gosub "migrationstepname_BWM"
+
+! ==============================================================================
+! Set Migration GUID
+! ==============================================================================
+
+setmigrationguid targetGUID
+
+! ==============================================================================
+end ! end ! end ! end ! end ! end ! end ! end ! end ! end ! end ! end ! end ! en
+! ==============================================================================
+
+
+! ==============================================================================
+! migrationstepname
+! ==============================================================================
+"migrationstepname _BWM":
+    if targetGUID # "" then
+        bMigrationSuccess = 1
+        if bMigrationSuccess = 1 then
+            oldParameter = newParameter
+            parameters oldParameter = oldParameter
+        else
+            targetGuid = ""
+        endif
+    endif
+return
+				</pre></div></div><p>
+				<code class="literal">TO_GUID</code> is the global variable holding the main ID of the target element in the conversion.
+			</p><p>
+				Use <a class="xref" href="reference/SETMIGRATIONGUID.html">the SETMIGRATIONGUID command</a> for setting targetGUID.
+			</p><h3 id="NEWPARAMETER_gdlcommand">NEWPARAMETER</h3>
+				
+				<pre class="programlisting"><b id="NEWPARAMETER_keyword_2.12.7.6.4.1">NEWPARAMETER</b> "name", "type" [, dim1 [, dim2]]</pre>
+				
+					<p>
+						Adds a new parameter to the parameters of a library part in the Backward Migration Script.
+						The parameter creation happens only after the full interpretation of the script.
+						If a parameter with the given name already exists in the parameters list, an error occurs.
+					</p>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>name: </b></code>string expression, name of the parameter to be created.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>type: </b></code>string expression, type of the parameter. Possible values are:</div>
+						<div><code>Integer</code></div>
+						<div><code>Length</code></div>
+						<div><code>Angle</code></div>
+						<div><code>RealNum</code></div>
+						<div><code>LightSwitch</code></div>
+						<div><code>ColorRGB</code></div>
+						<div><code>Intensity</code></div>
+						<div><code>LineType</code></div>
+						<div><code>Material</code></div>
+						<div><code>FillPattern</code></div>
+						<div><code>PenColor</code></div>
+						<div><code>String</code></div>
+						<div><code>Boolean</code></div>
+						<div><code>BuildingMaterial</code><span class="italic">(Compatibility: introduced in ARCHICAD 22.)</span></div>
+						<div><code>Profile</code><span class="italic">(Compatibility: introduced in ARCHICAD 22.)</span></div>
+						<div><code>Dictionary</code><span class="italic">(Compatibility: introduced in ARCHICAD 24.)</span></div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>dim1, dim2: </b></code>
+							dim1 is the first dimension of the parameter, 0 if not set. dim2 is the second dimension of the parameter, 0 if not set.
+						</div>
+						<div><code>dim1 = 0, dim2 = 0: </code>the parameter is a scalar parameter,</div>
+						<div><code>dim1 &gt; 0, dim2 = 0: </code>the parameter is a 1 dimensional array,</div>
+						<div><code>dim1 &gt; 0, dim2 &gt; 0: </code>the parameter is a 2 dimensional array,</div>
+					</div>
+					
+						<pre class="programlisting">If dim2 &gt; 0, then dim1 &gt; 0.</pre>
+					
+				
+			</div><hr/><p>
+				<span class="bold"><strong>GDL Reference Guide</strong></span>
+			</p><p>
+				<span class="trademark">Copyright</span><sup>©</sup> 2021 by GRAPHISOFT, all rights reserved.
+				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+			</p></body></html>

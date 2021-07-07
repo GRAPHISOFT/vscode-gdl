@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>REMOVEKEY</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="REMOVEKEY_gdlcommand">REMOVEKEY</h3>
+				
+				<pre class="programlisting"><b id="REMOVEKEY_keyword_2.13.3.6.4.1">REMOVEKEY</b> (dictionary.key)</pre>
+				
+					<p>
+						The function removes the referred key from the dictionary, along with the assigned value(s). If the removal was successful, the return value is 1, othervise 0 (in case the key is non-existent or already deleted).
+					</p>
+				
+				<div class="example"><a id="id532626"/><p class="title"><b>Example:
+</b></p><div class="example-contents"><pre class="programlisting">DICT myDictionary
+myDictionary.myText[1] = "hello"
+myDictionary.myOtherText[1] = "world"
+
+print myDictionary
+
+_dummy = REMOVEKEY(myDictionary.myOtherText)
+print myDictionary, _dummy
+
+_dummy2 = REMOVEKEY(myDictionary.myNonExistentText)
+print myDictionary, _dummy2</pre></div></div>
+			<hr/><a href="002.013.html#REMOVEKEY_gdlcommand">Related in Expressions and Functions</a><p>
+				<span class="bold"><strong>GDL Reference Guide</strong></span>
+			</p><p>
+				<span class="trademark">Copyright</span><sup>©</sup> 2021 by GRAPHISOFT, all rights reserved.
+				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+			</p></body></html>

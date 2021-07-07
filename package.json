@@ -1,0 +1,502 @@
+{
+    "name": "gdl",
+    "displayName": "GDL",
+    "description": "Development environment for Archicad 25 GDL language (XML and HSF source code): syntax coloring, snippets, code outline, quick reference.",
+    "version": "1.25.1",
+    "publisher": "Graphisoft",
+    "author": "Péter Baksa",
+    "contributors": [
+        "Csilla Mai",
+        "Olga Végh",
+        "Lucas Becker",
+        "Owen Sharp"
+    ],
+    "bugs": {
+        "email": "gdlcenter@graphisoft.com"
+    },
+    "qna": "https://archicad-talk.graphisoft.com/viewforum.php?f=49",
+    "license": "MIT",
+    "repository": { "url": "https://github.com/GRAPHISOFT/vscode-gdl" },
+    "engines": {
+        "vscode": "^1.57.0"
+    },
+    "categories": [
+        "Programming Languages",
+        "Themes",
+        "Snippets"
+    ],
+    "preview": false,
+    "keywords": [
+        "GDL",
+        "Graphisoft",
+        "Geometric Description Language",
+        "HSF"
+    ],
+    "activationEvents": [
+        "onView:GDLOutline",
+        "onLanguage:gdl-xml",
+        "onLanguage:gdl-hsf",
+        "workspaceContains:**/libpartdata.xml",
+        "onCommand:GDL.gotoCursor",
+        "onCommand:GDL.gotoScript",
+        "onCommand:GDL.gotoRelative",
+        "onCommand:GDL.selectScript",
+        "onCommand:GDL.switchToGDL",
+        "onCommand:GDL.switchToHSF",
+        "onCommand:GDL.switchToXML",
+        "onCommand:GDL.refguide",
+        "onCommand:GDL.infoFromHSF"
+    ],
+    "main": "./out/extension",
+    "contributes": {
+        "languages": [
+            {
+                "id": "gdl-xml",
+                "aliases": [
+                    "GDL-XML"
+                ],
+                "extensions": [
+                    ".xml"
+                ],
+                "configuration": "./language-configuration.json"
+            },
+            {
+                "id": "gdl-hsf",
+                "aliases": [
+                    "GDL-HSF"
+                ],
+                "extensions": [
+                    ".gdl"
+                ],
+                "configuration": "./language-configuration.json"
+            }
+        ],
+        "grammars": [
+            {
+                "language": "gdl-xml",
+                "scopeName": "source.gdl",
+                "path": "./syntaxes/gdl.tmLanguage"
+            },
+            {
+                "language": "gdl-hsf",
+                "scopeName": "source.gdl",
+                "path": "./syntaxes/gdl.tmLanguage"
+            }
+        ],
+        "snippets": [
+            {
+                "language": "gdl-xml",
+                "path": "./snippets/gdl_snippets.json"
+            },
+            {
+                "language": "gdl-hsf",
+                "path": "./snippets/gdl_snippets.json"
+            }
+        ],
+        "configuration": {
+            "type": "object",
+            "title": "GDL configuration",
+            "properties": {
+                "gdl.showSpecialComments": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Show special comments in script outline tree when opening new files."
+                },
+                "gdl.showMacroCalls": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Show macro calls in script outline tree when opening new files."
+                },
+                "gdl.refguidePath": {
+                    "title": "Custom Reference Guide Path",
+                    "type": "string",
+                    "default": "",
+                    "description": "Path of reference guide root folder. Leave empty to use the reference guide packed with the extension."
+                },
+                "gdl.showInfoFromHSFFiles": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "At GDL-HSF Language Mode the IntelliSense lists parameters and master scripts constants with their initilalized values. The parameter's names are showing as bold and have info in hover. "
+                }
+            }
+        },
+        "configurationDefaults": {
+            "[gdl-xml]": {
+                "editor.detectIndentation": false,
+                "editor.tabSize": 4,
+                "editor.insertSpaces": false,
+                "editor.rulers": [
+                    {
+                        "column": 120,
+                        "color": "#e0efff"
+                    },
+                    {
+                        "column": 256,
+                        "color": "#ffa0a0"
+                    }
+                ],
+                "editor.wordSeparators": "`!@#$%^&*()-=+[]\\|;:'\",.<>/?"
+            },
+            "[gdl-hsf]": {
+                "editor.detectIndentation": false,
+                "editor.tabSize": 4,
+                "editor.insertSpaces": false,
+                "editor.rulers": [
+                    {
+                        "column": 120,
+                        "color": "#e0efff"
+                    },
+                    {
+                        "column": 256,
+                        "color": "#ffa0a0"
+                    }
+                ],
+                "editor.wordSeparators": "`!@#$%^&*()-=+[]\\|;:'\",.<>/?"
+            }
+        },
+        "themes": [
+            {
+                "label": "GDL Light",
+                "uiTheme": "vs",
+                "path": "./themes/GDL_light_theme.json"
+            },
+            {
+                "label": "GDL Dark",
+                "uiTheme": "vs-dark",
+                "path": "./themes/GDL_dark_theme.json"
+            }
+        ],
+        "views": {
+            "explorer": [
+                {
+                    "id": "GDLOutline",
+                    "when": "GDLOutlineEnabled",
+                    "name": "GDL script outline"
+                }
+            ]
+        },
+        "menus": {
+            "commandPalette": [
+                {
+                    "command": "GDL.insertPict",
+                    "when": "view == GDLOutline && viewItem == gdlpict"
+                },
+                {
+                    "command": "GDLOutline.toggleSpecComments",
+                    "when": "view == GDLOutline"
+                },
+                {
+                    "command": "GDLOutline.toggleMacroCalls",
+                    "when": "view == GDLOutline"
+                },
+                {
+                    "command": "GDL.gotoScript",
+                    "when": "editorLangId == gdl-xml"
+                },
+                {
+                    "command": "GDL.gotoRelative",
+                    "when": "editorLangId == gdl-xml || editorLangId == gdl-hsf"
+                },
+                {
+                    "command": "GDL.selectScript",
+                    "when": "editorLangId == gdl-xml"
+                },
+                {
+                    "command": "GDL.insertGUID",
+                    "when": "editorLangId == gdl-xml"
+                },
+                {
+                    "command": "GDL.insertPict",
+                    "when": "editorLangId == gdl-xml"
+                },
+                {
+                    "command": "GDL.switchToGDL",
+                    "when": "editorLangId != gdl-xml && editorLangId != gdl-hsf && resourceExtname != .gdl"
+                },
+                {
+                    "command": "GDL.switchToHSF",
+                    "when": "editorLangId != gdl-xml && editorLangId != gdl-hsf && resourceExtname != .xml"
+                },
+                {
+                    "command": "GDL.switchToXML",
+                    "when": "editorLangId == gdl-xml"
+                },
+                {
+                    "command": "GDL.refguide",
+                    "when": "editorLangId == gdl-xml || editorLangId == gdl-hsf"
+                },
+                {
+                    "command": "GDL.infoFromHSF",
+                    "when": "editorLangId == gdl-hsf && isFileSystemResource && resourceExtname == .gdl && workbenchState != empty"
+                }
+            ],
+            "view/title": [
+                {
+                    "command": "GDL.gotoCursor",
+                    "when": "view == GDLOutline",
+                    "group": "navigation"
+                },
+                {
+                    "command": "GDLOutline.toggleSpecComments",
+                    "when": "view == GDLOutline",
+                    "group": "navigation"
+                },
+                {
+                    "command": "GDLOutline.toggleMacroCalls",
+                    "when": "view == GDLOutline",
+                    "group": "navigation"
+                }
+            ],
+            "view/item/context": [
+                {
+                    "command": "GDL.selectScript",
+                    "when": "view == GDLOutline && viewItem == script",
+                    "group": "inline"
+                },
+                {
+                    "command": "GDL.gotoRelative",
+                    "when": "view == GDLOutline && viewItem == script",
+                    "group": "inline"
+                },
+                {
+                    "command": "GDL.gotoScript",
+                    "when": "view == GDLOutline && viewItem == script",
+                    "group": "inline"
+                },
+                {
+                    "command": "GDL.insertPict",
+                    "when": "view == GDLOutline && viewItem == gdlpict",
+                    "group": "inline"
+                },
+                {
+                    "command": "GDL.insertGUID",
+                    "when": "view == GDLOutline && viewItem == MainGUID",
+                    "group": "inline"
+                },
+                {
+                    "command": "GDL.insertGUID",
+                    "when": "view == GDLOutline && viewItem == GUID",
+                    "group": "inline"
+                },
+                {
+                    "command": "GDL.gotoScript",
+                    "when": "view == GDLOutline && viewItem == xmlsection",
+                    "group": "inline"
+                }
+            ],
+            "editor/title": [
+                {
+                    "command": "GDL.gotoCursor",
+                    "group": "navigation"
+                },
+                {
+                    "command": "GDL.infoFromHSF",
+                    "when": "editorLangId == gdl-hsf && isFileSystemResource && resourceExtname == .gdl && workbenchState != empty",
+                    "group": "navigation"
+                }
+            ],
+            "editor/context": [
+                {
+                    "command": "GDL.gotoScript",
+                    "when": "editorLangId == gdl-xml",
+                    "group": "navigation"
+                },
+                {
+                    "command": "GDL.gotoRelative",
+                    "when": "editorLangId == gdl-xml || editorLangId == gdl-hsf",
+                    "group": "navigation"
+                },
+                {
+                    "command": "GDL.selectScript",
+                    "when": "editorLangId == gdl-xml",
+                    "group": "navigation"
+                },
+                {
+                    "command": "GDL.insertGUID",
+                    "when": "editorLangId == gdl-xml",
+                    "group": "1_modification"
+                },
+                {
+                    "command": "GDL.switchToGDL",
+                    "when": "editorLangId != gdl-xml && editorLangId != gdl-hsf && resourceExtname != .gdl",
+                    "group": "navigation"
+                },
+                {
+                    "command": "GDL.switchToHSF",
+                    "when": "editorLangId != gdl-xml && editorLangId != gdl-hsf && resourceExtname != .xml",
+                    "group": "navigation"
+                },
+                {
+                    "command": "GDL.switchToXML",
+                    "when": "editorLangId == gdl-xml",
+                    "group": "navigation"
+                },
+                {
+                    "command": "GDL.refguide",
+                    "when": "editorLangId == gdl-xml || editorLangId == gdl-hsf",
+                    "group": "navigation"
+                },
+                {
+                    "command": "GDL.infoFromHSF",
+                    "when": "editorLangId == gdl-hsf && isFileSystemResource && resourceExtname == .gdl && workbenchState != empty",
+                    "group": "navigation"
+                }
+            ]
+        },
+        "commands": [
+            {
+                "command": "GDLOutline.toggleSpecComments",
+                "title": "Toggle special comments on/off",
+                "category": "GDL",
+                "icon": {
+                    "light": "images/light/togglecomment_button16x22.svg",
+                    "dark": "images/dark/togglecomment_button16x22.svg"
+                }
+            },
+            {
+                "command": "GDLOutline.toggleMacroCalls",
+                "title": "Toggle macro calls on/off",
+                "category": "GDL",
+                "icon": {
+                    "light": "images/light/togglemacro_button16x22.svg",
+                    "dark": "images/dark/togglemacro_button16x22.svg"
+                }
+            },
+            {
+                "command": "GDL.gotoCursor",
+                "title": "Go to Cursor",
+                "icon": {
+                    "light": "images/light/gotocursor_button16x22.svg",
+                    "dark": "images/dark/gotocursor_button16x22.svg"
+                }
+            },
+            {
+                "command": "GDL.gotoScript",
+                "title": "Show Script Start...",
+                "category": "GDL",
+                "icon": {
+                    "light": "images/light/gotomain_button16x22.svg",
+                    "dark": "images/dark/gotomain_button16x22.svg"
+                },
+                "when": "editorLangId == gdl-xml"
+            },
+            {
+                "command": "GDL.gotoRelative",
+                "title": "Go to Line of Script...",
+                "category": "GDL",
+                "icon": {
+                    "light": "images/light/gotorelative_button16x22.svg",
+                    "dark": "images/dark/gotorelative_button16x22.svg"
+                },
+                "when": "editorLangId == gdl-xml || editorLangId == gdl-hsf"
+            },
+            {
+                "command": "GDL.selectScript",
+                "title": "Select Whole Script...",
+                "category": "GDL",
+                "icon": {
+                    "light": "images/light/selectall_button16x22.svg",
+                    "dark": "images/dark/selectall_button16x22.svg"
+                },
+                "when": "editorLangId == gdl-xml"
+            },
+            {
+                "command": "GDL.insertGUID",
+                "title": "Insert GUID at cursor",
+                "category": "GDL",
+                "icon": {
+                    "light": "images/light/insertGUID_button16x22.svg",
+                    "dark": "images/dark/insertGUID_button16x22.svg"
+                },
+                "when": "editorLangId == gdl-xml"
+            },
+            {
+                "command": "GDL.insertPict",
+                "title": "Insert GDLPict id at cursor and comment at end of line",
+                "category": "GDL",
+                "icon": {
+                    "light": "images/light/insertPict_button16x22.svg",
+                    "dark": "images/dark/insertPict_button16x22.svg"
+                },
+                "when": "editorLangId == gdl-xml"
+            },
+            {
+                "command": "GDL.switchToGDL",
+                "title": "Switch language to GDL-XML",
+                "category": "GDL",
+                "when": "editorLangId != gdl-xml && editorLangId != gdl-hsf && resourceExtname != .gdl"
+            },
+            {
+                "command": "GDL.switchToHSF",
+                "title": "Switch language to GDL-HSF",
+                "category": "GDL",
+                "when": "editorLangId != gdl-xml && editorLangId != gdl-hsf && resourceExtname != .xml"
+            },
+            {
+                "command": "GDL.switchToXML",
+                "title": "Switch language to XML",
+                "category": "GDL",
+                "when": "editorLangId == gdl-xml"
+            },
+            {
+                "command": "GDL.refguide",
+                "title": "GDL reference guide",
+                "category": "GDL",
+                "when": "editorLangId == gdl-xml || editorLangId == gdl-hsf"
+            },
+            {
+                "command": "GDL.infoFromHSF",
+                "title": "Show Info from HSF Files",
+                "icon": "$(symbol-parameter)",
+                "category": "GDL",
+                "when": "editorLangId == gdl-hsf && isFileSystemResource && resourceExtname == .gdl && workbenchState != empty"
+            }
+        ],
+        "keybindings": [
+            {
+                "command": "GDL.gotoRelative",
+                "key": "ctrl+l",
+                "mac": "cmd+l",
+                "when": "editorTextFocus"
+            },
+            {
+                "command": "GDL.refguide",
+                "key": "ctrl+F1",
+                "mac": "cmd+F1",
+                "when": "editorTextFocus && editorLangId == gdl-xml || editorTextFocus && editorLangId == gdl-hsf"
+            },
+            {
+                "command": "GDL.infoFromHSF",
+                "key": "ctrl+alt+space",
+                "mac": "ctrl+alt+space",
+                "when": "editorLangId == gdl-hsf && isFileSystemResource && resourceExtname == .gdl && workbenchState != empty"
+            }
+        ]
+    },
+    "icon": "images/icon.png",
+    "galleryBanner": {
+        "color": "#ffffff",
+        "theme": "light"
+    },
+    "scripts": {
+        "vscode:prepublish": "npm run compile",
+        "vscode:package": "vsce package",
+        "compile": "tsc -p ./",
+        "watch": "tsc -watch -p ./",
+        "test": "npm run compile && node ./node_modules/vscode/bin/test"
+    },
+    "devDependencies": {
+        "@types/glob": "^7.1.1",
+        "@types/mocha": "^7.0.2",
+        "@types/node": "^13.11.0",
+        "@types/vscode": "^1.57.0",
+        "@typescript-eslint/eslint-plugin": "^4.28.1",
+        "@typescript-eslint/parser": "^4.28.1",
+        "eslint": "^6.8.0",
+        "glob": "^7.1.6",
+        "mocha": "^7.1.2",
+        "typescript": "^4.0.3",
+        "vscode-test": "^1.3.0"
+    },
+    "dependencies": {}
+}

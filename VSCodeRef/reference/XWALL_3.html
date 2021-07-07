@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>XWALL_{3}</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="XWALL_3_gdlcommand">XWALL_{3}</h3>
+				
+				<pre class="programlisting"><b id="XWALL_3_keyword_2.7.3.28.4.1">XWALL_{3}</b> left_material, right_material, vertical_material, horizontal_material,
+        height, x1, x2, x3, x4,
+        y1, y2, y3, y4,
+        t, radius,
+        log_height, log_offset,
+        mask1, mask2, mask3, mask4,
+        n,
+        x_start1, y_low1, x_end1, y_high1,
+        sill_depth1, frame_shown1,
+        ...
+        x_startn, y_lown, x_endn, y_highn,
+        sill_depthn, frame_shownn,
+        m,
+        a1, b1, c1, d1,
+        ...
+        am, bm, cm, dm,
+        status</pre>
+				
+ 					<p>XWALL_{3} is an extension of XWALL_{2} command with the possibility of hiding all edges of the log wall.</p>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>status: </b></code>controls the behavior of log walls</div><div><code>status = j<sub>1</sub> + 2*j<sub>2</sub> + 4*j<sub>3</sub> + 32*j<sub>6</sub> + 64*j<sub>7</sub> + 128*j<sub>8</sub> + 256*j<sub>9</sub> + 512*j<sub>10</sub></code>, where each j can be 0 or 1.
+	</div>
+						<div><code>j<sub>1</sub>: </code>apply right side material on horizontal edges,</div>
+						<div><code>j<sub>2</sub>: </code>apply left side material on horizontal edges,</div>
+						<div><code>j<sub>3</sub>: </code>start with half log,</div>
+						<div><code>j<sub>6</sub>: </code>align texture to wall edges,</div>
+						<div><code>j<sub>7</sub>: </code>double radius on bended side,</div>
+						<div><code>j<sub>8</sub>: </code>square log on the right side,</div>
+						<div><code>j<sub>9</sub>: </code>square log on the left side,</div>
+						<div><code>j<sub>10</sub>: </code>hide all edges of log wall.</div>
+					</div>
+				
+				<div class="example"><a id="id497920"/><p class="title"><b>Example:
+</b></p><div class="example-contents"><div style="text-align: center"><img src="Images/GDL_Images/3Dshapes_xwall_2_ex.png" style="text-align: middle" alt="Images/GDL_Images/3Dshapes_xwall_2_ex.png"/></div><pre class="programlisting">ROTZ 90
+xWALL_{2} "C13", "C11", "C12", "C12",
+        2, 0, 4, 4, 0,
+        0, 0, 1, 1,
+        1, 0,
+        0, 0,
+        15, 15, 15, 15,
+        1,
+        1, 0.9, 3, 2.1, 0.3, -(255 + 256),
+        0,
+        0
+DEL 1
+ADDX 2
+xWALL_{2} "C13", "C11", "C12", "C12",
+        2, 0, 2 * PI, 2 * PI, 0,
+        0, 0, 1, 1,
+        1, 2,
+        0, 0,
+        15, 15, 15, 15,
+        1,
+        1.6, 0.9, 4.6, 2.1, 0.3, -(255 + 256),
+        0,
+        0
+ADDX 4
+xWALL_{2} "C13", "C11", "C12", "C12",
+        2, 0, 2 * PI, 2 * PI, 0,
+        0, 0, 1, 1,
+        1, 2,
+        0, 0,
+        15, 15, 15, 15,
+        1,
+        1.6, 0.9, 4.6, 2.1, 0.3, -(255 + 256 + 512),
+        0,
+        0</pre></div></div>
+			<hr/><a href="002.007.html#XWALL_3_gdlcommand">Related in 3D Shapes</a><p>
+				<span class="bold"><strong>GDL Reference Guide</strong></span>
+			</p><p>
+				<span class="trademark">Copyright</span><sup>©</sup> 2021 by GRAPHISOFT, all rights reserved.
+				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+			</p></body></html>

@@ -1,0 +1,4636 @@
+{
+  ".source.gdl": {
+    "\"add2\" command": {
+      "prefix": "add2",
+      "body": "add2 ${01:x}, ${02:y}"
+    },
+    "\"mul2\" command": {
+      "prefix": "mul2",
+      "body": "mul2 ${01:x}, ${02:y}"
+    },
+    "\"rot2\" command": {
+      "prefix": "rot2",
+      "body": "rot2 ${01:alpha}"
+    },
+    "\"addx\" command": {
+      "prefix": "addx",
+      "body": "addx ${01:dx}"
+    },
+    "\"addy\" command": {
+      "prefix": "addy",
+      "body": "addy ${01:dy}"
+    },
+    "\"addz\" command": {
+      "prefix": "addz",
+      "body": "addz ${01:dz}"
+    },
+    "\"add\" command": {
+      "prefix": "add",
+      "body": "add ${01:dx}, ${02:dy}, ${03:dz}"
+    },
+    "\"mulx\" command": {
+      "prefix": "mulx",
+      "body": "mulx ${01:mx}"
+    },
+    "\"muly\" command": {
+      "prefix": "muly",
+      "body": "muly ${01:my}"
+    },
+    "\"mulz\" command": {
+      "prefix": "mulz",
+      "body": "mulz ${01:mz}"
+    },
+    "\"mul\" command": {
+      "prefix": "mul",
+      "body": "mul ${01:mx}, ${02:my}, ${03:mz}"
+    },
+    "\"rotx\" command": {
+      "prefix": "rotx",
+      "body": "rotx ${01:alphax}"
+    },
+    "\"roty\" command": {
+      "prefix": "roty",
+      "body": "roty ${01:alphay}"
+    },
+    "\"rotz\" command": {
+      "prefix": "rotz",
+      "body": "rotz ${01:alphaz}"
+    },
+    "\"rot\" command": {
+      "prefix": "rot",
+      "body": "rot ${01:x}, ${02:y}, ${03:m}, ${04:alpha}"
+    },
+    "\"xform\" command": {
+      "prefix": "xform",
+      "body": "xform\t${01:newx_x}, ${02:newy_x}, ${03:newz_x}, ${04:offset_x},\n\t\t${05:newx_y}, ${06:newy_y}, ${07:newz_y}, ${08:offset_y},\n\t\t${09:newx_z}, ${10:newy_z}, ${11:newz_z}, ${12:offset_z}"
+    },
+    "\"del\" command": {
+      "prefix": "del",
+      "body": "del ${01:n}, ${02:begin_width}"
+    },
+    "\"del top\" command": {
+      "prefix": "del top",
+      "body": "del top"
+    },
+    "\"ntr()\" command": {
+      "prefix": "ntr()",
+      "body": "ntr()"
+    },
+    "\"block\" command": {
+      "prefix": "block",
+      "body": "block ${01:a}, ${02:b}, ${03:c}"
+    },
+    "\"brick\" command": {
+      "prefix": "brick",
+      "body": "brick ${01:a}, ${02:b}, ${03:c}"
+    },
+    "\"cylind\" command": {
+      "prefix": "cylind",
+      "body": "cylind ${01:height}, ${02:radius}"
+    },
+    "\"sphere\" command": {
+      "prefix": "sphere",
+      "body": "sphere ${01:radius}"
+    },
+    "\"ellips\" command": {
+      "prefix": "ellips",
+      "body": "ellips ${01:height}, ${02:radius}"
+    },
+    "\"cone\" command": {
+      "prefix": "cone",
+      "body": "cone ${01:height}, ${02:bottomRadius}, ${03:topRadius}, ${04:bottomAngle}, ${05:topAngle}"
+    },
+    "\"prism\" command": {
+      "prefix": "prism",
+      "body": "prism ${01:n}, ${02:height},\n\t${03:x1}, ${04:y1},\n\t${05:...},\n\t${06:xn}, ${07:yn}"
+    },
+    "\"prism_\" command": {
+      "prefix": "prism_",
+      "body": "prism_ ${01:n}, ${02:height},\n\t${03:x1}, ${04:y1}, ${05:s1},\n\t${06:...},\n\t${07:xn}, ${08:yn}, ${09:sn}"
+    },
+    "\"cprism_\" command": {
+      "prefix": "cprism_",
+      "body": "cprism_ ${01:topMaterial}, ${02:bottomMaterial}, ${03:sideMaterial},\n\t${04:n}, ${05:height},\n\t${06:x1}, ${07:y1}, ${08:s1},\n\t${09:...},\n\t${10:xn}, ${11:yn}, ${12:sn}"
+    },
+    "\"cprism_{2}\" command": {
+      "prefix": "cprism_{2}",
+      "body": "cprism_{2} ${01:topMaterial}, ${02:bottomMaterial}, ${03:sideMaterial},\n\t${04:n}, ${05:height},\n\t${06:x1}, ${07:y1}, ${08:alpha1}, ${09:s1}, ${10:mat1},\n\t${11:...},\n\t${12:xn}, ${13:yn}, ${14:alphan}, ${15:sn}, ${16:matn}"
+    },
+    "\"cprism_{3}\" command": {
+      "prefix": "cprism_{3}",
+      "body": "cprism_{3} ${01:topMaterial}, ${02:bottomMaterial}, ${03:sideMaterial}, ${04:mask},\n\t${05:n}, ${06:height},\n\t${07:x1}, ${08:y1}, ${09:alpha1}, ${10:s1}, ${11:mat1},\n\t${12:...},\n\t${13:xn}, ${14:yn}, ${15:alphan}, ${16:sn}, ${17:matn}"
+    },
+    "\"cprism_{4}\" command": {
+      "prefix": "cprism_{4}",
+      "body": "cprism_{4} ${01:topMaterial}, ${02:bottomMaterial}, ${03:sideMaterial}, ${04:mask},\n\t${05:n}, ${06:height},\n\t${07:x1}, ${08:y1}, ${09:alpha1}, ${10:s1}, ${11:mat1},\n\t${12:...},\n\t${13:xn}, ${14:yn}, ${15:alphan}, ${16:sn}, ${17:matn}"
+    },
+    "\"bprism_\" command": {
+      "prefix": "bprism_",
+      "body": "bprism_ ${01:topMaterial}, ${02:bottomMaterial}, ${03:sideMaterial},\n\t${04:n}, ${05:height}, ${06:radius},\n\t${07:x1}, ${08:y1}, ${09:s1},\n\t${10:...},\n\t${11:xn}, ${12:yn}, ${13:sn}"
+    },
+    "\"fprism_\" command": {
+      "prefix": "fprism_",
+      "body": "fprism_ ${01:topMaterial}, ${02:bottomMaterial}, ${03:sideMaterial}, ${04:hillMaterial},\n\t${05:n}, ${06:thickness}, ${07:angle}, ${08:hillHeight},\n\t${09:x1}, ${10:y1}, ${11:s1},\n\t${12:...},\n\t${13:xn}, ${14:yn}, ${15:sn}"
+    },
+    "\"hprism_\" command": {
+      "prefix": "hprism_",
+      "body": "hprism_ ${01:topMaterial}, ${02:bottomMaterial}, ${03:sideMaterial}, ${04:hillMaterial},\n\t${05:n}, ${06:thickness}, ${07:angle}, ${08:hillHeight}, ${09:status},\n\t${10:x1}, ${11:y1}, ${12:s1},\n\t${13:...},\n\t${14:xn}, ${15:yn}, ${16:sn}"
+    },
+    "\"sprism_\" command": {
+      "prefix": "sprism_",
+      "body": "sprism_ ${01:topMaterial}, ${02:bottomMaterial}, ${03:sideMaterial},\n\t${04:n},\n\t${05:xb}, ${06:yb}, ${07:xe}, ${08:ye},\n\t${09:height}, ${10:angle},\n\t${11:x1}, ${12:y1}, ${13:s1},\n\t${14:...},\n\t${15:xn}, ${16:yn}, ${17:sn}"
+    },
+    "\"sprism_{2}\" command": {
+      "prefix": "sprism_{2}",
+      "body": "sprism_{2} ${01:topMaterial}, ${02:bottomMaterial}, ${03:sideMaterial},\n\t${04:n},\n\t${05:xtb}, ${06:ytb}, ${07:xte}, ${08:yte},\n\t${09:topz}, ${10:tangle},\n\t${11:xbb}, ${12:ybb}, ${13:xbe}, ${14:ybe},\n\t${15:bottomz}, ${16:bangle},\n\t${17:x1}, ${18:y1}, ${19:s1}, ${20:mat1},\n\t${21:...},\n\t${22:xn}, ${23:yn}, ${24:sn}, ${25:matn}"
+    },
+    "\"sprism_{3}\" command": {
+      "prefix": "sprism_{3}",
+      "body": "sprism_{3} ${01:topMaterial}, ${02:bottomMaterial}, ${03:sideMaterial}, ${04:mask},\n\t${05:n},\n\t${06:xtb}, ${07:ytb}, ${08:xte}, ${09:yte},\n\t${10:topz}, ${11:tangle},\n\t${12:xbb}, ${13:ybb}, ${14:xbe}, ${15:ybe},\n\t${16:bottomz}, ${17:bangle},\n\t${18:x1}, ${19:y1}, ${20:s1}, ${21:mat1},\n\t${22:...},\n\t${23:xn}, ${24:yn}, ${25:sn}, ${26:matn}"
+    },
+    "\"sprism_{4}\" command": {
+      "prefix": "sprism_{4}",
+      "body": "sprism_{4} ${01:topMaterial}, ${02:bottomMaterial}, ${03:sideMaterial}, ${04:mask},\n\t${05:n},\n\t${06:xtb}, ${07:ytb}, ${08:xte}, ${09:yte},\n\t${10:topz}, ${11:tangle},\n\t${12:xbb}, ${13:ybb}, ${14:xbe}, ${15:ybe},\n\t${16:bottomz}, ${17:bangle},\n\t${18:x1}, ${19:y1}, ${20:s1}, ${21:mat1},\n\t${22:...},\n\t${23:xn}, ${24:yn}, ${25:sn}, ${26:matn}"
+    },
+    "\"slab\" command": {
+      "prefix": "slab",
+      "body": "slab ${01:n}, ${02:height},\n\t${03:x1}, ${04:y1}, ${05:z1},\n\t${06:...},\n\t${07:xn}, ${08:yn}, ${09:zn}"
+    },
+    "\"slab_\" command": {
+      "prefix": "slab_",
+      "body": "slab_ ${01:n}, ${02:height},\n\t${03:x1}, ${04:y1}, ${05:z1}, ${06:s1},\n\t${07:...},\n\t${08:xn}, ${09:yn}, ${10:zn}, ${11:sn}"
+    },
+    "\"cslab_\" command": {
+      "prefix": "cslab_",
+      "body": "cslab_ ${01:topMaterial}, ${02:bottomMaterial}, ${03:sideMaterial},\n\t${04:n}, ${05:height},\n\t${06:x1}, ${07:y1}, ${08:z1}, ${09:s1},\n\t${10:...},\n\t${11:xn}, ${12:yn}, ${13:z1}, ${14:sn}"
+    },
+    "\"cwall_\" command": {
+      "prefix": "cwall_",
+      "body": "cwall_ ${01:leftMaterial}, ${02:rightMaterial}, ${03:sideMaterial},\n\t${04:height}, ${05:x1}, ${06:x2}, ${07:x3}, ${08:x4}, ${09:thickness},\n\t${10:mask1}, ${11:mask2}, ${12:mask3}, ${13:mask4},\n\t${14:nOpenings},\n\t${15:xStart1}, ${16:yLow1}, ${17:xEnd1}, ${18:yHigh1}, ${19:frameShown1},\n\t${20:...},\n\t${21:xStartn}, ${22:yLown}, ${23:xEndn}, ${24:yHighn}, ${25:frameShownn},\n\t${26:mCutPlanes},\n\t${27:a1}, ${28:b1}, ${29:c1}, ${30:d1},\n\t${31:...},\n\t${32:am}, ${33:bm}, ${34:cm}, ${35:dm}"
+    },
+    "\"bwall_\" command": {
+      "prefix": "bwall_",
+      "body": "bwall_ ${01:leftMaterial}, ${02:rightMaterial}, ${03:sideMaterial},\n\t${04:height}, ${05:x1}, ${06:x2}, ${07:x3}, ${08:x4}, ${09:thickness}, ${10:radius},\n\t${11:mask1}, ${12:mask2}, ${13:mask3}, ${14:mask4},\n\t${15:nOpenings},\n\t${16:xStart1}, ${17:yLow1}, ${18:xEnd1}, ${19:yHigh1}, ${20:frameShown1},\n\t${21:...},\n\t${22:xStartn}, ${23:yLown}, ${24:xEndn}, ${25:yHighn}, ${26:frameShownn},\n\t${27:mCutPlanes},\n\t${28:a1}, ${29:b1}, ${30:c1}, ${31:d1},\n\t${32:...},\n\t${33:am}, ${34:bm}, ${35:cm}, ${36:dm}"
+    },
+    "\"xwall_\" command": {
+      "prefix": "xwall_",
+      "body": "xwall_ ${01:leftMaterial}, ${02:rightMaterial}, ${03:verticalMaterial}, ${04:horizontalMaterial},\n\t${05:height}, ${06:x1}, ${07:x2}, ${08:x3}, ${09:x4},\n\t${10:y1}, ${11:y2}, ${12:y3}, ${13:y4},\n\t${14:thickness}, ${15:radius},\n\t${16:logHeight}, ${17:logOffset},\n\t${18:mask1}, ${19:mask2}, ${20:mask3}, ${21:mask4},\n\t${22:nOpenings},\n\t${23:xStart1}, ${24:yLow1}, ${25:xEnd1}, ${26:yHigh1}, ${27:frameShown1},\n\t${28:...},\n\t${29:xStartn}, ${30:yLown}, ${31:xEndn}, ${32:yHighn}, ${33:frameShownn},\n\t${34:mCutPlanes},\n\t${35:a1}, ${36:b1}, ${37:c1}, ${38:d1},\n\t${39:...},\n\t${40:am}, ${41:bm}, ${42:cm}, ${43:dm},\n\t${44:status}"
+    },
+    "\"xwall_{2}\" command": {
+      "prefix": "xwall_{2}",
+      "body": "xwall_{2} ${01:leftMaterial}, ${02:rightMaterial}, ${03:verticalMaterial}, ${04:horizontalMaterial},\n\t${05:height}, ${06:x1}, ${07:x2}, ${08:x3}, ${09:x4},\n\t${10:y1}, ${11:y2}, ${12:y3}, ${13:y4},\n\t${14:thickness}, ${15:radius},\n\t${16:logHeight}, ${17:logOffset},\n\t${18:mask1}, ${19:mask2}, ${20:mask3}, ${21:mask4},\n\t${22:nOpenings},\n\t${23:xStart1}, ${24:yLow1}, ${25:xEnd1}, ${26:yHigh1},\n\t${27:sillDepth1}, ${28:frameShown1},\n\t${29:...},\n\t${30:xStartn}, ${31:yLown}, ${32:xEndn}, ${33:yHighn},\n\t${34:sillDepthn}, ${35:frameShownn},\n\t${36:mCutPlanes},\n\t${37:a1}, ${38:b1}, ${39:c1}, ${40:d1},\n\t${41:...},\n\t${42:am}, ${43:bm}, ${44:cm}, ${45:dm},\n\t${46:status}"
+    },
+    "\"xwall_{3}\" command": {
+      "prefix": "xwall_{3}",
+      "body": "xwall_{3} ${01:leftMaterial}, ${02:rightMaterial}, ${03:verticalMaterial}, ${04:horizontalMaterial},\n\t${05:height}, ${06:x1}, ${07:x2}, ${08:x3}, ${09:x4},\n\t${10:y1}, ${11:y2}, ${12:y3}, ${13:y4},\n\t${14:thickness}, ${15:radius},\n\t${16:logHeight}, ${17:logOffset},\n\t${18:mask1}, ${19:mask2}, ${20:mask3}, ${21:mask4},\n\t${22:nOpenings},\n\t${23:xStart1}, ${24:yLow1}, ${25:xEnd1}, ${26:yHigh1},\n\t${27:sillDepth1}, ${28:frameShown1},\n\t${29:...},\n\t${30:xStartn}, ${31:yLown}, ${32:xEndn}, ${33:yHighn},\n\t${34:sillDepthn}, ${35:frameShownn},\n\t${36:mCutPlanes},\n\t${37:a1}, ${38:b1}, ${39:c1}, ${40:d1},\n\t${41:...},\n\t${42:am}, ${43:bm}, ${44:cm}, ${45:dm},\n\t${46:status}"
+    },
+    "\"beam\" command": {
+      "prefix": "beam",
+      "body": "beam ${01:leftMaterial}, ${02:rightMaterial}, ${03:verticalMaterial},\n\t${04:topMaterial}, ${05:bottomMaterial},\n\t${06:height},\n\t${07:x1}, ${08:x2}, ${09:x3}, ${10:x4},\n\t${11:y1}, ${12:y2}, ${13:y3}, ${14:y4}, ${15:thickness},\n\t${16:mask1}, ${17:mask2}, ${18:mask3}, ${19:mask4}"
+    },
+    "\"croof_\" command": {
+      "prefix": "croof_",
+      "body": "croof_ ${01:topMaterial}, ${02:bottomMaterial}, ${03:sideMaterial},\n\t${04:n},\n\t${05:xb}, ${06:yb}, ${07:xe}, ${08:ye},\n\t${09:height}, ${10:angle}, ${11:thickness},\n\t${12:x1}, ${13:y1}, ${14:alpha1}, ${15:s1},\n\t${16:...},\n\t${17:xn}, ${18:yn}, ${19:alphan}, ${20:sn}"
+    },
+    "\"croof_{2}\" command": {
+      "prefix": "croof_{2}",
+      "body": "croof_{2} ${01:topMaterial}, ${02:bottomMaterial}, ${03:sideMaterial},\n\t${04:n},\n\t${05:xb}, ${06:yb}, ${07:xe}, ${08:ye},\n\t${09:height}, ${10:angle}, ${11:thickness},\n\t${12:x1}, ${13:y1}, ${14:alpha1}, ${15:s1}, ${16:mat1},\n\t${17:...},\n\t${18:xn}, ${19:yn}, ${20:alphan}, ${21:sn}, ${22:matn}"
+    },
+    "\"croof_{3}\" command": {
+      "prefix": "croof_{3}",
+      "body": "croof_{3} ${01:topMaterial}, ${02:bottomMaterial}, ${03:sideMaterial}, ${04:mask},\n\t${05:n},\n\t${06:xb}, ${07:yb}, ${08:xe}, ${09:ye},\n\t${10:height}, ${11:angle}, ${12:thickness},\n\t${13:x1}, ${14:y1}, ${15:alpha1}, ${16:s1}, ${17:mat1},\n\t${18:...},\n\t${19:xn}, ${20:yn}, ${21:alphan}, ${22:sn}, ${23:matn}"
+    },
+    "\"croof_{4}\" command": {
+      "prefix": "croof_{4}",
+      "body": "croof_{4} ${01:topMaterial}, ${02:bottomMaterial}, ${03:sideMaterial}, ${04:mask},\n\t${05:n},\n\t${06:xb}, ${07:yb}, ${08:xe}, ${09:ye},\n\t${10:height}, ${11:angle}, ${12:thickness},\n\t${13:x1}, ${14:y1}, ${15:alpha1}, ${16:s1}, ${17:mat1},\n\t${18:...},\n\t${19:xn}, ${20:yn}, ${21:alphan}, ${22:sn}, ${23:matn}"
+    },
+    "\"mesh\" command": {
+      "prefix": "mesh",
+      "body": "mesh ${01:a}, ${02:b}, ${03:m}, ${04:n}, ${05:mask},\n\t${06:z11}, ${07:z12}, ${08:...}, ${09:z1m},\n\t${10:z21}, ${11:z22}, ${12:...}, ${13:z2m},\n\t${14:...},\n\t${15:zn1}, ${16:zn2}, ${17:...}, ${18:znm}"
+    },
+    "\"armc\" command": {
+      "prefix": "armc",
+      "body": "armc ${01:radius1}, ${02:radius2}, ${03:length}, ${04:height}, ${05:dist}, ${06:alpha}"
+    },
+    "\"arme\" command": {
+      "prefix": "arme",
+      "body": "arme ${01:length}, ${02:radius1}, ${03:radius2}, ${04:height}, ${05:dist}"
+    },
+    "\"elbow\" command": {
+      "prefix": "elbow",
+      "body": "elbow ${01:radius1}, ${02:alpha}, ${03:radius2}"
+    },
+    "\"hotspot\" command": {
+      "prefix": "hotspot",
+      "body": "hotspot ${01:x}, ${02:y}, ${03:z}, ${04:unID}, ${05:paramreference}, ${06:flags}, ${07:displayparam}, ${08:customDescription}"
+    },
+    "3D editable X": {
+      "prefix": "hotspot",
+      "body": "hotspot 0,\t\t${02:y},\t${03:z},\t${04:unID}, ${01:x}, 1 + 128,\t${05:displayparam}, ${06:customDescription}: ${04:unID} = ${04:unID} + 1\nhotspot ${01:x},\t${02:y},\t${03:z},\t${04:unID}, ${01:x}, 2,\t\t${05:displayparam}, ${06:customDescription}: ${04:unID} = ${04:unID} + 1\nhotspot -1,\t\t${02:y},\t${03:z},\t${04:unID}, ${01:x}, 3,\t\t${05:displayparam}, ${06:customDescription}: ${04:unID} = ${04:unID} + 1\n$0"
+    },
+    "3D editable Y": {
+      "prefix": "hotspot",
+      "body": "hotspot ${01:x},\t0,\t\t${03:z},\t${04:unID}, ${02:y}, 1 + 128,\t${05:displayparam}, ${06:customDescription}: ${04:unID} = ${04:unID} + 1\nhotspot ${01:x},\t${02:y},\t${03:z},\t${04:unID}, ${02:y}, 2,\t\t${05:displayparam}, ${06:customDescription}: ${04:unID} = ${04:unID} + 1\nhotspot ${01:x},\t-1,\t\t${03:z},\t${04:unID}, ${02:y}, 3,\t\t${05:displayparam}, ${06:customDescription}: ${04:unID} = ${04:unID} + 1\n$0"
+    },
+    "3D editable Z": {
+      "prefix": "hotspot",
+      "body": "hotspot ${01:x},\t${02:y},\t0,\t\t${04:unID}, ${03:z}, 1 + 128,\t${05:displayparam}, ${06:customDescription}: ${04:unID} = ${04:unID} + 1\nhotspot ${01:x},\t${02:y},\t${03:z},\t${04:unID}, ${03:z}, 2,\t\t${05:displayparam}, ${06:customDescription}: ${04:unID} = ${04:unID} + 1\nhotspot ${01:x},\t${02:y},\t-1,\t\t${04:unID}, ${03:z}, 3,\t\t${05:displayparam}, ${06:customDescription}: ${04:unID} = ${04:unID} + 1\n$0"
+    },
+    "\"hotline\" command": {
+      "prefix": "hotline",
+      "body": "hotline ${01:x1}, ${02:y1}, ${03:z1}, ${04:x2}, ${05:y2}, ${06:z2}, ${07:unID}"
+    },
+    "\"hotarc\" command": {
+      "prefix": "hotarc",
+      "body": "hotarc ${01:radius}, ${02:alpha}, ${03:beta}, ${04:unID}"
+    },
+    "\"lin_\" command": {
+      "prefix": "lin_",
+      "body": "lin_ ${01:x1}, ${02:y1}, ${03:z1}, ${04:x2}, ${05:y2}, ${06:z2}"
+    },
+    "\"rect\" command": {
+      "prefix": "rect",
+      "body": "rect ${01:a}, ${02:b}"
+    },
+    "\"poly\" command": {
+      "prefix": "poly",
+      "body": "poly ${01:n},\n\t${02:x1}, ${03:y1},\n\t${04:...},\n\t${05:xn}, ${06:yn}"
+    },
+    "\"poly_\" command": {
+      "prefix": "poly_",
+      "body": "poly_ ${01:n},\n\t${02:x1}, ${03:y1}, ${04:s1},\n\t${05:...},\n\t${06:xn}, ${07:yn}, ${08:sn}"
+    },
+    "\"plane\" command": {
+      "prefix": "plane",
+      "body": "plane ${01:n},\n\t${02:x1}, ${03:y1}, ${04:z1},\n\t${05:...},\n\t${06:xn}, ${07:yn}, ${08:zn}"
+    },
+    "\"plane_\" command": {
+      "prefix": "plane_",
+      "body": "plane_ ${01:n},\n\t${02:x1}, ${03:y1}, ${04:z1}, ${05:s1},\n\t${06:...},\n\t${07:xn}, ${08:yn}, ${09:zn}, ${10:sn}"
+    },
+    "\"circle\" command": {
+      "prefix": "circle",
+      "body": "circle ${01:radius}"
+    },
+    "\"arc\" command": {
+      "prefix": "arc",
+      "body": "arc ${01:radius}, ${02:alpha}, ${03:beta}"
+    },
+    "\"extrude\" command": {
+      "prefix": "extrude",
+      "body": "extrude ${01:n}, ${02:dx}, ${03:dy}, ${04:dz}, ${05:mask},\n\t${06:x1}, ${07:y1}, ${08:s1},\n\t${09:...},\n\t${10:xn}, ${11:yn}, ${12:sn}"
+    },
+    "\"pyramid\" command": {
+      "prefix": "pyramid",
+      "body": "pyramid ${01:n}, ${02:height}, ${03:mask},\n\t${04:x1}, ${05:y1}, ${06:s1},\n\t${07:...},\n\t${08:xn}, ${09:yn}, ${10:sn}"
+    },
+    "\"revolve\" command": {
+      "prefix": "revolve",
+      "body": "revolve ${01:n}, ${02:alpha}, ${03:mask},\n\t${04:x1}, ${05:y1}, ${06:s1},\n\t${07:...},\n\t${08:xn}, ${09:yn}, ${10:sn}"
+    },
+    "\"revolve{2}\" command": {
+      "prefix": "revolve{2}",
+      "body": "revolve{2} ${01:n}, ${02:alphaOffset}, ${03:alpha}, ${04:mask}, ${05:sideMaterial},\n\t${06:x1}, ${07:y1}, ${08:s1}, ${09:mat1},\n\t${10:...},\n\t${11:xn}, ${12:yn}, ${13:sn}, ${14:matn}"
+    },
+    "\"revolve{3}\" command": {
+      "prefix": "revolve{3}",
+      "body": "revolve{3} ${01:n}, ${02:alphaOffset}, ${03:alpha}, ${04:betaOffset}, ${05:beta},\n\t${06:mask}, ${07:sideMaterial},\n\t${08:x1}, ${09:y1}, ${10:s1}, ${11:mat1},\n\t${12:...},\n\t${13:xn}, ${14:yn}, ${15:sn}, ${16:matn}"
+    },
+    "\"revolve{4}\" command": {
+      "prefix": "revolve{4}",
+      "body": "revolve{4} ${01:n}, ${02:alphaOffset}, ${03:alpha}, ${04:betaOffset}, ${05:beta},\n\t${06:mask}, ${07:sideMaterial},\n\t${08:x1}, ${09:y1}, ${10:s1}, ${11:mat1},\n\t${12:...},\n\t${13:xn}, ${14:yn}, ${15:sn}, ${16:matn}"
+    },
+    "\"revolve{5}\" command": {
+      "prefix": "revolve{5}",
+      "body": "revolve{5} ${01:n}, ${02:alphaOffset}, ${03:alpha}, ${04:betaOffset}, ${05:beta},\n\t${06:mask}, ${07:sideMaterial},\n\t${08:x1}, ${09:y1}, ${10:s1}, ${11:mat1},\n\t${12:...},\n\t${13:xn}, ${14:yn}, ${15:sn}, ${16:matn}"
+    },
+    "\"ruled\" command": {
+      "prefix": "ruled",
+      "body": "ruled ${01:n}, ${02:mask},\n\t${03:u1}, ${04:v1}, ${05:s1}, ${06:...}, ${07:un}, ${08:vn}, ${09:sn},\n\t${10:x1}, ${11:y1}, ${12:z1}, ${13:...}, ${14:xn}, ${15:yn}, ${16:zn}"
+    },
+    "\"ruledsegmented\" command": {
+      "prefix": "ruledsegmented",
+      "body": "ruledsegmented ${01:n}, ${02:mask},\n\t${03:x11}, ${04:y11}, ${05:z11}, ${06:s1}, ${07:...}, ${08:x1n}, ${09:y1n}, ${10:z1n}, ${11:sn},\n\t${12:x21}, ${13:y21}, ${14:z21}, ${15:...}, ${16:x2n}, ${17:y2n}, ${18:z2n}"
+    },
+    "\"ruledsegmented{2}\" command": {
+      "prefix": "ruledsegmented{2}",
+      "body": "ruledsegmented{2} ${01:top_material}, ${02:bottom_material},\n\t${03:n}, ${04:mask}, ${05:textureMode},\n\t${06:x11}, ${07:y11}, ${08:z11}, ${09:s1}, ${10:mat1}, ${11:...}, ${12:x1n}, ${13:y1n}, ${14:z1n}, ${15:sn}, ${16:matn},\n\t${17:x21}, ${18:y21}, ${19:z21}, ${20:...}, ${21:x2n}, ${22:y2n}, ${23:z2n}"
+    },
+    "\"ruled{2}\" command": {
+      "prefix": "ruled{2}",
+      "body": "ruled{2} ${01:n}, ${02:mask},\n\t${03:u1}, ${04:v1}, ${05:s1}, ${06:...}, ${07:un}, ${08:vn}, ${09:sn},\n\t${10:x1}, ${11:y1}, ${12:z1}, ${13:...}, ${14:xn}, ${15:yn}, ${16:zn}"
+    },
+    "\"sweep\" command": {
+      "prefix": "sweep",
+      "body": "sweep ${01:n}, ${02:m}, ${03:alpha}, ${04:scale}, ${05:mask},\n\t${06:u1}, ${07:v1}, ${08:s1}, ${09:...}, ${10:un}, ${11:vn}, ${12:sn},\n\t${13:x1}, ${14:y1}, ${15:z1}, ${16:...}, ${17:xm}, ${18:ym}, ${19:zm}"
+    },
+    "\"tube\" command": {
+      "prefix": "tube",
+      "body": "tube ${01:n}, ${02:m}, ${03:mask},\n\t${04:u1}, ${05:w1}, ${06:s1},\n\t${07:...},\n\t${08:un}, ${09:wn}, ${10:sn},\n\t${11:x1}, ${12:y1}, ${13:z1}, ${14:angle1},\n\t${15:...},\n\t${16:xm}, ${17:ym}, ${18:zm}, ${19:anglem}"
+    },
+    "\"tube{2}\" command": {
+      "prefix": "tube{2}",
+      "body": "tube{2} ${01:top_material}, ${02:bottom_material}, ${03:cut_material},\n\t${04:n}, ${05:m}, ${06:mask},\n\t${07:u1}, ${08:w1}, ${09:s1}, ${10:mat1},\n\t${11:...},\n\t${12:un}, ${13:wn}, ${14:sn}, ${15:matn},\n\t${16:x1}, ${17:y1}, ${18:z1}, ${19:angle1},\n\t${20:...},\n\t${21:xm}, ${22:ym}, ${23:zm}, ${24:anglem}"
+    },
+    "\"tubea\" command": {
+      "prefix": "tubea",
+      "body": "tubea ${01:n}, ${02:m}, ${03:mask},\n\t${04:u1}, ${05:w1}, ${06:s1},\n\t${07:...},\n\t${08:un}, ${09:wn}, ${10:sn},\n\t${11:x1}, ${12:y1}, ${13:z1},\n\t${14:...},\n\t${15:xm}, ${16:ym}, ${17:zm}"
+    },
+    "\"coons\" command": {
+      "prefix": "coons",
+      "body": "coons ${01:n}, ${02:m}, ${03:mask},\n\t${04:x11}, ${05:y11}, ${06:z11}, ${07:...}, ${08:x1n}, ${09:y1n}, ${10:z1n},\n\t${11:x21}, ${12:y21}, ${13:z21}, ${14:...}, ${15:x2n}, ${16:y2n}, ${17:z2n},\n\t${18:x31}, ${19:y31}, ${20:z31}, ${21:...}, ${22:x3m}, ${23:y3m}, ${24:z3m},\n\t${25:x41}, ${26:y41}, ${27:z41}, ${28:...}, ${29:x4m}, ${30:y4m}, ${31:z4m}"
+    },
+    "\"coons{2}\" command": {
+      "prefix": "coons{2}",
+      "body": "coons{2} ${01:n}, ${02:m}, ${03:mask},\n\t${04:x11}, ${05:y11}, ${06:z11}, ${07:...}, ${08:x1n}, ${09:y1n}, ${10:z1n},\n\t${11:x21}, ${12:y21}, ${13:z21}, ${14:...}, ${15:x2n}, ${16:y2n}, ${17:z2n},\n\t${18:x31}, ${19:y31}, ${20:z31}, ${21:...}, ${22:x3m}, ${23:y3m}, ${24:z3m},\n\t${25:x41}, ${26:y41}, ${27:z41}, ${28:...}, ${29:x4m}, ${30:y4m}, ${31:z4m}"
+    },
+    "\"mass\" command": {
+      "prefix": "mass",
+      "body": "mass ${01:topMaterial}, ${02:bottomMaterial}, ${03:sideMaterial},\n\t${04:n}, ${05:m}, ${06:mask}, ${07:height},\n\t${08:x1}, ${09:y1}, ${10:z1}, ${11:s1},\n\t${12:...},\n\t${13:xn}, ${14:yn}, ${15:zn}, ${16:sn},\n\t${17:xn+1}, ${18:yn+1}, ${19:zn+1}, ${20:sn+1},\n\t${21:...},\n\t${22:xn+m}, ${23:yn+m}, ${24:zn+m}, ${25:sn+m}"
+    },
+    "\"mass{2}\" command": {
+      "prefix": "mass{2}",
+      "body": "mass{2} ${01:topMaterial}, ${02:bottomMaterial}, ${03:sideMaterial},\n\t${04:n}, ${05:m}, ${06:mask}, ${07:height},\n\t${08:x1}, ${09:y1}, ${10:z1}, ${11:s1},\n\t${12:...},\n\t${13:xn}, ${14:yn}, ${15:zn}, ${16:sn},\n\t${17:xn+1}, ${18:yn+1}, ${19:zn+1}, ${20:sn+1},\n\t${21:...},\n\t${22:xn+m}, ${23:yn+m}, ${24:zn+m}, ${25:sn+m}"
+    },
+    "\"polyroof\" command": {
+      "prefix": "polyroof",
+      "body": "polyroof ${01:defaultMat}, ${02:k}, ${03:m}, ${04:n},\n\t${05:offset}, ${06:thickness}, ${07:applyContourInsidePivot},\n\t${08:z1}, ${09:...}, ${10:zk},\n\t${11:pivotX1}, ${12:pivotY1}, ${13:pivotMask1},\n\t${14:roofAngle11}, ${15:gableOverhang11}, ${16:topMat11}, ${17:bottomMat11},\n\t${18:...},\n\t${19:roofAngle1k}, ${20:gableOverhang1k}, ${21:topMat1k}, ${22:bottomMat1k},\n\t${23:...},\n\t${24:pivotXm}, ${25:pivotYm}, ${26:pivotMaskm},\n\t${27:roofAnglem1}, ${28:gableOverhangm1}, ${29:topMatm1}, ${30:bottomMatm1},\n\t${31:...},\n\t${32:roofAnglemk}, ${33:gableOverhangmk}, ${34:topMatmk}, ${35:bottomMatmk},\n\t${36:contourX1}, ${37:contourY1}, ${38:contourMask1}, ${39:edgeTrim1}, ${40:edgeAngle1}, ${41:edgeMat1},\n\t${42:...},\n\t${43:contourXn}, ${44:contourYn}, ${45:contourMaskn}, ${46:edgeTrimn}, ${47:edgeAnglen}, ${48:edgeMatn}"
+    },
+    "\"polyroof{2}\" command": {
+      "prefix": "polyroof{2}",
+      "body": "polyroof{2} ${01:defaultMat}, ${02:k}, ${03:m}, ${04:n},\n\t${05:offset}, ${06:thickness}, ${07:totalThickness}, ${08:applyContourInsidePivot},\n\t${09:z1}, ${10:...}, ${11:zk},\n\t${12:pivotX1}, ${13:pivotY1}, ${14:pivotMask1},\n\t${15:roofAngle11}, ${16:gableOverhang11}, ${17:topMat11}, ${18:bottomMat11},\n\t${19:...},\n\t${20:roofAngle1k}, ${21:gableOverhang1k}, ${22:topMat1k}, ${23:bottomMat1k},\n\t${24:...},\n\t${25:pivotXm}, ${26:pivotYm}, ${27:pivotMaskm},\n\t${28:roofAnglem1}, ${29:gableOverhangm1}, ${30:topMatm1}, ${31:bottomMatm1},\n\t${32:...},\n\t${33:roofAnglemk}, ${34:gableOverhangmk}, ${35:topMatmk}, ${36:bottomMatmk},\n\t${37:contourX1}, ${38:contourY1}, ${39:contourMask1}, ${40:edgeTrim1}, ${41:edgeAngle1}, ${42:edgeMat1},\n\t${43:...},\n\t${44:contourXn}, ${45:contourYn}, ${46:contourMaskn}, ${47:edgeTrimn}, ${48:edgeAnglen}, ${49:edgeMatn}"
+    },
+    "\"polyroof{3}\" command": {
+      "prefix": "polyroof{3}",
+      "body": "polyroof{3} ${01:defaultMat}, ${02:mask}, ${03:k}, ${04:m}, ${05:n},\n\t${06:offset}, ${07:thickness}, ${08:totalThickness}, ${09:applyContourInsidePivot},\n\t${10:z1}, ${11:...}, ${12:zk},\n\t${13:pivotX1}, ${14:pivotY1}, ${15:pivotMask1},\n\t${16:roofAngle11}, ${17:gableOverhang11}, ${18:topMat11}, ${19:bottomMat11},\n\t${20:...},\n\t${21:roofAngle1k}, ${22:gableOverhang1k}, ${23:topMat1k}, ${24:bottomMat1k},\n\t${25:...},\n\t${26:pivotXm}, ${27:pivotYm}, ${28:pivotMaskm},\n\t${29:roofAnglem1}, ${30:gableOverhangm1}, ${31:topMatm1}, ${32:bottomMatm1},\n\t${33:...},\n\t${34:roofAnglemk}, ${35:gableOverhangmk}, ${36:topMatmk}, ${37:bottomMatmk},\n\t${38:contourX1}, ${39:contourY1}, ${40:contourMask1}, ${41:edgeTrim1}, ${42:edgeAngle1}, ${43:edgeMat1},\n\t${44:...},\n\t${45:contourXn}, ${46:contourYn}, ${47:contourMaskn}, ${48:edgeTrimn}, ${49:edgeAnglen}, ${50:edgeMatn}"
+    },
+    "\"polyroof{4}\" command": {
+      "prefix": "polyroof{4}",
+      "body": "polyroof{4} ${01:defaultMat}, ${02:mask}, ${03:k}, ${04:m}, ${05:n},\n\t${06:offset}, ${07:thickness}, ${08:totalThickness}, ${09:applyContourInsidePivot},\n\t${10:z1}, ${11:...}, ${12:zk},\n\t${13:pivotX1}, ${14:pivotY1}, ${15:pivotMask1},\n\t${16:roofAngle11}, ${17:gableOverhang11}, ${18:topMat11}, ${19:bottomMat11},\n\t${20:...},\n\t${21:roofAngle1k}, ${22:gableOverhang1k}, ${23:topMat1k}, ${24:bottomMat1k},\n\t${25:...},\n\t${26:pivotXm}, ${27:pivotYm}, ${28:pivotMaskm},\n\t${29:roofAnglem1}, ${30:gableOverhangm1}, ${31:topMatm1}, ${32:bottomMatm1},\n\t${33:...},\n\t${34:roofAnglemk}, ${35:gableOverhangmk}, ${36:topMatmk}, ${37:bottomMatmk},\n\t${38:contourX1}, ${39:contourY1}, ${40:contourMask1}, ${41:edgeTrim1}, ${42:edgeAngle1}, ${43:edgeMat1},\n\t${44:...},\n\t${45:contourXn}, ${46:contourYn}, ${47:contourMaskn}, ${48:edgeTrimn}, ${49:edgeAnglen}, ${50:edgeMatn}"
+    },
+    "\"extrudedshell\" command": {
+      "prefix": "extrudedshell",
+      "body": "extrudedshell ${01:topMat}, ${02:bottomMat}, ${03:sideMat1}, ${04:sideMat2}, ${05:sideMat3}, ${06:sideMat4},\n\t${07:defaultMat},\n\t${08:n}, ${09:offset}, ${10:thickness}, ${11:flipped}, ${12:trimmingBody},\n\t${13:xtb}, ${14:ytb}, ${15:xte}, ${16:yte},\n\t${17:topz}, ${18:tangle},\n\t${19:xbb}, ${20:ybb}, ${21:xbe}, ${22:ybe},\n\t${23:bottomz}, ${24:bangle},\n\t${25:preThickenTran11}, ${26:preThickenTran12}, ${27:preThickenTran13}, ${28:preThickenTran14},\n\t${29:preThickenTran21}, ${30:preThickenTran22}, ${31:preThickenTran23}, ${32:preThickenTran24},\n\t${33:preThickenTran31}, ${34:preThickenTran32}, ${35:preThickenTran33}, ${36:preThickenTran34},\n\t${37:x1}, ${38:y1}, ${39:s1},\n\t${40:...},\n\t${41:xn}, ${42:yn}, ${43:sn}"
+    },
+    "\"extrudedshell{2}\" command": {
+      "prefix": "extrudedshell{2}",
+      "body": "extrudedshell{2} ${01:topMat}, ${02:bottomMat}, ${03:sideMat1}, ${04:sideMat2}, ${05:sideMat3}, ${06:sideMat4},\n\t${07:defaultMat},\n\t${08:n}, ${09:status}, ${10:offset}, ${11:thickness}, ${12:flipped}, ${13:trimmingBody},\n\t${14:xtb}, ${15:ytb}, ${16:xte}, ${17:yte},\n\t${18:topz}, ${19:tangle},\n\t${20:xbb}, ${21:ybb}, ${22:xbe}, ${23:ybe},\n\t${24:bottomz}, ${25:bangle},\n\t${26:preThickenTran11}, ${27:preThickenTran12}, ${28:preThickenTran13}, ${29:preThickenTran14},\n\t${30:preThickenTran21}, ${31:preThickenTran22}, ${32:preThickenTran23}, ${33:preThickenTran24},\n\t${34:preThickenTran31}, ${35:preThickenTran32}, ${36:preThickenTran33}, ${37:preThickenTran34},\n\t${38:x1}, ${39:y1}, ${40:s1},\n\t${41:...},\n\t${42:xn}, ${43:yn}, ${44:sn}"
+    },
+    "\"extrudedshell{3}\" command": {
+      "prefix": "extrudedshell{3}",
+      "body": "extrudedshell{3} ${01:topMat}, ${02:bottomMat}, ${03:sideMat1}, ${04:sideMat2}, ${05:sideMat3}, ${06:sideMat4},\n\t${07:defaultMat},\n\t${08:n}, ${09:status}, ${10:offset}, ${11:thickness}, ${12:flipped}, ${13:trimmingBody},\n\t${14:xtb}, ${15:ytb}, ${16:xte}, ${17:yte},\n\t${18:topz}, ${19:tangle},\n\t${20:xbb}, ${21:ybb}, ${22:xbe}, ${23:ybe},\n\t${24:bottomz}, ${25:bangle},\n\t${26:preThickenTran11}, ${27:preThickenTran12}, ${28:preThickenTran13}, ${29:preThickenTran14},\n\t${30:preThickenTran21}, ${31:preThickenTran22}, ${32:preThickenTran23}, ${33:preThickenTran24},\n\t${34:preThickenTran31}, ${35:preThickenTran32}, ${36:preThickenTran33}, ${37:preThickenTran34},\n\t${38:x1}, ${39:y1}, ${40:s1},\n\t${41:...},\n\t${42:xn}, ${43:yn}, ${44:sn}"
+    },
+    "\"revolvedshell\" command": {
+      "prefix": "revolvedshell",
+      "body": "revolvedshell ${01:topMat}, ${02:bottomMat}, ${03:sideMat1}, ${04:sideMat2}, ${05:sideMat3}, ${06:sideMat4},\n\t${07:defaultMat},\n\t${08:n}, ${09:offset}, ${10:thickness}, ${11:flipped}, ${12:trimmingBody},\n\t${13:alphaOffset}, ${14:alpha},\n\t${15:preThickenTran11}, ${16:preThickenTran12}, ${17:preThickenTran13}, ${18:preThickenTran14},\n\t${19:preThickenTran21}, ${20:preThickenTran22}, ${21:preThickenTran23}, ${22:preThickenTran24},\n\t${23:preThickenTran31}, ${24:preThickenTran32}, ${25:preThickenTran33}, ${26:preThickenTran34},\n\t${27:x1}, ${28:y1}, ${29:s1},\n\t${30:...},\n\t${31:xn}, ${32:yn}, ${33:sn}"
+    },
+    "\"revolvedshell{2}\" command": {
+      "prefix": "revolvedshell{2}",
+      "body": "revolvedshell{2} ${01:topMat}, ${02:bottomMat}, ${03:sideMat1}, ${04:sideMat2}, ${05:sideMat3}, ${06:sideMat4},\n\t${07:defaultMat},\n\t${08:n}, ${09:status}, ${10:offset}, ${11:thickness}, ${12:flipped}, ${13:trimmingBody},\n\t${14:alphaOffset}, ${15:alpha},\n\t${16:preThickenTran11}, ${17:preThickenTran12}, ${18:preThickenTran13}, ${19:preThickenTran14},\n\t${20:preThickenTran21}, ${21:preThickenTran22}, ${22:preThickenTran23}, ${23:preThickenTran24},\n\t${24:preThickenTran31}, ${25:preThickenTran32}, ${26:preThickenTran33}, ${27:preThickenTran34},\n\t${28:x1}, ${29:y1}, ${30:s1},\n\t${31:...},\n\t${32:xn}, ${33:yn}, ${34:sn}"
+    },
+    "\"revolvedshell{3}\" command": {
+      "prefix": "revolvedshell{3}",
+      "body": "revolvedshell{3} ${01:topMat}, ${02:bottomMat}, ${03:sideMat1}, ${04:sideMat2}, ${05:sideMat3}, ${06:sideMat4},\n\t${07:defaultMat},\n\t${08:n}, ${09:status}, ${10:offset}, ${11:thickness}, ${12:flipped}, ${13:trimmingBody},\n\t${14:alphaOffset}, ${15:alpha},\n\t${16:preThickenTran11}, ${17:preThickenTran12}, ${18:preThickenTran13}, ${19:preThickenTran14},\n\t${20:preThickenTran21}, ${21:preThickenTran22}, ${22:preThickenTran23}, ${23:preThickenTran24},\n\t${24:preThickenTran31}, ${25:preThickenTran32}, ${26:preThickenTran33}, ${27:preThickenTran34},\n\t${28:x1}, ${29:y1}, ${30:s1},\n\t${31:...},\n\t${32:xn}, ${33:yn}, ${34:sn}"
+    },
+    "\"revolvedshellangular\" command": {
+      "prefix": "revolvedshellangular",
+      "body": "revolvedshellangular ${01:topMat}, ${02:bottomMat}, ${03:sideMat1}, ${04:sideMat2}, ${05:sideMat3}, ${06:sideMat4},\n\t${07:defaultMat},\n\t${08:n}, ${09:offset}, ${10:thickness}, ${11:flipped}, ${12:trimmingBody},\n\t${13:alphaOffset}, ${14:alpha},\n\t${15:segmentationType}, ${16:nOfSegments},\n\t${17:preThickenTran11}, ${18:preThickenTran12}, ${19:preThickenTran13}, ${20:preThickenTran14},\n\t${21:preThickenTran21}, ${22:preThickenTran22}, ${23:preThickenTran23}, ${24:preThickenTran24},\n\t${25:preThickenTran31}, ${26:preThickenTran32}, ${27:preThickenTran33}, ${28:preThickenTran34},\n\t${29:x1}, ${30:y1}, ${31:s1},\n\t${32:...},\n\t${33:xn}, ${34:yn}, ${35:sn}"
+    },
+    "\"revolvedshellangular{2}\" command": {
+      "prefix": "revolvedshellangular{2}",
+      "body": "revolvedshellangular{2} ${01:topMat}, ${02:bottomMat}, ${03:sideMat1}, ${04:sideMat2}, ${05:sideMat3}, ${06:sideMat4},\n\t${07:defaultMat},\n\t${08:n}, ${09:status}, ${10:offset}, ${11:thickness}, ${12:flipped}, ${13:trimmingBody},\n\t${14:alphaOffset}, ${15:alpha},\n\t${16:segmentationType}, ${17:nOfSegments},\n\t${18:preThickenTran11}, ${19:preThickenTran12}, ${20:preThickenTran13}, ${21:preThickenTran14},\n\t${22:preThickenTran21}, ${23:preThickenTran22}, ${24:preThickenTran23}, ${25:preThickenTran24},\n\t${26:preThickenTran31}, ${27:preThickenTran32}, ${28:preThickenTran33}, ${29:preThickenTran34},\n\t${30:x1}, ${31:y1}, ${32:s1},\n\t${33:...},\n\t${34:xn}, ${35:yn}, ${36:sn}"
+    },
+    "\"revolvedshellangular{3}\" command": {
+      "prefix": "revolvedshellangular{3}",
+      "body": "revolvedshellangular{3} ${01:topMat}, ${02:bottomMat}, ${03:sideMat1}, ${04:sideMat2}, ${05:sideMat3}, ${06:sideMat4},\n\t${07:defaultMat},\n\t${08:n}, ${09:status}, ${10:offset}, ${11:thickness}, ${12:flipped}, ${13:trimmingBody},\n\t${14:alphaOffset}, ${15:alpha},\n\t${16:segmentationType}, ${17:nOfSegments},\n\t${18:preThickenTran11}, ${19:preThickenTran12}, ${20:preThickenTran13}, ${21:preThickenTran14},\n\t${22:preThickenTran21}, ${23:preThickenTran22}, ${24:preThickenTran23}, ${25:preThickenTran24},\n\t${26:preThickenTran31}, ${27:preThickenTran32}, ${28:preThickenTran33}, ${29:preThickenTran34},\n\t${30:x1}, ${31:y1}, ${32:s1},\n\t${33:...},\n\t${34:xn}, ${35:yn}, ${36:sn}"
+    },
+    "\"ruledshell\" command": {
+      "prefix": "ruledshell",
+      "body": "ruledshell ${01:topMat}, ${02:bottomMat}, ${03:sideMat1}, ${04:sideMat2}, ${05:sideMat3}, ${06:sideMat4},\n\t${07:defaultMat},\n\t${08:n}, ${09:m}, ${10:g},\n\t${11:offset}, ${12:thickness}, ${13:flipped}, ${14:trimmingBody},\n\t${15:preThickenTran11}, ${16:preThickenTran12}, ${17:preThickenTran13}, ${18:preThickenTran14},\n\t${19:preThickenTran21}, ${20:preThickenTran22}, ${21:preThickenTran23}, ${22:preThickenTran24},\n\t${23:preThickenTran31}, ${24:preThickenTran32}, ${25:preThickenTran33}, ${26:preThickenTran34},\n\t${27:firstpolyX1}, ${28:firstpolyY1}, ${29:firstpolyS1},\n\t${30:...},\n\t${31:firstpolyXn}, ${32:firstpolyYn}, ${33:firstpolySn},\n\t${34:secondpolyX1}, ${35:secondpolyY1}, ${36:secondpolyS1},\n\t${37:...},\n\t${38:secondpolyXm}, ${39:secondpolyYm}, ${40:secondpolySm},\n\t${41:profile2Tran11}, ${42:profile2Tran12}, ${43:profile2Tran13}, ${44:profile2Tran14},\n\t${45:profile2Tran21}, ${46:profile2Tran22}, ${47:profile2Tran23}, ${48:profile2Tran24},\n\t${49:profile2Tran31}, ${50:profile2Tran32}, ${51:profile2Tran33}, ${52:profile2Tran34},\n\t${53:generatrixFirstIndex1}, ${54:generatrixSecondIndex1},\n\t${55:...},\n\t${56:generatrixFirstIndexg}, ${57:generatrixSecondIndexg}"
+    },
+    "\"ruledshell{2}\" command": {
+      "prefix": "ruledshell{2}",
+      "body": "ruledshell{2} ${01:topMat}, ${02:bottomMat}, ${03:sideMat1}, ${04:sideMat2}, ${05:sideMat3}, ${06:sideMat4},\n\t${07:defaultMat},\n\t${08:n}, ${09:m}, ${10:g}, ${11:status},\n\t${12:offset}, ${13:thickness}, ${14:flipped}, ${15:trimmingBody},\n\t${16:preThickenTran11}, ${17:preThickenTran12}, ${18:preThickenTran13}, ${19:preThickenTran14},\n\t${20:preThickenTran21}, ${21:preThickenTran22}, ${22:preThickenTran23}, ${23:preThickenTran24},\n\t${24:preThickenTran31}, ${25:preThickenTran32}, ${26:preThickenTran33}, ${27:preThickenTran34},\n\t${28:firstpolyX1}, ${29:firstpolyY1}, ${30:firstpolyS1},\n\t${31:...},\n\t${32:firstpolyXn}, ${33:firstpolyYn}, ${34:firstpolySn},\n\t${35:secondpolyX1}, ${36:secondpolyY1}, ${37:secondpolyS1},\n\t${38:...},\n\t${39:secondpolyXm}, ${40:secondpolyYm}, ${41:secondpolySm},\n\t${42:profile2Tran11}, ${43:profile2Tran12}, ${44:profile2Tran13}, ${45:profile2Tran14},\n\t${46:profile2Tran21}, ${47:profile2Tran22}, ${48:profile2Tran23}, ${49:profile2Tran24},\n\t${50:profile2Tran31}, ${51:profile2Tran32}, ${52:profile2Tran33}, ${53:profile2Tran34},\n\t${54:generatrixFirstIndex1}, ${55:generatrixSecondIndex1},\n\t${56:...},\n\t${57:generatrixFirstIndexg}, ${58:generatrixSecondIndexg}"
+    },
+    "\"ruledshell{3}\" command": {
+      "prefix": "ruledshell{3}",
+      "body": "ruledshell{3} ${01:topMat}, ${02:bottomMat}, ${03:sideMat1}, ${04:sideMat2}, ${05:sideMat3}, ${06:sideMat4},\n\t${07:defaultMat},\n\t${08:n}, ${09:m}, ${10:g}, ${11:status},\n\t${12:offset}, ${13:thickness}, ${14:flipped}, ${15:trimmingBody},\n\t${16:preThickenTran11}, ${17:preThickenTran12}, ${18:preThickenTran13}, ${19:preThickenTran14},\n\t${20:preThickenTran21}, ${21:preThickenTran22}, ${22:preThickenTran23}, ${23:preThickenTran24},\n\t${24:preThickenTran31}, ${25:preThickenTran32}, ${26:preThickenTran33}, ${27:preThickenTran34},\n\t${28:firstpolyX1}, ${29:firstpolyY1}, ${30:firstpolyS1},\n\t${31:...},\n\t${32:firstpolyXn}, ${33:firstpolyYn}, ${34:firstpolySn},\n\t${35:secondpolyX1}, ${36:secondpolyY1}, ${37:secondpolyS1},\n\t${38:...},\n\t${39:secondpolyXm}, ${40:secondpolyYm}, ${41:secondpolySm},\n\t${42:profile2Tran11}, ${43:profile2Tran12}, ${44:profile2Tran13}, ${45:profile2Tran14},\n\t${46:profile2Tran21}, ${47:profile2Tran22}, ${48:profile2Tran23}, ${49:profile2Tran24},\n\t${50:profile2Tran31}, ${51:profile2Tran32}, ${52:profile2Tran33}, ${53:profile2Tran34},\n\t${54:generatrixFirstIndex1}, ${55:generatrixSecondIndex1},\n\t${56:...},\n\t${57:generatrixFirstIndexg}, ${58:generatrixSecondIndexg}"
+    },
+    "\"light\" command": {
+      "prefix": "light",
+      "body": "light ${01:red}, ${02:green}, ${03:blue}, ${04:shadow},\n\t${05:radius}, ${06:alpha}, ${07:beta}, ${08:angleFalloff},\n\t${09:distance1}, ${10:distance2}, ${11:distanceFalloff},\n\tadditional_data ${12:name1} = ${13:value1},\n\t\t${14:name2} = ${15:value2},\n\t\t${16:...}"
+    },
+    "\"picture\" command": {
+      "prefix": "picture",
+      "body": "picture ${01:expression}, ${02:a}, ${03:b}, ${04:mask}"
+    },
+    "\"text\" command": {
+      "prefix": "text",
+      "body": "text ${01:d}, 0, ${02:expression}"
+    },
+    "\"richtext\" command": {
+      "prefix": "richtext",
+      "body": "richtext ${01:x}, ${02:y},\n\t${05:height}, 0, ${06:textblockName}"
+    },
+    "\"nurbscurve2D\" command": {
+      "prefix": "nurbscurve2D",
+      "body": "nurbscurve2D ${01:degree}, ${02:nControlPoints},\n\t${03:knot1}, ${04:knot2}, ${05:...}, ${06:knotm},\n\t${07:cPoint1X}, ${08:cPoint1Y}, ${09:weight1},\n\t${10:cPoint2X}, ${11:cPoint2Y}, ${12:weight2},\n\t${13:...},\n\t${14:cPointnX}, ${15:cPointnY}, ${16:weightn}"
+    },
+    "\"nurbscurve3D\" command": {
+      "prefix": "nurbscurve3D",
+      "body": "nurbscurve3D ${01:degree}, ${02:nControlPoints},\n\t${03:knot1}, ${04:knot2}, ${05:...}, ${06:knotm},\n\t${07:cPoint1X}, ${08:cPoint1Y}, ${09:cPoint1Z}, ${10:weight1},\n\t${11:cPoint2X}, ${12:cPoint2Y}, ${13:cPoint2Z}, ${14:weight2},\n\t${15:...},\n\t${16:cPointnX}, ${17:cPointnY}, ${18:cPointnZ}, ${19:weightn}"
+    },
+    "\"nurbssurface\" command": {
+      "prefix": "nurbssurface",
+      "body": "nurbssurface ${01:degreeU}, ${02:degreeV}, ${03:nU}, ${04:nV},\n\t${05:knotU1}, ${06:knotU2}, ${07:...}, ${08:knotUmU},\n\t${09:knotV1}, ${10:knotV2}, ${11:...}, ${12:knotVmV},\n\t${13:cPoint11X}, ${14:cPoint11Y}, ${15:cPoint11Z}, ${16:weight11},\n\t${17:cPoint12X}, ${18:cPoint12Y}, ${19:cPoint12Z}, ${20:weight12},\n\t${21:...},\n\t${22:cPoint1nVX}, ${23:cPoint1nVY}, ${24:cPoint1nVZ}, ${25:weight1nV},\n\t${26:cPoint21X}, ${27:cPoint21Y}, ${28:cPoint21Z}, ${29:weight21},\n\t${30:...},\n\t${31:cPointnUnVX}, ${32:cPointnUnVY}, ${33:cPointnUnVZ}, ${34:weightnUnV}"
+    },
+    "\"nurbsvert\" command": {
+      "prefix": "nurbsvert",
+      "body": "nurbsvert ${01:x}, ${02:y}, ${03:z}, ${04:hard}, ${05:tolerance}"
+    },
+    "\"nurbsedge\" command": {
+      "prefix": "nurbsedge",
+      "body": "nurbsedge ${01:vert1}, ${02:vert2}, ${03:curve}, ${04:curveDomainBeg}, ${05:curveDomainEnd}, ${06:status}, ${07:tolerance}"
+    },
+    "\"nurbstrim\" command": {
+      "prefix": "nurbstrim",
+      "body": "nurbstrim ${01:edge}, ${02:curve}, ${03:curveDomainBeg}, ${04:curveDomainEnd}, ${05:tolerance}"
+    },
+    "\"nurbstrimsingular\" command": {
+      "prefix": "nurbstrimsingular",
+      "body": "nurbstrimsingular ${01:vertex}, ${02:curve}, ${03:curveDomainBeg}, ${04:curveDomainEnd}, ${05:tolerance}"
+    },
+    "\"nurbsface\" command": {
+      "prefix": "nurbsface",
+      "body": "nurbsface ${01:n}, ${02:iSurface}, ${03:tolerance},\n\t${04:trim1}, ${05:trim2}, ${06:...}, ${07:trimn}"
+    },
+    "\"nurbsface{2}\" command": {
+      "prefix": "nurbsface{2}",
+      "body": "nurbsface{2} ${01:n}, ${02:iSurface}, ${03:tolerance},\n\t${04:wrap_method}, ${05:wrap_flags},\n\t${06:x1}, ${07:y1}, ${08:z1},\n\t${09:x2}, ${10:y2}, ${11:z2},\n\t${12:x3}, ${13:y3}, ${14:z3},\n\t${15:x4}, ${16:y4}, ${17:z4},\n\t${18:trim1}, ${19:trim2}, ${20:...}, ${21:trimn}"
+    },
+    "\"nurbslump\" command": {
+      "prefix": "nurbslump",
+      "body": "nurbslump ${01:n}, ${02:face1}, ${03:face2}, ${04:...}, ${05:facen}"
+    },
+    "\"nurbsbody\" command": {
+      "prefix": "nurbsbody",
+      "body": "nurbsbody ${01:shadowStatus}, ${02:smoothnessMin}, ${03:smoothnessMax}"
+    },
+    "\"vert\" command": {
+      "prefix": "vert",
+      "body": "vert ${01:x}, ${02:y}, ${03:z}"
+    },
+    "\"vert{2}\" command": {
+      "prefix": "vert{2}",
+      "body": "vert{2} ${01:x}, ${02:y}, ${03:z}, ${04:hard}"
+    },
+    "\"teve\" command": {
+      "prefix": "teve",
+      "body": "teve ${01:x}, ${02:y}, ${03:z}, ${04:u}, ${05:v}"
+    },
+    "\"vect\" command": {
+      "prefix": "vect",
+      "body": "vect ${01:x}, ${02:y}, ${03:z}"
+    },
+    "\"edge\" command": {
+      "prefix": "edge",
+      "body": "edge ${01:vert1}, ${02:vert2}, ${03:pgon1}, ${04:pgon2}, ${05:status}"
+    },
+    "\"pgon\" command": {
+      "prefix": "pgon",
+      "body": "pgon ${01:n}, ${02:vect}, ${03:status},\n\t${04:edge1},\n\t${05:...},\n\t${06:edgen}"
+    },
+    "\"pgon{2}\" command": {
+      "prefix": "pgon{2}",
+      "body": "pgon{2} ${01:n}, ${02:vect}, ${03:status}, ${04:wrap},\n\t${05:edgeOrWrap1},\n\t${06:...},\n\t${07:edgeOrWrapn}"
+    },
+    "\"pgon{3}\" command": {
+      "prefix": "pgon{3}",
+      "body": "pgon{3} ${01:n}, ${02:vect}, ${03:status}, ${04:wrapMethod}, ${05:wrapFlags},\n\t${06:edgeOrWrap1},\n\t${07:...},\n\t${08:edgeOrWrapn}"
+    },
+    "\"pipg\" command": {
+      "prefix": "pipg",
+      "body": "pipg ${01:expression}, ${02:a}, ${03:b}, ${04:mask}, ${05:n}, ${06:vect}, ${07:status},\n\t${08:edge1},\n\t${09:...},\n\t${10:edgen}"
+    },
+    "\"coor{3}\" command": {
+      "prefix": "coor{3}",
+      "body": "coor{3} ${01:wrapMethod}, ${02:wrapFlags},\n\t${03:originX}, ${04:originY}, ${05:originZ},\n\t${06:endOfXX}, ${07:endOfXY}, ${08:endOfXZ},\n\t${09:endOfYX}, ${10:endOfYY}, ${11:endOfYZ},\n\t${12:endOfZX}, ${13:endOfZY}, ${14:endOfZZ}"
+    },
+    "\"body\" command": {
+      "prefix": "body",
+      "body": "body ${01:status}"
+    },
+    "\"base\" command": {
+      "prefix": "base",
+      "body": "base"
+    },
+    "\"pointcloud\" command": {
+      "prefix": "pointcloud",
+      "body": "pointcloud \"${01:dataFileName}\""
+    },
+    "\"cutplane\" command": {
+      "prefix": "cutplane",
+      "body": "cutplane ${01:x}, ${02:y}, ${03:z}, ${04:side}, ${05:status},\n\t${06:statement1},\n\t${07:...},\n\t${08:statementn}\ncutend\n$0"
+    },
+    "\"cutplane{2}\" command": {
+      "prefix": "cutplane{2}",
+      "body": "cutplane{2} ${01:angle}, ${02:status},\n\t${03:statement1},\n\t${04:...},\n\t${05:statementn}\ncutend\n$0"
+    },
+    "\"cutplane{3}\" command": {
+      "prefix": "cutplane{3}",
+      "body": "cutplane{3} ${01:x}, ${02:y}, ${03:z}, ${04:side}, ${05:status},\n\t${06:statement1},\n\t${07:...},\n\t${08:statementn}\ncutend\n$0"
+    },
+    "\"cutpoly\" command": {
+      "prefix": "cutpoly",
+      "body": "cutpoly ${01:n},\n\t${02:x1}, ${03:y1}, ${04:...}, ${05:xn}, ${06:yn},\n\t${07:x}, ${08:y}, ${09:z},\n\t${10:statement1},\n\t${11:...},\n\t${12:statementn}\ncutend\n$0"
+    },
+    "\"cutpolya\" command": {
+      "prefix": "cutpolya",
+      "body": "cutpolya ${01:n}, ${02:status}, ${03:dist},\n\t${04:x1}, ${05:y1}, ${06:mask1}, ${07:...}, ${08:xn}, ${09:yn}, ${10:maskn},\n\t${11:x}, ${12:y}, ${13:z},\n\t${14:statement1},\n\t${15:...},\n\t${16:statementn}\ncutend\n$0"
+    },
+    "\"cutshape\" command": {
+      "prefix": "cutshape",
+      "body": "cutshape ${01:dist}, ${02:status},\n\t${03:statement1},\n\t${04:...},\n\t${05:statementn}\ncutend\n$0"
+    },
+    "\"cutform\" command": {
+      "prefix": "cutform",
+      "body": "cutform ${01:n}, ${02:method}, ${03:status},\n\t${04:ry}, ${05:rx}, ${06:rz}, ${07:dist},\n\t${08:x1}, ${09:y1}, ${10:mask1}, ${11:mat1},\n\t${12:...},\n\t${13:xn}, ${14:yn}, ${15:maskn}, ${16:matn}"
+    },
+    "\"cutform{2}\" command": {
+      "prefix": "cutform{2}",
+      "body": "cutform{2} ${01:n}, ${02:method}, ${03:status},\n\t${04:ry}, ${05:rx}, ${06:rz}, ${07:dist},\n\t${08:x1}, ${09:y1}, ${10:mask1}, ${11:mat1},\n\t${12:...},\n\t${13:xn}, ${14:yn}, ${15:maskn}, ${16:matn}"
+    },
+    "\"group\" command": {
+      "prefix": "group",
+      "body": "group \"${01:name}\",\n\t${02:statement1},\n\t${03:...},\n\t${04:statementn}\nendgroup\n$0"
+    },
+    "\"addgroup\" command": {
+      "prefix": "addgroup",
+      "body": "addgroup (${01:groupExpr1}, ${02:groupExpr2})\n$0"
+    },
+    "\"addgroup{2}\" command": {
+      "prefix": "addgroup{2}",
+      "body": "addgroup{2} (${01:groupExpr1}, ${02:groupExpr2}, ${03:edgeColor}, ${04:materialId}, ${05:materialColor}, ${06:operationStatus})\n$0"
+    },
+    "\"addgroup{3}\" command": {
+      "prefix": "addgroup{3}",
+      "body": "addgroup{3} (${01:groupExpr1}, ${02:groupExpr2}, ${03:edgeColor}, ${04:materialId}, ${05:materialColor}, ${06:operationStatus})\n$0"
+    },
+    "\"subgroup\" command": {
+      "prefix": "subgroup",
+      "body": "subgroup (${01:groupExpr1}, ${02:groupExpr2})\n$0"
+    },
+    "\"subgroup{2}\" command": {
+      "prefix": "subgroup{2}",
+      "body": "subgroup{2} (${01:groupExpr1}, ${02:groupExpr2}, ${03:edgeColor}, ${04:materialId}, ${05:materialColor}, ${06:operationStatus})\n$0"
+    },
+    "\"subgroup{3}\" command": {
+      "prefix": "subgroup{3}",
+      "body": "subgroup{3} (${01:groupExpr1}, ${02:groupExpr2}, ${03:edgeColor}, ${04:materialId}, ${05:materialColor}, ${06:operationStatus})\n$0"
+    },
+    "\"isectgroup\" command": {
+      "prefix": "isectgroup",
+      "body": "isectgroup (${01:groupExpr1}, ${02:groupExpr2})\n$0"
+    },
+    "\"isectgroup{2}\" command": {
+      "prefix": "isectgroup{2}",
+      "body": "isectgroup{2} (${01:groupExpr1}, ${02:groupExpr2}, ${03:edgeColor}, ${04:materialId}, ${05:materialColor}, ${06:operationStatus})\n$0"
+    },
+    "\"isectgroup{3}\" command": {
+      "prefix": "isectgroup{3}",
+      "body": "isectgroup{3} (${01:groupExpr1}, ${02:groupExpr2}, ${03:edgeColor}, ${04:materialId}, ${05:materialColor}, ${06:operationStatus})\n$0"
+    },
+    "\"isectlines\" command": {
+      "prefix": "isectlines",
+      "body": "isectlines (${01:groupExpr1}, ${02:groupExpr2})\n$0"
+    },
+    "\"placegroup\" command": {
+      "prefix": "placegroup",
+      "body": "placegroup ${01:groupExpr}"
+    },
+    "\"killgroup\" command": {
+      "prefix": "killgroup",
+      "body": "killgroup ${01:groupExpr}"
+    },
+    "\"sweepgroup\" command": {
+      "prefix": "sweepgroup",
+      "body": "sweepgroup (${01:groupExpr}, ${02:x}, ${03:y}, ${04:z})\n$0"
+    },
+    "\"sweepgroup{2}\" command": {
+      "prefix": "sweepgroup{2}",
+      "body": "sweepgroup{2} (${01:groupExpr}, ${02:x}, ${03:y}, ${04:z})\n$0"
+    },
+    "\"sweepgroup{3}\" command": {
+      "prefix": "sweepgroup{3}",
+      "body": "sweepgroup{3} (${01:groupExpr}, ${02:x}, ${03:y}, ${04:z}, ${05:edgeColor}, ${06:materialId}, ${07:materialColor}, ${08:method})\n$0"
+    },
+    "\"sweepgroup{4}\" command": {
+      "prefix": "sweepgroup{4}",
+      "body": "sweepgroup{4} (${01:groupExpr}, ${02:x}, ${03:y}, ${04:z}, ${05:edgeColor}, ${06:materialId}, ${07:materialColor}, ${08:method}, ${09:status})\n$0"
+    },
+    "\"sweepgroup{5}\" command": {
+      "prefix": "sweepgroup{5}",
+      "body": "sweepgroup{5} (${01:groupExpr}, ${02:x}, ${03:y}, ${04:z}, ${05:edgeColor}, ${06:materialId}, ${07:materialColor}, ${08:method}, ${09:status})\n$0"
+    },
+    "\"creategroupwithmaterial\" command": {
+      "prefix": "creategroupwithmaterial",
+      "body": "creategroupwithmaterial (${01:groupExpr}, ${02:replDirective}, ${03:pen}, ${04:material})\n$0"
+    },
+    "\"binary\" command": {
+      "prefix": "binary",
+      "body": "binary ${01:mode}, ${02:section}, ${03:elementID}"
+    },
+    "\"hotspot2\" command": {
+      "prefix": "hotspot2",
+      "body": "hotspot2 ${01:x}, ${02:y}, ${03:unID}, ${04:paramreference}, ${05:flags}, ${06:displayparam}, ${07:customDescription}"
+    },
+    "2D editable X": {
+      "prefix": "hotspot2",
+      "body": "hotspot2 0,\t\t${02:y},\t${03:unID}, ${01:x}, 1 + 128,\t${04:displayparam}, ${05:customDescription}: ${03:unID} = ${03:unID} + 1\nhotspot2 ${01:x},\t${02:y},\t${03:unID}, ${01:x}, 2,\t\t${04:displayparam}, ${05:customDescription}: ${03:unID} = ${03:unID} + 1\nhotspot2 -1,\t${02:y},\t${03:unID}, ${01:x}, 3,\t\t${04:displayparam}, ${05:customDescription}: ${03:unID} = ${03:unID} + 1\n$0"
+    },
+    "2D editable Y": {
+      "prefix": "hotspot2",
+      "body": "hotspot2 ${01:x},\t0,\t\t${03:unID}, ${02:y}, 1 + 128,\t${04:displayparam}, ${05:customDescription}: ${03:unID} = ${03:unID} + 1\nhotspot2 ${01:x},\t${02:y},\t${03:unID}, ${02:y}, 2,\t\t${04:displayparam}, ${05:customDescription}: ${03:unID} = ${03:unID} + 1\nhotspot2 ${01:x},\t-1,\t${03:unID}, ${02:y}, 3,\t\t${04:displayparam}, ${05:customDescription}: ${03:unID} = ${03:unID} + 1\n$0"
+    },
+    "\"hotline2\" command": {
+      "prefix": "hotline2",
+      "body": "hotline2 ${01:x1}, ${02:y1}, ${03:x2}, ${04:y2}, ${05:unID}"
+    },
+    "\"hotarc2\" command": {
+      "prefix": "hotarc2",
+      "body": "hotarc2 ${01:x}, ${02:y}, ${03:radius}, ${04:startAngle}, ${05:endAngle}, ${06:unID}"
+    },
+    "\"line2\" command": {
+      "prefix": "line2",
+      "body": "line2 ${01:x1}, ${02:y1}, ${03:x2}, ${04:y2}"
+    },
+    "\"rect2\" command": {
+      "prefix": "rect2",
+      "body": "rect2 ${01:x1}, ${02:y1}, ${03:x2}, ${04:y2}"
+    },
+    "\"poly2\" command": {
+      "prefix": "poly2",
+      "body": "poly2 ${01:n}, ${02:frameFill},\n\t${03:x1}, ${04:y1},\n\t${05:...},\n\t${06:xn}, ${07:yn}"
+    },
+    "\"poly2_\" command": {
+      "prefix": "poly2_",
+      "body": "poly2_ ${01:n}, ${02:frameFill},\n\t${03:x1}, ${04:y1}, ${05:s1},\n\t${06:...},\n\t${07:xn}, ${08:yn}, ${09:sn}"
+    },
+    "\"poly2_a\" command": {
+      "prefix": "poly2_a",
+      "body": "poly2_a ${01:n}, ${02:frameFill}, ${03:fillPen},\n\t${04:x1}, ${05:y1}, ${06:s1},\n\t${07:...},\n\t${08:xn}, ${09:yn}, ${10:sn}"
+    },
+    "\"poly2_b\" command": {
+      "prefix": "poly2_b",
+      "body": "poly2_b ${01:n}, ${02:frameFill},\n\t${03:fillPen}, ${04:fillBackgroundPen},\n\t${05:x1}, ${06:y1}, ${07:s1},\n\t${08:...},\n\t${09:xn}, ${10:yn}, ${11:sn}"
+    },
+    "\"poly2_b{2}\" command": {
+      "prefix": "poly2_b{2}",
+      "body": "poly2_b{2} ${01:n}, ${02:frameFill},\n\t${03:fillPen}, ${04:fillBackgroundPen},\n\t${05:fillOrigoX}, ${06:fillOrigoY}, ${07:fillAngle},\n\t${08:x1}, ${09:y1}, ${10:s1},\n\t${11:...},\n\t${12:xn}, ${13:yn}, ${14:sn}"
+    },
+    "\"poly2_b{3}\" command": {
+      "prefix": "poly2_b{3}",
+      "body": "poly2_b{3} ${01:n}, ${02:frameFill},\n\t${03:fillPen}, ${04:fillBackgroundPen},\n\t${05:fillOrigoX}, ${06:fillOrigoY}, ${07:fillAngle},\n\t${08:mxx}, ${09:mxy}, ${10:myx}, ${11:myy},\n\t${12:x1}, ${13:y1}, ${14:s1},\n\t${15:...},\n\t${16:xn}, ${17:yn}, ${18:sn}"
+    },
+    "\"poly2_b{4}\" command": {
+      "prefix": "poly2_b{4}",
+      "body": "poly2_b{4} ${01:n}, ${02:frameFill},\n\t${03:fillPen}, ${04:fillBackgroundPen},\n\t${05:fillOrigoX}, ${06:fillOrigoY}, ${07:fillAngle},\n\t${08:mxx}, ${09:mxy}, ${10:myx}, ${11:myy},\n\t${12:gradientInnerRadius},\n\t${13:x1}, ${14:y1}, ${15:s1},\n\t${16:...},\n\t${17:xn}, ${18:yn}, ${19:sn}"
+    },
+    "\"poly2_b{5}\" command": {
+      "prefix": "poly2_b{5}",
+      "body": "poly2_b{5} ${01:n}, ${02:frameFill}, ${03:fillCategory}, ${04:distortionFlags},\n\t${05:fillPen}, ${06:fillBackgroundPen},\n\t${07:fillOrigoX}, ${08:fillOrigoY}, ${09:fillAngle},\n\t${10:mxx}, ${11:mxy}, ${12:myx}, ${13:myy},\n\t${14:gradientInnerRadius},\n\t${15:x1}, ${16:y1}, ${17:s1},\n\t${18:...},\n\t${19:xn}, ${20:yn}, ${21:sn}"
+    },
+    "\"poly2_b{6}\" command": {
+      "prefix": "poly2_b{6}",
+      "body": "poly2_b{6} ${01:n}, ${02:frameFill}, ${03:fillCategory}, ${04:distortionFlags},\n\t${05:fillPen}, ${06:fillBackgroundPen},\n\t${07:fillOrigoX}, ${08:fillOrigoY}, ${09:fillAngle},\n\t${10:mxx}, ${11:mxy}, ${12:myx}, ${13:myy},\n\t${14:gradientInnerRadius},\n\t${15:x1}, ${16:y1}, ${17:s1}, ${18:pen1}, ${19:linetype1},\n\t${20:...},\n\t${21:xn}, ${22:yn}, ${23:sn}, ${24:penn}, ${25:linetypen}"
+    },
+    "\"arc2\" command": {
+      "prefix": "arc2",
+      "body": "arc2 ${01:x}, ${02:y}, ${03:radius}, ${04:alpha}, ${05:beta}"
+    },
+    "\"circle2\" command": {
+      "prefix": "circle2",
+      "body": "circle2 ${01:x}, ${02:y}, ${03:radius}"
+    },
+    "\"spline2\" command": {
+      "prefix": "spline2",
+      "body": "spline2 ${01:n}, ${02:status},\n\t${03:x1}, ${04:y1}, ${05:angle1},\n\t${06:...},\n\t${07:xn}, ${08:yn}, ${09:anglen}"
+    },
+    "\"spline2a\" command": {
+      "prefix": "spline2a",
+      "body": "spline2a ${01:n}, ${02:status},\n\t${03:x1}, ${04:y1}, ${05:angle1}, ${06:lengthPrevious1}, ${07:lengthNext1},\n\t${08:...},\n\t${09:xn}, ${10:yn}, ${11:anglen}, ${12:lengthPreviousn}, ${13:lengthNextn}"
+    },
+    "\"picture2\" command": {
+      "prefix": "picture2",
+      "body": "picture2 ${01:expression}, ${02:a}, ${03:b}"
+    },
+    "\"picture2{2}\" command": {
+      "prefix": "picture2{2}",
+      "body": "picture2{2} ${01:expression}, ${02:a}, ${03:b}, ${04:mask}"
+    },
+    "\"text2\" command": {
+      "prefix": "text2",
+      "body": "text2 ${01:x}, ${02:y}, ${03:expression}"
+    },
+    "\"richtext2\" command": {
+      "prefix": "richtext2",
+      "body": "richtext2 ${01:x}, ${02:y}, ${03:textblockName}"
+    },
+    "\"fragment2\" command": {
+      "prefix": "fragment2",
+      "body": "fragment2 ${01:fragmentIndex}, ${02:useCurrentAttributesFlag}"
+    },
+    "\"project2\" command": {
+      "prefix": "project2",
+      "body": "project2 ${01:projectionCode}, ${02:angle}, ${03:method}"
+    },
+    "\"project2{2}\" command": {
+      "prefix": "project2{2}",
+      "body": "project2{2} ${01:projectionCode}, ${02:angle}, ${03:method}, ${04:backgroundColor}, ${05:fillOrigoX}, ${06:fillOrigoY}, ${07:fillDirection}"
+    },
+    "\"project2{3}\" command": {
+      "prefix": "project2{3}",
+      "body": "project2{3} ${01:projectionCode}, ${02:angle}, ${03:method}, ${04:parts},\n\t${05:backgroundColor}, ${06:fillOrigoX}, ${07:fillOrigoY}, ${08:fillDirection}\n\tparameters ${09:name1} = ${10:value1},\n\t\t${11:name2} = ${12:value2},\n\t\t${13:...},\n\t\t${14:namen} = ${15:valuen}"
+    },
+    "\"project2{4}\" command": {
+      "prefix": "project2{4}",
+      "body": "project2{4} ${01:projectionCode}, ${02:angle},\n\t${03:useTransparency}, ${04:statusParts},\n\t${05:numCutplanes},\n\t${06:cutplaneHeight1}, ${07:...}, ${08:cutplaneHeightn},\n\n\t${09:method1}, ${10:parts1},\n\t${11:cutFillIndex1}, ${12:cutFillBgPen1},\n\t${13:cutFillOrigoX1}, ${14:cutFillOrigoY1}, ${15:cutFillDirection1},\n\t${16:cutLinePen1}, ${17:cutLineType1},\n\t${18:projectedFillIndex1},\n\t${19:projectedFillFgPen1}, ${20:projectedFillBgPen1},\n\t${21:projectedFillOrigoX1}, ${22:projectedFillOrigoY1},\n\t${23:projectedFillDirection1},\n\t${24:projectedLinePen1}, ${25:projectedLineType1},\n\t${26:...},\n\t${27:method(numCutplanes+1))}, ${28:parts(numCutplanes+1)},\n\t${29:cutFillIndex(numCutplanes+1)},\n\t${30:cutFillFgPen(numCutplanes+1)}, ${31:cutFillBgPen(numCutplanes+1)},\n\t${32:cutFillOrigoX(numCutplanes+1)}, ${33:cutFillOrigoY(numCutplanes+1)},\n\t${34:cutFillDirection(numCutplanes+1)},\n\t${35:cutLinePen(numCutplanes+1)}, ${36:cutLineType(numCutplanes+1)},\n\t${37:projectedFillIndex(numCutplanes+1)},\n\t${38:projectedFillFgPen(numCutplanes+1)}, ${39:projectedFillBgPen(numCutplanes+1)},\n\t${40:projectedFillOrigoX(numCutplanes+1)}, ${41:projectedFillOrigoY(numCutplanes+1)},\n\t${42:projectedFillDirection(numCutplanes+1)},\n\t${43:projectedLinePen(numCutplanes+1)}, ${44:projectedLineType(numCutplanes+1)}"
+    },
+    "\"drawing2\" command": {
+      "prefix": "drawing2",
+      "body": "drawing2 ${01:expression}"
+    },
+    "\"drawing3\" command": {
+      "prefix": "drawing3",
+      "body": "drawing3 ${01:projectionCode}, ${02:angle}, ${03:method}"
+    },
+    "\"drawing3{2}\" command": {
+      "prefix": "drawing3{2}",
+      "body": "drawing3{2} ${01:projectionCode}, ${02:angle}, ${03:method}, ${04:backgroundColor}, ${05:fillOrigoX}, ${06:fillOrigoY}, ${07:fillDirection}"
+    },
+    "\"drawing3{3}\" command": {
+      "prefix": "drawing3{3}",
+      "body": "drawing3{3} ${01:projectionCode}, ${02:angle}, ${03:method}, ${04:parts},\n\t${05:backgroundColor}, ${06:fillOrigoX}, ${07:fillOrigoY}, ${08:fillDirection}\n\tparameters ${09:name1} = ${10:value1},\n\t\t${11:name2} = ${12:value2},\n\t\t${13:...},\n\t\t${14:namen} = ${15:valuen}"
+    },
+    "\"radius\" command": {
+      "prefix": "radius",
+      "body": "radius ${01:radiusMin}, ${02:radiusMax}"
+    },
+    "\"resol\" command": {
+      "prefix": "resol",
+      "body": "resol ${01:n}"
+    },
+    "\"toler\" command": {
+      "prefix": "toler",
+      "body": "toler ${01:dist}"
+    },
+    "\"pen\" command": {
+      "prefix": "pen",
+      "body": "pen ${01:n}"
+    },
+    "\"line_property\" command": {
+      "prefix": "line_property",
+      "body": "line_property ${01:expression}"
+    },
+    "\"style\" command": {
+      "prefix": "style",
+      "body": "style ${01:expression}"
+    },
+    "\"model wire\" command": {
+      "prefix": "model wire",
+      "body": "model wire"
+    },
+    "\"model surface\" command": {
+      "prefix": "model surface",
+      "body": "model surface"
+    },
+    "\"model solid\" command": {
+      "prefix": "model solid",
+      "body": "model solid"
+    },
+    "\"material\" command": {
+      "prefix": "material",
+      "body": "material ${01:expression}"
+    },
+    "\"building_material\" command": {
+      "prefix": "building_material",
+      "body": "building_material ${01:expression}"
+    },
+    "\"sect_fill\" command": {
+      "prefix": "sect_fill",
+      "body": "sect_fill ${01:fill}, ${02:fillBackgroundPen}, ${03:fillPen}, ${04:contourPen}"
+    },
+    "\"sect_attrs\" command": {
+      "prefix": "sect_attrs",
+      "body": "sect_attrs ${01:fill}, ${02:fillBackgroundPen},\n\t${03:fillPen}, ${04:contourPen} [, ${05:lineType}]"
+    },
+    "\"sect_attrs{2}\" command": {
+      "prefix": "sect_attrs{2}",
+      "body": "sect_attrs{2} ${01:contour_pen} [, ${02:lineType}]"
+    },
+    "\"shadow\" command": {
+      "prefix": "shadow",
+      "body": "shadow ${01:casting}, ${02:catching}"
+    },
+    "\"drawindex\" command": {
+      "prefix": "drawindex",
+      "body": "drawindex ${01:number}"
+    },
+    "\"fill\" command": {
+      "prefix": "fill",
+      "body": "fill ${01:expression}"
+    },
+    "\"line_type\" command": {
+      "prefix": "line_type",
+      "body": "line_type ${01:expression}"
+    },
+    "\"define material\" command": {
+      "prefix": "define material",
+      "body": "define material ${01:name} ${02:type},\n\t${03:surfaceRed}, ${04:surfaceGreen}, ${05:surfaceBlue},\n\t${06:ambientCe}, ${07:diffuseCe}, ${08:specularCe}, ${09:transparentCe},\n\t${10:shining}, ${11:transparencyAttenuation},\n\t${12:specularRed}, ${13:specularGreen}, ${14:specularBlue},\n\t${15:emissionRed}, ${16:emissionGreen}, ${17:emissionBlue}, ${18:emissionAtt},\n\t${19:fillIndex}, ${20:fillcolorIndex}, ${21:textureIndex}"
+    },
+    "\"define texture\" command": {
+      "prefix": "define texture",
+      "body": "define texture ${01:name} ${02:expression}, ${03:x}, ${04:y}, ${05:mask}, ${06:angle}"
+    },
+    "\"define fill\" command": {
+      "prefix": "define fill",
+      "body": "define fill ${01:name}, filltypes_mask ${02:fillTypes},\n\t${03:pattern1}, ${04:pattern2}, ${05:pattern3}, ${06:pattern4},\n\t${07:pattern5}, ${08:pattern6}, ${09:pattern7}, ${10:pattern8},\n\t${11:spacing}, ${12:angle}, ${13:n},\n\t${14:frequency1}, ${15:direction1}, ${16:offsetX1}, ${17:offsetY1}, ${18:m1},\n\t${19:length11}, ${20:...}, ${21:length1m},\n\t${22:...},\n\t${23:frequencyn}, ${24:directionn}, ${25:offsetXn},\n\t${26:lengthn1}, ${27:...}, ${28:lengthnm}"
+    },
+    "\"define filla\" command": {
+      "prefix": "define filla",
+      "body": "define filla ${01:name}, filltypes_mask ${02:fillTypes},\n\t${03:pattern1}, ${04:pattern2}, ${05:pattern3}, ${06:pattern4},\n\t${07:pattern5}, ${08:pattern6}, ${09:pattern7}, ${10:pattern8},\n\t${11:spacingX}, ${12:spacingY}, ${13:angle}, ${14:n},\n\t${15:frequency1}, ${16:directionalOffset1}, ${17:direction1},\n\t${18:offsetX1}, ${19:offsetY1}, ${20:m1},\n\t${21:length11}, ${22:...}, ${23:length1m},\n\t${24:...},\n\t${25:frequencyn}, ${26:directionalOffsetn}, ${27:directionn},\n\t${28:offsetXn}, ${29:offsetYn}, ${30:mn},\n\t${31:lengthn1}, ${32:...}, ${33:lengthnm}"
+    },
+    "\"define symbol_fill\" command": {
+      "prefix": "define symbol_fill",
+      "body": "define symbol_fill ${01:name}, filltypes_mask ${02:fillTypes},\n\t${03:pattern1}, ${04:pattern2}, ${05:pattern3}, ${06:pattern4},\n\t${07:pattern5}, ${08:pattern6}, ${09:pattern7}, ${10:pattern8},\n\t${11:spacingX1}, ${12:spacingY1}, ${13:spacingX2}, ${14:spacingY2},\n\t${15:angle}, ${16:scaling1}, ${17:scaling2}, ${18:macroName},\n\tparameters ${19:name1} = ${20:value1},\n\t\t${21:name2} = ${22:value2},\n\t\t${23:...},\n\t\t${24:namen} = ${25:valuen}"
+    },
+    "\"define solid_fill\" command": {
+      "prefix": "define solid_fill",
+      "body": "define solid_fill ${01:name}, filltypes_mask ${02:fillTypes}"
+    },
+    "\"define empty_fill\" command": {
+      "prefix": "define empty_fill",
+      "body": "define empty_fill ${01:name}, filltypes_mask ${02:fillTypes}"
+    },
+    "\"define linear_gradient_fill\" command": {
+      "prefix": "define linear_gradient_fill",
+      "body": "define linear_gradient_fill ${01:name}, filltypes_mask ${02:fillTypes}"
+    },
+    "\"define radial_gradient_fill\" command": {
+      "prefix": "define radial_gradient_fill",
+      "body": "define radial_gradient_fill ${01:name}, filltypes_mask ${02:fillTypes}"
+    },
+    "\"define translucent_fill\" command": {
+      "prefix": "define translucent_fill",
+      "body": "define translucent_fill ${01:name}, filltypes_mask ${02:fillTypes},\n\t${03:pattern1}, ${04:pattern2}, ${05:pattern3}, ${06:pattern4},\n\t${07:pattern5}, ${08:pattern6}, ${09:pattern7}, ${10:pattern8},\n\t${11:percentage}"
+    },
+    "\"define image_fill\" command": {
+      "prefix": "define image_fill",
+      "body": "define image_fill ${01:name}, filltypes_mask ${02:fillTypes},\n\t${03:pattern1}, ${04:pattern2}, ${05:pattern3}, ${06:pattern4},\n\t${07:pattern5}, ${08:pattern6}, ${09:pattern7}, ${10:pattern8},\n\t${11:imageVertSize}, ${12:imageHorSize}, ${13:imageMask}, ${14:imageRotangle}"
+    },
+    "\"define line_type\" command": {
+      "prefix": "define line_type",
+      "body": "define line_type ${01:name} ${02:spacing}, ${03:n},\n\t${04:length1}, ${05:...}, ${06:lengthn}"
+    },
+    "\"define symbol_line\" command": {
+      "prefix": "define symbol_line",
+      "body": "define symbol_line ${01:name} ${02:dash}, ${03:gap}, ${04:macroName}\n\tparameters ${05:name1} = ${06:value1},\n\t\t${07:name2} = ${08:value2},\n\t\t${09:...},\n\t\t${10:namen} = ${11:valuen}"
+    },
+    "\"define style\" command": {
+      "prefix": "define style",
+      "body": "define style ${01:name} ${02:fontFamily}, ${03:size}, ${04:anchor}, ${05:faceCode}"
+    },
+    "\"define style{2}\" command": {
+      "prefix": "define style{2}",
+      "body": "define style{2} ${01:name} ${02:fontFamily}, ${03:size}, ${04:faceCode}"
+    },
+    "\"paragraph\" command": {
+      "prefix": "paragraph",
+      "body": "paragraph ${01:name} ${02:alignment}, ${03:firstlineIndent},\n\t\t${04:leftIndent}, ${05:rightIndent}, ${06:lineSpacing},\n\t\t${07:tab_position1}, ${08:...}\n\tpen ${09:index}\n\tstyle ${10:style1}\n\tmaterial ${11:index}\n\t${12:'string1'}\n\t${13:'string2'}\n\t${14:...}\n\t${15:'stringn'}\n\tpen ${16:index}\n\tstyle ${17:style2}\n\tmaterial ${18:index}\n\t${19:'string1'}\n\t${20:'string2'}\n\t${21:...}\n\t${22:'stringn'}\n\t${23:...}\nendparagraph\n$0"
+    },
+    "\"textblock\" command": {
+      "prefix": "textblock",
+      "body": "textblock ${01:name} ${02:width}, ${03:anchor}, ${04:angle}, ${05:widthFactor}, ${06:charspaceFactor}, ${07:fixedHeight},\n\t${08:'stringExpression1'}, ${09:'stringExpression2'}, ${10:...}"
+    },
+    "\"textblock_\" command": {
+      "prefix": "textblock_",
+      "body": "textblock_ ${01:name} ${02:width}, ${03:anchor}, ${04:angle}, ${05:widthFactor}, ${06:charspaceFactor}, ${07:fixedHeight}, ${08:n},\n\t${09:expression1}, ${10:expression2}, ${11:...}, ${12:expressionn}"
+    },
+    "\"additional_data\" definition": {
+      "prefix": "additional_data",
+      "body": "additional_data ${01:name1} = ${02:value1},\n\t\t${03:name2} = ${04:value2},\n\t\t${05:...}"
+    },
+    "\"file_dependence\" command": {
+      "prefix": "file_dependence",
+      "body": "file_dependence \"${01:name1}\", \"${02:name2}\", \"${03:...}\""
+    },
+    "\"database_set\" command": {
+      "prefix": "database_set",
+      "body": "database_set ${01:setName}, ${02:descriptorName}, ${03:componentName}, ${04:unitName}, ${05:keyName},\n\t${06:criteriaName}, ${07:listSetName}"
+    },
+    "\"ref descriptor\" command": {
+      "prefix": "ref descriptor",
+      "body": "ref descriptor ${01:code}, ${02:keycode}"
+    },
+    "\"component\" command": {
+      "prefix": "component",
+      "body": "component ${01:name}, ${02:quantity}, ${03:unit}, ${04:proportionalWith}, ${05:code}, ${06:keycode}, ${07:unitcode}"
+    },
+    "\"ref component\" command": {
+      "prefix": "ref component",
+      "body": "ref component ${01:code}, ${02:keycode}, ${03:numericExpression}"
+    },
+    "\"binaryprop\" command": {
+      "prefix": "binaryprop",
+      "body": "binaryprop"
+    },
+    "\"surface3D\" command": {
+      "prefix": "surface3D",
+      "body": "surface3D()"
+    },
+    "\"volume3D\" command": {
+      "prefix": "volume3D",
+      "body": "volume3D()"
+    },
+    "\"position\" command": {
+      "prefix": "position",
+      "body": "position ${01:positionKeyword}"
+    },
+    "\"drawing\" command": {
+      "prefix": "drawing",
+      "body": "drawing"
+    },
+    "\"values\" command": {
+      "prefix": "values",
+      "body": "values \"${01:parameterName}\", ${02:valueDefinition1}, ${03:valueDefinition2}, ${04:...}"
+    },
+    "\"values{2}\" command": {
+      "prefix": "values{2}",
+      "body": "values{2} \"${01:parameterName}\", ${02:numExpression1}, ${03:description1},\n\t\t${04:numExpression2}, ${05:description2},\n\t\t${06:...}"
+    },
+    "\"profiletypes_mask\" command": {
+      "prefix": "profiletypes_mask",
+      "body": "profiletypes_mask 1 + 2 + 4 + 8 + 16\t! 1: wall, 2:beam, 4:column, 8:rail, 16:libpart"
+    },
+    "\"filltypes_mask\" command": {
+      "prefix": "filltypes_mask",
+      "body": "filltypes_mask 1 + 2 + 4\t! 1: cut, 2:cover, 4:draft"
+    },
+    "\"parameters\" command": {
+      "prefix": "parameters",
+      "body": "parameters  ${01:name1} = ${02:expression1},\n\t\t${03:name2} = ${04:expression2},\n\t\t${05:...},\n\t\t${06:namen} = ${07:expressionn}"
+    },
+    "\"lock\" command": {
+      "prefix": "lock",
+      "body": "lock \"${01:name1}\", \"${02:name2}\", ${03:...}, \"${04:namen}\""
+    },
+    "\"lock all\" command": {
+      "prefix": "lock all",
+      "body": "lock all \"${01:name1}\", \"${02:name2}\", ${03:...}, \"${04:namen}\""
+    },
+    "\"hideparameter\" command": {
+      "prefix": "hideparameter",
+      "body": "hideparameter \"${01:name1}\", \"${02:name2}\", ${03:...}, \"${04:namen}\""
+    },
+    "\"hideparameter all\" command": {
+      "prefix": "hideparameter all",
+      "body": "hideparameter all \"${01:name1}\", \"${02:name2}\", ${03:...}, \"${04:namen}\""
+    },
+    "\"ui_dialog\" command": {
+      "prefix": "ui_dialog",
+      "body": "ui_dialog ${01:title}, ${02:sizeX}, ${03:sizeY}"
+    },
+    "\"ui_page\" command": {
+      "prefix": "ui_page",
+      "body": "ui_page ${01:pageNumber}, ${02:parentID}, ${03:pageTitle}, ${04:image}"
+    },
+    "\"ui_current_page\" command": {
+      "prefix": "ui_current_page",
+      "body": "ui_current_page ${01:index}"
+    },
+    "\"ui_button UI_PREV\" command": {
+      "prefix": "ui_button",
+      "body": "ui_button UI_PREV, ${01:text}, ${02:x}, ${03:y}, ${04:width}, ${05:height}, ${06:id}"
+    },
+    "\"ui_button UI_NEXT\" command": {
+      "prefix": "ui_button",
+      "body": "ui_button UI_NEXT, ${01:text}, ${02:x}, ${03:y}, ${04:width}, ${05:height}, ${06:id}"
+    },
+    "\"ui_button UI_FUNCTION\" command": {
+      "prefix": "ui_button",
+      "body": "ui_button UI_FUNCTION, ${01:text}, ${02:x}, ${03:y}, ${04:width}, ${05:height}, ${06:id}"
+    },
+    "\"ui_button UI_LINK\" command": {
+      "prefix": "ui_button",
+      "body": "ui_button UI_LINK, ${01:text}, ${02:x}, ${03:y}, ${04:width}, ${05:height}, ${06:id}, ${07:url}"
+    },
+    "\"ui_pict_button\" command": {
+      "prefix": "ui_pict_button",
+      "body": "ui_pict_button ${01:type}, ${02:text}, ${03:pictureReference},\n\t${04:x}, ${05:y}, ${06:width}, ${07:height}, ${08:id}, ${09:url}"
+    },
+    "\"ui_separator\" command": {
+      "prefix": "ui_separator",
+      "body": "ui_separator ${01:x1}, ${02:y1}, ${03:x2}, ${04:y2}"
+    },
+    "\"ui_groupbox\" command": {
+      "prefix": "ui_groupbox",
+      "body": "ui_groupbox ${01:text}, ${02:x}, ${03:y}, ${04:width}, ${05:height}"
+    },
+    "\"ui_pict\" command": {
+      "prefix": "ui_pict",
+      "body": "ui_pict ${01:pictureReference}, ${02:x}, ${03:y}, ${04:width}, ${05:height}, ${06:mask}"
+    },
+    "\"ui_pict_pushcheckbutton\" command": {
+      "prefix": "ui_pict_pushcheckbutton",
+      "body": "ui_pict_pushcheckbutton ${01:name}, ${02:text}, ${03:picture_reference},\n\t${04:frameFlag}, ${05:x}, ${06:y}, ${07:width}, ${08:height}"
+    },
+    "\"ui_pict_pushcheckbutton{2}\" command": {
+      "prefix": "ui_pict_pushcheckbutton{2}",
+      "body": "ui_pict_pushcheckbutton{2} \"${01:name}\", ${02:text}, ${03:picture_reference},\n\t${04:frameFlag}, ${05:x}, ${06:y}, ${07:width}, ${08:height}"
+    },
+    "\"ui_style\" command": {
+      "prefix": "ui_style",
+      "body": "ui_style ${01:fontSize}, ${02:faceCode}"
+    },
+    "\"ui_outfield\" command": {
+      "prefix": "ui_outfield",
+      "body": "ui_outfield ${01:expression}, ${02:x}, ${03:y}, ${04:width}, ${05:height}, ${06:flags}"
+    },
+    "\"ui_infield\" command": {
+      "prefix": "ui_infield",
+      "body": "ui_infield \"${01:name}\", ${02:x}, ${03:y}, ${04:width}, ${05:height},\n\t${06:method}, ${07:pictureName},\n\t${08:imagesNumber}, ${09:rowsNumber},\n\t${10:cellX}, ${11:cellY}, ${12:imageX}, ${13:imageY},\n\t${14:expressionImage1}, ${15:text1},\n\t${16:...},\n\t${17:expressionImagen}, ${18:textn}"
+    },
+    "\"ui_infield{2}\" command": {
+      "prefix": "ui_infield{2}",
+      "body": "ui_infield{2} ${01:name}, ${02:x}, ${03:y}, ${04:width}, ${05:height},\n\t${06:method}, ${07:pictureName},\n\t${08:imagesNumber}, ${09:rowsNumber},\n\t${10:cellX}, ${11:cellY}, ${12:imageX}, ${13:imageY},\n\t${14:expressionImage1}, ${15:text1},\n\t${16:...},\n\t${17:expressionImagen}, ${18:textn}"
+    },
+    "\"ui_infield{3}\" command": {
+      "prefix": "ui_infield{3}",
+      "body": "ui_infield{3} ${01:name}, ${02:x}, ${03:y}, ${04:width}, ${05:height},\n\t${06:method}, ${07:pictureName},\n\t${08:imagesNumber}, ${09:rowsNumber},\n\t${10:cellX}, ${11:cellY}, ${12:imageX}, ${13:imageY},\n\t${14:expressionImage1}, ${15:text1}, ${16:valueDefinition1},\n\t${17:...},\n\t${18:expressionImagen}, ${19:textn}, ${20:valueDefinitionn}"
+    },
+    "\"ui_infield{4}\" command": {
+      "prefix": "ui_infield{4}",
+      "body": "ui_infield{4} \"${01:name}\", ${02:x}, ${03:y}, ${04:width}, ${05:height},\n\t${06:method}, ${07:pictureName},\n\t${08:imagesNumber}, ${09:rowsNumber},\n\t${10:cellX}, ${11:cellY}, ${12:imageX}, ${13:imageY},\n\t${14:expressionImage1}, ${15:text1}, ${16:valueDefinition1},\n\t${17:...},\n\t${18:expressionImagen}, ${19:textn}, ${20:valueDefinitionn}"
+    },
+    "\"ui_textstyle_infield\" command": {
+      "prefix": "ui_textstyle_infield",
+      "body": "ui_textstyle_infield ${01:name}, ${02:faceCodeMask}, ${03:x}, ${04:y},\n\t${05:buttonWidth}, ${06:buttonHeight}[, ${07:buttonOffsetX}]"
+    },
+    "\"ui_textstyle_infield{2}\" command": {
+      "prefix": "ui_textstyle_infield{2}",
+      "body": "ui_textstyle_infield{2} \"${01:name}\", ${02:faceCodeMask}, ${03:x}, ${04:y},\n\t${05:buttonWidth}, ${06:buttonHeight}[, ${07:buttonOffsetX}]"
+    },
+    "\"ui_custom_popup_infield\" command": {
+      "prefix": "ui_custom_popup_infield",
+      "body": "ui_custom_popup_infield \"${01:name}\", ${02:x}, ${03:y}, ${04:width}, ${05:height},\n\t${06:storeHiddenId}, ${07:treeDepth},\n\t${08:groupingMethod}, ${09:selectedValDescription},\n\t${10:value1}, ${11:value2}, ${12:valuesArray1}, ${13:...}, ${14:valuen}, ${15:valuesArrayn}"
+    },
+    "\"ui_custom_popup_infield{2}\" command": {
+      "prefix": "ui_custom_popup_infield{2}",
+      "body": "ui_custom_popup_infield{2} ${01:name}, ${02:x}, ${03:y}, ${04:width}, ${05:height},\n\t${06:storeHiddenId}, ${07:treeDepth},\n\t${08:groupingMethod}, ${09:selectedValDescription},\n\t${10:value1}, ${11:value2}, ${12:valuesArray1}, ${13:...}, ${14:valuen}, ${15:valuesArrayn}"
+    },
+    "\"ui_radiobutton\" command": {
+      "prefix": "ui_radiobutton",
+      "body": "ui_radiobutton ${01:name}, ${02:value}, ${03:text}, ${04:x}, ${05:y}, ${06:width}, ${07:height}"
+    },
+    "\"ui_radiobutton{2}\" command": {
+      "prefix": "ui_radiobutton{2}",
+      "body": "ui_radiobutton{2} \"${01:name}\", ${02:value}, ${03:text}, ${04:x}, ${05:y}, ${06:width}, ${07:height}"
+    },
+    "\"ui_pict_radiobutton\" command": {
+      "prefix": "ui_pict_radiobutton",
+      "body": "ui_pict_radiobutton ${01:name}, ${02:value}, ${03:picture_reference}, ${04:x}, ${05:y}, ${06:width}, ${07:height}, ${08:borderFlag}"
+    },
+    "\"ui_pict_radiobutton{2}\" command": {
+      "prefix": "ui_pict_radiobutton{2}",
+      "body": "ui_pict_radiobutton{2} \"${01:name}\", ${02:value}, ${03:picture_reference}, ${04:x}, ${05:y}, ${06:width}, ${07:height}, ${08:borderFlag}"
+    },
+    "\"ui_listfield\" command": {
+      "prefix": "ui_listfield",
+      "body": "ui_listfield ${01:fieldID}, ${02:x}, ${03:y}, ${04:width}, ${05:height}, ${06:iconFlag}, ${07:descriptionHeader}, ${08:valueHeader}"
+    },
+    "\"ui_listitem\" command": {
+      "prefix": "ui_listitem",
+      "body": "ui_listitem ${01:itemID}, ${02:fieldID}, \"${03:name}\", ${04:childFlag}, ${05:image}, ${06:paramDesc}"
+    },
+    "\"ui_listitem{2}\" command": {
+      "prefix": "ui_listitem{2}",
+      "body": "ui_listitem{2} ${01:itemID}, ${02:fieldID}, ${03:name}, ${04:childFlag}, ${05:image}, ${06:paramDesc}"
+    },
+    "\"ui_custom_popup_listitem\" command": {
+      "prefix": "ui_custom_popup_listitem",
+      "body": "ui_custom_popup_listitem ${01:itemID}, ${02:fieldID}, \"${03:name}\", ${04:childFlag}, ${05:image}, ${06:paramDesc},\n\t${07:storeHiddenId}, ${08:treeDepth},\n\t${09:groupingMethod}, ${10:selectedValDescription},\n\t${11:value1}, ${12:value2}, ${13:valuesArray1}, ${14:...}, ${15:valuen}, ${16:valuesArrayn}"
+    },
+    "\"ui_custom_popup_listitem{2}\" command": {
+      "prefix": "ui_custom_popup_listitem{2}",
+      "body": "ui_custom_popup_listitem{2} ${01:itemID}, ${02:fieldID}, ${03:name}, ${04:childFlag}, ${05:image}, ${06:paramDesc},\n\t${07:storeHiddenId}, ${08:treeDepth},\n\t${09:groupingMethod}, ${10:selectedValDescription},\n\t${11:value1}, ${12:value2}, ${13:valuesArray1}, ${14:...}, ${15:valuen}, ${16:valuesArrayn}"
+    },
+    "\"ui_tooltip\" command": {
+      "prefix": "ui_tooltip",
+      "body": "\tui_tooltip ${01:tooltiptext}"
+    },
+    "\"ui_colorpicker\" command": {
+      "prefix": "ui_colorpicker",
+      "body": "ui_colorpicker \"${01:redParamName}\", \"${02:greenParamName}\", \"${03:blueParamName}\", ${04:x0}, ${05:y0}, ${06:width}, ${07:height}"
+    },
+    "\"ui_colorpicker{2}\" command": {
+      "prefix": "ui_colorpicker{2}",
+      "body": "ui_colorpicker{2} ${01:redParamName}, ${02:greenParamName}, ${03:blueParamName}, ${04:x0}, ${05:y0}, ${06:width}, ${07:height}"
+    },
+    "\"ui_slider\" command": {
+      "prefix": "ui_slider",
+      "body": "ui_slider \"${01:name}\", ${02:x0}, ${03:y0}, ${04:width}, ${05:height}, ${06:nSegments}, ${07:sliderStyle}"
+    },
+    "\"ui_slider{2}\" command": {
+      "prefix": "ui_slider{2}",
+      "body": "ui_slider{2} ${01:name}, ${02:x0}, ${03:y0}, ${04:width}, ${05:height}, ${06:nSegments}, ${07:sliderStyle}"
+    },
+    "\"setmigrationguid\" command": {
+      "prefix": "setmigrationguid",
+      "body": "setmigrationguid ${01:guid}"
+    },
+    "\"stored_par_value\" command": {
+      "prefix": "stored_par_value",
+      "body": "stored_par_value (\"${01:oldparname}\", ${02:outputvalue})\n$0"
+    },
+    "\"deleted_par_value\" command": {
+      "prefix": "deleted_par_value",
+      "body": "deleted_par_value (\"${01:oldparname}\", ${02:outputvalue})\n$0"
+    },
+    "\"newparameter\" command": {
+      "prefix": "newparameter",
+      "body": "newparameter \"${01:name}\", \"${02:type}\", ${03:dim1}, ${04:dim2}"
+    },
+    "\"let\" command": {
+      "prefix": "let",
+      "body": "let ${01:variable} = ${02:expression}$0"
+    },
+    "\"dim\" command": {
+      "prefix": "dim",
+      "body": "dim ${01:var1}[${02:dim1}][${03:dim2}]\n$0"
+    },
+    "\"vardim1\" command": {
+      "prefix": "vardim1",
+      "body": "vardim1(${01:expression})\n$0"
+    },
+    "\"vardim2\" command": {
+      "prefix": "vardim2",
+      "body": "vardim2(${01:expression})\n$0"
+    },
+    "\"dict\" command": {
+      "prefix": "dict",
+      "body": "dict ${01:var1}\n$0"
+    },
+    "\"haskey\" command": {
+      "prefix": "haskey",
+      "body": "haskey(${01:expression})\n$0"
+    },
+    "\"removekey\" command": {
+      "prefix": "removekey",
+      "body": "removekey(${01:expression})\n$0"
+    },
+    "\"parvalue_description\" command": {
+      "prefix": "parvalue_description",
+      "body": "parvalue_description (${01:parameterName}, ${02:ind1}, ${03:ind2})\n$0"
+    },
+    "\"abs\" command": {
+      "prefix": "abs",
+      "body": "abs(${01:x})\n$0"
+    },
+    "\"ceil\" command": {
+      "prefix": "ceil",
+      "body": "ceil(${01:x})\n$0"
+    },
+    "\"int\" command": {
+      "prefix": "int",
+      "body": "int(${01:x})\n$0"
+    },
+    "\"fra\" command": {
+      "prefix": "fra",
+      "body": "fra(${01:x})\n$0"
+    },
+    "\"round_int\" command": {
+      "prefix": "round_int",
+      "body": "round_int(${01:x})\n$0"
+    },
+    "\"sgn\" command": {
+      "prefix": "sgn",
+      "body": "sgn(${01:x})\n$0"
+    },
+    "\"sqr\" command": {
+      "prefix": "sqr",
+      "body": "sqr(${01:x})\n$0"
+    },
+    "\"acs\" command": {
+      "prefix": "acs",
+      "body": "acs(${01:x})\n$0"
+    },
+    "\"asn\" command": {
+      "prefix": "asn",
+      "body": "asn(${01:x})\n$0"
+    },
+    "\"atn\" command": {
+      "prefix": "atn",
+      "body": "atn(${01:x})\n$0"
+    },
+    "\"cos\" command": {
+      "prefix": "cos",
+      "body": "cos(${01:x})\n$0"
+    },
+    "\"sin\" command": {
+      "prefix": "sin",
+      "body": "sin(${01:x})\n$0"
+    },
+    "\"tan\" command": {
+      "prefix": "tan",
+      "body": "tan(${01:x})\n$0"
+    },
+    "\"pi\" command": {
+      "prefix": "pi",
+      "body": "pi"
+    },
+    "\"exp\" command": {
+      "prefix": "exp",
+      "body": "exp(${01:x})\n$0"
+    },
+    "\"lgt\" command": {
+      "prefix": "lgt",
+      "body": "lgt(${01:x})\n$0"
+    },
+    "\"log\" command": {
+      "prefix": "log",
+      "body": "log(${01:x})\n$0"
+    },
+    "\"not\" command": {
+      "prefix": "not",
+      "body": "not(${01:x})\n$0"
+    },
+    "\"min\" command": {
+      "prefix": "min",
+      "body": "min(${01:x1}, ${02:x2}, ${03:...}, ${04:xn})\n$0"
+    },
+    "\"max\" command": {
+      "prefix": "max",
+      "body": "max(${01:x1}, ${02:x2}, ${03:...}, ${04:xn})\n$0"
+    },
+    "\"rnd\" command": {
+      "prefix": "rnd",
+      "body": "rnd(${01:x})\n$0"
+    },
+    "\"bittest\" command": {
+      "prefix": "bittest",
+      "body": "bittest(${01:x}, ${02:b})\n$0"
+    },
+    "\"bitset\" command": {
+      "prefix": "bitset",
+      "body": "bitset(${01:x}, ${02:b}, ${03:expression})\n$0"
+    },
+    "\"req\" command": {
+      "prefix": "req",
+      "body": "req(${01:parameterString})\n$0"
+    },
+    "\"request\" command": {
+      "prefix": "request",
+      "body": "${01:_nResults} = request(${02:questionName}, ${03:name_or_index}, ${04:variable1}, ${05:variable2}, ${06:...})\n$0"
+    },
+    "\"request{2}\" command": {
+      "prefix": "request{2}",
+      "body": "${01:_nResults} = request{2}(${02:questionName}, ${03:name_or_index}, ${04:param_name}, ${05:variable1}, ${06:variable2}, ${07:...})\n$0"
+    },
+    "\"request{3}\" command": {
+      "prefix": "request{3}",
+      "body": "${01:_nResults} = request{3}(${02:questionName}, ${03:name}, ${04:name_or_index_or_numeric[]}, ${05:variable1}, ${06:variable2}, ${07:...})\n$0"
+    },
+    "\"request{4}\" command": {
+      "prefix": "request{4}",
+      "body": "${01:_nResults} = request{4}(${02:questionName}, ${03:name_or_index}, ${04:component_index}, ${05:param_name}, ${06:variable1}, ${07:variable2}, ${08:...})\n$0"
+    },
+    "\"ind(material\" command": {
+      "prefix": "ind(material",
+      "body": "ind(material, ${01:nameString})\n$0"
+    },
+    "\"ind(building_material\" command": {
+      "prefix": "ind(building_material",
+      "body": "ind(building_material, ${01:nameString})\n$0"
+    },
+    "\"ind(fill\" command": {
+      "prefix": "ind(fill",
+      "body": "ind(fill, ${01:nameString})\n$0"
+    },
+    "\"ind(line_type\" command": {
+      "prefix": "ind(line_type",
+      "body": "ind(line_type, ${01:nameString})\n$0"
+    },
+    "\"ind(style\" command": {
+      "prefix": "ind(style",
+      "body": "ind(style, ${01:nameString})\n$0"
+    },
+    "\"ind(texture\" command": {
+      "prefix": "ind(texture",
+      "body": "ind(texture, ${01:nameString})\n$0"
+    },
+    "\"ind(profile_attr\" command": {
+      "prefix": "ind(profile_attr",
+      "body": "ind(profile_attr, ${01:nameString})\n$0"
+    },
+    "\"application_query\" command": {
+      "prefix": "application_query",
+      "body": "application_query(${01:extensionName}, ${02:parameterString}, ${03:variable1}, ${04:variable2}, ${05:...})\n$0"
+    },
+    "\"libraryglobal\" command": {
+      "prefix": "libraryglobal",
+      "body": "libraryglobal(${01:objectName}, ${02:parameter}, ${03:value})\n$0"
+    },
+    "\"str\" command": {
+      "prefix": "str",
+      "body": "str(${01:numericExpression}, ${02:length}, ${03:fractions})\n$0"
+    },
+    "\"str{2}\" command": {
+      "prefix": "str{2}",
+      "body": "str{2}(${01:formatString}, ${02:numericExpression}, ${03:extraAccuracyString})\n$0"
+    },
+    "\"split\" command": {
+      "prefix": "split",
+      "body": "split(${01:string}, ${02:format}, ${03:variable1}, ${04:variable2}, ${05:...})\n$0"
+    },
+    "\"stw\" command": {
+      "prefix": "stw",
+      "body": "stw(${01:stringExpression})\n$0"
+    },
+    "\"strlen\" command": {
+      "prefix": "strlen",
+      "body": "strlen(${01:stringExpression})\n$0"
+    },
+    "\"strstr\" command": {
+      "prefix": "strstr",
+      "body": "strstr(${01:stringExpression1}, ${02:stringExpression2}, ${03:caseInsensitivity})\n$0"
+    },
+    "\"strsub\" command": {
+      "prefix": "strsub",
+      "body": "strsub(${01:stringExpression}, ${02:startPosition}, ${03:charactersNumber})\n$0"
+    },
+    "\"strtoupper\" command": {
+      "prefix": "strtoupper",
+      "body": "strtoupper(${01:stringExpression})\n$0"
+    },
+    "\"strtolower\" command": {
+      "prefix": "strtolower",
+      "body": "strtolower(${01:stringExpression})\n$0"
+    },
+    "\"for-to-next\" statement": {
+      "prefix": "for",
+      "body": "for ${01:variable} = ${02:initialValue} to ${03:endValue} step ${04:stepValue}\n\t$5\nnext ${01:variable}\n$0"
+    },
+    "\"do-while\" statement": {
+      "prefix": "do",
+      "body": "do ${01:statement1}\n\t${02:statement2}\n\t${03:...}\n\t${04:statementn}\nwhile ${05:condition}"
+    },
+    "\"while-endwhile\" statement": {
+      "prefix": "while",
+      "body": "while ${01:condition} do\n\t${02:statement1}\n\t${03:statement2}\n\t${04:...}\n\t${05:statementn}\nendwhile"
+    },
+    "\"repeat-until\" statement": {
+      "prefix": "repeat",
+      "body": "repeat ${01:statement1}\n\t${02:statement2}\n\t${03:...}\n\t${04:statementn}\nuntil ${05:condition}"
+    },
+    "\"if-then\" statement": {
+      "prefix": "if-then",
+      "body": "if ${01:condition} then ${02:statement}"
+    },
+    "\"if-then-else-endif\" statement": {
+      "prefix": "if-then-else-endif",
+      "body": "if ${01:condition} then\n\t${02:statement1}\n\t${03:statement2}\n\t${04:...}\n\t${05:statementn}\nelse\n\t${06:statementn+1}\n\t${07:statementn+2}\n\t${08:...}\n\t${09:statementn+m}\nendif\n$0"
+    },
+    "\"goto\" statement": {
+      "prefix": "goto",
+      "body": "goto ${01:label}"
+    },
+    "\"gosub\" statement": {
+      "prefix": "gosub",
+      "body": "gosub ${01:label}"
+    },
+    "\"return\" statement": {
+      "prefix": "return",
+      "body": "return"
+    },
+    "\"end\" statement": {
+      "prefix": "end",
+      "body": "end ${01:variable1}, ${02:variable2}, ${03:...}, ${04:variablen}"
+    },
+    "\"exit\" statement": {
+      "prefix": "exit",
+      "body": "exit ${01:variable1}, ${02:variable2}, ${03:...}, ${04:variablen}"
+    },
+    "\"breakpoint\" statement": {
+      "prefix": "breakpoint",
+      "body": "breakpoint ${01:expression}"
+    },
+    "\"put\" command": {
+      "prefix": "put",
+      "body": "put ${01:expression1}, ${02:expression2}, ${03:...}, ${04:expressionn}"
+    },
+    "\"get\" command": {
+      "prefix": "get",
+      "body": "get(${01:n})\n$0"
+    },
+    "\"use\" command": {
+      "prefix": "use",
+      "body": "use(${01:n})\n$0"
+    },
+    "\"nsp\" command": {
+      "prefix": "nsp",
+      "body": "nsp"
+    },
+    "\"call\" command": {
+      "prefix": "call",
+      "body": "call ${01:macroNameString} parameters ${02:name1} = ${03:value1},\n\t\t${04:name2} = ${05:value2},\n\t\t${06:...},\n\t\t${07:namen} = ${08:valuen}\n\treturned_parameters ${09:valuen}, ${10:valuen}, ${11:valuen}"
+    },
+    "\"print\" command": {
+      "prefix": "print",
+      "body": "print ${01:expression1}, ${02:expression2}, ${03:...}, ${04:expressionn}"
+    },
+    "\"open\" command": {
+      "prefix": "open",
+      "body": "${01:channel} = open(${02:filter}, ${03:filename}, ${04:parameterString})\n$0"
+    },
+    "\"input\" command": {
+      "prefix": "input",
+      "body": "input(${01:channel}, ${02:recordID}, ${03:fieldID}, ${04:variable1}, ${05:variable2}, ${06:...})\n$0"
+    },
+    "\"vartype\" command": {
+      "prefix": "vartype",
+      "body": "vartype(${01:expression})\n$0"
+    },
+    "\"output\" command": {
+      "prefix": "output",
+      "body": "output ${01:channel}, ${02:recordID}, ${03:fieldID}, ${04:expression1}, ${05:expression2}, ${06:...}"
+    },
+    "\"close\" command": {
+      "prefix": "close",
+      "body": "close ${01:channel}"
+    },
+    "\"initaddonscope\" command": {
+      "prefix": "initaddonscope",
+      "body": "initaddonscope(${01:extension}, ${02:parameterString1}, ${03:parameterString2})\n$0"
+    },
+    "\"preparefunction\" command": {
+      "prefix": "preparefunction",
+      "body": "preparefunction ${01:channel}, ${02:functionName}, ${03:expression1}, ${04:expression2}, ${05:...}"
+    },
+    "\"callfunction\" command": {
+      "prefix": "callfunction",
+      "body": "callfunction(${01:channel}, ${02:functionName}, ${03:parameter}, ${04:variable1}, ${05:variable2}, ${06:...})\n$0"
+    },
+    "\"closeaddonscope\" command": {
+      "prefix": "closeaddonscope",
+      "body": "closeaddonscope ${01:channel}"
+    },
+    "\"wallhole\" command": {
+      "prefix": "wallhole",
+      "body": "wallhole ${01:n}, ${02:status},\n\t${03:x1}, ${04:y1}, ${05:mask1},\n\t${06:...},\n\t${07:xn}, ${08:yn}, ${09:maskn},\n\t${10:x}, ${11:y}, ${12:z}"
+    },
+    "\"wallniche\" command": {
+      "prefix": "wallniche",
+      "body": "wallniche ${01:n}, ${02:method}, ${03:status},\n\t${04:rx}, ${05:ry}, ${06:rz}, ${07:dist},\n\t${08:x1}, ${09:y1}, ${10:mask1}, ${11:mat1},\n\t${12:...},\n\t${13:xn}, ${14:yn}, ${15:maskn}, ${16:matn}"
+    },
+    "\"wallhole2\" command": {
+      "prefix": "wallhole2",
+      "body": "wallhole2 ${01:n}, ${02:fillControl}, ${03:fillPen}, ${04:fillBackgroundPen},\n\t${05:fillOrigoX}, ${06:fillOrigoY}, ${07:fillAngle},\n\t${08:x1}, ${09:y1}, ${10:s1},\n\t${11:...},\n\t${12:xn}, ${13:yn}, ${14:sn}"
+    },
+    "\"wallhole2{2}\" command": {
+      "prefix": "wallhole2{2}",
+      "body": "wallhole2{2} ${01:n}, ${02:frameFill}, ${03:fillCategory}, ${04:distortionFlags},\n\t${05:fillPen}, ${06:fillBackgroundPen},\n\t${07:fillOrigoX}, ${08:fillOrigoY},\n\t${09:mxx}, ${10:mxy}, ${11:myx}, ${12:myy},\n\t${13:innerRadius},\n\t${14:x1}, ${15:y1}, ${16:s1},\n\t${17:...},\n\t${18:xn}, ${19:yn}, ${20:sn}"
+    },
+    "\"wallblock2\" command": {
+      "prefix": "wallblock2",
+      "body": "wallblock2 ${01:n}, ${02:fillControl}, ${03:fillPen}, ${04:fillBackgroundPen},\n\t${05:fillOrigoX}, ${06:fillOrigoY}, ${07:fillAngle},\n\t${08:x1}, ${09:y1}, ${10:s1},\n\t${11:...},\n\t${12:xn}, ${13:yn}, ${14:sn}"
+    },
+    "\"wallblock2{2}\" command": {
+      "prefix": "wallblock2{2}",
+      "body": "wallblock2{2} ${01:n}, ${02:frameFill}, ${03:fillCategory}, ${04:distortionFlags},\n\t${05:fillPen}, ${06:fillBackgroundPen},\n\t${07:fillOrigoX}, ${08:fillOrigoY},\n\t${09:mxx}, ${10:mxy}, ${11:myx}, ${12:myy},\n\t${13:innerRadius},\n\t${14:x1}, ${15:y1}, ${16:s1},\n\t${17:...},\n\t${18:xn}, ${19:yn}, ${20:sn}"
+    },
+    "\"wallline2\" command": {
+      "prefix": "wallline2",
+      "body": "wallline2 ${01:x1}, ${02:y1}, ${03:x2}, ${04:y2}"
+    },
+    "\"wallarc2\" command": {
+      "prefix": "wallarc2",
+      "body": "wallarc2 ${01:x}, ${02:y}, ${03:radius}, ${04:alpha}, ${05:beta}"
+    },
+    "new subroutine": {
+      "prefix": "sub",
+      "body": "\n\n! ========================================================================\n! Description\n\t\"${01:name}\":\n! ------------------------------------------------------------------------\n! input:\n!\tvariable\tdescription\n! output:\n!\tvariable\tdescription\n! ========================================================================\n\n\t${02:body}\n\nreturn\n\n\n"
+    },
+    "\"BEAM_AXES_LINETYPE\" global": {
+      "prefix": "BEAM_AXES_LINETYPE",
+      "body": "BEAM_AXES_LINETYPE"
+    },
+    "\"BEAM_BMAT\" global": {
+      "prefix": "BEAM_BMAT",
+      "body": "BEAM_BMAT"
+    },
+    "\"BEAM_BMAT_NAME\" global": {
+      "prefix": "BEAM_BMAT_NAME",
+      "body": "BEAM_BMAT_NAME"
+    },
+    "\"BEAM_BOTTOM_SURF\" global": {
+      "prefix": "BEAM_BOTTOM_SURF",
+      "body": "BEAM_BOTTOM_SURF"
+    },
+    "\"BEAM_DIRECTION\" global": {
+      "prefix": "BEAM_DIRECTION",
+      "body": "BEAM_DIRECTION"
+    },
+    "\"BEAM_ELEVATION_BOTTOM\" global": {
+      "prefix": "BEAM_ELEVATION_BOTTOM",
+      "body": "BEAM_ELEVATION_BOTTOM"
+    },
+    "\"BEAM_ELEVATION_TOP\" global": {
+      "prefix": "BEAM_ELEVATION_TOP",
+      "body": "BEAM_ELEVATION_TOP"
+    },
+    "\"BEAM_END_SURF\" global": {
+      "prefix": "BEAM_END_SURF",
+      "body": "BEAM_END_SURF"
+    },
+    "\"BEAM_FBGD_PEN\" global": {
+      "prefix": "BEAM_FBGD_PEN",
+      "body": "BEAM_FBGD_PEN"
+    },
+    "\"BEAM_FILL\" global": {
+      "prefix": "BEAM_FILL",
+      "body": "BEAM_FILL"
+    },
+    "\"BEAM_FILL_PEN\" global": {
+      "prefix": "BEAM_FILL_PEN",
+      "body": "BEAM_FILL_PEN"
+    },
+    "\"BEAM_HEIGHT\" global": {
+      "prefix": "BEAM_HEIGHT",
+      "body": "BEAM_HEIGHT"
+    },
+    "\"BEAM_HOLE_EDGE_SURF\" global": {
+      "prefix": "BEAM_HOLE_EDGE_SURF",
+      "body": "BEAM_HOLE_EDGE_SURF"
+    },
+    "\"BEAM_HOLES_NR\" global": {
+      "prefix": "BEAM_HOLES_NR",
+      "body": "BEAM_HOLES_NR"
+    },
+    "\"BEAM_HOLES_SURF\" global": {
+      "prefix": "BEAM_HOLES_SURF",
+      "body": "BEAM_HOLES_SURF"
+    },
+    "\"BEAM_HOLES_VOLUME\" global": {
+      "prefix": "BEAM_HOLES_VOLUME",
+      "body": "BEAM_HOLES_VOLUME"
+    },
+    "\"BEAM_LEFT_SURF\" global": {
+      "prefix": "BEAM_LEFT_SURF",
+      "body": "BEAM_LEFT_SURF"
+    },
+    "\"BEAM_LENGTH_LEFT\" global": {
+      "prefix": "BEAM_LENGTH_LEFT",
+      "body": "BEAM_LENGTH_LEFT"
+    },
+    "\"BEAM_LENGTH_RIGHT\" global": {
+      "prefix": "BEAM_LENGTH_RIGHT",
+      "body": "BEAM_LENGTH_RIGHT"
+    },
+    "\"BEAM_MAT_BOTTOM\" global": {
+      "prefix": "BEAM_MAT_BOTTOM",
+      "body": "BEAM_MAT_BOTTOM"
+    },
+    "\"BEAM_MAT_END\" global": {
+      "prefix": "BEAM_MAT_END",
+      "body": "BEAM_MAT_END"
+    },
+    "\"BEAM_MAT_LEFT\" global": {
+      "prefix": "BEAM_MAT_LEFT",
+      "body": "BEAM_MAT_LEFT"
+    },
+    "\"BEAM_MAT_RIGHT\" global": {
+      "prefix": "BEAM_MAT_RIGHT",
+      "body": "BEAM_MAT_RIGHT"
+    },
+    "\"BEAM_MAT_TOP\" global": {
+      "prefix": "BEAM_MAT_TOP",
+      "body": "BEAM_MAT_TOP"
+    },
+    "\"BEAM_OUTLINE_LINETYPE\" global": {
+      "prefix": "BEAM_OUTLINE_LINETYPE",
+      "body": "BEAM_OUTLINE_LINETYPE"
+    },
+    "\"BEAM_POSITION\" global": {
+      "prefix": "BEAM_POSITION",
+      "body": "BEAM_POSITION"
+    },
+    "\"BEAM_PRIORITY\" global": {
+      "prefix": "BEAM_PRIORITY",
+      "body": "BEAM_PRIORITY"
+    },
+    "\"BEAM_PROFILE_NAME\" global": {
+      "prefix": "BEAM_PROFILE_NAME",
+      "body": "BEAM_PROFILE_NAME"
+    },
+    "\"BEAM_REFLINE_OFFSET\" global": {
+      "prefix": "BEAM_REFLINE_OFFSET",
+      "body": "BEAM_REFLINE_OFFSET"
+    },
+    "\"BEAM_RIGHT_SURF\" global": {
+      "prefix": "BEAM_RIGHT_SURF",
+      "body": "BEAM_RIGHT_SURF"
+    },
+    "\"BEAM_SECT_PEN\" global": {
+      "prefix": "BEAM_SECT_PEN",
+      "body": "BEAM_SECT_PEN"
+    },
+    "\"BEAM_THICKNESS\" global": {
+      "prefix": "BEAM_THICKNESS",
+      "body": "BEAM_THICKNESS"
+    },
+    "\"BEAM_TOP_SURF\" global": {
+      "prefix": "BEAM_TOP_SURF",
+      "body": "BEAM_TOP_SURF"
+    },
+    "\"BEAM_VOLUME\" global": {
+      "prefix": "BEAM_VOLUME",
+      "body": "BEAM_VOLUME"
+    },
+    "\"BEAM_VOLUME_CON\" global": {
+      "prefix": "BEAM_VOLUME_CON",
+      "body": "BEAM_VOLUME_CON"
+    },
+    "\"COLU_AREA\" global": {
+      "prefix": "COLU_AREA",
+      "body": "COLU_AREA"
+    },
+    "\"COLU_CORE\" global": {
+      "prefix": "COLU_CORE",
+      "body": "COLU_CORE"
+    },
+    "\"COLU_CORE_BMAT\" global": {
+      "prefix": "COLU_CORE_BMAT",
+      "body": "COLU_CORE_BMAT"
+    },
+    "\"COLU_CORE_BMAT_NAME\" global": {
+      "prefix": "COLU_CORE_BMAT_NAME",
+      "body": "COLU_CORE_BMAT_NAME"
+    },
+    "\"COLU_CORE_BOT_SURF\" global": {
+      "prefix": "COLU_CORE_BOT_SURF",
+      "body": "COLU_CORE_BOT_SURF"
+    },
+    "\"COLU_CORE_FBGD_PEN\" global": {
+      "prefix": "COLU_CORE_FBGD_PEN",
+      "body": "COLU_CORE_FBGD_PEN"
+    },
+    "\"COLU_CORE_FILL\" global": {
+      "prefix": "COLU_CORE_FILL",
+      "body": "COLU_CORE_FILL"
+    },
+    "\"COLU_CORE_FILL_PEN\" global": {
+      "prefix": "COLU_CORE_FILL_PEN",
+      "body": "COLU_CORE_FILL_PEN"
+    },
+    "\"COLU_CORE_GROSS_SURF\" global": {
+      "prefix": "COLU_CORE_GROSS_SURF",
+      "body": "COLU_CORE_GROSS_SURF"
+    },
+    "\"COLU_CORE_GROSS_TOPBOT_SURF\" global": {
+      "prefix": "COLU_CORE_GROSS_TOPBOT_SURF",
+      "body": "COLU_CORE_GROSS_TOPBOT_SURF"
+    },
+    "\"COLU_CORE_GROSS_VOL\" global": {
+      "prefix": "COLU_CORE_GROSS_VOL",
+      "body": "COLU_CORE_GROSS_VOL"
+    },
+    "\"COLU_CORE_SURF\" global": {
+      "prefix": "COLU_CORE_SURF",
+      "body": "COLU_CORE_SURF"
+    },
+    "\"COLU_CORE_TOP_SURF\" global": {
+      "prefix": "COLU_CORE_TOP_SURF",
+      "body": "COLU_CORE_TOP_SURF"
+    },
+    "\"COLU_CORE_VOL\" global": {
+      "prefix": "COLU_CORE_VOL",
+      "body": "COLU_CORE_VOL"
+    },
+    "\"COLU_CORE_X\" global": {
+      "prefix": "COLU_CORE_X",
+      "body": "COLU_CORE_X"
+    },
+    "\"COLU_CORE_Y\" global": {
+      "prefix": "COLU_CORE_Y",
+      "body": "COLU_CORE_Y"
+    },
+    "\"COLU_DIM1\" global": {
+      "prefix": "COLU_DIM1",
+      "body": "COLU_DIM1"
+    },
+    "\"COLU_DIM2\" global": {
+      "prefix": "COLU_DIM2",
+      "body": "COLU_DIM2"
+    },
+    "\"COLU_GROSS_VOLUME\" global": {
+      "prefix": "COLU_GROSS_VOLUME",
+      "body": "COLU_GROSS_VOLUME"
+    },
+    "\"COLU_HEIGHT\" global": {
+      "prefix": "COLU_HEIGHT",
+      "body": "COLU_HEIGHT"
+    },
+    "\"COLU_LINETYPE\" global": {
+      "prefix": "COLU_LINETYPE",
+      "body": "COLU_LINETYPE"
+    },
+    "\"COLU_MAT\" global": {
+      "prefix": "COLU_MAT",
+      "body": "COLU_MAT"
+    },
+    "\"COLU_MAX_HEIGHT\" global": {
+      "prefix": "COLU_MAX_HEIGHT",
+      "body": "COLU_MAX_HEIGHT"
+    },
+    "\"COLU_MIN_HEIGHT\" global": {
+      "prefix": "COLU_MIN_HEIGHT",
+      "body": "COLU_MIN_HEIGHT"
+    },
+    "\"COLU_PERIMETER\" global": {
+      "prefix": "COLU_PERIMETER",
+      "body": "COLU_PERIMETER"
+    },
+    "\"COLU_PROFILE_NAME\" global": {
+      "prefix": "COLU_PROFILE_NAME",
+      "body": "COLU_PROFILE_NAME"
+    },
+    "\"COLU_SECT_PEN\" global": {
+      "prefix": "COLU_SECT_PEN",
+      "body": "COLU_SECT_PEN"
+    },
+    "\"COLU_VENEER_BMAT\" global": {
+      "prefix": "COLU_VENEER_BMAT",
+      "body": "COLU_VENEER_BMAT"
+    },
+    "\"COLU_VENEER_BMAT_NAME\" global": {
+      "prefix": "COLU_VENEER_BMAT_NAME",
+      "body": "COLU_VENEER_BMAT_NAME"
+    },
+    "\"COLU_VENEER_BOT_SURF\" global": {
+      "prefix": "COLU_VENEER_BOT_SURF",
+      "body": "COLU_VENEER_BOT_SURF"
+    },
+    "\"COLU_VENEER_FBGD_PEN\" global": {
+      "prefix": "COLU_VENEER_FBGD_PEN",
+      "body": "COLU_VENEER_FBGD_PEN"
+    },
+    "\"COLU_VENEER_FILL\" global": {
+      "prefix": "COLU_VENEER_FILL",
+      "body": "COLU_VENEER_FILL"
+    },
+    "\"COLU_VENEER_FILL_PEN\" global": {
+      "prefix": "COLU_VENEER_FILL_PEN",
+      "body": "COLU_VENEER_FILL_PEN"
+    },
+    "\"COLU_VENEER_GROSS_SURF\" global": {
+      "prefix": "COLU_VENEER_GROSS_SURF",
+      "body": "COLU_VENEER_GROSS_SURF"
+    },
+    "\"COLU_VENEER_GROSS_TOPBOT_SURF\" global": {
+      "prefix": "COLU_VENEER_GROSS_TOPBOT_SURF",
+      "body": "COLU_VENEER_GROSS_TOPBOT_SURF"
+    },
+    "\"COLU_VENEER_GROSS_VOL\" global": {
+      "prefix": "COLU_VENEER_GROSS_VOL",
+      "body": "COLU_VENEER_GROSS_VOL"
+    },
+    "\"COLU_VENEER_SURF\" global": {
+      "prefix": "COLU_VENEER_SURF",
+      "body": "COLU_VENEER_SURF"
+    },
+    "\"COLU_VENEER_TOP_SURF\" global": {
+      "prefix": "COLU_VENEER_TOP_SURF",
+      "body": "COLU_VENEER_TOP_SURF"
+    },
+    "\"COLU_VENEER_VOL\" global": {
+      "prefix": "COLU_VENEER_VOL",
+      "body": "COLU_VENEER_VOL"
+    },
+    "\"COLU_VENEER_WIDTH\" global": {
+      "prefix": "COLU_VENEER_WIDTH",
+      "body": "COLU_VENEER_WIDTH"
+    },
+    "\"COLU_VIEW_PEN\" global": {
+      "prefix": "COLU_VIEW_PEN",
+      "body": "COLU_VIEW_PEN"
+    },
+    "\"COLU_VOLUME\" global": {
+      "prefix": "COLU_VOLUME",
+      "body": "COLU_VOLUME"
+    },
+    "\"CW_BOUNDARY_PLACEMENT\" global": {
+      "prefix": "CW_BOUNDARY_PLACEMENT",
+      "body": "CW_BOUNDARY_PLACEMENT"
+    },
+    "\"CWACC_TYPE\" global": {
+      "prefix": "CWACC_TYPE",
+      "body": "CWACC_TYPE"
+    },
+    "\"CWALL_CONTOUR_FRAMES_LENGTH\" global": {
+      "prefix": "CWALL_CONTOUR_FRAMES_LENGTH",
+      "body": "CWALL_CONTOUR_FRAMES_LENGTH"
+    },
+    "\"CWALL_CUSTOM_FRAMES_LENGTH\" global": {
+      "prefix": "CWALL_CUSTOM_FRAMES_LENGTH",
+      "body": "CWALL_CUSTOM_FRAMES_LENGTH"
+    },
+    "\"CWALL_FRAMES_LENGTH\" global": {
+      "prefix": "CWALL_FRAMES_LENGTH",
+      "body": "CWALL_FRAMES_LENGTH"
+    },
+    "\"CWALL_HEIGHT\" global": {
+      "prefix": "CWALL_HEIGHT",
+      "body": "CWALL_HEIGHT"
+    },
+    "\"CWALL_ID\" global": {
+      "prefix": "CWALL_ID",
+      "body": "CWALL_ID"
+    },
+    "\"CWALL_LENGTH\" global": {
+      "prefix": "CWALL_LENGTH",
+      "body": "CWALL_LENGTH"
+    },
+    "\"CWALL_MAINAXIS_FRAMES_LENGTH\" global": {
+      "prefix": "CWALL_MAINAXIS_FRAMES_LENGTH",
+      "body": "CWALL_MAINAXIS_FRAMES_LENGTH"
+    },
+    "\"CWALL_PANELS_NR\" global": {
+      "prefix": "CWALL_PANELS_NR",
+      "body": "CWALL_PANELS_NR"
+    },
+    "\"CWALL_PANELS_SURF\" global": {
+      "prefix": "CWALL_PANELS_SURF",
+      "body": "CWALL_PANELS_SURF"
+    },
+    "\"CWALL_PANELS_SURF_E\" global": {
+      "prefix": "CWALL_PANELS_SURF_E",
+      "body": "CWALL_PANELS_SURF_E"
+    },
+    "\"CWALL_PANELS_SURF_N\" global": {
+      "prefix": "CWALL_PANELS_SURF_N",
+      "body": "CWALL_PANELS_SURF_N"
+    },
+    "\"CWALL_PANELS_SURF_NE\" global": {
+      "prefix": "CWALL_PANELS_SURF_NE",
+      "body": "CWALL_PANELS_SURF_NE"
+    },
+    "\"CWALL_PANELS_SURF_NW\" global": {
+      "prefix": "CWALL_PANELS_SURF_NW",
+      "body": "CWALL_PANELS_SURF_NW"
+    },
+    "\"CWALL_PANELS_SURF_S\" global": {
+      "prefix": "CWALL_PANELS_SURF_S",
+      "body": "CWALL_PANELS_SURF_S"
+    },
+    "\"CWALL_PANELS_SURF_SE\" global": {
+      "prefix": "CWALL_PANELS_SURF_SE",
+      "body": "CWALL_PANELS_SURF_SE"
+    },
+    "\"CWALL_PANELS_SURF_SW\" global": {
+      "prefix": "CWALL_PANELS_SURF_SW",
+      "body": "CWALL_PANELS_SURF_SW"
+    },
+    "\"CWALL_PANELS_SURF_W\" global": {
+      "prefix": "CWALL_PANELS_SURF_W",
+      "body": "CWALL_PANELS_SURF_W"
+    },
+    "\"CWALL_PATTERN_ANGLE\" global": {
+      "prefix": "CWALL_PATTERN_ANGLE",
+      "body": "CWALL_PATTERN_ANGLE"
+    },
+    "\"CWALL_SECAXIS_FRAMES_LENGTH\" global": {
+      "prefix": "CWALL_SECAXIS_FRAMES_LENGTH",
+      "body": "CWALL_SECAXIS_FRAMES_LENGTH"
+    },
+    "\"CWALL_SLANT_ANGLE\" global": {
+      "prefix": "CWALL_SLANT_ANGLE",
+      "body": "CWALL_SLANT_ANGLE"
+    },
+    "\"CWALL_SURF\" global": {
+      "prefix": "CWALL_SURF",
+      "body": "CWALL_SURF"
+    },
+    "\"CWALL_SURF_BOUNDARY\" global": {
+      "prefix": "CWALL_SURF_BOUNDARY",
+      "body": "CWALL_SURF_BOUNDARY"
+    },
+    "\"CWALL_THICKNESS\" global": {
+      "prefix": "CWALL_THICKNESS",
+      "body": "CWALL_THICKNESS"
+    },
+    "\"CWFRAME_BOTTOM_CUTPLANE\" global": {
+      "prefix": "CWFRAME_BOTTOM_CUTPLANE",
+      "body": "CWFRAME_BOTTOM_CUTPLANE[${01:index}]"
+    },
+    "\"CWFRAME_BOTTOM_CUTPOLYLINE\" global": {
+      "prefix": "CWFRAME_BOTTOM_CUTPOLYLINE",
+      "body": "CWFRAME_BOTTOM_CUTPOLYLINE[${01:index}][${02:index}]"
+    },
+    "\"CWFRAME_BOTTOM_CUTTYPE\" global": {
+      "prefix": "CWFRAME_BOTTOM_CUTTYPE",
+      "body": "CWFRAME_BOTTOM_CUTTYPE"
+    },
+    "\"CWFRAME_DEPTH\" global": {
+      "prefix": "CWFRAME_DEPTH",
+      "body": "CWFRAME_DEPTH"
+    },
+    "\"CWFRAME_DIRECTION\" global": {
+      "prefix": "CWFRAME_DIRECTION",
+      "body": "CWFRAME_DIRECTION"
+    },
+    "\"CWFRAME_LENGTH\" global": {
+      "prefix": "CWFRAME_LENGTH",
+      "body": "CWFRAME_LENGTH"
+    },
+    "\"CWFRAME_POSITION\" global": {
+      "prefix": "CWFRAME_POSITION",
+      "body": "CWFRAME_POSITION"
+    },
+    "\"CWFRAME_TOP_CUTPLANE\" global": {
+      "prefix": "CWFRAME_TOP_CUTPLANE",
+      "body": "CWFRAME_TOP_CUTPLANE[${01:index}]"
+    },
+    "\"CWFRAME_TOP_CUTPOLYLINE\" global": {
+      "prefix": "CWFRAME_TOP_CUTPOLYLINE",
+      "body": "CWFRAME_TOP_CUTPOLYLINE[${01:index}][${02:index}]"
+    },
+    "\"CWFRAME_TOP_CUTTYPE\" global": {
+      "prefix": "CWFRAME_TOP_CUTTYPE",
+      "body": "CWFRAME_TOP_CUTTYPE"
+    },
+    "\"CWFRAME_TYPE\" global": {
+      "prefix": "CWFRAME_TYPE",
+      "body": "CWFRAME_TYPE"
+    },
+    "\"CWFRAME_WIDTH\" global": {
+      "prefix": "CWFRAME_WIDTH",
+      "body": "CWFRAME_WIDTH"
+    },
+    "\"CWJUNC_TYPE\" global": {
+      "prefix": "CWJUNC_TYPE",
+      "body": "CWJUNC_TYPE"
+    },
+    "\"CWPANEL_FUNCTION\" global": {
+      "prefix": "CWPANEL_FUNCTION",
+      "body": "CWPANEL_FUNCTION"
+    },
+    "\"CWPANEL_GROSS_SURF\" global": {
+      "prefix": "CWPANEL_GROSS_SURF",
+      "body": "CWPANEL_GROSS_SURF"
+    },
+    "\"CWPANEL_HEIGHT\" global": {
+      "prefix": "CWPANEL_HEIGHT",
+      "body": "CWPANEL_HEIGHT"
+    },
+    "\"CWPANEL_HORIZONTAL_DIRECTION\" global": {
+      "prefix": "CWPANEL_HORIZONTAL_DIRECTION",
+      "body": "CWPANEL_HORIZONTAL_DIRECTION"
+    },
+    "\"CWPANEL_NOMINAL_HEIGHT\" global": {
+      "prefix": "CWPANEL_NOMINAL_HEIGHT",
+      "body": "CWPANEL_NOMINAL_HEIGHT"
+    },
+    "\"CWPANEL_NOMINAL_SURF\" global": {
+      "prefix": "CWPANEL_NOMINAL_SURF",
+      "body": "CWPANEL_NOMINAL_SURF"
+    },
+    "\"CWPANEL_NOMINAL_WIDTH\" global": {
+      "prefix": "CWPANEL_NOMINAL_WIDTH",
+      "body": "CWPANEL_NOMINAL_WIDTH"
+    },
+    "\"CWPANEL_ORIENTATION\" global": {
+      "prefix": "CWPANEL_ORIENTATION",
+      "body": "CWPANEL_ORIENTATION"
+    },
+    "\"CWPANEL_PERIMETER\" global": {
+      "prefix": "CWPANEL_PERIMETER",
+      "body": "CWPANEL_PERIMETER"
+    },
+    "\"CWPANEL_SURF\" global": {
+      "prefix": "CWPANEL_SURF",
+      "body": "CWPANEL_SURF"
+    },
+    "\"CWPANEL_THICKNESS\" global": {
+      "prefix": "CWPANEL_THICKNESS",
+      "body": "CWPANEL_THICKNESS"
+    },
+    "\"CWPANEL_VERTICAL_DIRECTION\" global": {
+      "prefix": "CWPANEL_VERTICAL_DIRECTION",
+      "body": "CWPANEL_VERTICAL_DIRECTION"
+    },
+    "\"CWPANEL_WIDTH\" global": {
+      "prefix": "CWPANEL_WIDTH",
+      "body": "CWPANEL_WIDTH"
+    },
+    "\"FILL_BMAT\" global": {
+      "prefix": "FILL_BMAT",
+      "body": "FILL_BMAT"
+    },
+    "\"FILL_BMAT_NAME\" global": {
+      "prefix": "FILL_BMAT_NAME",
+      "body": "FILL_BMAT_NAME"
+    },
+    "\"FILL_FBGD_PEN\" global": {
+      "prefix": "FILL_FBGD_PEN",
+      "body": "FILL_FBGD_PEN"
+    },
+    "\"FILL_FILL\" global": {
+      "prefix": "FILL_FILL",
+      "body": "FILL_FILL"
+    },
+    "\"FILL_FILL_CATEGORY\" global": {
+      "prefix": "FILL_FILL_CATEGORY",
+      "body": "FILL_FILL_CATEGORY"
+    },
+    "\"FILL_FILL_PEN\" global": {
+      "prefix": "FILL_FILL_PEN",
+      "body": "FILL_FILL_PEN"
+    },
+    "\"FILL_HOLES_AREA\" global": {
+      "prefix": "FILL_HOLES_AREA",
+      "body": "FILL_HOLES_AREA"
+    },
+    "\"FILL_HOLES_NR\" global": {
+      "prefix": "FILL_HOLES_NR",
+      "body": "FILL_HOLES_NR"
+    },
+    "\"FILL_HOLES_PRM\" global": {
+      "prefix": "FILL_HOLES_PRM",
+      "body": "FILL_HOLES_PRM"
+    },
+    "\"FILL_LINETYPE\" global": {
+      "prefix": "FILL_LINETYPE",
+      "body": "FILL_LINETYPE"
+    },
+    "\"FILL_PEN\" global": {
+      "prefix": "FILL_PEN",
+      "body": "FILL_PEN"
+    },
+    "\"FILL_PERIMETER\" global": {
+      "prefix": "FILL_PERIMETER",
+      "body": "FILL_PERIMETER"
+    },
+    "\"FILL_SEGMENT_NR\" global": {
+      "prefix": "FILL_SEGMENT_NR",
+      "body": "FILL_SEGMENT_NR"
+    },
+    "\"FILL_SURF\" global": {
+      "prefix": "FILL_SURF",
+      "body": "FILL_SURF"
+    },
+    "\"FROM_GUID\" global": {
+      "prefix": "FROM_GUID",
+      "body": "FROM_GUID"
+    },
+    "\"GLOB_CH_STORY_DIST\" global": {
+      "prefix": "GLOB_CH_STORY_DIST",
+      "body": "GLOB_CH_STORY_DIST"
+    },
+    "\"GLOB_CHANGE_SCHEME\" global": {
+      "prefix": "GLOB_CHANGE_SCHEME",
+      "body": "GLOB_CHANGE_SCHEME[${01:index}][${02:index}]"
+    },
+    "\"GLOB_CSTORY_ELEV\" global": {
+      "prefix": "GLOB_CSTORY_ELEV",
+      "body": "GLOB_CSTORY_ELEV"
+    },
+    "\"GLOB_CSTORY_HEIGHT\" global": {
+      "prefix": "GLOB_CSTORY_HEIGHT",
+      "body": "GLOB_CSTORY_HEIGHT"
+    },
+    "\"GLOB_CUTPLANES_INFO\" global": {
+      "prefix": "GLOB_CUTPLANES_INFO",
+      "body": "GLOB_CUTPLANES_INFO[${01:index}]"
+    },
+    "\"GLOB_DRAWING_BGD_PEN\" global": {
+      "prefix": "GLOB_DRAWING_BGD_PEN",
+      "body": "GLOB_DRAWING_BGD_PEN"
+    },
+    "\"GLOB_ELEM_TYPE\" global": {
+      "prefix": "GLOB_ELEM_TYPE",
+      "body": "GLOB_ELEM_TYPE"
+    },
+    "\"GLOB_ELEVATION\" global": {
+      "prefix": "GLOB_ELEVATION",
+      "body": "GLOB_ELEVATION"
+    },
+    "\"GLOB_EYEPOS_X\" global": {
+      "prefix": "GLOB_EYEPOS_X",
+      "body": "GLOB_EYEPOS_X"
+    },
+    "\"GLOB_EYEPOS_Y\" global": {
+      "prefix": "GLOB_EYEPOS_Y",
+      "body": "GLOB_EYEPOS_Y"
+    },
+    "\"GLOB_EYEPOS_Z\" global": {
+      "prefix": "GLOB_EYEPOS_Z",
+      "body": "GLOB_EYEPOS_Z"
+    },
+    "\"GLOB_FEEDBACK_MODE\" global": {
+      "prefix": "GLOB_FEEDBACK_MODE",
+      "body": "GLOB_FEEDBACK_MODE"
+    },
+    "\"GLOB_FILL_INDEX_BACKGROUND\" global": {
+      "prefix": "GLOB_FILL_INDEX_BACKGROUND",
+      "body": "GLOB_FILL_INDEX_BACKGROUND"
+    },
+    "\"GLOB_FILL_INDEX_SOLID\" global": {
+      "prefix": "GLOB_FILL_INDEX_SOLID",
+      "body": "GLOB_FILL_INDEX_SOLID"
+    },
+    "\"GLOB_FIRST_FRAME\" global": {
+      "prefix": "GLOB_FIRST_FRAME",
+      "body": "GLOB_FIRST_FRAME"
+    },
+    "\"GLOB_FRAME_NR\" global": {
+      "prefix": "GLOB_FRAME_NR",
+      "body": "GLOB_FRAME_NR"
+    },
+    "\"GLOB_HSTORY_ELEV\" global": {
+      "prefix": "GLOB_HSTORY_ELEV",
+      "body": "GLOB_HSTORY_ELEV"
+    },
+    "\"GLOB_HSTORY_HEIGHT\" global": {
+      "prefix": "GLOB_HSTORY_HEIGHT",
+      "body": "GLOB_HSTORY_HEIGHT"
+    },
+    "\"GLOB_ID\" global": {
+      "prefix": "GLOB_ID",
+      "body": "GLOB_ID"
+    },
+    "\"GLOB_INTGUID\" global": {
+      "prefix": "GLOB_INTGUID",
+      "body": "GLOB_INTGUID"
+    },
+    "\"GLOB_ISSUE_SCHEME\" global": {
+      "prefix": "GLOB_ISSUE_SCHEME",
+      "body": "GLOB_ISSUE_SCHEME[${01:index}][${02:index}]"
+    },
+    "\"GLOB_LAST_FRAME\" global": {
+      "prefix": "GLOB_LAST_FRAME",
+      "body": "GLOB_LAST_FRAME"
+    },
+    "\"GLOB_LAYER\" global": {
+      "prefix": "GLOB_LAYER",
+      "body": "GLOB_LAYER"
+    },
+    "\"GLOB_MODPAR_NAME\" global": {
+      "prefix": "GLOB_MODPAR_NAME",
+      "body": "GLOB_MODPAR_NAME"
+    },
+    "\"GLOB_MVO_CWACC_DETLEVEL\" global": {
+      "prefix": "GLOB_MVO_CWACC_DETLEVEL",
+      "body": "GLOB_MVO_CWACC_DETLEVEL"
+    },
+    "\"GLOB_MVO_CWFRAME_DETLEVEL\" global": {
+      "prefix": "GLOB_MVO_CWFRAME_DETLEVEL",
+      "body": "GLOB_MVO_CWFRAME_DETLEVEL"
+    },
+    "\"GLOB_MVO_CWJUNCT_DETLEVEL\" global": {
+      "prefix": "GLOB_MVO_CWJUNCT_DETLEVEL",
+      "body": "GLOB_MVO_CWJUNCT_DETLEVEL"
+    },
+    "\"GLOB_MVO_CWPANEL_DETLEVEL\" global": {
+      "prefix": "GLOB_MVO_CWPANEL_DETLEVEL",
+      "body": "GLOB_MVO_CWPANEL_DETLEVEL"
+    },
+    "\"GLOB_MVO_RAILING_PLAN_COMP\" global": {
+      "prefix": "GLOB_MVO_RAILING_PLAN_COMP",
+      "body": "GLOB_MVO_RAILING_PLAN_COMP"
+    },
+    "\"GLOB_MVO_STAIR_FLOOR_PLAN_COMP\" global": {
+      "prefix": "GLOB_MVO_STAIR_FLOOR_PLAN_COMP",
+      "body": "GLOB_MVO_STAIR_FLOOR_PLAN_COMP"
+    },
+    "\"GLOB_MVO_STAIR_FLOOR_PLAN_OPT\" global": {
+      "prefix": "GLOB_MVO_STAIR_FLOOR_PLAN_OPT",
+      "body": "GLOB_MVO_STAIR_FLOOR_PLAN_OPT"
+    },
+    "\"GLOB_NORTH_DIR\" global": {
+      "prefix": "GLOB_NORTH_DIR",
+      "body": "GLOB_NORTH_DIR"
+    },
+    "\"GLOB_PREVIEW_MODE\" global": {
+      "prefix": "GLOB_PREVIEW_MODE",
+      "body": "GLOB_PREVIEW_MODE"
+    },
+    "\"GLOB_PROJECT_ALTITUDE\" global": {
+      "prefix": "GLOB_PROJECT_ALTITUDE",
+      "body": "GLOB_PROJECT_ALTITUDE"
+    },
+    "\"GLOB_PROJECT_DATE\" global": {
+      "prefix": "GLOB_PROJECT_DATE",
+      "body": "GLOB_PROJECT_DATE[${01:index}]"
+    },
+    "\"GLOB_PROJECT_LATITUDE\" global": {
+      "prefix": "GLOB_PROJECT_LATITUDE",
+      "body": "GLOB_PROJECT_LATITUDE"
+    },
+    "\"GLOB_PROJECT_LONGITUDE\" global": {
+      "prefix": "GLOB_PROJECT_LONGITUDE",
+      "body": "GLOB_PROJECT_LONGITUDE"
+    },
+    "\"GLOB_SCALE\" global": {
+      "prefix": "GLOB_SCALE",
+      "body": "GLOB_SCALE"
+    },
+    "\"GLOB_SCRIPT_TYPE\" global": {
+      "prefix": "GLOB_SCRIPT_TYPE",
+      "body": "GLOB_SCRIPT_TYPE"
+    },
+    "\"GLOB_SEO_TOOL_MODE\" global": {
+      "prefix": "GLOB_SEO_TOOL_MODE",
+      "body": "GLOB_SEO_TOOL_MODE"
+    },
+    "\"GLOB_STRUCTURE_DISPLAY\" global": {
+      "prefix": "GLOB_STRUCTURE_DISPLAY",
+      "body": "GLOB_STRUCTURE_DISPLAY"
+    },
+    "\"GLOB_SUN_ALTITUDE\" global": {
+      "prefix": "GLOB_SUN_ALTITUDE",
+      "body": "GLOB_SUN_ALTITUDE"
+    },
+    "\"GLOB_SUN_AZIMUTH\" global": {
+      "prefix": "GLOB_SUN_AZIMUTH",
+      "body": "GLOB_SUN_AZIMUTH"
+    },
+    "\"GLOB_TARGPOS_X\" global": {
+      "prefix": "GLOB_TARGPOS_X",
+      "body": "GLOB_TARGPOS_X"
+    },
+    "\"GLOB_TARGPOS_Y\" global": {
+      "prefix": "GLOB_TARGPOS_Y",
+      "body": "GLOB_TARGPOS_Y"
+    },
+    "\"GLOB_TARGPOS_Z\" global": {
+      "prefix": "GLOB_TARGPOS_Z",
+      "body": "GLOB_TARGPOS_Z"
+    },
+    "\"GLOB_UI_BUTTON_ID\" global": {
+      "prefix": "GLOB_UI_BUTTON_ID",
+      "body": "GLOB_UI_BUTTON_ID"
+    },
+    "\"GLOB_USER_1\" global": {
+      "prefix": "GLOB_USER_1",
+      "body": "GLOB_USER_1"
+    },
+    "\"GLOB_USER_2\" global": {
+      "prefix": "GLOB_USER_2",
+      "body": "GLOB_USER_2"
+    },
+    "\"GLOB_USER_3\" global": {
+      "prefix": "GLOB_USER_3",
+      "body": "GLOB_USER_3"
+    },
+    "\"GLOB_USER_4\" global": {
+      "prefix": "GLOB_USER_4",
+      "body": "GLOB_USER_4"
+    },
+    "\"GLOB_USER_5\" global": {
+      "prefix": "GLOB_USER_5",
+      "body": "GLOB_USER_5"
+    },
+    "\"GLOB_USER_6\" global": {
+      "prefix": "GLOB_USER_6",
+      "body": "GLOB_USER_6"
+    },
+    "\"GLOB_USER_7\" global": {
+      "prefix": "GLOB_USER_7",
+      "body": "GLOB_USER_7"
+    },
+    "\"GLOB_USER_8\" global": {
+      "prefix": "GLOB_USER_8",
+      "body": "GLOB_USER_8"
+    },
+    "\"GLOB_USER_9\" global": {
+      "prefix": "GLOB_USER_9",
+      "body": "GLOB_USER_9"
+    },
+    "\"GLOB_USER_10\" global": {
+      "prefix": "GLOB_USER_10",
+      "body": "GLOB_USER_10"
+    },
+    "\"GLOB_USER_11\" global": {
+      "prefix": "GLOB_USER_11",
+      "body": "GLOB_USER_11"
+    },
+    "\"GLOB_USER_12\" global": {
+      "prefix": "GLOB_USER_12",
+      "body": "GLOB_USER_12"
+    },
+    "\"GLOB_USER_13\" global": {
+      "prefix": "GLOB_USER_13",
+      "body": "GLOB_USER_13"
+    },
+    "\"GLOB_USER_14\" global": {
+      "prefix": "GLOB_USER_14",
+      "body": "GLOB_USER_14"
+    },
+    "\"GLOB_USER_15\" global": {
+      "prefix": "GLOB_USER_15",
+      "body": "GLOB_USER_15"
+    },
+    "\"GLOB_USER_16\" global": {
+      "prefix": "GLOB_USER_16",
+      "body": "GLOB_USER_16"
+    },
+    "\"GLOB_USER_17\" global": {
+      "prefix": "GLOB_USER_17",
+      "body": "GLOB_USER_17"
+    },
+    "\"GLOB_USER_18\" global": {
+      "prefix": "GLOB_USER_18",
+      "body": "GLOB_USER_18"
+    },
+    "\"GLOB_USER_19\" global": {
+      "prefix": "GLOB_USER_19",
+      "body": "GLOB_USER_19"
+    },
+    "\"GLOB_USER_20\" global": {
+      "prefix": "GLOB_USER_20",
+      "body": "GLOB_USER_20"
+    },
+    "\"GLOB_VIEW_TYPE\" global": {
+      "prefix": "GLOB_VIEW_TYPE",
+      "body": "GLOB_VIEW_TYPE"
+    },
+    "\"GLOB_WORLD_ORIGO_OFFSET_X\" global": {
+      "prefix": "GLOB_WORLD_ORIGO_OFFSET_X",
+      "body": "GLOB_WORLD_ORIGO_OFFSET_X"
+    },
+    "\"GLOB_WORLD_ORIGO_OFFSET_Y\" global": {
+      "prefix": "GLOB_WORLD_ORIGO_OFFSET_Y",
+      "body": "GLOB_WORLD_ORIGO_OFFSET_Y"
+    },
+    "\"LABEL_ARROWHEAD_PEN\" global": {
+      "prefix": "LABEL_ARROWHEAD_PEN",
+      "body": "LABEL_ARROWHEAD_PEN"
+    },
+    "\"LABEL_ASSOC_ELEM_ORIENTATION\" global": {
+      "prefix": "LABEL_ASSOC_ELEM_ORIENTATION",
+      "body": "LABEL_ASSOC_ELEM_ORIENTATION"
+    },
+    "\"LABEL_HAS_POINTER\" global": {
+      "prefix": "LABEL_HAS_POINTER",
+      "body": "LABEL_HAS_POINTER"
+    },
+    "\"LABEL_POSITION\" global": {
+      "prefix": "LABEL_POSITION",
+      "body": "LABEL_POSITION[${01:index}][${02:index}]"
+    },
+    "\"LAYOUT_CHANGE_HISTORY\" global": {
+      "prefix": "LAYOUT_CHANGE_HISTORY",
+      "body": "LAYOUT_CHANGE_HISTORY[${01:index}][${02:index}]"
+    },
+    "\"LAYOUT_CURRENTREVISION_OPEN\" global": {
+      "prefix": "LAYOUT_CURRENTREVISION_OPEN",
+      "body": "LAYOUT_CURRENTREVISION_OPEN"
+    },
+    "\"LAYOUT_REVISION_HISTORY\" global": {
+      "prefix": "LAYOUT_REVISION_HISTORY",
+      "body": "LAYOUT_REVISION_HISTORY[${01:index}][${01:index}]"
+    },
+    "\"LIGHT_BLUE\" global": {
+      "prefix": "LIGHT_BLUE",
+      "body": "LIGHT_BLUE"
+    },
+    "\"LIGHT_GREEN\" global": {
+      "prefix": "LIGHT_GREEN",
+      "body": "LIGHT_GREEN"
+    },
+    "\"LIGHT_INTENSITY\" global": {
+      "prefix": "LIGHT_INTENSITY",
+      "body": "LIGHT_INTENSITY"
+    },
+    "\"LIGHT_ON\" global": {
+      "prefix": "LIGHT_ON",
+      "body": "LIGHT_ON"
+    },
+    "\"LIGHT_RED\" global": {
+      "prefix": "LIGHT_RED",
+      "body": "LIGHT_RED"
+    },
+    "\"MARKER_HEAD_ANGLE\" global": {
+      "prefix": "MARKER_HEAD_ANGLE",
+      "body": "MARKER_HEAD_ANGLE"
+    },
+    "\"MARKER_HEAD_ROT_MODE\" global": {
+      "prefix": "MARKER_HEAD_ROT_MODE",
+      "body": "MARKER_HEAD_ROT_MODE"
+    },
+    "\"MESH_BASE_OFFSET\" global": {
+      "prefix": "MESH_BASE_OFFSET",
+      "body": "MESH_BASE_OFFSET"
+    },
+    "\"MESH_BMAT\" global": {
+      "prefix": "MESH_BMAT",
+      "body": "MESH_BMAT"
+    },
+    "\"MESH_BMAT_NAME\" global": {
+      "prefix": "MESH_BMAT_NAME",
+      "body": "MESH_BMAT_NAME"
+    },
+    "\"MESH_BOTTOM_SURF\" global": {
+      "prefix": "MESH_BOTTOM_SURF",
+      "body": "MESH_BOTTOM_SURF"
+    },
+    "\"MESH_EDGE_SURF\" global": {
+      "prefix": "MESH_EDGE_SURF",
+      "body": "MESH_EDGE_SURF"
+    },
+    "\"MESH_FBGD_PEN\" global": {
+      "prefix": "MESH_FBGD_PEN",
+      "body": "MESH_FBGD_PEN"
+    },
+    "\"MESH_FILL\" global": {
+      "prefix": "MESH_FILL",
+      "body": "MESH_FILL"
+    },
+    "\"MESH_FILL_PEN\" global": {
+      "prefix": "MESH_FILL_PEN",
+      "body": "MESH_FILL_PEN"
+    },
+    "\"MESH_HOLES_AREA\" global": {
+      "prefix": "MESH_HOLES_AREA",
+      "body": "MESH_HOLES_AREA"
+    },
+    "\"MESH_HOLES_NR\" global": {
+      "prefix": "MESH_HOLES_NR",
+      "body": "MESH_HOLES_NR"
+    },
+    "\"MESH_HOLES_PRM\" global": {
+      "prefix": "MESH_HOLES_PRM",
+      "body": "MESH_HOLES_PRM"
+    },
+    "\"MESH_LINETYPE\" global": {
+      "prefix": "MESH_LINETYPE",
+      "body": "MESH_LINETYPE"
+    },
+    "\"MESH_MAT_BOTT\" global": {
+      "prefix": "MESH_MAT_BOTT",
+      "body": "MESH_MAT_BOTT"
+    },
+    "\"MESH_MAT_EDGE\" global": {
+      "prefix": "MESH_MAT_EDGE",
+      "body": "MESH_MAT_EDGE"
+    },
+    "\"MESH_MAT_TOP\" global": {
+      "prefix": "MESH_MAT_TOP",
+      "body": "MESH_MAT_TOP"
+    },
+    "\"MESH_PERIMETER\" global": {
+      "prefix": "MESH_PERIMETER",
+      "body": "MESH_PERIMETER"
+    },
+    "\"MESH_SECT_PEN\" global": {
+      "prefix": "MESH_SECT_PEN",
+      "body": "MESH_SECT_PEN"
+    },
+    "\"MESH_SEGMENTS_NR\" global": {
+      "prefix": "MESH_SEGMENTS_NR",
+      "body": "MESH_SEGMENTS_NR"
+    },
+    "\"MESH_TOP_SURF\" global": {
+      "prefix": "MESH_TOP_SURF",
+      "body": "MESH_TOP_SURF"
+    },
+    "\"MESH_TRIEDGE_PEN\" global": {
+      "prefix": "MESH_TRIEDGE_PEN",
+      "body": "MESH_TRIEDGE_PEN"
+    },
+    "\"MESH_TYPE\" global": {
+      "prefix": "MESH_TYPE",
+      "body": "MESH_TYPE"
+    },
+    "\"MESH_USEREDGE_PEN\" global": {
+      "prefix": "MESH_USEREDGE_PEN",
+      "body": "MESH_USEREDGE_PEN"
+    },
+    "\"MESH_VIEW_PEN\" global": {
+      "prefix": "MESH_VIEW_PEN",
+      "body": "MESH_VIEW_PEN"
+    },
+    "\"MESH_VOLUME\" global": {
+      "prefix": "MESH_VOLUME",
+      "body": "MESH_VOLUME"
+    },
+    "\"MORPH_BMAT\" global": {
+      "prefix": "MORPH_BMAT",
+      "body": "MORPH_BMAT"
+    },
+    "\"MORPH_BMAT_NAME\" global": {
+      "prefix": "MORPH_BMAT_NAME",
+      "body": "MORPH_BMAT_NAME"
+    },
+    "\"MORPH_CASTS_SHADOW\" global": {
+      "prefix": "MORPH_CASTS_SHADOW",
+      "body": "MORPH_CASTS_SHADOW"
+    },
+    "\"MORPH_FBGD_PEN\" global": {
+      "prefix": "MORPH_FBGD_PEN",
+      "body": "MORPH_FBGD_PEN"
+    },
+    "\"MORPH_FILL\" global": {
+      "prefix": "MORPH_FILL",
+      "body": "MORPH_FILL"
+    },
+    "\"MORPH_FILL_PEN\" global": {
+      "prefix": "MORPH_FILL_PEN",
+      "body": "MORPH_FILL_PEN"
+    },
+    "\"MORPH_FLOOR_PERIMETER\" global": {
+      "prefix": "MORPH_FLOOR_PERIMETER",
+      "body": "MORPH_FLOOR_PERIMETER"
+    },
+    "\"MORPH_LINETYPE\" global": {
+      "prefix": "MORPH_LINETYPE",
+      "body": "MORPH_LINETYPE"
+    },
+    "\"MORPH_MAT_DEFAULT\" global": {
+      "prefix": "MORPH_MAT_DEFAULT",
+      "body": "MORPH_MAT_DEFAULT"
+    },
+    "\"MORPH_RECEIVES_SHADOW\" global": {
+      "prefix": "MORPH_RECEIVES_SHADOW",
+      "body": "MORPH_RECEIVES_SHADOW"
+    },
+    "\"MORPH_SECT_LINETYPE\" global": {
+      "prefix": "MORPH_SECT_LINETYPE",
+      "body": "MORPH_SECT_LINETYPE"
+    },
+    "\"MORPH_SECT_PEN\" global": {
+      "prefix": "MORPH_SECT_PEN",
+      "body": "MORPH_SECT_PEN"
+    },
+    "\"MORPH_SOLID\" global": {
+      "prefix": "MORPH_SOLID",
+      "body": "MORPH_SOLID"
+    },
+    "\"MORPH_SURFACE\" global": {
+      "prefix": "MORPH_SURFACE",
+      "body": "MORPH_SURFACE"
+    },
+    "\"MORPH_VIEW_PEN\" global": {
+      "prefix": "MORPH_VIEW_PEN",
+      "body": "MORPH_VIEW_PEN"
+    },
+    "\"MORPH_VOLUME\" global": {
+      "prefix": "MORPH_VOLUME",
+      "body": "MORPH_VOLUME"
+    },
+    "\"RAIL_COMPONENTS\" global": {
+      "prefix": "RAIL_COMPONENTS",
+      "body": "RAIL_COMPONENTS[${01:index}]"
+    },
+    "\"RAIL_CONNECTING_POSTS\" global": {
+      "prefix": "RAIL_CONNECTING_POSTS",
+      "body": "RAIL_CONNECTING_POSTS[${01:index}][${02:index}]"
+    },
+    "\"RAIL_CONNECTING_POSTS_NUM\" global": {
+      "prefix": "RAIL_CONNECTING_POSTS_NUM",
+      "body": "RAIL_CONNECTING_POSTS_NUM"
+    },
+    "\"RAIL_CUTS\" global": {
+      "prefix": "RAIL_CUTS",
+      "body": "RAIL_CUTS[${01:index}][${02:index}]"
+    },
+    "\"RAIL_DISCONNECTED_CUTS\" global": {
+      "prefix": "RAIL_DISCONNECTED_CUTS",
+      "body": "RAIL_DISCONNECTED_CUTS[${01:index}][${02:index}]"
+    },
+    "\"RAIL_POLYLINE_GEOMETRY\" global": {
+      "prefix": "RAIL_POLYLINE_GEOMETRY",
+      "body": "RAIL_POLYLINE_GEOMETRY[${01:index}][${02:index}]"
+    },
+    "\"RAIL_SEGMENT_FLAGS\" global": {
+      "prefix": "RAIL_SEGMENT_FLAGS",
+      "body": "RAIL_SEGMENT_FLAGS[${01:index}]"
+    },
+    "\"RAIL_SLANT_ANGLE\" global": {
+      "prefix": "RAIL_SLANT_ANGLE",
+      "body": "RAIL_SLANT_ANGLE"
+    },
+    "\"RAIL_TYPE\" global": {
+      "prefix": "RAIL_TYPE",
+      "body": "RAIL_TYPE"
+    },
+    "\"RAIL2D_CUSTOMDISPLAY\" global": {
+      "prefix": "RAIL2D_CUSTOMDISPLAY",
+      "body": "RAIL2D_CUSTOMDISPLAY"
+    },
+    "\"RAIL2D_FULL_POLYGON_FLAGS\" global": {
+      "prefix": "RAIL2D_FULL_POLYGON_FLAGS",
+      "body": "RAIL2D_FULL_POLYGON_FLAGS[${01:index}][1]"
+    },
+    "\"RAIL2D_FULL_POLYGON_GEOM\" global": {
+      "prefix": "RAIL2D_FULL_POLYGON_GEOM",
+      "body": "RAIL2D_FULL_POLYGON_GEOM[${01:index}][${02:index}]"
+    },
+    "\"RAIL2D_FULL_POLYLINE_FLAGS\" global": {
+      "prefix": "RAIL2D_FULL_POLYLINE_FLAGS",
+      "body": "RAIL2D_FULL_POLYLINE_FLAGS[${01:index}][1]"
+    },
+    "\"RAIL2D_FULL_POLYLINE_GEOM\" global": {
+      "prefix": "RAIL2D_FULL_POLYLINE_GEOM",
+      "body": "RAIL2D_FULL_POLYLINE_GEOM[${01:index}][${02:index}]"
+    },
+    "\"RAIL2D_FULL_VISIBILITY\" global": {
+      "prefix": "RAIL2D_FULL_VISIBILITY",
+      "body": "RAIL2D_FULL_VISIBILITY"
+    },
+    "\"RAIL2D_LOWER_POLYGON_FLAGS\" global": {
+      "prefix": "RAIL2D_LOWER_POLYGON_FLAGS",
+      "body": "RAIL2D_LOWER_POLYGON_FLAGS[${01:index}][1]"
+    },
+    "\"RAIL2D_LOWER_POLYGON_GEOM\" global": {
+      "prefix": "RAIL2D_LOWER_POLYGON_GEOM",
+      "body": "RAIL2D_LOWER_POLYGON_GEOM[${01:index}][${02:index}]"
+    },
+    "\"RAIL2D_LOWER_POLYLINE_FLAGS\" global": {
+      "prefix": "RAIL2D_LOWER_POLYLINE_FLAGS",
+      "body": "RAIL2D_LOWER_POLYLINE_FLAGS[${01:index}][1]"
+    },
+    "\"RAIL2D_LOWER_POLYLINE_GEOM\" global": {
+      "prefix": "RAIL2D_LOWER_POLYLINE_GEOM",
+      "body": "RAIL2D_LOWER_POLYLINE_GEOM[${01:index}][${02:index}]"
+    },
+    "\"RAIL2D_LOWER_VISIBILITY\" global": {
+      "prefix": "RAIL2D_LOWER_VISIBILITY",
+      "body": "RAIL2D_LOWER_VISIBILITY"
+    },
+    "\"RAIL2D_MIDDLE_POLYGON_FLAGS\" global": {
+      "prefix": "RAIL2D_MIDDLE_POLYGON_FLAGS",
+      "body": "RAIL2D_MIDDLE_POLYGON_FLAGS[${01:index}][1]"
+    },
+    "\"RAIL2D_MIDDLE_POLYGON_GEOM\" global": {
+      "prefix": "RAIL2D_MIDDLE_POLYGON_GEOM",
+      "body": "RAIL2D_MIDDLE_POLYGON_GEOM[${01:index}][${02:index}]"
+    },
+    "\"RAIL2D_MIDDLE_POLYLINE_FLAGS\" global": {
+      "prefix": "RAIL2D_MIDDLE_POLYLINE_FLAGS",
+      "body": "RAIL2D_MIDDLE_POLYLINE_FLAGS[${01:index}][1]"
+    },
+    "\"RAIL2D_MIDDLE_POLYLINE_GEOM\" global": {
+      "prefix": "RAIL2D_MIDDLE_POLYLINE_GEOM",
+      "body": "RAIL2D_MIDDLE_POLYLINE_GEOM[${01:index}][${02:index}]"
+    },
+    "\"RAIL2D_MIDDLE_VISIBILITY\" global": {
+      "prefix": "RAIL2D_MIDDLE_VISIBILITY",
+      "body": "RAIL2D_MIDDLE_VISIBILITY"
+    },
+    "\"RAIL2D_UPPER_POLYGON_FLAGS\" global": {
+      "prefix": "RAIL2D_UPPER_POLYGON_FLAGS",
+      "body": "RAIL2D_UPPER_POLYGON_FLAGS[${01:index}][1]"
+    },
+    "\"RAIL2D_UPPER_POLYGON_GEOM\" global": {
+      "prefix": "RAIL2D_UPPER_POLYGON_GEOM",
+      "body": "RAIL2D_UPPER_POLYGON_GEOM[${01:index}][${02:index}]"
+    },
+    "\"RAIL2D_UPPER_POLYLINE_FLAGS\" global": {
+      "prefix": "RAIL2D_UPPER_POLYLINE_FLAGS",
+      "body": "RAIL2D_UPPER_POLYLINE_FLAGS[${01:index}][1]"
+    },
+    "\"RAIL2D_UPPER_POLYLINE_GEOM\" global": {
+      "prefix": "RAIL2D_UPPER_POLYLINE_GEOM",
+      "body": "RAIL2D_UPPER_POLYLINE_GEOM[${01:index}][${02:index}]"
+    },
+    "\"RAIL2D_UPPER_VISIBILITY\" global": {
+      "prefix": "RAIL2D_UPPER_VISIBILITY",
+      "body": "RAIL2D_UPPER_VISIBILITY"
+    },
+    "\"RAILING_3DLENGTH\" global": {
+      "prefix": "RAILING_3DLENGTH",
+      "body": "RAILING_3DLENGTH"
+    },
+    "\"RAILING_HEIGHT\" global": {
+      "prefix": "RAILING_HEIGHT",
+      "body": "RAILING_HEIGHT"
+    },
+    "\"RAILING_HORIZONTAL_LENGTH\" global": {
+      "prefix": "RAILING_HORIZONTAL_LENGTH",
+      "body": "RAILING_HORIZONTAL_LENGTH"
+    },
+    "\"RAILING_NR_OF_BALUSTERS\" global": {
+      "prefix": "RAILING_NR_OF_BALUSTERS",
+      "body": "RAILING_NR_OF_BALUSTERS"
+    },
+    "\"RAILING_NR_OF_PANELS\" global": {
+      "prefix": "RAILING_NR_OF_PANELS",
+      "body": "RAILING_NR_OF_PANELS"
+    },
+    "\"RAILING_NR_OF_POSTS\" global": {
+      "prefix": "RAILING_NR_OF_POSTS",
+      "body": "RAILING_NR_OF_POSTS"
+    },
+    "\"RAILING_NR_OF_RAILS\" global": {
+      "prefix": "RAILING_NR_OF_RAILS",
+      "body": "RAILING_NR_OF_RAILS"
+    },
+    "\"RAILING_NR_OF_SEGMENTS\" global": {
+      "prefix": "RAILING_NR_OF_SEGMENTS",
+      "body": "RAILING_NR_OF_SEGMENTS"
+    },
+    "\"RAILING_REFLINE_DISTANCE\" global": {
+      "prefix": "RAILING_REFLINE_DISTANCE",
+      "body": "RAILING_REFLINE_DISTANCE[${01:index}]"
+    },
+    "\"RAILING_VOLUME\" global": {
+      "prefix": "RAILING_VOLUME",
+      "body": "RAILING_VOLUME"
+    },
+    "\"RAILINGEND_DIRECTION_AND_ANGLE\" global": {
+      "prefix": "RAILINGEND_DIRECTION_AND_ANGLE",
+      "body": "RAILINGEND_DIRECTION_AND_ANGLE[${01:index}][${02:index}]"
+    },
+    "\"RAILINGPANEL_FLAGS\" global": {
+      "prefix": "RAILINGPANEL_FLAGS",
+      "body": "RAILINGPANEL_FLAGS[${01:index}][${02:index}]"
+    },
+    "\"RAILINGPANEL_GEOMETRY\" global": {
+      "prefix": "RAILINGPANEL_GEOMETRY",
+      "body": "RAILINGPANEL_GEOMETRY[${01:index}][${02:index}]"
+    },
+    "\"RAILINGPANEL_SIDE_OFFSETS\" global": {
+      "prefix": "RAILINGPANEL_SIDE_OFFSETS",
+      "body": "RAILINGPANEL_SIDE_OFFSETS[${01:index}]"
+    },
+    "\"RAILINGPANEL_SKEW_ANGLE\" global": {
+      "prefix": "RAILINGPANEL_SKEW_ANGLE",
+      "body": "RAILINGPANEL_SKEW_ANGLE"
+    },
+    "\"RAILINGPANEL_SLANT_ANGLE\" global": {
+      "prefix": "RAILINGPANEL_SLANT_ANGLE",
+      "body": "RAILINGPANEL_SLANT_ANGLE"
+    },
+    "\"RAILINGPANEL_TYPE\" global": {
+      "prefix": "RAILINGPANEL_TYPE",
+      "body": "RAILINGPANEL_TYPE"
+    },
+    "\"RAILINGPANEL_UNCUT_GEOMETRY\" global": {
+      "prefix": "RAILINGPANEL_UNCUT_GEOMETRY",
+      "body": "RAILINGPANEL_UNCUT_GEOMETRY[${01:index}][${02:index}]"
+    },
+    "\"RAILINGPOST_CUTS\" global": {
+      "prefix": "RAILINGPOST_CUTS",
+      "body": "RAILINGPOST_CUTS[${01:index}][${02:index}]"
+    },
+    "\"RAILINGPOST_SEGMENT_CUTS\" global": {
+      "prefix": "RAILINGPOST_SEGMENT_CUTS",
+      "body": "RAILINGPOST_SEGMENT_CUTS[${01:index}][${02:index}]"
+    },
+    "\"RAILINGPOST_TOP_COORD\" global": {
+      "prefix": "RAILINGPOST_TOP_COORD",
+      "body": "RAILINGPOST_TOP_COORD[${01:index}]"
+    },
+    "\"RAILINGPOST_TYPE\" global": {
+      "prefix": "RAILINGPOST_TYPE",
+      "body": "RAILINGPOST_TYPE"
+    },
+    "\"RAILPOST2D_VISIBILITY\" global": {
+      "prefix": "RAILPOST2D_VISIBILITY",
+      "body": "RAILPOST2D_VISIBILITY"
+    },
+    "\"RISER_BMATS\" global": {
+      "prefix": "RISER_BMATS",
+      "body": "RISER_BMATS[${01:index}]"
+    },
+    "\"RISER_CUT\" global": {
+      "prefix": "RISER_CUT",
+      "body": "RISER_CUT[${01:index}][${02:index}]"
+    },
+    "\"RISER_FRONT_AREA\" global": {
+      "prefix": "RISER_FRONT_AREA",
+      "body": "RISER_FRONT_AREA"
+    },
+    "\"RISER_HEIGHT\" global": {
+      "prefix": "RISER_HEIGHT",
+      "body": "RISER_HEIGHT"
+    },
+    "\"RISER_SLANT_ANGLE\" global": {
+      "prefix": "RISER_SLANT_ANGLE",
+      "body": "RISER_SLANT_ANGLE"
+    },
+    "\"RISER_STEP_INDEX\" global": {
+      "prefix": "RISER_STEP_INDEX",
+      "body": "RISER_STEP_INDEX"
+    },
+    "\"RISER_THICKNESS\" global": {
+      "prefix": "RISER_THICKNESS",
+      "body": "RISER_THICKNESS"
+    },
+    "\"RISER_VOLUME\" global": {
+      "prefix": "RISER_VOLUME",
+      "body": "RISER_VOLUME"
+    },
+    "\"RISER_WIDTH\" global": {
+      "prefix": "RISER_WIDTH",
+      "body": "RISER_WIDTH"
+    },
+    "\"ROOF_ANGLE\" global": {
+      "prefix": "ROOF_ANGLE",
+      "body": "ROOF_ANGLE"
+    },
+    "\"ROOF_BMAT\" global": {
+      "prefix": "ROOF_BMAT",
+      "body": "ROOF_BMAT"
+    },
+    "\"ROOF_BMAT_NAME\" global": {
+      "prefix": "ROOF_BMAT_NAME",
+      "body": "ROOF_BMAT_NAME"
+    },
+    "\"ROOF_BOTTOM_SURF\" global": {
+      "prefix": "ROOF_BOTTOM_SURF",
+      "body": "ROOF_BOTTOM_SURF"
+    },
+    "\"ROOF_BOTTOM_SURF_CON\" global": {
+      "prefix": "ROOF_BOTTOM_SURF_CON",
+      "body": "ROOF_BOTTOM_SURF_CON"
+    },
+    "\"ROOF_COMPS_NAME\" global": {
+      "prefix": "ROOF_COMPS_NAME",
+      "body": "ROOF_COMPS_NAME"
+    },
+    "\"ROOF_CONTOUR_AREA\" global": {
+      "prefix": "ROOF_CONTOUR_AREA",
+      "body": "ROOF_CONTOUR_AREA"
+    },
+    "\"ROOF_EAVES\" global": {
+      "prefix": "ROOF_EAVES",
+      "body": "ROOF_EAVES"
+    },
+    "\"ROOF_EDGE_SURF\" global": {
+      "prefix": "ROOF_EDGE_SURF",
+      "body": "ROOF_EDGE_SURF"
+    },
+    "\"ROOF_END_WALL\" global": {
+      "prefix": "ROOF_END_WALL",
+      "body": "ROOF_END_WALL"
+    },
+    "\"ROOF_FBGD_PEN\" global": {
+      "prefix": "ROOF_FBGD_PEN",
+      "body": "ROOF_FBGD_PEN"
+    },
+    "\"ROOF_FILL\" global": {
+      "prefix": "ROOF_FILL",
+      "body": "ROOF_FILL"
+    },
+    "\"ROOF_FILL_PEN\" global": {
+      "prefix": "ROOF_FILL_PEN",
+      "body": "ROOF_FILL_PEN"
+    },
+    "\"ROOF_GABLE\" global": {
+      "prefix": "ROOF_GABLE",
+      "body": "ROOF_GABLE"
+    },
+    "\"ROOF_GROSS_BOTTOM_SURF\" global": {
+      "prefix": "ROOF_GROSS_BOTTOM_SURF",
+      "body": "ROOF_GROSS_BOTTOM_SURF"
+    },
+    "\"ROOF_GROSS_EDGE_SURF\" global": {
+      "prefix": "ROOF_GROSS_EDGE_SURF",
+      "body": "ROOF_GROSS_EDGE_SURF"
+    },
+    "\"ROOF_GROSS_TOP_SURF\" global": {
+      "prefix": "ROOF_GROSS_TOP_SURF",
+      "body": "ROOF_GROSS_TOP_SURF"
+    },
+    "\"ROOF_GROSS_VOLUME\" global": {
+      "prefix": "ROOF_GROSS_VOLUME",
+      "body": "ROOF_GROSS_VOLUME"
+    },
+    "\"ROOF_HIP\" global": {
+      "prefix": "ROOF_HIP",
+      "body": "ROOF_HIP"
+    },
+    "\"ROOF_HOLES_AREA\" global": {
+      "prefix": "ROOF_HOLES_AREA",
+      "body": "ROOF_HOLES_AREA"
+    },
+    "\"ROOF_HOLES_NR\" global": {
+      "prefix": "ROOF_HOLES_NR",
+      "body": "ROOF_HOLES_NR"
+    },
+    "\"ROOF_HOLES_PRM\" global": {
+      "prefix": "ROOF_HOLES_PRM",
+      "body": "ROOF_HOLES_PRM"
+    },
+    "\"ROOF_INSU_THICKNESS\" global": {
+      "prefix": "ROOF_INSU_THICKNESS",
+      "body": "ROOF_INSU_THICKNESS"
+    },
+    "\"ROOF_LINETYPE\" global": {
+      "prefix": "ROOF_LINETYPE",
+      "body": "ROOF_LINETYPE"
+    },
+    "\"ROOF_MAT_BOTT\" global": {
+      "prefix": "ROOF_MAT_BOTT",
+      "body": "ROOF_MAT_BOTT"
+    },
+    "\"ROOF_MAT_EDGE\" global": {
+      "prefix": "ROOF_MAT_EDGE",
+      "body": "ROOF_MAT_EDGE"
+    },
+    "\"ROOF_MAT_TOP\" global": {
+      "prefix": "ROOF_MAT_TOP",
+      "body": "ROOF_MAT_TOP"
+    },
+    "\"ROOF_PEAK\" global": {
+      "prefix": "ROOF_PEAK",
+      "body": "ROOF_PEAK"
+    },
+    "\"ROOF_PERIMETER\" global": {
+      "prefix": "ROOF_PERIMETER",
+      "body": "ROOF_PERIMETER"
+    },
+    "\"ROOF_RIDGE\" global": {
+      "prefix": "ROOF_RIDGE",
+      "body": "ROOF_RIDGE"
+    },
+    "\"ROOF_SECT_PEN\" global": {
+      "prefix": "ROOF_SECT_PEN",
+      "body": "ROOF_SECT_PEN"
+    },
+    "\"ROOF_SEGMENTS_NR\" global": {
+      "prefix": "ROOF_SEGMENTS_NR",
+      "body": "ROOF_SEGMENTS_NR"
+    },
+    "\"ROOF_SIDE_WALL\" global": {
+      "prefix": "ROOF_SIDE_WALL",
+      "body": "ROOF_SIDE_WALL"
+    },
+    "\"ROOF_SKINS_BMAT_NAMES\" global": {
+      "prefix": "ROOF_SKINS_BMAT_NAMES",
+      "body": "ROOF_SKINS_BMAT_NAMES[${01:index}][1]"
+    },
+    "\"ROOF_SKINS_NUMBER\" global": {
+      "prefix": "ROOF_SKINS_NUMBER",
+      "body": "ROOF_SKINS_NUMBER"
+    },
+    "\"ROOF_SKINS_PARAMS\" global": {
+      "prefix": "ROOF_SKINS_PARAMS",
+      "body": "ROOF_SKINS_PARAMS[${01:index}][${02:index}]"
+    },
+    "\"ROOF_THICKNESS\" global": {
+      "prefix": "ROOF_THICKNESS",
+      "body": "ROOF_THICKNESS"
+    },
+    "\"ROOF_TOP_SURF\" global": {
+      "prefix": "ROOF_TOP_SURF",
+      "body": "ROOF_TOP_SURF"
+    },
+    "\"ROOF_TOP_SURF_CON\" global": {
+      "prefix": "ROOF_TOP_SURF_CON",
+      "body": "ROOF_TOP_SURF_CON"
+    },
+    "\"ROOF_TRANSITION_DOME\" global": {
+      "prefix": "ROOF_TRANSITION_DOME",
+      "body": "ROOF_TRANSITION_DOME"
+    },
+    "\"ROOF_TRANSITION_HOLLOW\" global": {
+      "prefix": "ROOF_TRANSITION_HOLLOW",
+      "body": "ROOF_TRANSITION_HOLLOW"
+    },
+    "\"ROOF_VALLEY\" global": {
+      "prefix": "ROOF_VALLEY",
+      "body": "ROOF_VALLEY"
+    },
+    "\"ROOF_VIEW_PEN\" global": {
+      "prefix": "ROOF_VIEW_PEN",
+      "body": "ROOF_VIEW_PEN"
+    },
+    "\"ROOF_VOLUME\" global": {
+      "prefix": "ROOF_VOLUME",
+      "body": "ROOF_VOLUME"
+    },
+    "\"ROOF_VOLUME_CON\" global": {
+      "prefix": "ROOF_VOLUME_CON",
+      "body": "ROOF_VOLUME_CON"
+    },
+    "\"SHELLBASE_BMAT\" global": {
+      "prefix": "SHELLBASE_BMAT",
+      "body": "SHELLBASE_BMAT"
+    },
+    "\"SHELLBASE_BMAT_NAME\" global": {
+      "prefix": "SHELLBASE_BMAT_NAME",
+      "body": "SHELLBASE_BMAT_NAME"
+    },
+    "\"SHELLBASE_COMPS_NAME\" global": {
+      "prefix": "SHELLBASE_COMPS_NAME",
+      "body": "SHELLBASE_COMPS_NAME"
+    },
+    "\"SHELLBASE_COND_OPPOSITE_SURF\" global": {
+      "prefix": "SHELLBASE_COND_OPPOSITE_SURF",
+      "body": "SHELLBASE_COND_OPPOSITE_SURF"
+    },
+    "\"SHELLBASE_COND_REFERENCE_SURF\" global": {
+      "prefix": "SHELLBASE_COND_REFERENCE_SURF",
+      "body": "SHELLBASE_COND_REFERENCE_SURF"
+    },
+    "\"SHELLBASE_COND_VOLUME\" global": {
+      "prefix": "SHELLBASE_COND_VOLUME",
+      "body": "SHELLBASE_COND_VOLUME"
+    },
+    "\"SHELLBASE_EAVES\" global": {
+      "prefix": "SHELLBASE_EAVES",
+      "body": "SHELLBASE_EAVES"
+    },
+    "\"SHELLBASE_EDGE_SURF\" global": {
+      "prefix": "SHELLBASE_EDGE_SURF",
+      "body": "SHELLBASE_EDGE_SURF"
+    },
+    "\"SHELLBASE_END_WALL\" global": {
+      "prefix": "SHELLBASE_END_WALL",
+      "body": "SHELLBASE_END_WALL"
+    },
+    "\"SHELLBASE_FBGD_PEN\" global": {
+      "prefix": "SHELLBASE_FBGD_PEN",
+      "body": "SHELLBASE_FBGD_PEN"
+    },
+    "\"SHELLBASE_FILL\" global": {
+      "prefix": "SHELLBASE_FILL",
+      "body": "SHELLBASE_FILL"
+    },
+    "\"SHELLBASE_FILL_PEN\" global": {
+      "prefix": "SHELLBASE_FILL_PEN",
+      "body": "SHELLBASE_FILL_PEN"
+    },
+    "\"SHELLBASE_GABLE\" global": {
+      "prefix": "SHELLBASE_GABLE",
+      "body": "SHELLBASE_GABLE"
+    },
+    "\"SHELLBASE_GROSS_EDGE_SURF\" global": {
+      "prefix": "SHELLBASE_GROSS_EDGE_SURF",
+      "body": "SHELLBASE_GROSS_EDGE_SURF"
+    },
+    "\"SHELLBASE_GROSS_OPPOSITE_SURF\" global": {
+      "prefix": "SHELLBASE_GROSS_OPPOSITE_SURF",
+      "body": "SHELLBASE_GROSS_OPPOSITE_SURF"
+    },
+    "\"SHELLBASE_GROSS_REFERENCE_SURF\" global": {
+      "prefix": "SHELLBASE_GROSS_REFERENCE_SURF",
+      "body": "SHELLBASE_GROSS_REFERENCE_SURF"
+    },
+    "\"SHELLBASE_GROSS_VOLUME\" global": {
+      "prefix": "SHELLBASE_GROSS_VOLUME",
+      "body": "SHELLBASE_GROSS_VOLUME"
+    },
+    "\"SHELLBASE_HIP\" global": {
+      "prefix": "SHELLBASE_HIP",
+      "body": "SHELLBASE_HIP"
+    },
+    "\"SHELLBASE_HOLES_NR\" global": {
+      "prefix": "SHELLBASE_HOLES_NR",
+      "body": "SHELLBASE_HOLES_NR"
+    },
+    "\"SHELLBASE_HOLES_PRM\" global": {
+      "prefix": "SHELLBASE_HOLES_PRM",
+      "body": "SHELLBASE_HOLES_PRM"
+    },
+    "\"SHELLBASE_HOLES_SURF\" global": {
+      "prefix": "SHELLBASE_HOLES_SURF",
+      "body": "SHELLBASE_HOLES_SURF"
+    },
+    "\"SHELLBASE_INSU_THICKNESS\" global": {
+      "prefix": "SHELLBASE_INSU_THICKNESS",
+      "body": "SHELLBASE_INSU_THICKNESS"
+    },
+    "\"SHELLBASE_LINETYPE\" global": {
+      "prefix": "SHELLBASE_LINETYPE",
+      "body": "SHELLBASE_LINETYPE"
+    },
+    "\"SHELLBASE_MAT_EDGE\" global": {
+      "prefix": "SHELLBASE_MAT_EDGE",
+      "body": "SHELLBASE_MAT_EDGE"
+    },
+    "\"SHELLBASE_MAT_OPPOSITE\" global": {
+      "prefix": "SHELLBASE_MAT_OPPOSITE",
+      "body": "SHELLBASE_MAT_OPPOSITE"
+    },
+    "\"SHELLBASE_MAT_REFERENCE\" global": {
+      "prefix": "SHELLBASE_MAT_REFERENCE",
+      "body": "SHELLBASE_MAT_REFERENCE"
+    },
+    "\"SHELLBASE_OPENINGS_NR\" global": {
+      "prefix": "SHELLBASE_OPENINGS_NR",
+      "body": "SHELLBASE_OPENINGS_NR"
+    },
+    "\"SHELLBASE_OPENINGS_SURF\" global": {
+      "prefix": "SHELLBASE_OPENINGS_SURF",
+      "body": "SHELLBASE_OPENINGS_SURF"
+    },
+    "\"SHELLBASE_OPPOSITE_SURF\" global": {
+      "prefix": "SHELLBASE_OPPOSITE_SURF",
+      "body": "SHELLBASE_OPPOSITE_SURF"
+    },
+    "\"SHELLBASE_PEAK\" global": {
+      "prefix": "SHELLBASE_PEAK",
+      "body": "SHELLBASE_PEAK"
+    },
+    "\"SHELLBASE_PERIMETER\" global": {
+      "prefix": "SHELLBASE_PERIMETER",
+      "body": "SHELLBASE_PERIMETER"
+    },
+    "\"SHELLBASE_REFERENCE_SURF\" global": {
+      "prefix": "SHELLBASE_REFERENCE_SURF",
+      "body": "SHELLBASE_REFERENCE_SURF"
+    },
+    "\"SHELLBASE_RIDGE\" global": {
+      "prefix": "SHELLBASE_RIDGE",
+      "body": "SHELLBASE_RIDGE"
+    },
+    "\"SHELLBASE_SECT_PEN\" global": {
+      "prefix": "SHELLBASE_SECT_PEN",
+      "body": "SHELLBASE_SECT_PEN"
+    },
+    "\"SHELLBASE_SIDE_WALL\" global": {
+      "prefix": "SHELLBASE_SIDE_WALL",
+      "body": "SHELLBASE_SIDE_WALL"
+    },
+    "\"SHELLBASE_SKINS_BMAT_NAMES\" global": {
+      "prefix": "SHELLBASE_SKINS_BMAT_NAMES",
+      "body": "SHELLBASE_SKINS_BMAT_NAMES[${01:index}][1]"
+    },
+    "\"SHELLBASE_SKINS_NUMBER\" global": {
+      "prefix": "SHELLBASE_SKINS_NUMBER",
+      "body": "SHELLBASE_SKINS_NUMBER"
+    },
+    "\"SHELLBASE_SKINS_PARAMS\" global": {
+      "prefix": "SHELLBASE_SKINS_PARAMS",
+      "body": "SHELLBASE_SKINS_PARAMS[${01:index}][${02:index}]"
+    },
+    "\"SHELLBASE_THICKNESS\" global": {
+      "prefix": "SHELLBASE_THICKNESS",
+      "body": "SHELLBASE_THICKNESS"
+    },
+    "\"SHELLBASE_TRANSITION_DOME\" global": {
+      "prefix": "SHELLBASE_TRANSITION_DOME",
+      "body": "SHELLBASE_TRANSITION_DOME"
+    },
+    "\"SHELLBASE_TRANSITION_HOLLOW\" global": {
+      "prefix": "SHELLBASE_TRANSITION_HOLLOW",
+      "body": "SHELLBASE_TRANSITION_HOLLOW"
+    },
+    "\"SHELLBASE_VALLEY\" global": {
+      "prefix": "SHELLBASE_VALLEY",
+      "body": "SHELLBASE_VALLEY"
+    },
+    "\"SHELLBASE_VIEW_PEN\" global": {
+      "prefix": "SHELLBASE_VIEW_PEN",
+      "body": "SHELLBASE_VIEW_PEN"
+    },
+    "\"SHELLBASE_VOLUME\" global": {
+      "prefix": "SHELLBASE_VOLUME",
+      "body": "SHELLBASE_VOLUME"
+    },
+    "\"SKYL_HEADER_HEIGHT\" global": {
+      "prefix": "SKYL_HEADER_HEIGHT",
+      "body": "SKYL_HEADER_HEIGHT"
+    },
+    "\"SKYL_MARKER_TXT\" global": {
+      "prefix": "SKYL_MARKER_TXT",
+      "body": "SKYL_MARKER_TXT"
+    },
+    "\"SKYL_OPENING_HEIGHT\" global": {
+      "prefix": "SKYL_OPENING_HEIGHT",
+      "body": "SKYL_OPENING_HEIGHT"
+    },
+    "\"SKYL_OPENING_SURF\" global": {
+      "prefix": "SKYL_OPENING_SURF",
+      "body": "SKYL_OPENING_SURF"
+    },
+    "\"SKYL_OPENING_VOLUME\" global": {
+      "prefix": "SKYL_OPENING_VOLUME",
+      "body": "SKYL_OPENING_VOLUME"
+    },
+    "\"SKYL_OPENING_WIDTH\" global": {
+      "prefix": "SKYL_OPENING_WIDTH",
+      "body": "SKYL_OPENING_WIDTH"
+    },
+    "\"SKYL_SILL_HEIGHT\" global": {
+      "prefix": "SKYL_SILL_HEIGHT",
+      "body": "SKYL_SILL_HEIGHT"
+    },
+    "\"SLAB_BMAT\" global": {
+      "prefix": "SLAB_BMAT",
+      "body": "SLAB_BMAT"
+    },
+    "\"SLAB_BMAT_NAME\" global": {
+      "prefix": "SLAB_BMAT_NAME",
+      "body": "SLAB_BMAT_NAME"
+    },
+    "\"SLAB_BOT_SURF\" global": {
+      "prefix": "SLAB_BOT_SURF",
+      "body": "SLAB_BOT_SURF"
+    },
+    "\"SLAB_BOT_SURF_CON\" global": {
+      "prefix": "SLAB_BOT_SURF_CON",
+      "body": "SLAB_BOT_SURF_CON"
+    },
+    "\"SLAB_COMPS_NAME\" global": {
+      "prefix": "SLAB_COMPS_NAME",
+      "body": "SLAB_COMPS_NAME"
+    },
+    "\"SLAB_EDGE_SURF\" global": {
+      "prefix": "SLAB_EDGE_SURF",
+      "body": "SLAB_EDGE_SURF"
+    },
+    "\"SLAB_ELEVATION_BOTTOM\" global": {
+      "prefix": "SLAB_ELEVATION_BOTTOM",
+      "body": "SLAB_ELEVATION_BOTTOM"
+    },
+    "\"SLAB_ELEVATION_TOP\" global": {
+      "prefix": "SLAB_ELEVATION_TOP",
+      "body": "SLAB_ELEVATION_TOP"
+    },
+    "\"SLAB_FBGD_PEN\" global": {
+      "prefix": "SLAB_FBGD_PEN",
+      "body": "SLAB_FBGD_PEN"
+    },
+    "\"SLAB_FILL\" global": {
+      "prefix": "SLAB_FILL",
+      "body": "SLAB_FILL"
+    },
+    "\"SLAB_FILL_PEN\" global": {
+      "prefix": "SLAB_FILL_PEN",
+      "body": "SLAB_FILL_PEN"
+    },
+    "\"SLAB_GROSS_BOT_SURF\" global": {
+      "prefix": "SLAB_GROSS_BOT_SURF",
+      "body": "SLAB_GROSS_BOT_SURF"
+    },
+    "\"SLAB_GROSS_BOT_SURF_WITH_HOLES\" global": {
+      "prefix": "SLAB_GROSS_BOT_SURF_WITH_HOLES",
+      "body": "SLAB_GROSS_BOT_SURF_WITH_HOLES"
+    },
+    "\"SLAB_GROSS_EDGE_SURF\" global": {
+      "prefix": "SLAB_GROSS_EDGE_SURF",
+      "body": "SLAB_GROSS_EDGE_SURF"
+    },
+    "\"SLAB_GROSS_EDGE_SURF_WITH_HOLES\" global": {
+      "prefix": "SLAB_GROSS_EDGE_SURF_WITH_HOLES",
+      "body": "SLAB_GROSS_EDGE_SURF_WITH_HOLES"
+    },
+    "\"SLAB_GROSS_TOP_SURF\" global": {
+      "prefix": "SLAB_GROSS_TOP_SURF",
+      "body": "SLAB_GROSS_TOP_SURF"
+    },
+    "\"SLAB_GROSS_TOP_SURF_WITH_HOLES\" global": {
+      "prefix": "SLAB_GROSS_TOP_SURF_WITH_HOLES",
+      "body": "SLAB_GROSS_TOP_SURF_WITH_HOLES"
+    },
+    "\"SLAB_GROSS_VOLUME\" global": {
+      "prefix": "SLAB_GROSS_VOLUME",
+      "body": "SLAB_GROSS_VOLUME"
+    },
+    "\"SLAB_GROSS_VOLUME_WITH_HOLES\" global": {
+      "prefix": "SLAB_GROSS_VOLUME_WITH_HOLES",
+      "body": "SLAB_GROSS_VOLUME_WITH_HOLES"
+    },
+    "\"SLAB_HOLES_AREA\" global": {
+      "prefix": "SLAB_HOLES_AREA",
+      "body": "SLAB_HOLES_AREA"
+    },
+    "\"SLAB_HOLES_NR\" global": {
+      "prefix": "SLAB_HOLES_NR",
+      "body": "SLAB_HOLES_NR"
+    },
+    "\"SLAB_HOLES_PRM\" global": {
+      "prefix": "SLAB_HOLES_PRM",
+      "body": "SLAB_HOLES_PRM"
+    },
+    "\"SLAB_LINETYPE\" global": {
+      "prefix": "SLAB_LINETYPE",
+      "body": "SLAB_LINETYPE"
+    },
+    "\"SLAB_MAT_BOTT\" global": {
+      "prefix": "SLAB_MAT_BOTT",
+      "body": "SLAB_MAT_BOTT"
+    },
+    "\"SLAB_MAT_EDGE\" global": {
+      "prefix": "SLAB_MAT_EDGE",
+      "body": "SLAB_MAT_EDGE"
+    },
+    "\"SLAB_MAT_TOP\" global": {
+      "prefix": "SLAB_MAT_TOP",
+      "body": "SLAB_MAT_TOP"
+    },
+    "\"SLAB_PERIMETER\" global": {
+      "prefix": "SLAB_PERIMETER",
+      "body": "SLAB_PERIMETER"
+    },
+    "\"SLAB_SECT_PEN\" global": {
+      "prefix": "SLAB_SECT_PEN",
+      "body": "SLAB_SECT_PEN"
+    },
+    "\"SLAB_SEGMENTS_NR\" global": {
+      "prefix": "SLAB_SEGMENTS_NR",
+      "body": "SLAB_SEGMENTS_NR"
+    },
+    "\"SLAB_SKINS_BMAT_NAMES\" global": {
+      "prefix": "SLAB_SKINS_BMAT_NAMES",
+      "body": "SLAB_SKINS_BMAT_NAMES[${01:index}][1]"
+    },
+    "\"SLAB_SKINS_NUMBER\" global": {
+      "prefix": "SLAB_SKINS_NUMBER",
+      "body": "SLAB_SKINS_NUMBER"
+    },
+    "\"SLAB_SKINS_PARAMS\" global": {
+      "prefix": "SLAB_SKINS_PARAMS",
+      "body": "SLAB_SKINS_PARAMS[${01:index}][${02:index}]"
+    },
+    "\"SLAB_THICKNESS\" global": {
+      "prefix": "SLAB_THICKNESS",
+      "body": "SLAB_THICKNESS"
+    },
+    "\"SLAB_TOP_SURF\" global": {
+      "prefix": "SLAB_TOP_SURF",
+      "body": "SLAB_TOP_SURF"
+    },
+    "\"SLAB_TOP_SURF_CON\" global": {
+      "prefix": "SLAB_TOP_SURF_CON",
+      "body": "SLAB_TOP_SURF_CON"
+    },
+    "\"SLAB_VIEW_PEN\" global": {
+      "prefix": "SLAB_VIEW_PEN",
+      "body": "SLAB_VIEW_PEN"
+    },
+    "\"SLAB_VOLUME\" global": {
+      "prefix": "SLAB_VOLUME",
+      "body": "SLAB_VOLUME"
+    },
+    "\"SLAB_VOLUME_CON\" global": {
+      "prefix": "SLAB_VOLUME_CON",
+      "body": "SLAB_VOLUME_CON"
+    },
+    "\"STAIR_AREA\" global": {
+      "prefix": "STAIR_AREA",
+      "body": "STAIR_AREA"
+    },
+    "\"STAIR_DEFAULT_GOING_DEPTH\" global": {
+      "prefix": "STAIR_DEFAULT_GOING_DEPTH",
+      "body": "STAIR_DEFAULT_GOING_DEPTH"
+    },
+    "\"STAIR_DEFAULT_RISER_HEIGHT\" global": {
+      "prefix": "STAIR_DEFAULT_RISER_HEIGHT",
+      "body": "STAIR_DEFAULT_RISER_HEIGHT"
+    },
+    "\"STAIR_DEFAULT_TREAD_THICKNESS\" global": {
+      "prefix": "STAIR_DEFAULT_TREAD_THICKNESS",
+      "body": "STAIR_DEFAULT_TREAD_THICKNESS"
+    },
+    "\"STAIR_DEFAULT_WIDTH\" global": {
+      "prefix": "STAIR_DEFAULT_WIDTH",
+      "body": "STAIR_DEFAULT_WIDTH"
+    },
+    "\"STAIR_END_WITH_RISER\" global": {
+      "prefix": "STAIR_END_WITH_RISER",
+      "body": "STAIR_END_WITH_RISER"
+    },
+    "\"STAIR_HEIGHT\" global": {
+      "prefix": "STAIR_HEIGHT",
+      "body": "STAIR_HEIGHT"
+    },
+    "\"STAIR_LANDING_NUMBER\" global": {
+      "prefix": "STAIR_LANDING_NUMBER",
+      "body": "STAIR_LANDING_NUMBER"
+    },
+    "\"STAIR_NOSING_EXIST\" global": {
+      "prefix": "STAIR_NOSING_EXIST",
+      "body": "STAIR_NOSING_EXIST[${01:index}]"
+    },
+    "\"STAIR_NR_OF_RISERS\" global": {
+      "prefix": "STAIR_NR_OF_RISERS",
+      "body": "STAIR_NR_OF_RISERS"
+    },
+    "\"STAIR_NR_OF_RISERS_IN_FLIGHTS\" global": {
+      "prefix": "STAIR_NR_OF_RISERS_IN_FLIGHTS",
+      "body": "STAIR_NR_OF_RISERS_IN_FLIGHTS[${01:index}]"
+    },
+    "\"STAIR_NR_OF_TREADS\" global": {
+      "prefix": "STAIR_NR_OF_TREADS",
+      "body": "STAIR_NR_OF_TREADS"
+    },
+    "\"STAIR_NR_OF_TREADS_IN_FLIGHTS\" global": {
+      "prefix": "STAIR_NR_OF_TREADS_IN_FLIGHTS",
+      "body": "STAIR_NR_OF_TREADS_IN_FLIGHTS[${01:index}]"
+    },
+    "\"STAIR_RISER_EXIST\" global": {
+      "prefix": "STAIR_RISER_EXIST",
+      "body": "STAIR_RISER_EXIST[${01:index}]"
+    },
+    "\"STAIR_RISER_GEOMETRY\" global": {
+      "prefix": "STAIR_RISER_GEOMETRY",
+      "body": "STAIR_RISER_GEOMETRY[${01:index}][${02:index}]"
+    },
+    "\"STAIR_RULE_FLAGS\" global": {
+      "prefix": "STAIR_RULE_FLAGS",
+      "body": "STAIR_RULE_FLAGS[${01:index}][${02:index}]"
+    },
+    "\"STAIR_RULE_LIMITS\" global": {
+      "prefix": "STAIR_RULE_LIMITS",
+      "body": "STAIR_RULE_LIMITS[${01:index}][${02:index}]"
+    },
+    "\"STAIR_STAIR_GRADIENT\" global": {
+      "prefix": "STAIR_STAIR_GRADIENT",
+      "body": "STAIR_STAIR_GRADIENT"
+    },
+    "\"STAIR_START_WITH_RISER\" global": {
+      "prefix": "STAIR_START_WITH_RISER",
+      "body": "STAIR_START_WITH_RISER"
+    },
+    "\"STAIR_STRINGER_PATH_OFFSET\" global": {
+      "prefix": "STAIR_STRINGER_PATH_OFFSET",
+      "body": "STAIR_STRINGER_PATH_OFFSET"
+    },
+    "\"STAIR_STRUCTURE_CONN_FLAGS\" global": {
+      "prefix": "STAIR_STRUCTURE_CONN_FLAGS",
+      "body": "STAIR_STRUCTURE_CONN_FLAGS[${01:index}][${02:index}]"
+    },
+    "\"STAIR_STRUCTURE_CONN_OFFSETS\" global": {
+      "prefix": "STAIR_STRUCTURE_CONN_OFFSETS",
+      "body": "STAIR_STRUCTURE_CONN_OFFSETS[${01:index}][${02:index}]"
+    },
+    "\"STAIR_STRUCTURE_FLAGS\" global": {
+      "prefix": "STAIR_STRUCTURE_FLAGS",
+      "body": "STAIR_STRUCTURE_FLAGS[${01:index}][${02:index}]"
+    },
+    "\"STAIR_STRUCTURE_GEOMETRY\" global": {
+      "prefix": "STAIR_STRUCTURE_GEOMETRY",
+      "body": "STAIR_STRUCTURE_GEOMETRY[${01:index}][${02:index}]"
+    },
+    "\"STAIR_TREAD_EXIST\" global": {
+      "prefix": "STAIR_TREAD_EXIST",
+      "body": "STAIR_TREAD_EXIST[${01:index}]"
+    },
+    "\"STAIR_TREAD_FLAGS\" global": {
+      "prefix": "STAIR_TREAD_FLAGS",
+      "body": "STAIR_TREAD_FLAGS[${01:index}][1]"
+    },
+    "\"STAIR_TREAD_GEOMETRY\" global": {
+      "prefix": "STAIR_TREAD_GEOMETRY",
+      "body": "STAIR_TREAD_GEOMETRY[${01:index}][${02:index}]"
+    },
+    "\"STAIR_VOLUME\" global": {
+      "prefix": "STAIR_VOLUME",
+      "body": "STAIR_VOLUME"
+    },
+    "\"STAIR_WALKLINE_LENGTH\" global": {
+      "prefix": "STAIR_WALKLINE_LENGTH",
+      "body": "STAIR_WALKLINE_LENGTH"
+    },
+    "\"STAIR2D_BREAKMARK_ANGLE\" global": {
+      "prefix": "STAIR2D_BREAKMARK_ANGLE",
+      "body": "STAIR2D_BREAKMARK_ANGLE"
+    },
+    "\"STAIR2D_BREAKMARK_FLAGS\" global": {
+      "prefix": "STAIR2D_BREAKMARK_FLAGS",
+      "body": "STAIR2D_BREAKMARK_FLAGS[${01:index}][1]"
+    },
+    "\"STAIR2D_BREAKMARK_GEOM\" global": {
+      "prefix": "STAIR2D_BREAKMARK_GEOM",
+      "body": "STAIR2D_BREAKMARK_GEOM[${01:index}][${02:index}]"
+    },
+    "\"STAIR2D_CURRSTORY_LOCATION\" global": {
+      "prefix": "STAIR2D_CURRSTORY_LOCATION",
+      "body": "STAIR2D_CURRSTORY_LOCATION"
+    },
+    "\"STAIR2D_CUSTOMDISPLAY\" global": {
+      "prefix": "STAIR2D_CUSTOMDISPLAY",
+      "body": "STAIR2D_CUSTOMDISPLAY"
+    },
+    "\"STAIR2D_DESCRIPTION_POSITION\" global": {
+      "prefix": "STAIR2D_DESCRIPTION_POSITION",
+      "body": "STAIR2D_DESCRIPTION_POSITION[${01:index}][${02:index}]"
+    },
+    "\"STAIR2D_DRAIN_TPOLYGON_FLAGS\" global": {
+      "prefix": "STAIR2D_DRAIN_TPOLYGON_FLAGS",
+      "body": "STAIR2D_DRAIN_TPOLYGON_FLAGS[${01:index}][${02:index}]"
+    },
+    "\"STAIR2D_DRAIN_TPOLYGON_GEOM\" global": {
+      "prefix": "STAIR2D_DRAIN_TPOLYGON_GEOM",
+      "body": "STAIR2D_DRAIN_TPOLYGON_GEOM[${01:index}][${02:index}]"
+    },
+    "\"STAIR2D_EXT_RPOLYLINE_FLAGS\" global": {
+      "prefix": "STAIR2D_EXT_RPOLYLINE_FLAGS",
+      "body": "STAIR2D_EXT_RPOLYLINE_FLAGS[${01:index}][1]"
+    },
+    "\"STAIR2D_EXT_RPOLYLINE_GEOM\" global": {
+      "prefix": "STAIR2D_EXT_RPOLYLINE_GEOM",
+      "body": "STAIR2D_EXT_RPOLYLINE_GEOM[${01:index}][${02:index}]"
+    },
+    "\"STAIR2D_EXT_TPOLYGON_FLAGS\" global": {
+      "prefix": "STAIR2D_EXT_TPOLYGON_FLAGS",
+      "body": "STAIR2D_EXT_TPOLYGON_FLAGS[${01:index}][${02:index}]"
+    },
+    "\"STAIR2D_EXT_TPOLYGON_GEOM\" global": {
+      "prefix": "STAIR2D_EXT_TPOLYGON_GEOM",
+      "body": "STAIR2D_EXT_TPOLYGON_GEOM[${01:index}][${02:index}]"
+    },
+    "\"STAIR2D_FULL_BOUNDARY_GEOM\" global": {
+      "prefix": "STAIR2D_FULL_BOUNDARY_GEOM",
+      "body": "STAIR2D_FULL_BOUNDARY_GEOM[${01:index}][${02:index}]"
+    },
+    "\"STAIR2D_FULL_RPOLYLINE_FLAGS\" global": {
+      "prefix": "STAIR2D_FULL_RPOLYLINE_FLAGS",
+      "body": "STAIR2D_FULL_RPOLYLINE_FLAGS[${01:index}][1]"
+    },
+    "\"STAIR2D_FULL_RPOLYLINE_GEOM\" global": {
+      "prefix": "STAIR2D_FULL_RPOLYLINE_GEOM",
+      "body": "STAIR2D_FULL_RPOLYLINE_GEOM[${01:index}][${02:index}]"
+    },
+    "\"STAIR2D_FULL_SPOLYGON_FLAGS\" global": {
+      "prefix": "STAIR2D_FULL_SPOLYGON_FLAGS",
+      "body": "STAIR2D_FULL_SPOLYGON_FLAGS[${01:index}][${02:index}]"
+    },
+    "\"STAIR2D_FULL_SPOLYGON_GEOM\" global": {
+      "prefix": "STAIR2D_FULL_SPOLYGON_GEOM",
+      "body": "STAIR2D_FULL_SPOLYGON_GEOM[${01:index}][${02:index}]"
+    },
+    "\"STAIR2D_FULL_SPOLYLINE_FLAGS\" global": {
+      "prefix": "STAIR2D_FULL_SPOLYLINE_FLAGS",
+      "body": "STAIR2D_FULL_SPOLYLINE_FLAGS[${01:index}]"
+    },
+    "\"STAIR2D_FULL_SPOLYLINE_GEOM\" global": {
+      "prefix": "STAIR2D_FULL_SPOLYLINE_GEOM",
+      "body": "STAIR2D_FULL_SPOLYLINE_GEOM[${01:index}][${02:index}]"
+    },
+    "\"STAIR2D_FULL_TPOLYGON_FLAGS\" global": {
+      "prefix": "STAIR2D_FULL_TPOLYGON_FLAGS",
+      "body": "STAIR2D_FULL_TPOLYGON_FLAGS[${01:index}][${02:index}]"
+    },
+    "\"STAIR2D_FULL_TPOLYGON_GEOM\" global": {
+      "prefix": "STAIR2D_FULL_TPOLYGON_GEOM",
+      "body": "STAIR2D_FULL_TPOLYGON_GEOM[${01:index}][${02:index}]"
+    },
+    "\"STAIR2D_FULL_WALKLINE_FLAGS\" global": {
+      "prefix": "STAIR2D_FULL_WALKLINE_FLAGS",
+      "body": "STAIR2D_FULL_WALKLINE_FLAGS[${01:index}][${02:index}]"
+    },
+    "\"STAIR2D_FULL_WALKLINE_GEOM\" global": {
+      "prefix": "STAIR2D_FULL_WALKLINE_GEOM",
+      "body": "STAIR2D_FULL_WALKLINE_GEOM[${01:index}][${02:index}]"
+    },
+    "\"STAIR2D_LAYOUT_TYPES\" global": {
+      "prefix": "STAIR2D_LAYOUT_TYPES",
+      "body": "STAIR2D_LAYOUT_TYPES[${01:index}]"
+    },
+    "\"STAIR2D_LOWER_BOUNDARY_GEOM\" global": {
+      "prefix": "STAIR2D_LOWER_BOUNDARY_GEOM",
+      "body": "STAIR2D_LOWER_BOUNDARY_GEOM[${01:index}][${02:index}]"
+    },
+    "\"STAIR2D_LOWER_RPOLYLINE_FLAGS\" global": {
+      "prefix": "STAIR2D_LOWER_RPOLYLINE_FLAGS",
+      "body": "STAIR2D_LOWER_RPOLYLINE_FLAGS[${01:index}][1]"
+    },
+    "\"STAIR2D_LOWER_RPOLYLINE_GEOM\" global": {
+      "prefix": "STAIR2D_LOWER_RPOLYLINE_GEOM",
+      "body": "STAIR2D_LOWER_RPOLYLINE_GEOM[${01:index}][${02:index}]"
+    },
+    "\"STAIR2D_LOWER_TPOLYGON_FLAGS\" global": {
+      "prefix": "STAIR2D_LOWER_TPOLYGON_FLAGS",
+      "body": "STAIR2D_LOWER_TPOLYGON_FLAGS[${01:index}][${02:index}]"
+    },
+    "\"STAIR2D_LOWER_TPOLYGON_GEOM\" global": {
+      "prefix": "STAIR2D_LOWER_TPOLYGON_GEOM",
+      "body": "STAIR2D_LOWER_TPOLYGON_GEOM[${01:index}][${02:index}]"
+    },
+    "\"STAIR2D_LOWER_WALKLINE_FLAGS\" global": {
+      "prefix": "STAIR2D_LOWER_WALKLINE_FLAGS",
+      "body": "STAIR2D_LOWER_WALKLINE_FLAGS[${01:index}][${02:index}]"
+    },
+    "\"STAIR2D_LOWER_WALKLINE_GEOM\" global": {
+      "prefix": "STAIR2D_LOWER_WALKLINE_GEOM",
+      "body": "STAIR2D_LOWER_WALKLINE_GEOM[${01:index}][${02:index}]"
+    },
+    "\"STAIR2D_MIDDLE_BOUNDARY_GEOM\" global": {
+      "prefix": "STAIR2D_MIDDLE_BOUNDARY_GEOM",
+      "body": "STAIR2D_MIDDLE_BOUNDARY_GEOM[${01:index}][${02:index}]"
+    },
+    "\"STAIR2D_MIDDLE_RPOLYLINE_FLAGS\" global": {
+      "prefix": "STAIR2D_MIDDLE_RPOLYLINE_FLAGS",
+      "body": "STAIR2D_MIDDLE_RPOLYLINE_FLAGS[${01:index}][1]"
+    },
+    "\"STAIR2D_MIDDLE_RPOLYLINE_GEOM\" global": {
+      "prefix": "STAIR2D_MIDDLE_RPOLYLINE_GEOM",
+      "body": "STAIR2D_MIDDLE_RPOLYLINE_GEOM[${01:index}][${02:index}]"
+    },
+    "\"STAIR2D_MIDDLE_TPOLYGON_FLAGS\" global": {
+      "prefix": "STAIR2D_MIDDLE_TPOLYGON_FLAGS",
+      "body": "STAIR2D_MIDDLE_TPOLYGON_FLAGS[${01:index}][${02:index}]"
+    },
+    "\"STAIR2D_MIDDLE_TPOLYGON_GEOM\" global": {
+      "prefix": "STAIR2D_MIDDLE_TPOLYGON_GEOM",
+      "body": "STAIR2D_MIDDLE_TPOLYGON_GEOM[${01:index}][${02:index}]"
+    },
+    "\"STAIR2D_MIDDLE_WALKLINE_FLAGS\" global": {
+      "prefix": "STAIR2D_MIDDLE_WALKLINE_FLAGS",
+      "body": "STAIR2D_MIDDLE_WALKLINE_FLAGS[${01:index}][${02:index}]"
+    },
+    "\"STAIR2D_MIDDLE_WALKLINE_GEOM\" global": {
+      "prefix": "STAIR2D_MIDDLE_WALKLINE_GEOM",
+      "body": "STAIR2D_MIDDLE_WALKLINE_GEOM[${01:index}][${02:index}]"
+    },
+    "\"STAIR2D_MONOLITH_ATTRIBUTES\" global": {
+      "prefix": "STAIR2D_MONOLITH_ATTRIBUTES",
+      "body": "STAIR2D_MONOLITH_ATTRIBUTES[${01:index}][${02:index}]"
+    },
+    "\"STAIR2D_POLYLINES_FLAGS\" global": {
+      "prefix": "STAIR2D_POLYLINES_FLAGS",
+      "body": "STAIR2D_POLYLINES_FLAGS[${01:index}][1]"
+    },
+    "\"STAIR2D_POLYLINES_GEOM\" global": {
+      "prefix": "STAIR2D_POLYLINES_GEOM",
+      "body": "STAIR2D_POLYLINES_GEOM[${01:index}][${02:index}]"
+    },
+    "\"STAIR2D_STRUCT_ATTRIBUTES\" global": {
+      "prefix": "STAIR2D_STRUCT_ATTRIBUTES",
+      "body": "STAIR2D_STRUCT_ATTRIBUTES[${01:index}][${02:index}]"
+    },
+    "\"STAIR2D_UPPER_BOUNDARY_GEOM\" global": {
+      "prefix": "STAIR2D_UPPER_BOUNDARY_GEOM",
+      "body": "STAIR2D_UPPER_BOUNDARY_GEOM[${01:index}][${02:index}]"
+    },
+    "\"STAIR2D_UPPER_RPOLYLINE_FLAGS\" global": {
+      "prefix": "STAIR2D_UPPER_RPOLYLINE_FLAGS",
+      "body": "STAIR2D_UPPER_RPOLYLINE_FLAGS[${01:index}][1]"
+    },
+    "\"STAIR2D_UPPER_RPOLYLINE_GEOM\" global": {
+      "prefix": "STAIR2D_UPPER_RPOLYLINE_GEOM",
+      "body": "STAIR2D_UPPER_RPOLYLINE_GEOM[${01:index}][${02:index}]"
+    },
+    "\"STAIR2D_UPPER_TPOLYGON_FLAGS\" global": {
+      "prefix": "STAIR2D_UPPER_TPOLYGON_FLAGS",
+      "body": "STAIR2D_UPPER_TPOLYGON_FLAGS[${01:index}][${02:index}]"
+    },
+    "\"STAIR2D_UPPER_TPOLYGON_GEOM\" global": {
+      "prefix": "STAIR2D_UPPER_TPOLYGON_GEOM",
+      "body": "STAIR2D_UPPER_TPOLYGON_GEOM[${01:index}][${02:index}]"
+    },
+    "\"STAIR2D_UPPER_WALKLINE_FLAGS\" global": {
+      "prefix": "STAIR2D_UPPER_WALKLINE_FLAGS",
+      "body": "STAIR2D_UPPER_WALKLINE_FLAGS[${01:index}][${02:index}]"
+    },
+    "\"STAIR2D_UPPER_WALKLINE_GEOM\" global": {
+      "prefix": "STAIR2D_UPPER_WALKLINE_GEOM",
+      "body": "STAIR2D_UPPER_WALKLINE_GEOM[${01:index}][${02:index}]"
+    },
+    "\"STAIR2D_VISIBILITY\" global": {
+      "prefix": "STAIR2D_VISIBILITY",
+      "body": "STAIR2D_VISIBILITY"
+    },
+    "\"STRUCTURE_3DLENGTH\" global": {
+      "prefix": "STRUCTURE_3DLENGTH",
+      "body": "STRUCTURE_3DLENGTH"
+    },
+    "\"STRUCTURE_HEIGHT\" global": {
+      "prefix": "STRUCTURE_HEIGHT",
+      "body": "STRUCTURE_HEIGHT"
+    },
+    "\"STRUCTURE_THICKNESS\" global": {
+      "prefix": "STRUCTURE_THICKNESS",
+      "body": "STRUCTURE_THICKNESS"
+    },
+    "\"STRUCTURE_VOLUME\" global": {
+      "prefix": "STRUCTURE_VOLUME",
+      "body": "STRUCTURE_VOLUME"
+    },
+    "\"STRUCTURE_WIDTH\" global": {
+      "prefix": "STRUCTURE_WIDTH",
+      "body": "STRUCTURE_WIDTH"
+    },
+    "\"SYMB_A_SIZE\" global": {
+      "prefix": "SYMB_A_SIZE",
+      "body": "SYMB_A_SIZE"
+    },
+    "\"SYMB_B_SIZE\" global": {
+      "prefix": "SYMB_B_SIZE",
+      "body": "SYMB_B_SIZE"
+    },
+    "\"SYMB_FBGD_PEN\" global": {
+      "prefix": "SYMB_FBGD_PEN",
+      "body": "SYMB_FBGD_PEN"
+    },
+    "\"SYMB_FILL\" global": {
+      "prefix": "SYMB_FILL",
+      "body": "SYMB_FILL"
+    },
+    "\"SYMB_FILL_PEN\" global": {
+      "prefix": "SYMB_FILL_PEN",
+      "body": "SYMB_FILL_PEN"
+    },
+    "\"SYMB_LINETYPE\" global": {
+      "prefix": "SYMB_LINETYPE",
+      "body": "SYMB_LINETYPE"
+    },
+    "\"SYMB_MAT\" global": {
+      "prefix": "SYMB_MAT",
+      "body": "SYMB_MAT"
+    },
+    "\"SYMB_MIRRORED\" global": {
+      "prefix": "SYMB_MIRRORED",
+      "body": "SYMB_MIRRORED"
+    },
+    "\"SYMB_POS_X\" global": {
+      "prefix": "SYMB_POS_X",
+      "body": "SYMB_POS_X"
+    },
+    "\"SYMB_POS_Y\" global": {
+      "prefix": "SYMB_POS_Y",
+      "body": "SYMB_POS_Y"
+    },
+    "\"SYMB_POS_Z\" global": {
+      "prefix": "SYMB_POS_Z",
+      "body": "SYMB_POS_Z"
+    },
+    "\"SYMB_ROTANGLE\" global": {
+      "prefix": "SYMB_ROTANGLE",
+      "body": "SYMB_ROTANGLE"
+    },
+    "\"SYMB_SECT_PEN\" global": {
+      "prefix": "SYMB_SECT_PEN",
+      "body": "SYMB_SECT_PEN"
+    },
+    "\"SYMB_VIEW_PEN\" global": {
+      "prefix": "SYMB_VIEW_PEN",
+      "body": "SYMB_VIEW_PEN"
+    },
+    "\"SYMB_Z_SIZE\" global": {
+      "prefix": "SYMB_Z_SIZE",
+      "body": "SYMB_Z_SIZE"
+    },
+    "\"TO_GUID\" global": {
+      "prefix": "TO_GUID",
+      "body": "TO_GUID"
+    },
+    "\"TREAD_AREA\" global": {
+      "prefix": "TREAD_AREA",
+      "body": "TREAD_AREA"
+    },
+    "\"TREAD_BMATS\" global": {
+      "prefix": "TREAD_BMATS",
+      "body": "TREAD_BMATS[${01:index}]"
+    },
+    "\"TREAD_ELEVATION\" global": {
+      "prefix": "TREAD_ELEVATION",
+      "body": "TREAD_ELEVATION"
+    },
+    "\"TREAD_FRONT_AREA\" global": {
+      "prefix": "TREAD_FRONT_AREA",
+      "body": "TREAD_FRONT_AREA"
+    },
+    "\"TREAD_GOING\" global": {
+      "prefix": "TREAD_GOING",
+      "body": "TREAD_GOING"
+    },
+    "\"TREAD_LOWER_RISER_HEIGHT\" global": {
+      "prefix": "TREAD_LOWER_RISER_HEIGHT",
+      "body": "TREAD_LOWER_RISER_HEIGHT"
+    },
+    "\"TREAD_LOWER_RISER_SLANT_ANGLE\" global": {
+      "prefix": "TREAD_LOWER_RISER_SLANT_ANGLE",
+      "body": "TREAD_LOWER_RISER_SLANT_ANGLE"
+    },
+    "\"TREAD_LOWER_RISER_THICKNESS\" global": {
+      "prefix": "TREAD_LOWER_RISER_THICKNESS",
+      "body": "TREAD_LOWER_RISER_THICKNESS"
+    },
+    "\"TREAD_NOSING\" global": {
+      "prefix": "TREAD_NOSING",
+      "body": "TREAD_NOSING"
+    },
+    "\"TREAD_NOSING_BY_SLANTING\" global": {
+      "prefix": "TREAD_NOSING_BY_SLANTING",
+      "body": "TREAD_NOSING_BY_SLANTING"
+    },
+    "\"TREAD_NOSING_METHOD\" global": {
+      "prefix": "TREAD_NOSING_METHOD",
+      "body": "TREAD_NOSING_METHOD"
+    },
+    "\"TREAD_STEP_INDEX\" global": {
+      "prefix": "TREAD_STEP_INDEX",
+      "body": "TREAD_STEP_INDEX"
+    },
+    "\"TREAD_THICKNESS\" global": {
+      "prefix": "TREAD_THICKNESS",
+      "body": "TREAD_THICKNESS"
+    },
+    "\"TREAD_UPPER_RISER_HEIGHT\" global": {
+      "prefix": "TREAD_UPPER_RISER_HEIGHT",
+      "body": "TREAD_UPPER_RISER_HEIGHT"
+    },
+    "\"TREAD_UPPER_RISER_SLANT_ANGLE\" global": {
+      "prefix": "TREAD_UPPER_RISER_SLANT_ANGLE",
+      "body": "TREAD_UPPER_RISER_SLANT_ANGLE"
+    },
+    "\"TREAD_UPPER_RISER_THICKNESS\" global": {
+      "prefix": "TREAD_UPPER_RISER_THICKNESS",
+      "body": "TREAD_UPPER_RISER_THICKNESS"
+    },
+    "\"TREAD_VOLUME\" global": {
+      "prefix": "TREAD_VOLUME",
+      "body": "TREAD_VOLUME"
+    },
+    "\"WALL_AIR_THICKNESS\" global": {
+      "prefix": "WALL_AIR_THICKNESS",
+      "body": "WALL_AIR_THICKNESS"
+    },
+    "\"WALL_AREA\" global": {
+      "prefix": "WALL_AREA",
+      "body": "WALL_AREA"
+    },
+    "\"WALL_BMAT\" global": {
+      "prefix": "WALL_BMAT",
+      "body": "WALL_BMAT"
+    },
+    "\"WALL_BMAT_NAME\" global": {
+      "prefix": "WALL_BMAT_NAME",
+      "body": "WALL_BMAT_NAME"
+    },
+    "\"WALL_CENTER_LENGTH\" global": {
+      "prefix": "WALL_CENTER_LENGTH",
+      "body": "WALL_CENTER_LENGTH"
+    },
+    "\"WALL_COLUMNS_NR\" global": {
+      "prefix": "WALL_COLUMNS_NR",
+      "body": "WALL_COLUMNS_NR"
+    },
+    "\"WALL_COMPS_NAME\" global": {
+      "prefix": "WALL_COMPS_NAME",
+      "body": "WALL_COMPS_NAME"
+    },
+    "\"WALL_CROSSSECTION_TYPE\" global": {
+      "prefix": "WALL_CROSSSECTION_TYPE",
+      "body": "WALL_CROSSSECTION_TYPE"
+    },
+    "\"WALL_DIRECTION\" global": {
+      "prefix": "WALL_DIRECTION",
+      "body": "WALL_DIRECTION"
+    },
+    "\"WALL_DOORS_NR\" global": {
+      "prefix": "WALL_DOORS_NR",
+      "body": "WALL_DOORS_NR"
+    },
+    "\"WALL_DOORS_SURF\" global": {
+      "prefix": "WALL_DOORS_SURF",
+      "body": "WALL_DOORS_SURF"
+    },
+    "\"WALL_DOORS_WID\" global": {
+      "prefix": "WALL_DOORS_WID",
+      "body": "WALL_DOORS_WID"
+    },
+    "\"WALL_EDGE_SURF\" global": {
+      "prefix": "WALL_EDGE_SURF",
+      "body": "WALL_EDGE_SURF"
+    },
+    "\"WALL_END_THICKNESS\" global": {
+      "prefix": "WALL_END_THICKNESS",
+      "body": "WALL_END_THICKNESS"
+    },
+    "\"WALL_FBGD_PEN\" global": {
+      "prefix": "WALL_FBGD_PEN",
+      "body": "WALL_FBGD_PEN"
+    },
+    "\"WALL_FILL\" global": {
+      "prefix": "WALL_FILL",
+      "body": "WALL_FILL"
+    },
+    "\"WALL_FILL_PEN\" global": {
+      "prefix": "WALL_FILL_PEN",
+      "body": "WALL_FILL_PEN"
+    },
+    "\"WALL_FLIPPED\" global": {
+      "prefix": "WALL_FLIPPED",
+      "body": "WALL_FLIPPED"
+    },
+    "\"WALL_GROSS_SURFACE_A\" global": {
+      "prefix": "WALL_GROSS_SURFACE_A",
+      "body": "WALL_GROSS_SURFACE_A"
+    },
+    "\"WALL_GROSS_SURFACE_B\" global": {
+      "prefix": "WALL_GROSS_SURFACE_B",
+      "body": "WALL_GROSS_SURFACE_B"
+    },
+    "\"WALL_GROSS_VOLUME\" global": {
+      "prefix": "WALL_GROSS_VOLUME",
+      "body": "WALL_GROSS_VOLUME"
+    },
+    "\"WALL_HEIGHT\" global": {
+      "prefix": "WALL_HEIGHT",
+      "body": "WALL_HEIGHT"
+    },
+    "\"WALL_HOLES_NR\" global": {
+      "prefix": "WALL_HOLES_NR",
+      "body": "WALL_HOLES_NR"
+    },
+    "\"WALL_HOLES_SURF\" global": {
+      "prefix": "WALL_HOLES_SURF",
+      "body": "WALL_HOLES_SURF"
+    },
+    "\"WALL_HOLES_SURF_A\" global": {
+      "prefix": "WALL_HOLES_SURF_A",
+      "body": "WALL_HOLES_SURF_A"
+    },
+    "\"WALL_HOLES_SURF_B\" global": {
+      "prefix": "WALL_HOLES_SURF_B",
+      "body": "WALL_HOLES_SURF_B"
+    },
+    "\"WALL_HOLES_VOLUME\" global": {
+      "prefix": "WALL_HOLES_VOLUME",
+      "body": "WALL_HOLES_VOLUME"
+    },
+    "\"WALL_ID\" global": {
+      "prefix": "WALL_ID",
+      "body": "WALL_ID"
+    },
+    "\"WALL_INCL\" global": {
+      "prefix": "WALL_INCL",
+      "body": "WALL_INCL"
+    },
+    "\"WALL_INSU_THICKNESS\" global": {
+      "prefix": "WALL_INSU_THICKNESS",
+      "body": "WALL_INSU_THICKNESS"
+    },
+    "\"WALL_INTGUID\" global": {
+      "prefix": "WALL_INTGUID",
+      "body": "WALL_INTGUID"
+    },
+    "\"WALL_LENGTH_A\" global": {
+      "prefix": "WALL_LENGTH_A",
+      "body": "WALL_LENGTH_A"
+    },
+    "\"WALL_LENGTH_A_CON\" global": {
+      "prefix": "WALL_LENGTH_A_CON",
+      "body": "WALL_LENGTH_A_CON"
+    },
+    "\"WALL_LENGTH_B\" global": {
+      "prefix": "WALL_LENGTH_B",
+      "body": "WALL_LENGTH_B"
+    },
+    "\"WALL_LENGTH_B_CON\" global": {
+      "prefix": "WALL_LENGTH_B_CON",
+      "body": "WALL_LENGTH_B_CON"
+    },
+    "\"WALL_LINETYPE\" global": {
+      "prefix": "WALL_LINETYPE",
+      "body": "WALL_LINETYPE"
+    },
+    "\"WALL_MAT_A\" global": {
+      "prefix": "WALL_MAT_A",
+      "body": "WALL_MAT_A"
+    },
+    "\"WALL_MAT_B\" global": {
+      "prefix": "WALL_MAT_B",
+      "body": "WALL_MAT_B"
+    },
+    "\"WALL_MAT_EDGE\" global": {
+      "prefix": "WALL_MAT_EDGE",
+      "body": "WALL_MAT_EDGE"
+    },
+    "\"WALL_MAX_HEIGHT\" global": {
+      "prefix": "WALL_MAX_HEIGHT",
+      "body": "WALL_MAX_HEIGHT"
+    },
+    "\"WALL_MIN_HEIGHT\" global": {
+      "prefix": "WALL_MIN_HEIGHT",
+      "body": "WALL_MIN_HEIGHT"
+    },
+    "\"WALL_PERIMETER\" global": {
+      "prefix": "WALL_PERIMETER",
+      "body": "WALL_PERIMETER"
+    },
+    "\"WALL_POSITION\" global": {
+      "prefix": "WALL_POSITION",
+      "body": "WALL_POSITION[${01:index}]"
+    },
+    "\"WALL_RESOL\" global": {
+      "prefix": "WALL_RESOL",
+      "body": "WALL_RESOL"
+    },
+    "\"WALL_SECT_PEN\" global": {
+      "prefix": "WALL_SECT_PEN",
+      "body": "WALL_SECT_PEN"
+    },
+    "\"WALL_SKIN_MAX_HEIGHT_A\" global": {
+      "prefix": "WALL_SKIN_MAX_HEIGHT_A",
+      "body": "WALL_SKIN_MAX_HEIGHT_A"
+    },
+    "\"WALL_SKIN_MAX_HEIGHT_B\" global": {
+      "prefix": "WALL_SKIN_MAX_HEIGHT_B",
+      "body": "WALL_SKIN_MAX_HEIGHT_B"
+    },
+    "\"WALL_SKIN_MIN_HEIGHT_A\" global": {
+      "prefix": "WALL_SKIN_MIN_HEIGHT_A",
+      "body": "WALL_SKIN_MIN_HEIGHT_A"
+    },
+    "\"WALL_SKIN_MIN_HEIGHT_B\" global": {
+      "prefix": "WALL_SKIN_MIN_HEIGHT_B",
+      "body": "WALL_SKIN_MIN_HEIGHT_B"
+    },
+    "\"WALL_SKIN_THICKNESS_A\" global": {
+      "prefix": "WALL_SKIN_THICKNESS_A",
+      "body": "WALL_SKIN_THICKNESS_A"
+    },
+    "\"WALL_SKIN_THICKNESS_B\" global": {
+      "prefix": "WALL_SKIN_THICKNESS_B",
+      "body": "WALL_SKIN_THICKNESS_B"
+    },
+    "\"WALL_SKINS_BMAT_NAMES\" global": {
+      "prefix": "WALL_SKINS_BMAT_NAMES",
+      "body": "WALL_SKINS_BMAT_NAMES[${01:index}][1]"
+    },
+    "\"WALL_SKINS_NUMBER\" global": {
+      "prefix": "WALL_SKINS_NUMBER",
+      "body": "WALL_SKINS_NUMBER"
+    },
+    "\"WALL_SKINS_PARAMS\" global": {
+      "prefix": "WALL_SKINS_PARAMS",
+      "body": "WALL_SKINS_PARAMS[${01:index}][${02:index}]"
+    },
+    "\"WALL_START_THICKNESS\" global": {
+      "prefix": "WALL_START_THICKNESS",
+      "body": "WALL_START_THICKNESS"
+    },
+    "\"WALL_SURFACE_A\" global": {
+      "prefix": "WALL_SURFACE_A",
+      "body": "WALL_SURFACE_A"
+    },
+    "\"WALL_SURFACE_A_CON\" global": {
+      "prefix": "WALL_SURFACE_A_CON",
+      "body": "WALL_SURFACE_A_CON"
+    },
+    "\"WALL_SURFACE_B\" global": {
+      "prefix": "WALL_SURFACE_B",
+      "body": "WALL_SURFACE_B"
+    },
+    "\"WALL_SURFACE_B_CON\" global": {
+      "prefix": "WALL_SURFACE_B_CON",
+      "body": "WALL_SURFACE_B_CON"
+    },
+    "\"WALL_TEXTURE_WRAP\" global": {
+      "prefix": "WALL_TEXTURE_WRAP",
+      "body": "WALL_TEXTURE_WRAP[${01:index}]"
+    },
+    "\"WALL_THICKNESS\" global": {
+      "prefix": "WALL_THICKNESS",
+      "body": "WALL_THICKNESS"
+    },
+    "\"WALL_VIEW_PEN\" global": {
+      "prefix": "WALL_VIEW_PEN",
+      "body": "WALL_VIEW_PEN"
+    },
+    "\"WALL_VOLUME\" global": {
+      "prefix": "WALL_VOLUME",
+      "body": "WALL_VOLUME"
+    },
+    "\"WALL_VOLUME_A\" global": {
+      "prefix": "WALL_VOLUME_A",
+      "body": "WALL_VOLUME_A"
+    },
+    "\"WALL_VOLUME_A_CON\" global": {
+      "prefix": "WALL_VOLUME_A_CON",
+      "body": "WALL_VOLUME_A_CON"
+    },
+    "\"WALL_VOLUME_B\" global": {
+      "prefix": "WALL_VOLUME_B",
+      "body": "WALL_VOLUME_B"
+    },
+    "\"WALL_VOLUME_B_CON\" global": {
+      "prefix": "WALL_VOLUME_B_CON",
+      "body": "WALL_VOLUME_B_CON"
+    },
+    "\"WALL_VOLUME_CON\" global": {
+      "prefix": "WALL_VOLUME_CON",
+      "body": "WALL_VOLUME_CON"
+    },
+    "\"WALL_WINDS_NR\" global": {
+      "prefix": "WALL_WINDS_NR",
+      "body": "WALL_WINDS_NR"
+    },
+    "\"WALL_WINDS_SURF\" global": {
+      "prefix": "WALL_WINDS_SURF",
+      "body": "WALL_WINDS_SURF"
+    },
+    "\"WALL_WINDS_WID\" global": {
+      "prefix": "WALL_WINDS_WID",
+      "body": "WALL_WINDS_WID"
+    },
+    "\"WIDO_CUSTOM_MARKER\" global": {
+      "prefix": "WIDO_CUSTOM_MARKER",
+      "body": "WIDO_CUSTOM_MARKER"
+    },
+    "\"WIDO_FRAME_THICKNESS\" global": {
+      "prefix": "WIDO_FRAME_THICKNESS",
+      "body": "WIDO_FRAME_THICKNESS"
+    },
+    "\"WIDO_GROSS_SURFACE\" global": {
+      "prefix": "WIDO_GROSS_SURFACE",
+      "body": "WIDO_GROSS_SURFACE"
+    },
+    "\"WIDO_GROSS_VOLUME\" global": {
+      "prefix": "WIDO_GROSS_VOLUME",
+      "body": "WIDO_GROSS_VOLUME"
+    },
+    "\"WIDO_HEAD_DEPTH\" global": {
+      "prefix": "WIDO_HEAD_DEPTH",
+      "body": "WIDO_HEAD_DEPTH"
+    },
+    "\"WIDO_HEAD_HEIGHT\" global": {
+      "prefix": "WIDO_HEAD_HEIGHT",
+      "body": "WIDO_HEAD_HEIGHT"
+    },
+    "\"WIDO_LEFT_JAMB\" global": {
+      "prefix": "WIDO_LEFT_JAMB",
+      "body": "WIDO_LEFT_JAMB"
+    },
+    "\"WIDO_MARKER_TXT\" global": {
+      "prefix": "WIDO_MARKER_TXT",
+      "body": "WIDO_MARKER_TXT"
+    },
+    "\"WIDO_N_OPRSIDE_HEIGHT\" global": {
+      "prefix": "WIDO_N_OPRSIDE_HEIGHT",
+      "body": "WIDO_N_OPRSIDE_HEIGHT"
+    },
+    "\"WIDO_N_OPRSIDE_SURF\" global": {
+      "prefix": "WIDO_N_OPRSIDE_SURF",
+      "body": "WIDO_N_OPRSIDE_SURF"
+    },
+    "\"WIDO_N_OPRSIDE_WIDTH\" global": {
+      "prefix": "WIDO_N_OPRSIDE_WIDTH",
+      "body": "WIDO_N_OPRSIDE_WIDTH"
+    },
+    "\"WIDO_N_RSIDE_HEIGHT\" global": {
+      "prefix": "WIDO_N_RSIDE_HEIGHT",
+      "body": "WIDO_N_RSIDE_HEIGHT"
+    },
+    "\"WIDO_N_RSIDE_SURF\" global": {
+      "prefix": "WIDO_N_RSIDE_SURF",
+      "body": "WIDO_N_RSIDE_SURF"
+    },
+    "\"WIDO_N_RSIDE_WIDTH\" global": {
+      "prefix": "WIDO_N_RSIDE_WIDTH",
+      "body": "WIDO_N_RSIDE_WIDTH"
+    },
+    "\"WIDO_OPRSIDE_HEAD_HEIGHT\" global": {
+      "prefix": "WIDO_OPRSIDE_HEAD_HEIGHT",
+      "body": "WIDO_OPRSIDE_HEAD_HEIGHT"
+    },
+    "\"WIDO_OPRSIDE_HEIGHT\" global": {
+      "prefix": "WIDO_OPRSIDE_HEIGHT",
+      "body": "WIDO_OPRSIDE_HEIGHT"
+    },
+    "\"WIDO_OPRSIDE_SILL_HEIGHT\" global": {
+      "prefix": "WIDO_OPRSIDE_SILL_HEIGHT",
+      "body": "WIDO_OPRSIDE_SILL_HEIGHT"
+    },
+    "\"WIDO_OPRSIDE_SURF\" global": {
+      "prefix": "WIDO_OPRSIDE_SURF",
+      "body": "WIDO_OPRSIDE_SURF"
+    },
+    "\"WIDO_OPRSIDE_WIDTH\" global": {
+      "prefix": "WIDO_OPRSIDE_WIDTH",
+      "body": "WIDO_OPRSIDE_WIDTH"
+    },
+    "\"WIDO_ORIENTATION\" global": {
+      "prefix": "WIDO_ORIENTATION",
+      "body": "WIDO_ORIENTATION"
+    },
+    "\"WIDO_ORIG_DIST\" global": {
+      "prefix": "WIDO_ORIG_DIST",
+      "body": "WIDO_ORIG_DIST"
+    },
+    "\"WIDO_POSITION\" global": {
+      "prefix": "WIDO_POSITION",
+      "body": "WIDO_POSITION"
+    },
+    "\"WIDO_PREFIX\" global": {
+      "prefix": "WIDO_PREFIX",
+      "body": "WIDO_PREFIX"
+    },
+    "\"WIDO_PWALL_INSET\" global": {
+      "prefix": "WIDO_PWALL_INSET",
+      "body": "WIDO_PWALL_INSET"
+    },
+    "\"WIDO_REVEAL_ON\" global": {
+      "prefix": "WIDO_REVEAL_ON",
+      "body": "WIDO_REVEAL_ON"
+    },
+    "\"WIDO_REVEAL_SIDE\" global": {
+      "prefix": "WIDO_REVEAL_SIDE",
+      "body": "WIDO_REVEAL_SIDE"
+    },
+    "\"WIDO_RIGHT_JAMB\" global": {
+      "prefix": "WIDO_RIGHT_JAMB",
+      "body": "WIDO_RIGHT_JAMB"
+    },
+    "\"WIDO_RSIDE_HEAD_HEIGHT\" global": {
+      "prefix": "WIDO_RSIDE_HEAD_HEIGHT",
+      "body": "WIDO_RSIDE_HEAD_HEIGHT"
+    },
+    "\"WIDO_RSIDE_HEIGHT\" global": {
+      "prefix": "WIDO_RSIDE_HEIGHT",
+      "body": "WIDO_RSIDE_HEIGHT"
+    },
+    "\"WIDO_RSIDE_SILL_HEIGHT\" global": {
+      "prefix": "WIDO_RSIDE_SILL_HEIGHT",
+      "body": "WIDO_RSIDE_SILL_HEIGHT"
+    },
+    "\"WIDO_RSIDE_SURF\" global": {
+      "prefix": "WIDO_RSIDE_SURF",
+      "body": "WIDO_RSIDE_SURF"
+    },
+    "\"WIDO_RSIDE_WIDTH\" global": {
+      "prefix": "WIDO_RSIDE_WIDTH",
+      "body": "WIDO_RSIDE_WIDTH"
+    },
+    "\"WIDO_SILL\" global": {
+      "prefix": "WIDO_SILL",
+      "body": "WIDO_SILL"
+    },
+    "\"WIDO_SILL_HEIGHT\" global": {
+      "prefix": "WIDO_SILL_HEIGHT",
+      "body": "WIDO_SILL_HEIGHT"
+    },
+    "\"WIDO_SUBFL_THICKNESS\" global": {
+      "prefix": "WIDO_SUBFL_THICKNESS",
+      "body": "WIDO_SUBFL_THICKNESS"
+    },
+    "\"WIDO_THRES_DEPTH\" global": {
+      "prefix": "WIDO_THRES_DEPTH",
+      "body": "WIDO_THRES_DEPTH"
+    },
+    "\"WIDO_VOLUME\" global": {
+      "prefix": "WIDO_VOLUME",
+      "body": "WIDO_VOLUME"
+    },
+    "request (\"Name_of_program\")": {
+      "prefix": "request (\"Name_of_program",
+      "body": "n = REQUEST (\"Name_of_program\", \"\", ${01:program_name})"
+    },
+    "request (\"Name_of_macro\")": {
+      "prefix": "request (\"Name_of_macro",
+      "body": "n = REQUEST (\"Name_of_macro\", \"\", ${01:my_name})"
+    },
+    "request (\"Name_of_main\")": {
+      "prefix": "request (\"Name_of_main",
+      "body": "n = REQUEST (\"Name_of_main\", \"\", ${01:main_name})"
+    },
+    "request (\"ID_of_main\")": {
+      "prefix": "request (\"ID_of_main",
+      "body": "n = REQUEST (\"ID_of_main\", \"\", ${01:id_string})"
+    },
+    "request (\"Full_ID_of_parent\")": {
+      "prefix": "request (\"Full_ID_of_parent",
+      "body": "n = REQUEST (\"Full_ID_of_parent\", \"\", ${01:id_string})"
+    },
+    "request (\"Name_of_plan\")": {
+      "prefix": "request (\"Name_of_plan",
+      "body": "n = REQUEST (\"Name_of_plan\", \"\", ${01:name})"
+    },
+    "request (\"Story\")": {
+      "prefix": "request (\"Story",
+      "body": "n = REQUEST (\"Story\", \"\", ${01:index}, ${02:story_name})"
+    },
+    "request (\"Home_story\")": {
+      "prefix": "request (\"Home_story",
+      "body": "n = REQUEST (\"Home_story\", \"\", ${01:index}, ${02:story_name})"
+    },
+    "request (\"Home_story_of_opening\")": {
+      "prefix": "request (\"Home_story_of_opening",
+      "body": "n = REQUEST (\"Home_story_of_opening\", \"\", ${01:index}, ${01:story_name})"
+    },
+    "request (\"Story_info\")": {
+      "prefix": "request (\"Story_info",
+      "body": "n = REQUEST (\"Story_info\", ${01:expr}, ${02:nStories},\n\t${03:index1}, ${04:name1}, ${05:elev1}, ${06:height1} [,\n\t${07:index2}, ${08:name2}, ...])"
+    },
+    "request (\"Linear_dimension\")": {
+      "prefix": "request (\"Linear_dimension",
+      "body": "n = REQUEST (\"Linear_dimension\", \"\", ${01:format_string})"
+    },
+    "request (\"Angular_dimension\")": {
+      "prefix": "request (\"Angular_dimension",
+      "body": "n = REQUEST (\"Angular_dimension\", \"\", ${01:format_string})"
+    },
+    "request (\"Angular_length_dimension\")": {
+      "prefix": "request (\"Angular_length_dimension",
+      "body": "n = REQUEST (\"Angular_length_dimension\", \"\", ${01:format_string})"
+    },
+    "request (\"Radial_dimension\")": {
+      "prefix": "request (\"Radial_dimension",
+      "body": "n = REQUEST (\"Radial_dimension\", \"\", ${01:format_string})"
+    },
+    "request (\"Level_dimension\")": {
+      "prefix": "request (\"Level_dimension",
+      "body": "n = REQUEST (\"Level_dimension\", \"\", ${01:format_string})"
+    },
+    "request (\"Elevation_dimension\")": {
+      "prefix": "request (\"Elevation_dimension",
+      "body": "n = REQUEST (\"Elevation_dimension\", \"\", ${01:format_string})"
+    },
+    "request (\"Window_door_dimension\")": {
+      "prefix": "request (\"Window_door_dimension",
+      "body": "n = REQUEST (\"Window_door_dimension\", \"\", ${01:format_string})"
+    },
+    "request (\"Sill_height_dimension\")": {
+      "prefix": "request (\"Sill_height_dimension",
+      "body": "n = REQUEST (\"Sill_height_dimension\", \"\", ${01:format_string})"
+    },
+    "request (\"Area_dimension\")": {
+      "prefix": "request (\"Area_dimension",
+      "body": "n = REQUEST (\"Area_dimension\", \"\", ${01:format_string})"
+    },
+    "request (\"Calc_length_unit\")": {
+      "prefix": "request (\"Calc_length_unit",
+      "body": "n = REQUEST (\"Calc_length_unit\", \"\", ${01:format_string})"
+    },
+    "request (\"Calc_area_unit\")": {
+      "prefix": "request (\"Calc_area_unit",
+      "body": "n = REQUEST (\"Calc_area_unit\", \"\", ${01:format_string})"
+    },
+    "request (\"Calc_volume_unit\")": {
+      "prefix": "request (\"Calc_volume_unit",
+      "body": "n = REQUEST (\"Calc_volume_unit\", \"\", ${01:format_string})"
+    },
+    "request (\"Calc_angle_unit\")": {
+      "prefix": "request (\"Calc_angle_unit",
+      "body": "n = REQUEST (\"Calc_angle_unit\", \"\", ${01:format_string})"
+    },
+    "request (\"Clean_intersections\")": {
+      "prefix": "request (\"Clean_intersections",
+      "body": "n = REQUEST (\"Clean_intersections\", \"\", ${01:state})"
+    },
+    "request (\"Zone_category\")": {
+      "prefix": "request (\"Zone_category",
+      "body": "n = REQUEST (\"Zone_category\", \"\", ${01:name}, ${02:code})"
+    },
+    "request (\"Zone_relations\")": {
+      "prefix": "request (\"Zone_relations",
+      "body": "n = REQUEST (\"Zone_relations\", \"\",\n\t${01:category_name, ${02:code}, ${03:name}, ${04:number}\n\t[, ${05:category_name2}, ${06:code2}, ${07:name2}, ${08:number2}])"
+    },
+    "request (\"Zone_relations_of_owner\")": {
+      "prefix": "request (\"Zone_relations_of_owner",
+      "body": "n = REQUEST (\"Zone_relations_of_owner\", \"\",\n\t${01:category_name}, ${02:code}, ${03:name}, ${04:number}\n\t[, ${05:category_name2}, ${06:code2}, ${07:name2}, ${08:number2}])"
+    },
+    "request (\"Zone_colus_area\")": {
+      "prefix": "request (\"Zone_colus_area",
+      "body": "n = REQUEST (\"Zone_colus_area\", \"\", ${01:area})"
+    },
+    "request (\"Custom_auto_label\")": {
+      "prefix": "request (\"Custom_auto_label",
+      "body": "n = REQUEST (\"Custom_auto_label\", \"\", ${01:name})"
+    },
+    "request (\"Rgb_of_material\")": {
+      "prefix": "request (\"Rgb_of_material",
+      "body": "n = REQUEST (\"Rgb_of_material\", ${01:name}, ${02:r}, ${03:g}, ${04:b})"
+    },
+    "request (\"Rgb_of_pen\")": {
+      "prefix": "request (\"Rgb_of_pen",
+      "body": "n = REQUEST (\"Rgb_of_pen\", ${01:penindex}, ${02:r}, ${03:g}, ${04:b})"
+    },
+    "request (\"Pen_of_RGB\")": {
+      "prefix": "request (\"Pen_of_RGB",
+      "body": "n = REQUEST (\"Pen_of_RGB\", \"r g b\", ${01:penindex})"
+    },
+    "request (\"Height_of_style\")": {
+      "prefix": "request (\"Height_of_style",
+      "body": "n = REQUEST (\"Height_of_style\", ${01:name}, ${02:height} [, ${03:descent}, ${04:leading}])"
+    },
+    "request (\"Style_info\")": {
+      "prefix": "request (\"Style_info",
+      "body": "n = REQUEST (\"Style_info\", ${01:name}, ${02:fontname} [, ${03:size}, ${04:anchor}, ${05:face_or_slant}])"
+    },
+    "request (\"Name_of_material\")": {
+      "prefix": "request (\"Name_of_material",
+      "body": "n = REQUEST (\"Name_of_material\", ${01:index}, ${02:name})"
+    },
+    "request (\"Name_of_building_material\")": {
+      "prefix": "request (\"Name_of_building_material",
+      "body": "n = REQUEST (\"Name_of_building_material\", ${01:index}, ${02:name})"
+    },
+    "request (\"Name_of_fill\")": {
+      "prefix": "request (\"Name_of_fill",
+      "body": "n = REQUEST (\"Name_of_fill\", ${01:index}, ${02:name})"
+    },
+    "request (\"Name_of_line_type\")": {
+      "prefix": "request (\"Name_of_line_type",
+      "body": "n = REQUEST (\"Name_of_line_type\", ${01:index}, ${02:name})"
+    },
+    "request (\"Name_of_style\")": {
+      "prefix": "request (\"Name_of_style",
+      "body": "n = REQUEST (\"Name_of_style\", ${01:index}, ${02:name})"
+    },
+    "request (\"WINDOW_DOOR_SHOW_DIM\")": {
+      "prefix": "request (\"WINDOW_DOOR_SHOW_DIM",
+      "body": "n = REQUEST (\"WINDOW_DOOR_SHOW_DIM\", \"\", ${01:show})"
+    },
+    "request (\"window_show_dim\")": {
+      "prefix": "request (\"window_show_dim",
+      "body": "n = REQUEST (\"window_show_dim\", \"\", ${01:show})"
+    },
+    "request (\"door_show_dim\")": {
+      "prefix": "request (\"door_show_dim",
+      "body": "n = REQUEST (\"door_show_dim\", \"\", ${01:show})"
+    },
+    "request (\"name_of_listed\")": {
+      "prefix": "request (\"name_of_listed",
+      "body": "n = REQUEST (\"name_of_listed\", \"\", ${01:name})"
+    },
+    "request (\"window_door_zone_relev\")": {
+      "prefix": "request (\"window_door_zone_relev",
+      "body": "n = REQUEST (\"window_door_zone_relev\", \"\", ${01:out_direction})"
+    },
+    "request (\"window_door_zone_relev_of_owner\")": {
+      "prefix": "request (\"window_door_zone_relev_of_owner",
+      "body": "n = REQUEST (\"window_door_zone_relev_of_owner\", \"\", ${01:out_direction})"
+    },
+    "request (\"matching_properties\")": {
+      "prefix": "request (\"matching_properties",
+      "body": "n = REQUEST (\"matching_properties\", ${01:type}, ${02:name1}, ${03:name2}, ${04:...})"
+    },
+    "request (\"Working_length_unit\")": {
+      "prefix": "request (\"Working_length_unit",
+      "body": "n = REQUEST (\"Working_length_unit\", \"\", ${01:format_string})"
+    },
+    "request (\"Working_angle_unit\")": {
+      "prefix": "request (\"Working_angle_unit",
+      "body": "n = REQUEST (\"Working_angle_unit\", \"\", ${01:format_string})"
+    },
+    "request (\"Model_length_unit\")": {
+      "prefix": "request (\"Model_length_unit",
+      "body": "n = REQUEST (\"Model_length_unit\", \"\", ${01:format_string})"
+    },
+    "request (\"Layout_length_unit\")": {
+      "prefix": "request (\"Layout_length_unit",
+      "body": "n = REQUEST (\"Layout_length_unit\", \"\", ${01:format_string})"
+    },
+    "request (\"Model_text_size_unit\")": {
+      "prefix": "request (\"Model_text_size_unit",
+      "body": "n = REQUEST (\"Model_text_size_unit\", \"\", ${01:format_string})"
+    },
+    "request (\"Layout_text_size_unit\")": {
+      "prefix": "request (\"Layout_text_size_unit",
+      "body": "n = REQUEST (\"Layout_text_size_unit\", \"\", ${01:format_string})"
+    },
+    "request (\"Properties_Of_Parent\")": {
+      "prefix": "request (\"Properties_Of_Parent",
+      "body": "n = REQUEST (\"Properties_Of_Parent\", ${01:propertyType}, ${02:parentProperties})"
+    },
+    "request (\"Property_Value_Of_Parent\")": {
+      "prefix": "request (\"Property_Value_Of_Parent",
+      "body": "n = REQUEST (\"Property_Value_Of_Parent\", \"${01:id}\", ${02:type}, ${03:dim1}, ${04:dim2}, ${05:propertyValues})"
+    },
+    "request (\"Property_Tree_Of_Parent\")": {
+      "prefix": "request (\"Property_Tree_Of_Parent",
+      "body": "n = REQUEST (\"Property_Tree_Of_Parent\", ${01:propTreeInput}, ${02:propTreeOutput})"
+    },
+    "request (\"Component_Property_Tree_Of_Parent\")": {
+      "prefix": "request (\"Component_Property_Tree_Of_Parent",
+      "body": "n = REQUEST (\"Component_Property_Tree_Of_Parent\", ${01:propTreeInput}, ${02:propTreeOutput})"
+    },
+    "request (\"Property_Values_Of_Parent\")": {
+      "prefix": "request (\"Property_Values_Of_Parent",
+      "body": "n = REQUEST (\"Property_Values_Of_Parent\", \"${01:propInputIds}\", ${02:propOutputVals})"
+    },
+    "request (\"Property_Name\")": {
+      "prefix": "request (\"Property_Name",
+      "body": "n = REQUEST (\"Property_Name\", \"${01:id}\", ${02:typeName}, ${03:groupName}, ${04:propertyName})"
+    },
+    "request (\"Component_IDs_Of_Parent\")": {
+      "prefix": "request (\"Component_IDs_Of_Parent",
+      "body": "n = REQUEST (\"Component_IDs_Of_Parent\", \"${01:collectComponents}\", ${02:outputCompIds})"
+    },
+    "request (\"Component_Property_Values_Of_Parent\")": {
+      "prefix": "request (\"Component_Property_Values_Of_Parent",
+      "body": "n = REQUEST (\"Component_Property_Values_Of_Parent\", \"${01:compPropInput}\", ${02:compPropVals})"
+    },
+    "request (\"Component_Properties_Of_Parent\")": {
+      "prefix": "request (\"Component_Properties_Of_Parent",
+      "body": "n = REQUEST (\"Component_Properties_Of_Parent\", \"${01:propertyType}\", ${02:parentComponentProperties})"
+    },
+    "request (\"AUTOTEXT_LIST\")": {
+      "prefix": "request (\"AUTOTEXT_LIST",
+      "body": "n = REQUEST (\"AUTOTEXT_LIST\", \"\", ${01:autoTextListArray})"
+    },
+    "request (\"Sum_with_rounding\")": {
+      "prefix": "request (\"Sum_with_rounding",
+      "body": "n = REQUEST{3} (\"Sum_with_rounding\", ${01:req_name}, ${02:addends_array}, ${03:result})"
+    },
+    "request (\"ASSOCLP_PARVALUE\")": {
+      "prefix": "request (\"ASSOCLP_PARVALUE",
+      "body": "n = REQUEST (\"ASSOCLP_PARVALUE\", ${01:expr}, ${02:name_or_index}, ${03:type}, ${04:flags}, ${05:dim1}, ${06:dim2}, ${07:p_values})"
+    },
+    "request (\"ASSOCLP_PARVALUE_WITH_DESCRIPTION\")": {
+      "prefix": "request (\"ASSOCLP_PARVALUE_WITH_DESCRIPTION",
+      "body": "n = REQUEST (\"ASSOCLP_PARVALUE_WITH_DESCRIPTION\", ${01:expr}, ${02:name_or_index}, ${03:type},\n\t${04:flags}, ${05:dim1}, ${06:dim2}, ${07:p_values_and_descriptions})"
+    },
+    "request (\"ASSOCLP_NAME\")": {
+      "prefix": "request (\"ASSOCLP_NAME",
+      "body": "n = REQUEST (\"ASSOCLP_NAME\", \"\", ${01:name})"
+    },
+    "request (\"ASSOCEL_PROPERTIES\")": {
+      "prefix": "request (\"ASSOCEL_PROPERTIES",
+      "body": "n = REQUEST (\"ASSOCEL_PROPERTIES\", ${01:parameter_string}, ${02:nr_data}, ${03:data})"
+    },
+    "request (\"REFERENCE_LEVEL_DATA\")": {
+      "prefix": "request (\"REFERENCE_LEVEL_DATA",
+      "body": "n = REQUEST (\"REFERENCE_LEVEL_DATA\", \"\", ${01:name1, ${02:elev1, ${03:name2, ${04:lev2,\n\t${05:name3, ${06:elev3, ${07:name4, ${08:elev4)"
+    },
+    "request (\"ANCESTRY_INFO\")": {
+      "prefix": "request (\"ANCESTRY_INFO",
+      "body": "n = REQUEST (\"ANCESTRY_INFO\", ${01:expr}, ${02:name} [, ${03:guid},\n\t${04:parent_name1}, ${05:parent_guid1},\n\t${06:...}\n\t${07:parent_namen}, ${08:parent_guidn})"
+    },
+    "request (\"TEXTBLOCK_INFO\")": {
+      "prefix": "request (\"TEXTBLOCK_INFO",
+      "body": "n = REQUEST (\"TEXTBLOCK_INFO\", ${01:textblock_name}, ${02:width}, ${03:height})"
+    },
+    "request (\"Material_info\")": {
+      "prefix": "request (\"Material_info",
+      "body": "n = REQUEST{2} (\"Material_info\", ${01:name_or_index}, ${02:param_name}, ${03:value_or_values})"
+    },
+    "request (\"Building_Material_info\")": {
+      "prefix": "request (\"Building_Material_info",
+      "body": "n = REQUEST{2} (\"Building_Material_info\", ${01:name_or_index}, ${02:param_name}, ${03:value_or_values})"
+    },
+    "request (\"FONTNAMES_LIST\")": {
+      "prefix": "request (\"FONTNAMES_LIST",
+      "body": "n = REQUEST (\"FONTNAMES_LIST\", \"\", ${01:fontnames})"
+    },
+    "request (\"HomeDB_info\")": {
+      "prefix": "request (\"HomeDB_info",
+      "body": "n = REQUEST (\"HomeDB_info\", \"\", ${01:homeDBIntId}, ${02:homeDBUserId}, ${03:homeDBName}, ${04:homeContext})"
+    },
+    "request (\"floor_plan_option\")": {
+      "prefix": "request (\"floor_plan_option",
+      "body": "n = REQUEST (\"floor_plan_option\", \"\", ${01:storyViewpointType})"
+    },
+    "request (\"class_of_fill\")": {
+      "prefix": "request (\"class_of_fill",
+      "body": "n = REQUEST (\"class_of_fill\", ${01:index}, ${02:class})"
+    },
+    "request (\"view_rotangle\")": {
+      "prefix": "request (\"view_rotangle",
+      "body": "n = REQUEST (\"view_rotangle\", \"\", ${01:angleViewRotation})"
+    },
+    "request (\"program_info\")": {
+      "prefix": "request (\"program_info",
+      "body": "n = REQUEST (\"program_info\", \"\", ${01:name}[, ${02:version}[, ${03:keySerialNumber}[, ${04:isCommercial}]]])"
+    },
+    "request (\"Configuration_number\")": {
+      "prefix": "request (\"Configuration_number",
+      "body": "n = REQUEST (\"Configuration_number\", \"\", ${01:stConfigurationNumber})"
+    },
+    "request (extension_name)": {
+      "prefix": "request (extension_name",
+      "body": "n = REQUEST (${01:extension_name}, ${02:parameter_string}, ${03:variable1}, ${04:variable2}, ${05:...})"
+    },
+    "request (\"COMPONENT_PROJECTED_AREA\")": {
+      "prefix": "request (\"COMPONENT_PROJECTED_AREA",
+      "body": "n = REQUEST (\"COMPONENT_PROJECTED_AREA\", ${01:idxSkin}, ${02:projectedArea})"
+    },
+    "request (\"COMPONENT_VOLUME\")": {
+      "prefix": "request (\"COMPONENT_VOLUME",
+      "body": "n = REQUEST (\"COMPONENT_VOLUME\", ${01:idxSkin}, ${02:skinVolume})"
+    },
+    "request (\"DateTime\")": {
+      "prefix": "request (\"DateTime",
+      "body": "n = REQUEST (\"DateTime\", ${01:format_string}, ${02:datetimestring})"
+    },
+    "request (\"Name_of_Profile\")": {
+      "prefix": "request (\"Name_of_Profile",
+      "body": "n = REQUEST (\"Name_of_Profile\", ${01:index, ${02:name})"
+    },
+    "request (\"Profile_components\")": {
+      "prefix": "request (\"Profile_components",
+      "body": "n = REQUEST (\"Profile_components\", ${01:name_or_index}, ${02:nComponents},\n\t${03:compType1}, ${04:compType2}, ${05:...}, ${06:compTypen})"
+    },
+    "request (\"Profile_default_boundingbox\")": {
+      "prefix": "request (\"Profile_default_boundingbox",
+      "body": "n = REQUEST (\"Profile_default_boundingbox\", ${01:name_or_index}, ${02:xmin}, ${03:ymin}, ${04:xmax}, ${05:ymax})"
+    },
+    "request (\"Profile_default_geometry\")": {
+      "prefix": "request (\"Profile_default_geometry",
+      "body": "n = REQUEST (\"Profile_default_geometry\", ${01:name_or_index}, ${02:n1}, ${03:n2}, ${04:...}, ${05:nm,\n\t${06:x11}, ${07:y11}, ${08:edgeVisible11}, ${09:vertEdgeVisible11}, ${10:additionalStatus11}, ${11:...},\n\t${12:x1n1}, ${13:y1n1}, ${14:edgeVisible1n1}, ${15:vertEdgeVisible1n1}, ${16:additionalStatus1n1,\n\t${17:x21}, ${18:y21}, ${19:edgeVisible21}, ${20:vertEdgeVisible21}, ${21:additionalStatus21}, ${22:...,\n\t${01:x2n2}, ${23:y2n2}, ${24:edgeVisible2n2}, ${25:vertEdgeVisible2n2}, ${26:additionalStatus2n2}, ${27:...},\n\t${28:xm1}, ${29:ym1}, ${30:edgeVisiblem1}, ${31:vertEdgeVisiblem1}, ${32:additionalStatusm1}, ${33:...},\n\t${34:xmnm}, ${35:ymnm}, ${36:edgeVisiblemnm}, ${37:vertEdgeVisiblemnm}, ${38:additionalStatusmnm)"
+    },
+    "request (\"Profile_component_info\") whole component": {
+      "prefix": "request (\"Profile_component_info",
+      "body": "n = REQUEST{4} (\"Profile_component_info\", ${01:name_or_index}, ${02:component_ind}, ${03:param_name}, ${04:value})"
+    },
+    "request (\"Profile_component_info\") edges of component": {
+      "prefix": "request (\"Profile_component_info",
+      "body": "n = REQUEST{4} (\"Profile_component_info\", ${01:name_or_index}, ${02:component_ind}, ${03:param_name},\n\t${04:value1}, ${05:value2}, ${06:...}, ${07:valuen})"
+    },
+    "localized string": {
+      "prefix": "_(",
+      "body": "_(`${01:string}`)$0"
+    }
+  }
+}

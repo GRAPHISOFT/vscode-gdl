@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>ARMC</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="ARMC_gdlcommand">ARMC</h3>
+				
+				<pre class="programlisting"><b id="ARMC_keyword_2.7.3.35.4.1">ARMC</b> r1, r2, l, h, d, alpha</pre>
+				
+					<div style="text-align: center"><img src="Images/GDL_Images/3Dshapes_armc.png" style="text-align: middle" alt="Images/GDL_Images/3Dshapes_armc.png"/></div>
+					<p>
+						A piece of tube starting from another tube; parameters according to the figure (penetration curves are also calculated and drawn).
+						The alpha value is in degrees.
+					</p>
+					
+						<pre class="programlisting">r1 &gt;= r2 + d
+r1 &lt;= l*sin(alpha) - r2*cos(alpha)</pre>
+					
+				
+				<div class="example"><a id="id499094"/><p class="title"><b>Example:
+</b></p><div class="example-contents"><div class="informaltable"><table border="0"><colgroup><col/><col/></colgroup><tbody><tr><td>
+										<pre class="programlisting">ROTY 90
+CYLIND 10,1
+ADDZ 6
+ARMC 1, 0.9, 3, 0, 0, 45
+ADDZ -1
+ROTZ -90
+ARMC 1, 0.75, 3, 0, 0, 90
+ADDZ -1
+ROTZ -90
+ARMC 1, 0.6, 3, 0, 0, 135</pre>
+									</td><td style="text-align: center">
+										<div style="text-align: center"><img src="Images/GDL_Images/3Dshapes_armc_ex.png" style="text-align: middle" alt="Images/GDL_Images/3Dshapes_armc_ex.png"/></div>
+									</td></tr></tbody></table></div></div></div>
+			<hr/><a href="002.007.html#ARMC_gdlcommand">Related in 3D Shapes</a><p>
+				<span class="bold"><strong>GDL Reference Guide</strong></span>
+			</p><p>
+				<span class="trademark">Copyright</span><sup>©</sup> 2021 by GRAPHISOFT, all rights reserved.
+				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+			</p></body></html>

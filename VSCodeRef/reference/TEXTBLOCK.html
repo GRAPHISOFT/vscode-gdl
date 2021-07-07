@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>TEXTBLOCK</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="TEXTBLOCK_gdlcommand">TEXTBLOCK</h3>
+					
+					<pre class="programlisting"><b id="TEXTBLOCK_keyword_2.11.4.9.5.4.1">TEXTBLOCK</b> name width, anchor, angle, width_factor, charspace_factor, fixed_height,
+        'string_expr1' [, 'string_expr2', ...]</pre>
+					
+						<p>
+							Textblock definition. GDL scripts may include textblock definitions prior to the first reference to that textblock name.
+							The textblock defined this way can be used only in the script in which it was defined and its subsequent second generation scripts.
+							A textblock is defined to be a sequence of an arbitrary number of strings or paragraphs which can be placed
+							using <a class="xref" href="reference/RICHTEXT2.html">the RICHTEXT2 command</a> and <a class="xref" href="reference/RICHTEXT.html">the RICHTEXT command</a>.
+							Use the REQUEST ("TEXTBLOCK_INFO", ...) function to obtain information on the calculated width and height of a textblock.
+						</p>
+						<div style="margin-left: 1em">
+							<div style="text-indent: -1em"><code><b>name: </b></code>name of the textblock, string type value.</div>
+						</div>
+						<div style="margin-left: 1em">
+							<div style="text-indent: -1em"><code><b>width: </b></code>textblock width in mm or m in model space, if 0 it is calculated automatically.</div>
+						</div>
+						<div style="margin-left: 1em">
+							<div style="text-indent: -1em"><code><b>anchor: </b></code>code of the position point in the text.</div>
+						</div>
+						<div style="text-align: center"><img src="Images/GDL_Images/Attributes_anchor.png" style="text-align: middle" alt="Images/GDL_Images/Attributes_anchor.png"/></div>
+						<div style="margin-left: 1em">
+							<div style="text-indent: -1em"><code><b>angle: </b></code>rotation angle of the textblock in degrees.</div>
+						</div>
+						<div style="margin-left: 1em">
+							<div style="text-indent: -1em"><code><b>width_factor: </b></code>Character widths defined by the actual style will be multiplied by this number.</div>
+						</div>
+						<div style="margin-left: 1em">
+							<div style="text-indent: -1em"><code><b>charspace_factor: </b></code>The horizontal distance between two characters will be multiplied by this number.</div>
+						</div>
+						<div style="margin-left: 1em">
+							<div style="text-indent: -1em"><code><b>fixed_height: </b></code>Possible values:</div>
+							<div><code>1: </code>the placed TEXTBLOCK will be scale-independent and all specified length type parameters will mean millimeters,</div>
+							<div><code>0: </code>the placed TEXTBLOCK will be scale-dependent and all specified length type parameters will mean meters in model space.</div>
+						</div>
+						<div style="margin-left: 1em">
+							<div style="text-indent: -1em"><code><b>string_expri: </b></code>means paragraph name if it was previously defined, simple string otherwise (with default paragraph parameters).</div>
+						</div>
+					
+				<hr/><a href="002.011.html#TEXTBLOCK_gdlcommand">Related in Attributes</a><p>
+				<span class="bold"><strong>GDL Reference Guide</strong></span>
+			</p><p>
+				<span class="trademark">Copyright</span><sup>©</sup> 2021 by GRAPHISOFT, all rights reserved.
+				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+			</p></body></html>

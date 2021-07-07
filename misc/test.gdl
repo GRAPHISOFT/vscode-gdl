@@ -1,0 +1,136 @@
+!
+! te"st
+" te!st" !t"est
+
+123.456
+12.42
+.42
+1.567E-18
+.3E+2
+123,456
+43'
+0.2"
+.2"
+1/2', 3/4", 1/2'-3/4", 0.5'-0.75", .5'-.75", 1/2' - 3/4"
+2123
+"nll\njk" + 16 + 16' + 3.2" - 2.0
+"nlljk + 16' + 3.2" - 2.0"
+“nlljk + 16' + 3.2" - 2.0“
+'nlljk + 16 + 3.2" - 2.0'
+“nlljk + 16' + 3.2" - 2.0“
+
+1.567E-1.8
+5.E+2
+12. + 6
+
+NSP
+PI
+VALAMI
+VALA_mi
+VALAmi
+vala_MI
+valaMI
+_VALAMI
+_VAlami
+_vaLAMI
+_valami
+
+"aa"
+“A“
+”DATETIME”
+'aa'
+`aa`
+´aa´
+’aa’ "aa"
+‘aa‘
+
+dict test
+test.a[0]
+_test.a[2 + (6 % TEST.B)].b
+test.a.B._c
+TEST.E.A
+TEST.Aa.A
+_test.a
+test.int
+test.add2
+test.ac_riserPosition
+test.GLOB_MODPAR_NAME
+
+.int(a)
+.ADD2
+.add2.a
+add2.test
+
+test.0a
+test.5e
+test.a.0a
+
+test.a"
+test.a".a"
+
+goto 158
+158:
+
+goto "valami"
+"valami":
+"valami"
+! ========
+! coment
+! ========
+call "macroname"
+
+add2 A, b
+add2 a, b
+line2 0,0, a, b, valami
+hotspot2 a, b,,,,
+add A, b
+lin_ 0,0,a, b
+hotspot a, b
+
+065s + GLOB_CONTEXT + get 6
+"065s"
+
+valami (valami + "va\
+  lami" - valami : valami * valami \ !valami
+  - "val!a:mi",
+  valami)
+
+values A range ((16 - 48') / 2, (16 - 48) / 2]
+values A range (vmi[(67+2) * 3], vmi[(67+2) * 3])
+values A range [(16 - 48) / 2, vmi[(67+2) * 3]]
+values A range [vmi[(67+2) * 3], (16 - 48) / 2)
+
+valami(524, 625, 82678)
+ui_dialog 1, 2, 3, 4,
+arr [55]
+arr[][2]
+arr[berr[3]]
+!illegal[int(])]
+!int(illegal[)]
+int(55)
+arr[int(55)]
+int(arr[55])
+acs(arr[55 + int((berr[4] - 2) * 2), 3] - cirr[6][3])
+(berr[4] - 2) * 2
+
+for ha = 1 to 6 \
+    step _step
+  for ZZYZX = 7 to GLOB_LAYER - gs_valami + valami
+    UI_INFIELD "helo", 1, 2, 3, 4
+	ui_outfield `helo`, 1, 2, 3, 4
+next ha
+  ia = ia + 1
+next ZZYZX
+
+if  b = 6 |\
+    b = 7 then \
+        valami
+ENDIF
+a=b:b=j:\
+
+del ntr
+del ntr()
+str ()
+ia = haha
+A  = 5
+gs_ia = w

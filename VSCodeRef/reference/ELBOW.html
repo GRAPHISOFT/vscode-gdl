@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>ELBOW</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="ELBOW_gdlcommand">ELBOW</h3>
+				
+				<pre class="programlisting"><b id="ELBOW_keyword_2.7.3.37.4.1">ELBOW</b> r1, alpha, r2</pre>
+				
+					<p>
+						A segmented elbow in the x-z plane. The radius of the arc is r1, the angle is alpha and the radius of the tube segment is r2.
+						The alpha value is in degrees.
+					</p>
+					
+						<pre class="programlisting">r1 &gt; r2</pre>
+					
+					<div style="text-align: center"><img src="Images/GDL_Images/3Dshapes_elbow.png" style="text-align: middle" alt="Images/GDL_Images/3Dshapes_elbow.png"/></div>
+				
+				<div class="example"><a id="id499253"/><p class="title"><b>Example:
+</b></p><div class="example-contents"><div class="informaltable"><table border="0"><colgroup><col/><col/></colgroup><tbody><tr><td>
+										<pre class="programlisting">ROTY 90
+ELBOW 2.5, 180, 1
+ADDZ -4
+CYLIND 4, 1
+ROTZ -90
+MULZ -1
+ELBOW 5, 180, 1
+DEL 1
+ADDX 10
+CYLIND 4, 1
+ADDZ 4
+ROTZ 90
+ELBOW 2.5, 180, 1</pre>
+									</td><td style="text-align: center">
+										<div style="text-align: center"><img src="Images/GDL_Images/3Dshapes_elbow_ex.png" style="text-align: middle" alt="Images/GDL_Images/3Dshapes_elbow_ex.png"/></div>
+									</td></tr></tbody></table></div></div></div>
+			<hr/><a href="002.007.html#ELBOW_gdlcommand">Related in 3D Shapes</a><p>
+				<span class="bold"><strong>GDL Reference Guide</strong></span>
+			</p><p>
+				<span class="trademark">Copyright</span><sup>©</sup> 2021 by GRAPHISOFT, all rights reserved.
+				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+			</p></body></html>

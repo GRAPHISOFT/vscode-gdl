@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>POLYROOF</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="POLYROOF_gdlcommand">POLYROOF</h3>
+				
+				<pre class="programlisting"><b id="POLYROOF_keyword_2.7.5.45.4.1">POLYROOF</b> defaultMat, k, m, n,
+        offset, thickness, applyContourInsidePivot,
+        z_1, ..., z_k,
+        pivotX_1, pivotY_1, pivotMask_1,
+        roofAngle_11, gableOverhang_11, topMat_11, bottomMat_11,
+        ...
+        roofAngle_1k, gableOverhang_1k, topMat_1k, bottomMat_1k,
+        ...
+        pivotX_m, pivotY_m, pivotMask_m,
+        roofAngle_m1, gableOverhang_m1, topMat_m1, bottomMat_m1,
+        ...
+        roofAngle_mk, gableOverhang_mk, topMat_mk, bottomMat_mk,
+        contourX_1, contourY_1, contourMask_1, edgeTrim_1, edgeAngle_1, edgeMat_1,
+        ...
+        contourX_n, contourY_n, contourMask_n, edgeTrim_n, edgeAngle_n, edgeMat_n</pre>
+				
+					<p>
+						The command creates a possibly multi-level roof in which the geometry is controlled by multiple parameters,
+						most importantly the roof angles and two polygons: a pivot polygon and a contour polygon. At the pivot polygon, the roof is slanted at the roof angle.
+						It ascends until it either reaches the height of the next level or until it is eliminated by its sides encountering one another.
+						It also descends downwards, until it reaches the contour polygon, which cuts off parts of the roof outside of it.
+						The contour polygon can also be used to cut holes in the roof.
+					</p>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>defaultMat: </b></code>
+							the numeric index of the "inner" material of the roof.
+							This material becomes visible at gables and at cut surfaces, e.g., if the roof is cut by a plane.
+						</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>k: </b></code>the number of levels.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>m: </b></code>the number of pivot polygon vertices.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>n: </b></code>the number of contour polygon vertices.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>offset: </b></code>an offset for the thickness of the roof.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>thickness: </b></code>the thickness of the roof.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>applyContourInsidePivot: </b></code>
+							if set to 0, the outer contour polygon is only applied below the pivot polygon plane.
+							If set to 1, the outer contour polygon is applied both above and below the pivot polygon plane.
+							The 0 setting may be used to prevent the contour polygon from cutting off gables that lean outwards.
+						</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>z_i: </b></code>the Z coordinate of a level.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>pivotX_i, pivotY_i: </b></code>coordinates of the pivot polygon vertices.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>pivotMask_i: </b></code></div>
+						<div><code>0: </code>marks a normal vertex,</div>
+						<div><code>-1: </code>
+							marks the end of the current pivot subpolygon (outer contour or hole).
+							Data for such a vertex must be a copy of the data for the first vertex of the subpolygon.
+							A polygon must always be closed with a mask value of -1, even if there are no holes inside it.
+						</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>roofAngle_i: </b></code>angle of slant for a pivot edge on a given level. If the angle &gt;= 90, that part of the roof becomes a gable.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>gableOverhang_i: </b></code>
+							at the sides of a gable, the roof can extend over a lower level of itself.
+							The amount of this can be controlled by this parameter,
+							which has effect only on gables (roofAngle &gt;= 90) that are at least on the second level of the roof.
+						</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>topMat_i, bottomMat_i: </b></code>the numeric index of the materials for the top and bottom of the roof.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>contourX_i, contourY_i: </b></code>coordinates of the contour polygon vertices.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>contourMask_i: </b></code></div>
+						<div><code>0: </code>marks a normal vertex,</div>
+						<div><code>-1: </code>
+							marks the end of the current contour subpolygon (outer contour or hole).
+							Data for such a vertex must be a copy of the data for the first vertex of the subpolygon.
+							A polygon must always be closed with a mask value of -1, even if there are no holes inside it.
+						</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>edgeTrim_i: </b></code>specifies the way the edge is trimmed by the contour polygon. Possible values are:</div>
+						<div><code>0: </code>Vertical,</div>
+						<div><code>1: </code>Perpendicular to roof plane,</div>
+						<div><code>2: </code>Horizontal,</div>
+						<div><code>3: </code>Custom angle to roof plane.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>edgeAngle_i: </b></code>the custom angle of the edge to the roof plane. It has effect only if edgeTrim is set to 3 (custom angle to roof plane).</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>edgeMat_i: </b></code>numeric index of the material at the edge the roof, where the contour cuts it</div>
+					</div>
+					<div class="informaltable"><table border="0"><colgroup><col/></colgroup><tbody><tr><td style="text-align: center">
+										<div style="text-align: center"><img src="Images/GDL_Images/3Dshapes_polyroofMaterials.png" style="text-align: middle" alt="Images/GDL_Images/3Dshapes_polyroofMaterials.png"/></div>
+									</td></tr><tr><td style="text-align: center">
+										<span class="italic">Figure 1: Materials</span>
+									</td></tr></tbody></table></div>
+					<div class="informaltable"><table border="0"><colgroup><col/></colgroup><tbody><tr><td style="text-align: center">
+										<div style="text-align: center"><img src="Images/GDL_Images/3Dshapes_polyroofAngles.png" style="text-align: middle" alt="Images/GDL_Images/3Dshapes_polyroofAngles.png"/></div>
+									</td></tr><tr><td style="text-align: center">
+										<span class="italic">Figure 2: Angles</span>
+									</td></tr></tbody></table></div>
+				
+				<div class="example"><a id="id504135"/><p class="title"><b>Example:
+</b></p><div class="example-contents"><pre class="programlisting">POLYROOF "Paint-01",
+        2, 5, 5,
+        0, 0.2, 0,
+        ! Start of z values
+        2.7,
+        3.2,
+        ! Start of pivot polygon
+        2, 8, 0,
+        45, 0, ind(material, "Paint-01"), ind(material, "Paint-01"),
+        90, 0.5, ind(material, "Paint-01"), ind(material, "Paint-01"),
+        2, 3, 0,
+        45, 0, ind(material, "Paint-01"), ind(material, "Paint-01"),
+        65, 0, ind(material, "Paint-01"), ind(material, "Paint-01"),
+        10, 3, 0,
+        45, 0, ind(material, "Paint-01"), ind(material, "Paint-01"),
+        65, 0, ind(material, "Paint-01"), ind(material, "Paint-01"),
+        10, 8, 0,
+        45, 0, ind(material, "Paint-01"), ind(material, "Paint-01"),
+        65, 0, ind(material, "Paint-01"), ind(material, "Paint-01"),
+        2, 8, -1,
+        45, 0, ind(material, "Paint-01"), ind(material, "Paint-01"),
+        90, 0.5, ind(material, "Paint-01"), ind(material, "Paint-01"),
+        ! Start of contour polygon
+        1.5, 8.5, 0, 0, 0, ind(material, "Paint-01"),
+        1.5, 2.5, 0, 0, 0, ind(material, "Paint-01"),
+        10.5, 2.5, 0, 0, 0, ind(material, "Paint-01"),
+        10.5, 8.5, 0, 0, 0, ind(material, "Paint-01"),
+        1.5, 8.5, -1, 0, 0, ind(material, "Paint-01")</pre><p>Output: see Figure 1</p></div></div>
+			<hr/><a href="002.007.html#POLYROOF_gdlcommand">Related in 3D Shapes</a><p>
+				<span class="bold"><strong>GDL Reference Guide</strong></span>
+			</p><p>
+				<span class="trademark">Copyright</span><sup>©</sup> 2021 by GRAPHISOFT, all rights reserved.
+				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+			</p></body></html>

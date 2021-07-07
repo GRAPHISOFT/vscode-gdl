@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>EXTRUDE</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="EXTRUDE_gdlcommand">EXTRUDE</h3>
+				
+				<pre class="programlisting"><b id="EXTRUDE_keyword_2.7.5.26.4.1">EXTRUDE</b> n, dx, dy, dz, mask,
+        x1, y1, s1,
+        ...
+        xn, yn, sn</pre>
+				
+					<div style="text-align: center"><img src="Images/GDL_Images/3Dshapes_extrude.png" style="text-align: middle" alt="Images/GDL_Images/3Dshapes_extrude.png"/></div>
+					<p>General prism using a polyline base in the x-y plane.</p>
+					<p>
+						The displacement vector between bases is (dx, dy, dz).
+						This is a generalization of <a class="xref" href="reference/PRISM.html">the PRISM command</a> and <a class="xref" href="reference/SLAB.html">the SLAB command</a>.
+						The base polyline is not necessarily closed, as the lateral edges are not always perpendicular to the x-y plane.
+						The base polyline may include holes, just like PRISM_. It is possible to control the visibility of the contour edges.
+					</p>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>n: </b></code>the number of polyline nodes.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>mask: </b></code>
+							controls the existence of the bottom, top and (in case of an open polyline) side polygon.
+						</div><div><code>mask = j<sub>1</sub> + 2*j<sub>2</sub> + 4*j<sub>3</sub> + 16*j<sub>5</sub> + 32*j<sub>6</sub> + 64*j<sub>7</sub> + 128*j<sub>8</sub></code>, where each j can be 0 or 1.
+	</div>
+						<div><code>j<sub>1</sub>: </code>base surface is present,</div>
+						<div><code>j<sub>2</sub>: </code>top surface is present,</div>
+						<div><code>j<sub>3</sub>: </code>side (closing) surface is present,</div>
+						<div><code>j<sub>5</sub>: </code>base edges are visible,</div>
+						<div><code>j<sub>6</sub>: </code>top edges are visible.</div>
+						<div><code>j<sub>7</sub>: </code>cross-section edges are visible, surface is articulated,</div>
+						<div><code>j<sub>8</sub>: </code>cross-section edges are sharp, the surface smoothing will stop here in OpenGL and rendering.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>si: </b></code>
+							status of the lateral edges or marks the end of the polygon or of a hole.
+							You can also define arcs and segments in the polyline using additional status code values:
+						</div>
+						<div><code>0: </code>lateral edge starting from the node is visible,</div>
+						<div><code>1: </code>lateral edges starting from the node are used for showing the contour,</div>
+						<div><code>-1: </code>marks the end of the enclosing polygon or a hole, and means that the next node will be the first vertex of another hole.</div>
+					</div>
+					<p>Additional status codes allow you to create segments and arcs in the planar polyline using special constraints.</p>
+					<p>
+						<span class="italic">See <a class="xref" href="002.010.html#AdditionalStatusCodes_section" title="Additional Status Codes">the section called “Additional Status Codes”</a> for details.</span>
+					</p>
+					
+						<pre class="programlisting">n &gt; 2</pre>
+					
+				
+				<div class="example"><a id="id500129"/><p class="title"><b>Example 1:
+</b></p><div class="example-contents"><div class="informaltable"><table border="0"><colgroup><col/><col/></colgroup><tbody><tr><td>
+										<pre class="programlisting">EXTRUDE 14, 1, 1, 4, 1+2+4+16+32,
+        0, 0, 0,
+        1, -3, 0,
+        2, -2, 1,
+        3, -4, 0,
+        4, -2, 1,
+        5, -3, 0,
+        6, 0, 0,
+        3, 4, 0,
+        0, 0, -1,
+        2, 0, 0,
+        3, 2, 0,
+        4, 0, 0,
+        3, -2, 0,
+        2, 0, -1</pre>
+									</td><td style="text-align: center">
+										<div style="text-align: center"><img src="Images/GDL_Images/3Dshapes_extrude_ex1.png" style="text-align: middle" alt="Images/GDL_Images/3Dshapes_extrude_ex1.png"/></div>
+									</td></tr></tbody></table></div></div></div>
+				<div class="example"><a id="id500164"/><p class="title"><b>Example 2:
+</b></p><div class="example-contents"><div class="informaltable"><table border="0"><colgroup><col/><col/></colgroup><tbody><tr><td>
+										<pre class="programlisting">A=5: B=5: R=2: S=1: C=R-S : D=A-R : E=B-R
+EXTRUDE 28, -1, 0, 4, 1+2+4+16+32,
+        0, 0, 0,
+        D+R*sin(0),  R-R*cos(0), 1,
+        D+R*sin(15), R-R*cos(15), 1,
+        D+R*sin(30), R-R*cos(30), 1,
+        D+R*sin(45), R-R*cos(45), 1,
+        D+R*sin(60), R-R*cos(60), 1,
+        D+R*sin(75), R-R*cos(75), 1,
+        D+R*sin(90), R-R*cos(90), 1,
+        A, B, 0,
+        0, B, 0,
+        0, 0, -1,
+        C, C, 0,
+        D+S*sin(0),  R-S*cos(0), 1,
+        D+S*sin(15), R-S*cos(15), 1,
+        D+S*sin(30), R-S*cos(30), 1,
+        D+S*sin(45), R-S*cos(45), 1,
+        D+S*sin(60), R-S*cos(60), 1,
+        D+S*sin(75), R-S*cos(75), 1,
+        D+S*sin(90), R-S*cos(90), 1,
+        A-C,B-C,0,
+        R-S*cos(90), E+S*sin(90), 1,
+        R-S*cos(75), E+S*sin(75), 1,
+        R-S*cos(60), E+S*sin(60), 1,
+        R-S*cos(45), E+S*sin(45), 1,
+        R-S*cos(30), E+S*sin(30), 1,
+        R-S*cos(15), E+S*sin(15), 1,
+        R-S*cos(0),  E+S*sin(0), 1,
+        C, C, -1</pre>
+									</td><td style="text-align: center">
+										<div style="text-align: center"><img src="Images/GDL_Images/3Dshapes_extrude_ex2.png" style="text-align: middle" alt="Images/GDL_Images/3Dshapes_extrude_ex2.png"/></div>
+									</td></tr></tbody></table></div></div></div>
+			<hr/><a href="002.007.html#EXTRUDE_gdlcommand">Related in 3D Shapes</a><p>
+				<span class="bold"><strong>GDL Reference Guide</strong></span>
+			</p><p>
+				<span class="trademark">Copyright</span><sup>©</sup> 2021 by GRAPHISOFT, all rights reserved.
+				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+			</p></body></html>

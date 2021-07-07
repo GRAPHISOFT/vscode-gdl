@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>BWALL_</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="BWALL__gdlcommand">BWALL_</h3>
+				
+				<pre class="programlisting"><b id="BWALL__keyword_2.7.3.25.4.1">BWALL_</b> left_material, right_material, side_material,
+        height, x1, x2, x3, x4, t, radius,
+        mask1, mask2, mask3, mask4,
+        n,
+        x_start1, y_low1, x_end1, y_high1, frame_shown1,
+        ...
+        x_startn, y_lown, x_endn, y_highn, frame_shownn,
+        m,
+        a1, b1, c1, d1,
+        ...
+        am, bm, cm, dm</pre>
+				
+					<p>
+						A smooth curved wall based on the same data structure as the straight wall CWALL_ element. The only additional parameter is radius.
+						Derived from the corresponding CWALL_ by bending the x-z plane onto a cylinder tangential to that plane.
+						Edges along the x axis are transformed to circular arcs, edges along the y axis will be radial in direction, and vertical edges remain vertical.
+						The curvature is approximated by a number of segments set by the current resolution
+						(see <a class="xref" href="reference/RADIUS.html">the RADIUS command</a>, <a class="xref" href="reference/RESOL.html">the RESOL command</a> and <a class="xref" href="reference/TOLER.html">the TOLER command</a>).
+					</p>
+					<p>
+						<span class="italic">See also <a class="xref" href="reference/CWALL_.html">the CWALL_ command</a> for details.</span>
+					</p>
+				
+				<div class="example"><a id="id497553"/><p class="title"><b>Example 1:
+a BWALL_ and the corresponding CWALL_</b></p><div class="example-contents"><div class="informaltable"><table border="0"><colgroup><col/><col/></colgroup><tbody><tr><td style="text-align: center">
+										<div style="text-align: center"><img src="Images/GDL_Images/3Dshapes_bwall_.png" style="text-align: middle" alt="Images/GDL_Images/3Dshapes_bwall_.png"/></div>
+									</td><td style="text-align: center">
+										<div style="text-align: center"><img src="Images/GDL_Images/3Dshapes_bwall_components.png" style="text-align: middle" alt="Images/GDL_Images/3Dshapes_bwall_components.png"/></div>
+									</td></tr></tbody></table></div><div class="informaltable"><table border="0"><colgroup><col/><col/></colgroup><tbody><tr><td style="text-align: center">
+										<div style="text-align: center"><img src="Images/GDL_Images/3Dshapes_bwall_ex1_1.png" style="text-align: middle" alt="Images/GDL_Images/3Dshapes_bwall_ex1_1.png"/></div>
+									</td><td style="text-align: center">
+										<div style="text-align: center"><img src="Images/GDL_Images/3Dshapes_bwall_ex1_2.png" style="text-align: middle" alt="Images/GDL_Images/3Dshapes_bwall_ex1_2.png"/></div>
+									</td></tr></tbody></table></div></div></div>
+				<div class="example"><a id="id497638"/><p class="title"><b>Example 2:
+</b></p><div class="example-contents"><div class="informaltable"><table border="0"><colgroup><col/><col/></colgroup><tbody><tr><td>
+										<pre class="programlisting">ROTZ -60
+BWALL_ 1, 1, 1,
+        4, 0, 6, 6, 0,
+        0.3, 2,
+        15, 15, 15, 15,
+        5,
+        1, 1, 3.8, 2.5, -255,
+        1.8, 0, 3, 2.5, -255,
+        4.1, 1, 4.5, 1.4, -255,
+        4.1, 1.55, 4.5, 1.95,-255,
+        4.1, 2.1, 4.5, 2.5, -255,
+        1, 0, -0.25, 1, 3</pre>
+									</td><td style="text-align: center">
+										<div style="text-align: center"><img src="Images/GDL_Images/3Dshapes_bwall_ex2.png" style="text-align: middle" alt="Images/GDL_Images/3Dshapes_bwall_ex2.png"/></div>
+									</td></tr></tbody></table></div></div></div>
+			<hr/><a href="002.007.html#BWALL__gdlcommand">Related in 3D Shapes</a><p>
+				<span class="bold"><strong>GDL Reference Guide</strong></span>
+			</p><p>
+				<span class="trademark">Copyright</span><sup>©</sup> 2021 by GRAPHISOFT, all rights reserved.
+				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+			</p></body></html>

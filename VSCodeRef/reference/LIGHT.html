@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>LIGHT</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="LIGHT_gdlcommand">LIGHT</h3>
+				
+				<pre class="programlisting"><b id="LIGHT_keyword_2.7.6.2.4.1">LIGHT</b> red, green, blue, shadow,
+        radius, alpha, beta, angle_falloff,
+        distance1, distance2,
+        distance_falloff [[,] <b id="ADDITIONAL_DATA_keyword_2.7.6.2.4.3">ADDITIONAL_DATA</b> name1 = value1,
+        name2 = value2, ...]</pre>
+				
+					<p>
+						A light source radiates [red, green, blue] colored light from the local origin along the local x axis.
+						The light is projected parallel to the x axis from a point or circle source.
+						It has its maximum intensity within the alpha-angle frustum of a cone and falls to zero at the beta-angle frustum of a cone.
+						This falloff is controlled by the angle_falloff parameter.
+						(Zero gives the light a sharp edge, higher values mean that the transition is smoother.)
+						The effect of the light is limited along the axis by the distance1 and distance2 clipping values.
+						The distance_falloff parameter controls the decrease in intensity depending on the distance.
+						(Zero value means a constant intensity; bigger values are used for stronger falloff.)
+					</p>
+					<p>GDL transformations affect only the starting point and the direction of the light.</p>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>shadow: </b></code>controls the light’s shadow casting.</div>
+						<div><code>0: </code>light casts no shadows,</div>
+						<div><code>1: </code>light casts shadows.</div>
+					</div>
+					<div style="text-align: center"><img src="Images/GDL_Images/3Dshapes_light.png" style="text-align: middle" alt="Images/GDL_Images/3Dshapes_light.png"/></div>
+					
+						<pre class="programlisting">alpha &lt;= beta &lt;= 80°</pre>
+					
+					<p>The following parameter combinations have special meanings:</p>
+					<p>
+						<code class="literal">radius = 0, alpha = 0, beta = 0: </code>
+						A point light, it radiates light in every direction and does not cast any shadows.
+						The shadow and angle_falloff parameters are ignored, the values shadow = 0, angle_falloff = 0 are supposed.
+					</p>
+					<p>
+						<code class="literal">radius &gt; 0, alpha = 0, beta = 0: </code>
+						A directional light with parallel beams.
+					</p>
+					<div style="text-align: center"><img src="Images/GDL_Images/3Dshapes_light_cone3.png" style="text-align: middle" alt="Images/GDL_Images/3Dshapes_light_cone3.png"/></div>
+					<p>
+						<code class="literal">r = 0, alpha &gt; 0, beta &gt; 0: </code>
+						A directional light with conic beams.
+					</p>
+					<div style="text-align: center"><img src="Images/GDL_Images/3Dshapes_light_cone1.png" style="text-align: middle" alt="Images/GDL_Images/3Dshapes_light_cone1.png"/></div>
+					<p>
+						<code class="literal">r &gt; 0, alpha = 0, beta &gt; 0: </code>
+						A directional light with parallel beam and conic falloff.
+					</p>
+					<div style="text-align: center"><img src="Images/GDL_Images/3Dshapes_light_cone2.png" style="text-align: middle" alt="Images/GDL_Images/3Dshapes_light_cone2.png"/></div>
+					<p>
+						Light definitions can contain optional additional data definitions after the ADDITIONAL_DATA keyword.
+						Additional data has a name (namei) and a value (valuei), which can be an expression of any type, even an array.
+						If a string parameter name ends with the substring "_file", its value is considered to be a file name and will be
+						included in the archive project.
+					</p>
+					<p>Different meanings of additional data can be defined and used by the executing application.</p>
+					<p>
+					</p>
+				
+				<div class="example"><a id="id506862"/><p class="title"><b>Example 1:
+</b></p><div class="example-contents"><pre class="programlisting">LIGHT 1.0,0.2,0.3,   ! RGB
+        1,             ! shadow on
+        1.0,           ! radius
+        45.0, 60.0,    ! angle1, angle2
+        0.3,           ! angle_falloff
+        1.0, 10.0,     ! distance1, distance2
+        0.2            ! distance_falloff</pre></div></div>
+				<div class="example"><a id="id506887"/><p class="title"><b>Example 2:
+</b></p><div class="example-contents"><p>The library part dialog box for lights in ARCHICAD:</p><div style="text-align: center"><img src="Images/GDL_Images/3Dshapes_light_dialog.PNG" style="text-align: middle" alt="Images/GDL_Images/3Dshapes_light_dialog.PNG"/></div><p>
+						<span class="italic">Part of the corresponding GDL script:</span>
+					</p><pre class="programlisting">if gs_light_switch &gt; 0 then
+    LIGHT	gs_light_intensity/100*gs_color_red, \
+			gs_light_intensity/100*gs_color_green, \
+			gs_light_intensity/100*gs_color_blue, ! RGB
+            ...
+endif</pre></div></div>
+			<hr/><a href="002.007.html#LIGHT_gdlcommand">Related in 3D Shapes</a><p>
+				<span class="bold"><strong>GDL Reference Guide</strong></span>
+			</p><p>
+				<span class="trademark">Copyright</span><sup>©</sup> 2021 by GRAPHISOFT, all rights reserved.
+				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+			</p></body></html>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>UI_LISTITEM{2}</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="UI_LISTITEM2_gdlcommand">UI_LISTITEM{2}</h3>
+				
+				<pre class="programlisting"><b id="UI_LISTITEM2_keyword_2.12.5.31.4.1">UI_LISTITEM{2}</b> itemID, fieldID, name [, childFlag [, image [, paramDesc]]]</pre>
+				
+					<p>Appends a listitem to the listfield defined by the fieldID parameter.</p>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>itemID: </b></code>
+							the unique identifier of the listitem. Listitems can be scripted in an arbitrary order and are sorted by itemID.
+							Duplicate listitem IDs within a listfield are not allowed.
+						</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>fieldID: </b></code>
+							the unique identifier of the listfield containing this listitem.
+						</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>name: </b></code>
+							parameter name as string expression for UI_LISTITEM or parameter name with optional actual index values if array for UI_LISTITEM{2}.
+						</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>childFlag: </b></code></div>
+						<p><code class="literal">childFlag = 0:</code> the listitem is a groupitem (default value if not specified).</p>
+						<p><code class="literal">childFlag = 1:</code> the listitem is a childitem. The parent item is the first groupitem above.</p>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>image: </b></code>
+							file name or index number of the picture stored in the library part.
+							If valid, it is displayed as an icon in the first column of the listfield in the associated listitem's row.
+						</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>paramDesc: </b></code>
+							the visible name of the listitem in the Description column.
+							If left empty, the description is automatically filled up from the parameter list description of the Library Part.
+							If there is no description there, the name of the parameter is displayed instead.
+						</div>
+					</div>
+					<p>
+						If "name" string is empty, the listitem is a group with bold fonttype.
+						If both "name" string and paramDesc are empty, the listitem is a separator.
+						The HIDEPARAMETER command is ineffective for list items, the script should not add the item instead of using it.
+						The LOCK command can be used and it is effective for list items.
+					</p>
+					<p>
+						For a listfield it is recommended to define different itemIDs for different parameters, groups and separators.
+					</p>
+				
+				<div class="example"><a id="id528408"/><p class="title"><b>Example:
+</b></p><div class="example-contents"><pre class="programlisting">! List with header without icon column
+
+ui_listfield 1, 10, 35, 432, 220, 0, "Description Header Text", "Value Header Text"
+
+ui_listitem 1, 1, "", 0, "", "Group Title 1" ! Group Line
+ui_listitem 2, 1, "A", 1
+ui_listitem 3, 1, "B", 1
+ui_listitem 4, 1, "ZZYZX", 1
+
+ui_listitem 5, 1, "" !separator
+ui_listitem 6, 1, "AC_show2DHotspotsIn3D", 0, "", "Group Title 2" ! Group Parameter Line
+ui_listitem 7, 1, "A", 1, "", "Custom Description A"
+ui_listitem 8, 1, "B", 1, "", "Custom Description B"
+ui_listitem 9, 1, "ZZYZX", 1, "", "Custom Description ZZYZX"</pre><div style="text-align: center"><img src="Images/GDL_Images/NonGeom_uiListField.PNG" style="text-align: middle" alt="Images/GDL_Images/NonGeom_uiListField.PNG"/></div></div></div>
+			<hr/><a href="002.012.html#UI_LISTITEM2_gdlcommand">Related in Non-Geometric Scripts</a><p>
+				<span class="bold"><strong>GDL Reference Guide</strong></span>
+			</p><p>
+				<span class="trademark">Copyright</span><sup>©</sup> 2021 by GRAPHISOFT, all rights reserved.
+				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+			</p></body></html>

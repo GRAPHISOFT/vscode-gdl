@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>VALUES{2}</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="VALUES2_gdlcommand">VALUES{2}</h3>
+				
+				<pre class="programlisting"><b id="VALUES2_keyword_2.12.4.5.4.1">VALUES{2}</b> "parameter_name" [,]num_expression1, description1,
+			[, num_expression2, description2, ...]</pre>
+				<pre class="programlisting"><b id="VALUES2_keyword_2.12.4.5.6.1">VALUES{2}</b> "parameter_name" [,]num_values_array1, descriptions_array1
+			[, num_values_array2, descriptions_array2, ...]</pre>
+				
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>parameter_name: </b></code>name of an existing angle, length, real, or integer type parameter</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>num_expressioni, num_values_arrayi: </b></code>
+							simple value definition for a numerical parameter, or array expression containing multiple numerical values. Available only for VALUES{2}</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>descriptioni, descriptions_arrayi: </b></code>description string of the numerical value i, or array expression containing multiple description strings of
+						the values defined by num_values_arrayi (array dimensions must match). Available only for VALUES{2}</div>
+					</div>
+				
+				<div class="example"><a id="id525792"/><p class="title"><b>Example 1:
+Simple value lists</b></p><div class="example-contents"><pre class="programlisting">VALUES "par1" 1, 2, 3
+VALUES "par2" "a", "b"
+VALUES "par3" 1, CUSTOM, SIN (30)
+VALUES "par4" 4, RANGE(5, 10], 12, RANGE(,20] STEP 14.5, 0.5, CUSTOM</pre></div></div>
+				<div class="example"><a id="id525808"/><p class="title"><b>Example 2:
+Read all string values from a file for use in a value list</b></p><div class="example-contents"><pre class="programlisting">DIM sarray[]
+! file in the library, containing parameter data
+filename = "ProjectNotes.txt"
+ch1 = OPEN ("text", filename, "MODE=RO, LIBRARY")
+i = 1
+j = 1
+sarray[1] = ""
+! collect all strings
+DO
+    n = INPUT (ch1, i, 1, var)
+    IF n &gt; 0 AND VARTYPE (var) = 2 THEN
+        sarray[j] = var
+        j = j + 1
+    ENDIF
+    i = i + 1
+WHILE n &gt; 0
+CLOSE ch1
+! parameter popup with strings read from the file
+VALUES "RefNote" sarray</pre></div></div>
+			<hr/><a href="002.012.html#VALUES2_gdlcommand">Related in Non-Geometric Scripts</a><p>
+				<span class="bold"><strong>GDL Reference Guide</strong></span>
+			</p><p>
+				<span class="trademark">Copyright</span><sup>©</sup> 2021 by GRAPHISOFT, all rights reserved.
+				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+			</p></body></html>

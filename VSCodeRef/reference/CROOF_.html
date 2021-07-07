@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>CROOF_</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="CROOF__gdlcommand">CROOF_</h3>
+				
+				<pre class="programlisting"><b id="CROOF__keyword_2.7.3.30.4.1">CROOF_</b> top_material, bottom_material, side_material,
+        n, xb, yb, xe, ye, height, angle, thickness,
+        x1, y1, alpha1, s1,
+        ...
+        xn, yn, alphan, sn</pre>
+				
+					<p>A sloped roof pitch with custom angle ridges.</p>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>top_material, bottom_material, side_material: </b></code>name/index of the top, bottom and side material.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>n: </b></code>the number of nodes in the roof polygon.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>xb, yb, xe, ye: </b></code>reference line (vector).</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>height: </b></code>the height of the roof at the reference line (lower surface).</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>angle: </b></code>the rotation angle of the roof plane around the given oriented reference line in degrees (CCW).</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>thickness: </b></code>the thickness of the roof measured perpendicularly to the plane of the roof.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>xi, yi: </b></code>the coordinates of the nodes of the roof’s lower polygon.</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>alphai: </b></code>
+							the angle between the face belonging to the edge i of the roof and the plane perpendicular to the roof plane, -90° &lt; alphai &lt; 90°.
+							Looking in the direction of the edge of the properly oriented roof polygon, the CCW rotation angle is positive.
+							The edges of the roof polygon are oriented properly if, in top view, the contour is sequenced CCW and the holes are sequenced CW.
+						</div>
+					</div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>si: </b></code>
+							status code that allows you to control the visibility of polygon edges and side surfaces.
+							You can also define holes and create segments and arcs in the polyline using special constraints.
+						</div>
+					</div>
+					<div style="text-align: center"><img src="Images/GDL_Images/3Dshapes_croof_.png" style="text-align: middle" alt="Images/GDL_Images/3Dshapes_croof_.png"/></div>
+					<p>
+						<span class="italic">See <a class="xref" href="002.010.html#StatusCodes_chapter" title="Chapter 7. Status Codes">Chapter 7, <i>Status Codes</i></a> for details.</span>
+					</p>
+					
+						<pre class="programlisting">n &gt;= 3</pre>
+					
+				
+				<div class="example"><a id="id498086"/><p class="title"><b>Example 1:
+</b></p><div class="example-contents"><div style="text-align: center"><img src="Images/GDL_Images/3Dshapes_croof_ex1.png" style="text-align: middle" alt="Images/GDL_Images/3Dshapes_croof_ex1.png"/></div><pre class="programlisting">CROOF_ 1, 1, 1, ! materials
+        9,
+        0, 0,
+        1, 0, ! reference line (xb,yb)(xe,ye)
+        0.0,  ! height
+        -30,  ! angle
+        2.5,  ! thickness
+        0,  0,  -60, 15,
+        10, 0,  0,   15,
+        10, 20, -30, 15,
+        0,  20, 0,   15,
+        0,  0,  0,   -1,
+        2,  5,  0,   15,
+        8,  5,  0,   15,
+        5,  15, 0,   15,
+        2,  5,  0,   -1</pre></div></div>
+				<div class="example"><a id="id498088"/><p class="title"><b>Example 2:
+</b></p><div class="example-contents"><div class="informaltable"><table border="0"><colgroup><col/><col/></colgroup><tbody><tr><td>
+										<pre class="programlisting">L=0.25
+r=(0.6^2+L^2)/(2*L)
+a=ASN(0.6/r)
+CROOF_ "Roof Tile", "Pine", "Pine",
+        16, 2, 0, 0,
+        0, 0, 45, -0.2*SQR(2),
+        0,    0,     0,   15,
+        3.5,  0,     0,   15,
+        3.5,  3,     -45, 15,
+        0,    3,     0,   15,
+        0,    0,     0,   -1,
+        0.65, 1,     -45, 15,
+        1.85, 1,     0,   15,
+        1.85, 2.4-L, 0,   13,
+        1.25, 2.4-r, 0,   900,
+        0,    2*a,   0,   4015,
+        0.65, 1,     0,   -1,
+        2.5,  2,     45,  15,
+        3,    2,     0,   15,
+        3,    2.5,   -45, 15,
+        2.5,  2.5,   0,   15,
+        2.5,  2,     0,   -1</pre>
+									</td><td style="text-align: center">
+										<div style="text-align: center"><img src="Images/GDL_Images/3Dshapes_croof_ex2.png" style="text-align: middle" alt="Images/GDL_Images/3Dshapes_croof_ex2.png"/></div>
+									</td></tr></tbody></table></div></div></div>
+			<hr/><a href="002.007.html#CROOF__gdlcommand">Related in 3D Shapes</a><p>
+				<span class="bold"><strong>GDL Reference Guide</strong></span>
+			</p><p>
+				<span class="trademark">Copyright</span><sup>©</sup> 2021 by GRAPHISOFT, all rights reserved.
+				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+			</p></body></html>

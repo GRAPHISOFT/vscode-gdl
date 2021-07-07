@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>MESH</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="MESH_gdlcommand">MESH</h3>
+				
+				<pre class="programlisting"><b id="MESH_keyword_2.7.3.34.4.1">MESH</b> a, b, m, n, mask,
+        z11, z12, ..., z1m,
+        z21, z22, ..., z2m,
+        ...
+        zn1, zn2, ..., znm</pre>
+				
+					<p>
+						A simple smooth mesh based on a rectangle with an equidistant net.
+						The sides of the base rectangle are a and b; the m and n points are along the x and y axes respectively; zij is the height of the node.
+					</p>
+					<p>
+						<span class="italic">Masking:</span>
+					</p>
+					<div style="text-align: center"><img src="Images/GDL_Images/3Dshapes_masking.png" style="text-align: middle" alt="Images/GDL_Images/3Dshapes_masking.png"/></div>
+					<div style="margin-left: 1em">
+						<div style="text-indent: -1em"><code><b>mask: </b></code></div><div><code>mask = j<sub>1</sub> + 4*j<sub>3</sub> + 16*j<sub>5</sub> + 32*j<sub>6</sub> + 64*j<sub>7</sub></code>, where each j can be 0 or 1.
+	</div>
+						<div><code>j<sub>1</sub>: </code>base surface is present,</div>
+						<div><code>j<sub>3</sub>: </code>side surfaces are present,</div>
+						<div><code>j<sub>5</sub>: </code>base and side edges are visible,</div>
+						<div><code>j<sub>6</sub>: </code>top edges are visible,</div>
+						<div><code>j<sub>7</sub>: </code>top edges are visible, top surface is not smooth.</div>
+					</div>
+					
+						<pre class="programlisting">m &gt;= 2, n &gt;= 2</pre>
+					
+				
+				<div class="example"><a id="id499049"/><p class="title"><b>Example 1:
+</b></p><div class="example-contents"><div style="text-align: center"><img src="Images/GDL_Images/3Dshapes_mesh_ex.png" style="text-align: middle" alt="Images/GDL_Images/3Dshapes_mesh_ex.png"/></div><pre class="programlisting">MESH 50, 30, 5, 6, 1+4+16+32+64,
+        2, 4, 6, 7, 8,
+        10, 3, 4, 5, 6,
+        7, 9, 5, 5, 7,
+        8, 10, 9, 4, 5,
+        6, 7, 9, 8, 2,
+        4, 5, 6, 8, 6</pre></div></div>
+				<div class="example"><a id="id499058"/><p class="title"><b>Example 2:
+</b></p><div class="example-contents"><div style="text-align: center"><img src="Images/GDL_Images/3Dshapes_mesh_ex2.png" style="text-align: middle" alt="Images/GDL_Images/3Dshapes_mesh_ex2.png"/></div><pre class="programlisting">MESH 90, 100, 12, 8, 1+4+16+32+64,
+        17,16,15,14,13,12,11,10,10,10,10, 9,
+        16,14,13,11,10, 9, 9, 9,10,10,12,10,
+        16,14,12,11, 5, 5, 5, 5, 5,11,12,11,
+        16,14,12,11, 5, 5, 5, 5, 5,11,12,12,
+        16,14,12,12, 5, 5, 5, 5, 5,11,12,12,
+        16,14,12,12, 5, 5, 5, 5, 5,11,13,14,
+        17,17,15,13,12,12,12,12,12,12,15,15,
+        17,17,15,13,12,12,12,12,13,13,16,16</pre></div></div>
+			<hr/><a href="002.007.html#MESH_gdlcommand">Related in 3D Shapes</a><p>
+				<span class="bold"><strong>GDL Reference Guide</strong></span>
+			</p><p>
+				<span class="trademark">Copyright</span><sup>©</sup> 2021 by GRAPHISOFT, all rights reserved.
+				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+			</p></body></html>
