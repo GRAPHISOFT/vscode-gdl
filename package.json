@@ -2,7 +2,7 @@
     "name": "gdl",
     "displayName": "GDL",
     "description": "Development environment for Archicad 25 GDL language (XML and HSF source code): syntax coloring, snippets, code outline, quick reference.",
-    "version": "1.25.1",
+    "version": "1.25.2",
     "publisher": "Graphisoft",
     "author": "Péter Baksa",
     "contributors": [
@@ -15,7 +15,8 @@
         "email": "gdlcenter@graphisoft.com"
     },
     "qna": "https://archicad-talk.graphisoft.com/viewforum.php?f=49",
-    "license": "MIT",
+    "license": "LICENSE.md",
+
     "repository": {
         "type": "git",
         "url": "https://github.com/GRAPHISOFT/vscode-gdl"
