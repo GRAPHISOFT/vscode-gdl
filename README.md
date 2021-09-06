@@ -4,7 +4,7 @@ Development environment for Archicad 25 GDL language (XML, HSF and GDL source co
 
 # Usage
 
-[You can get the extension from the marketplace](https://marketplace.visualstudio.com/items?itemName=GRAPHISOFT.gdl).
+[You can get the extension from the marketplace.](https://marketplace.visualstudio.com/items?itemName=GRAPHISOFT.gdl)
 
 .xml files will be automatically detected as GDL-XML, .gdl files as GDL-HSF language.
   * To switch between XML and GDL-XML syntax coloring, use context menu commands: "Switch language to GDL-XML" or "Switch language to XML"
