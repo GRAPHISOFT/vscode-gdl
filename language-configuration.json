@@ -3,10 +3,19 @@
         // symbol used for single line comment. Remove this entry if your language does not support line comments
         "lineComment": "!"
     },
-    // symbols used as brackets
+    // symbols used as brackets - used for colorization or identation
     "brackets": [
         ["[", "]"],
-        ["(", ")"]
+        ["(", ")"],
+        // for identation - only unindent effective
+        ["for", "next"],    
+        ["do", "while"],
+        ["repeat", "until"],
+        ["call", "returned_parameters"],
+        ["group", "endgroup"],
+        // for identation
+        [":", "return"],
+        ["do", "endwhile"]
     ],
     // symbols that are auto closed when typing
     "autoClosingPairs": [
@@ -18,7 +27,8 @@
         ["`", "`"],
         ["´", "´"],
         ["“", "”"],
-        ["’", "‘"]
+        ["’", "‘"],
+        ["_(", ")"]
     ],
     "colorizedBracketPairs": [
         ["(", ")"],
