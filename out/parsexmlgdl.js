@@ -83,7 +83,7 @@ class GDLMacroCall extends GDLToken {
     }
 }
 exports.GDLMacroCall = GDLMacroCall;
-GDLMacroCall.regex = /\bcall\s*"([\w ]*)"(\s*(,\r?\n\s*)?(parameters\s*all))?/mig;
+GDLMacroCall.regex = /(?<!!.*)\bcall\s*"([\w ]*)"(\s*(,\r?\n\s*)?(parameters\s*all))?/mig;
 // main GUID
 class GDLMainGUID extends GDLToken {
     constructor(start, end, guid) {

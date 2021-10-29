@@ -73,7 +73,7 @@ export class GDLCalledMacro extends GDLToken {
 
 // macro calls
 export class GDLMacroCall extends GDLToken {
-	public static readonly regex = /\bcall\s*"([\w ]*)"(\s*(,\r?\n\s*)?(parameters\s*all))?/mig;
+	public static readonly regex = /(?<!!.*)\bcall\s*"([\w ]*)"(\s*(,\r?\n\s*)?(parameters\s*all))?/mig;
 
 	public readonly all : boolean;
 	public readonly inScript : ScriptType;
