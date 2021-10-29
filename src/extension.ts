@@ -128,7 +128,7 @@ export class GDLExtension
             vscode.commands.registerCommand('GDL.switchToXML', async () => this.switchLang("xml")),
             vscode.commands.registerCommand('GDL.refguide', async () => this.showRefguide()),
     
-            vscode.commands.registerCommand('GDL.infoFromHSF', () => this.toggleInfoFromHSF()),
+            vscode.commands.registerCommand('GDL.infoFromHSF', () => this.setInfoFromHSF(!this.infoFromHSF)),
 
             // language features
             vscode.languages.registerHoverProvider(["gdl-hsf"], this),
@@ -242,7 +242,10 @@ export class GDLExtension
 
     private updateUI() {
 
-        this.updateCurrentScript(); // status bar
+        // status bar
+        this.updateCurrentScript();
+        this.updateStatusHSF();
+
         let isGDLXML = (this.parser.getMainGUID() != undefined);	// only gdl-xml files contain main guid in <Symbol> tag
 
 		// script decorations
@@ -267,9 +270,6 @@ export class GDLExtension
 		
         // parameter decorations
         this.decorateParameters();
-
-        // status bar
-        this.updateStatusHSF();
     }
     
     private async parse(document : vscode.TextDocument | undefined, delay : number) : PromiseParse {
@@ -375,14 +375,8 @@ export class GDLExtension
         }
     }
 
-    public toggleInfoFromHSF() {
-        this.infoFromHSF = !this.infoFromHSF;
-        if (this.infoFromHSF) {
-            this.suggestHSF = vscode.languages.registerCompletionItemProvider(["gdl-hsf"], this);
-        } else {
-            this.cancelSuggestHSF();
-        }
-        
+    public setInfoFromHSF(infoFromHSF : boolean) {
+        this.infoFromHSF = infoFromHSF;
         this.updateStatusHSF();
         this.decorateParameters();
     }
@@ -423,11 +417,10 @@ export class GDLExtension
 
         let infoFromHSF = config.get<boolean>("showInfoFromHSFFiles");
         if (infoFromHSF === undefined) {
-            this.infoFromHSF = true;
+            this.setInfoFromHSF(true);
         } else {
-            this.infoFromHSF = infoFromHSF; 
+            this.setInfoFromHSF(infoFromHSF);
         }
-
     }
     
     private cancelParseTimer() {
@@ -703,12 +696,17 @@ export class GDLExtension
     private updateStatusHSF() {
         if (modeGDLHSF(this.editor?.document) && this.hsflibpart) {
             if (this.infoFromHSF) {
+                if (this.suggestHSF === undefined) {
+                    this.suggestHSF = vscode.languages.registerCompletionItemProvider(["gdl-hsf"], this);
+                }
                 this.statusHSF.text = `GDL: Show Info from HSF Files`;
             } else {
+                this.cancelSuggestHSF();
                 this.statusHSF.text = `GDL: Show Info from Local File Only`;
             }
             this.statusHSF.show();
         } else {
+            this.cancelSuggestHSF();
             this.statusHSF.hide();
         }
     }
@@ -820,7 +818,8 @@ export class GDLExtension
             let completions = new vscode.CompletionList();
 
             for (const p of this.hsflibpart.paramlist) {
-                let completion = new vscode.CompletionItem(p.type + "\t" + p.nameCS + p.getDimensionString(), vscode.CompletionItemKind.Field);
+                let padding = " ".repeat(34 - p.nameCS.length); // max. parameter name length is 32 chars
+                let completion = new vscode.CompletionItem(p.nameCS + padding + p.type + p.getDimensionString(), vscode.CompletionItemKind.Field);
                 completion.insertText = p.nameCS;
                 completion.detail = "\"" + p.desc + "\"";
                 completion.documentation = p.getDocString(false, false);

@@ -76,7 +76,7 @@ class GDLExtension {
         // moved cursor
         vscode.window.onDidChangeTextEditorSelection(() => this.updateCurrentScript()), 
         // extension commands
-        vscode.commands.registerCommand('GDL.gotoCursor', () => this.gotoCursor()), vscode.commands.registerCommand('GDL.gotoScript', (id) => __awaiter(this, void 0, void 0, function* () { return this.gotoScript(id); })), vscode.commands.registerCommand('GDL.gotoRelative', (id) => __awaiter(this, void 0, void 0, function* () { return this.gotoRelative(id); })), vscode.commands.registerCommand('GDL.selectScript', (id) => __awaiter(this, void 0, void 0, function* () { return this.selectScript(id); })), vscode.commands.registerCommand('GDL.insertGUID', (id) => this.insertGUID(id)), vscode.commands.registerCommand('GDL.insertPict', (id) => this.insertPict(id)), vscode.commands.registerCommand('GDLOutline.toggleSpecComments', () => __awaiter(this, void 0, void 0, function* () { return this.outlineView.toggleSpecComments(); })), vscode.commands.registerCommand('GDLOutline.toggleMacroCalls', () => __awaiter(this, void 0, void 0, function* () { return this.outlineView.toggleMacroCalls(); })), vscode.commands.registerCommand('GDL.switchToGDL', () => __awaiter(this, void 0, void 0, function* () { return this.switchLang("gdl-xml"); })), vscode.commands.registerCommand('GDL.switchToHSF', () => __awaiter(this, void 0, void 0, function* () { return this.switchLang("gdl-hsf"); })), vscode.commands.registerCommand('GDL.switchToXML', () => __awaiter(this, void 0, void 0, function* () { return this.switchLang("xml"); })), vscode.commands.registerCommand('GDL.refguide', () => __awaiter(this, void 0, void 0, function* () { return this.showRefguide(); })), vscode.commands.registerCommand('GDL.infoFromHSF', () => this.toggleInfoFromHSF()), 
+        vscode.commands.registerCommand('GDL.gotoCursor', () => this.gotoCursor()), vscode.commands.registerCommand('GDL.gotoScript', (id) => __awaiter(this, void 0, void 0, function* () { return this.gotoScript(id); })), vscode.commands.registerCommand('GDL.gotoRelative', (id) => __awaiter(this, void 0, void 0, function* () { return this.gotoRelative(id); })), vscode.commands.registerCommand('GDL.selectScript', (id) => __awaiter(this, void 0, void 0, function* () { return this.selectScript(id); })), vscode.commands.registerCommand('GDL.insertGUID', (id) => this.insertGUID(id)), vscode.commands.registerCommand('GDL.insertPict', (id) => this.insertPict(id)), vscode.commands.registerCommand('GDLOutline.toggleSpecComments', () => __awaiter(this, void 0, void 0, function* () { return this.outlineView.toggleSpecComments(); })), vscode.commands.registerCommand('GDLOutline.toggleMacroCalls', () => __awaiter(this, void 0, void 0, function* () { return this.outlineView.toggleMacroCalls(); })), vscode.commands.registerCommand('GDL.switchToGDL', () => __awaiter(this, void 0, void 0, function* () { return this.switchLang("gdl-xml"); })), vscode.commands.registerCommand('GDL.switchToHSF', () => __awaiter(this, void 0, void 0, function* () { return this.switchLang("gdl-hsf"); })), vscode.commands.registerCommand('GDL.switchToXML', () => __awaiter(this, void 0, void 0, function* () { return this.switchLang("xml"); })), vscode.commands.registerCommand('GDL.refguide', () => __awaiter(this, void 0, void 0, function* () { return this.showRefguide(); })), vscode.commands.registerCommand('GDL.infoFromHSF', () => this.setInfoFromHSF(!this.infoFromHSF)), 
         // language features
         vscode.languages.registerHoverProvider(["gdl-hsf"], this), vscode.languages.registerDocumentSymbolProvider(["gdl-xml", "gdl-hsf"], this), vscode.languages.registerWorkspaceSymbolProvider(new wssymbols_1.WSSymbols(context)));
     }
@@ -181,7 +181,9 @@ class GDLExtension {
         this.sectionDecorations[Parser.ScriptType.GDLPICT] = vscode.window.createTextEditorDecorationType({});
     }
     updateUI() {
-        this.updateCurrentScript(); // status bar
+        // status bar
+        this.updateCurrentScript();
+        this.updateStatusHSF();
         let isGDLXML = (this.parser.getMainGUID() != undefined); // only gdl-xml files contain main guid in <Symbol> tag
         // script decorations
         let sectionList = this.parser.getAllSections();
@@ -203,8 +205,6 @@ class GDLExtension {
             tokens: this.parser.getAllFunctions() });
         // parameter decorations
         this.decorateParameters();
-        // status bar
-        this.updateStatusHSF();
     }
     parse(document, delay) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -299,14 +299,8 @@ class GDLExtension {
             }, this));
         }
     }
-    toggleInfoFromHSF() {
-        this.infoFromHSF = !this.infoFromHSF;
-        if (this.infoFromHSF) {
-            this.suggestHSF = vscode.languages.registerCompletionItemProvider(["gdl-hsf"], this);
-        }
-        else {
-            this.cancelSuggestHSF();
-        }
+    setInfoFromHSF(infoFromHSF) {
+        this.infoFromHSF = infoFromHSF;
         this.updateStatusHSF();
         this.decorateParameters();
     }
@@ -346,10 +340,10 @@ class GDLExtension {
         }
         let infoFromHSF = config.get("showInfoFromHSFFiles");
         if (infoFromHSF === undefined) {
-            this.infoFromHSF = true;
+            this.setInfoFromHSF(true);
         }
         else {
-            this.infoFromHSF = infoFromHSF;
+            this.setInfoFromHSF(infoFromHSF);
         }
     }
     cancelParseTimer() {
@@ -587,14 +581,19 @@ class GDLExtension {
         var _a;
         if (modeGDLHSF((_a = this.editor) === null || _a === void 0 ? void 0 : _a.document) && this.hsflibpart) {
             if (this.infoFromHSF) {
+                if (this.suggestHSF === undefined) {
+                    this.suggestHSF = vscode.languages.registerCompletionItemProvider(["gdl-hsf"], this);
+                }
                 this.statusHSF.text = `GDL: Show Info from HSF Files`;
             }
             else {
+                this.cancelSuggestHSF();
                 this.statusHSF.text = `GDL: Show Info from Local File Only`;
             }
             this.statusHSF.show();
         }
         else {
+            this.cancelSuggestHSF();
             this.statusHSF.hide();
         }
     }
@@ -695,7 +694,8 @@ class GDLExtension {
             if (this.hsflibpart) {
                 let completions = new vscode.CompletionList();
                 for (const p of this.hsflibpart.paramlist) {
-                    let completion = new vscode.CompletionItem(p.type + "\t" + p.nameCS + p.getDimensionString(), vscode.CompletionItemKind.Field);
+                    let padding = " ".repeat(34 - p.nameCS.length); // max. parameter name length is 32 chars
+                    let completion = new vscode.CompletionItem(p.nameCS + padding + p.type + p.getDimensionString(), vscode.CompletionItemKind.Field);
                     completion.insertText = p.nameCS;
                     completion.detail = "\"" + p.desc + "\"";
                     completion.documentation = p.getDocString(false, false);
