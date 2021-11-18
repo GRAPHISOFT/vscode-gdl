@@ -1,13 +1,4 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.hasLibPartData = exports.modeGDLHSF = exports.modeGDLXML = exports.modeGDL = exports.GDLExtension = exports.activate = void 0;
 const vscode = require("vscode");
@@ -18,19 +9,17 @@ const parsehsf_1 = require("./parsehsf");
 const wssymbols_1 = require("./wssymbols");
 const path = require("path");
 const fs = require("fs");
-function activate(context) {
-    return __awaiter(this, void 0, void 0, function* () {
-        //console.log("extension.activate");
-        // check preview version and notify to uninstall
-        if (vscode.extensions.getExtension("pbaksa@graphisoft.com.gdl-xml") != undefined) {
-            let notice = "# Important\n" +
-                "Before starting to use the **GDL** extension by Graphisoft (`Graphisoft@gdl`), please uninstall or disable **GDLForVSCode** extension (`pbaksa@graphisoft.com.gdl-xml`)! It was a preview version, and the public extension id became different. To prevent UI ambiguities we decided to make them incompatible. All its features are available in the public version.";
-            let doc = yield vscode.workspace.openTextDocument({ content: notice, language: "markdown" });
-            vscode.window.showTextDocument(doc, vscode.ViewColumn.Active, true);
-        }
-        // create extension
-        context.subscriptions.push(new GDLExtension(context));
-    });
+async function activate(context) {
+    //console.log("extension.activate");
+    // check preview version and notify to uninstall
+    if (vscode.extensions.getExtension("pbaksa@graphisoft.com.gdl-xml") != undefined) {
+        let notice = "# Important\n" +
+            "Before starting to use the **GDL** extension by Graphisoft (`Graphisoft@gdl`), please uninstall or disable **GDLForVSCode** extension (`pbaksa@graphisoft.com.gdl-xml`)! It was a preview version, and the public extension id became different. To prevent UI ambiguities we decided to make them incompatible. All its features are available in the public version.";
+        let doc = await vscode.workspace.openTextDocument({ content: notice, language: "markdown" });
+        vscode.window.showTextDocument(doc, vscode.ViewColumn.Active, true);
+    }
+    // create extension
+    context.subscriptions.push(new GDLExtension(context));
 }
 exports.activate = activate;
 class GDLExtension {
@@ -66,34 +55,32 @@ class GDLExtension {
         context.subscriptions.push(
         // callbacks
         // changed settings
-        vscode.workspace.onDidChangeConfiguration(() => __awaiter(this, void 0, void 0, function* () { return this.onConfigChanged(); })), 
+        vscode.workspace.onDidChangeConfiguration(async () => this.onConfigChanged()), 
         // switched between open files
-        vscode.window.onDidChangeActiveTextEditor(() => __awaiter(this, void 0, void 0, function* () { return this.onActiveEditorChanged(); })), 
+        vscode.window.onDidChangeActiveTextEditor(async () => this.onActiveEditorChanged()), 
         // file edited
-        vscode.workspace.onDidChangeTextDocument((e) => __awaiter(this, void 0, void 0, function* () { return this.onDocumentChanged(e); })), 
+        vscode.workspace.onDidChangeTextDocument(async (e) => this.onDocumentChanged(e)), 
         // opened or changed language mode
-        vscode.workspace.onDidOpenTextDocument((e) => __awaiter(this, void 0, void 0, function* () { return this.onDocumentChanged({ contentChanges: [], document: e }); })), 
+        vscode.workspace.onDidOpenTextDocument(async (e) => this.onDocumentChanged({ contentChanges: [], document: e })), 
         // moved cursor
         vscode.window.onDidChangeTextEditorSelection(() => this.updateCurrentScript()), 
         // extension commands
-        vscode.commands.registerCommand('GDL.gotoCursor', () => this.gotoCursor()), vscode.commands.registerCommand('GDL.gotoScript', (id) => __awaiter(this, void 0, void 0, function* () { return this.gotoScript(id); })), vscode.commands.registerCommand('GDL.gotoRelative', (id) => __awaiter(this, void 0, void 0, function* () { return this.gotoRelative(id); })), vscode.commands.registerCommand('GDL.selectScript', (id) => __awaiter(this, void 0, void 0, function* () { return this.selectScript(id); })), vscode.commands.registerCommand('GDL.insertGUID', (id) => this.insertGUID(id)), vscode.commands.registerCommand('GDL.insertPict', (id) => this.insertPict(id)), vscode.commands.registerCommand('GDLOutline.toggleSpecComments', () => __awaiter(this, void 0, void 0, function* () { return this.outlineView.toggleSpecComments(); })), vscode.commands.registerCommand('GDLOutline.toggleMacroCalls', () => __awaiter(this, void 0, void 0, function* () { return this.outlineView.toggleMacroCalls(); })), vscode.commands.registerCommand('GDL.switchToGDL', () => __awaiter(this, void 0, void 0, function* () { return this.switchLang("gdl-xml"); })), vscode.commands.registerCommand('GDL.switchToHSF', () => __awaiter(this, void 0, void 0, function* () { return this.switchLang("gdl-hsf"); })), vscode.commands.registerCommand('GDL.switchToXML', () => __awaiter(this, void 0, void 0, function* () { return this.switchLang("xml"); })), vscode.commands.registerCommand('GDL.refguide', () => __awaiter(this, void 0, void 0, function* () { return this.showRefguide(); })), vscode.commands.registerCommand('GDL.infoFromHSF', () => this.setInfoFromHSF(!this.infoFromHSF)), 
+        vscode.commands.registerCommand('GDL.gotoCursor', () => this.gotoCursor()), vscode.commands.registerCommand('GDL.gotoScript', async (id) => this.gotoScript(id)), vscode.commands.registerCommand('GDL.gotoRelative', async (id) => this.gotoRelative(id)), vscode.commands.registerCommand('GDL.selectScript', async (id) => this.selectScript(id)), vscode.commands.registerCommand('GDL.insertGUID', (id) => this.insertGUID(id)), vscode.commands.registerCommand('GDL.insertPict', (id) => this.insertPict(id)), vscode.commands.registerCommand('GDLOutline.toggleSpecComments', async () => this.outlineView.toggleSpecComments()), vscode.commands.registerCommand('GDLOutline.toggleMacroCalls', async () => this.outlineView.toggleMacroCalls()), vscode.commands.registerCommand('GDL.switchToGDL', async () => this.switchLang("gdl-xml")), vscode.commands.registerCommand('GDL.switchToHSF', async () => this.switchLang("gdl-hsf")), vscode.commands.registerCommand('GDL.switchToXML', async () => this.switchLang("xml")), vscode.commands.registerCommand('GDL.refguide', async () => this.showRefguide()), vscode.commands.registerCommand('GDL.infoFromHSF', () => this.setInfoFromHSF(!this.infoFromHSF)), 
         // language features
-        vscode.languages.registerHoverProvider(["gdl-hsf"], this), vscode.languages.registerDocumentSymbolProvider(["gdl-xml", "gdl-hsf"], this), vscode.languages.registerWorkspaceSymbolProvider(new wssymbols_1.WSSymbols(context)));
+        vscode.languages.registerHoverProvider(["gdl-hsf"], this), vscode.languages.registerDocumentSymbolProvider(["gdl-xml", "gdl-hsf"], this), vscode.languages.registerWorkspaceSymbolProvider(new wssymbols_1.WSSymbols(context)), vscode.languages.registerDefinitionProvider(["gdl-hsf"], this), vscode.languages.registerReferenceProvider(["gdl-hsf"], this));
     }
     get updateEnabled() { return this._updateEnabled; }
     get editor() { return this._editor; }
-    reparseDoc(document, delay = 100) {
-        return __awaiter(this, void 0, void 0, function* () {
-            //console.log("GDLExtension.reparseDoc");
-            this._updateEnabled = modeGDL(document);
-            vscode.commands.executeCommand('setContext', 'GDLOutlineEnabled', this._updateEnabled);
-            // reparse document after delay
-            this.parse(document, delay).then(result => {
-                //console.log("reparseDoc resolved");
-                this.parser = result;
-                this.updateUI();
-                this._onDidParse.fire(null);
-            });
+    async reparseDoc(document, delay = 100) {
+        //console.log("GDLExtension.reparseDoc");
+        this._updateEnabled = modeGDL(document);
+        vscode.commands.executeCommand('setContext', 'GDLOutlineEnabled', this._updateEnabled);
+        // reparse document after delay
+        this.parse(document, delay).then(result => {
+            //console.log("reparseDoc resolved");
+            this.parser = result;
+            this.updateUI();
+            this._onDidParse.fire(null);
         });
     }
     initUIDecorations() {
@@ -206,39 +193,33 @@ class GDLExtension {
         // parameter decorations
         this.decorateParameters();
     }
-    parse(document, delay) {
-        return __awaiter(this, void 0, void 0, function* () {
-            //console.log("GDLExtension parse");
-            // promise to create new Parser.ParseXMLGDL after delay
-            return new Promise((resolve) => {
-                //console.log("GDLExtension.parse set timeout");
-                this.cancelParseTimer();
-                this.parseTimer = setTimeout((document) => {
-                    this.parseTimer = undefined;
-                    //console.log("GDLExtension.parse reached timeout");
-                    resolve(new Parser.ParseXMLGDL(document));
-                }, delay, document);
-            });
+    async parse(document, delay) {
+        //console.log("GDLExtension parse");
+        // promise to create new Parser.ParseXMLGDL after delay
+        return new Promise((resolve) => {
+            //console.log("GDLExtension.parse set timeout");
+            this.cancelParseTimer();
+            this.parseTimer = setTimeout((document) => {
+                this.parseTimer = undefined;
+                //console.log("GDLExtension.parse reached timeout");
+                resolve(new Parser.ParseXMLGDL(document));
+            }, delay, document);
         });
     }
-    onActiveEditorChanged() {
-        var _a, _b, _c;
-        return __awaiter(this, void 0, void 0, function* () {
-            //console.log("GDLExtension.onActiveEditorChanged");
-            this._editor = vscode.window.activeTextEditor;
-            // xml files opened as gdl-xml by extension
-            // switch non-libpart .xml to XML language
-            if (modeGDLXML((_a = this._editor) === null || _a === void 0 ? void 0 : _a.document) && !IsLibpart((_b = this._editor) === null || _b === void 0 ? void 0 : _b.document)) {
-                this.switchLang("xml");
-            }
-            this.updateHsfLibpart();
-            yield this.reparseDoc((_c = this._editor) === null || _c === void 0 ? void 0 : _c.document, 0);
-        });
+    async onActiveEditorChanged() {
+        //console.log("GDLExtension.onActiveEditorChanged");
+        this._editor = vscode.window.activeTextEditor;
+        // xml files opened as gdl-xml by extension
+        // switch non-libpart .xml to XML language
+        if (modeGDLXML(this._editor?.document) && !IsLibpart(this._editor?.document)) {
+            this.switchLang("xml");
+        }
+        this.updateHsfLibpart();
+        await this.reparseDoc(this._editor?.document, 0);
     }
     updateHsfLibpart() {
-        var _a;
         // create new HSFLibpart if root folder changed
-        let rootFolder = this.getNewHSFLibpartFolder((_a = this.hsflibpart) === null || _a === void 0 ? void 0 : _a.rootFolder);
+        let rootFolder = this.getNewHSFLibpartFolder(this.hsflibpart?.rootFolder);
         if (rootFolder) {
             this.hsflibpart = new parsehsf_1.HSFLibpart(rootFolder);
         }
@@ -248,14 +229,13 @@ class GDLExtension {
         }
     }
     getNewHSFLibpartFolder(oldRoot) {
-        var _a;
         // return false if didn't change (either not hsf of not new hsf)
         //        undefined if changed to non-hsf
         //        Uri if hsf and changed root folder
         let changed = undefined;
-        if (((_a = this._editor) === null || _a === void 0 ? void 0 : _a.document.uri.scheme) === 'file' && modeGDLHSF(this._editor.document)) {
+        if (this._editor?.document.uri.scheme === 'file' && modeGDLHSF(this._editor.document)) {
             let parentFolder = vscode.Uri.joinPath(this._editor.document.uri, "../..");
-            if (parentFolder.fsPath != (oldRoot === null || oldRoot === void 0 ? void 0 : oldRoot.fsPath)) {
+            if (parentFolder.fsPath != oldRoot?.fsPath) {
                 changed = parentFolder;
             }
             else {
@@ -304,15 +284,12 @@ class GDLExtension {
         this.updateStatusHSF();
         this.decorateParameters();
     }
-    onDocumentChanged(changeEvent) {
-        return __awaiter(this, void 0, void 0, function* () {
-            //console.log("GDLExtension.onDocumentChanged", changeEvent.document.uri.toString());
-            this.updateHsfLibpart();
-            yield this.reparseDoc(changeEvent.document); // with default timeout
-        });
+    async onDocumentChanged(changeEvent) {
+        //console.log("GDLExtension.onDocumentChanged", changeEvent.document.uri.toString());
+        this.updateHsfLibpart();
+        await this.reparseDoc(changeEvent.document); // with default timeout
     }
     onConfigChanged() {
-        var _a;
         let config = vscode.workspace.getConfiguration("gdl");
         //don't change if not found in setting
         let specComments = config.get("showSpecialComments");
@@ -336,9 +313,9 @@ class GDLExtension {
         }
         // close webview if reference guide root changed
         if (path.normalize(path.join(lastPath, ".")) != path.normalize(path.join(this.refguidePath, "."))) { // compare normalized paths
-            (_a = this.refguide) === null || _a === void 0 ? void 0 : _a.dispose(); // will be created in showRefguide with new refguidePath
+            this.refguide?.dispose(); // will be created in showRefguide with new refguidePath
         }
-        let infoFromHSF = config.get("showInfoFromHSFFiles");
+        let infoFromHSF = config.get("showInfoFromHSF");
         if (infoFromHSF === undefined) {
             this.setInfoFromHSF(true);
         }
@@ -381,79 +358,73 @@ class GDLExtension {
             "at": "top"
         });
     }
-    pickScript(lastScript = Parser.ScriptType.CALLEDMACROS) {
-        return __awaiter(this, void 0, void 0, function* () {
-            //console.log("GDLExtension.pickScript");
+    async pickScript(lastScript = Parser.ScriptType.CALLEDMACROS) {
+        //console.log("GDLExtension.pickScript");
+        let scriptType = Parser.ScriptType.ROOT;
+        //list only existing scripts
+        let scripts = [];
+        let scriptIDs = [];
+        for (let i = Parser.ScriptType.D; i <= lastScript; i++) {
+            let script = this.parser.getXMLSection(i);
+            if (script !== undefined) {
+                scripts.push(Parser.scriptName[i]);
+                scriptIDs.push(i);
+            }
+        }
+        if (scriptIDs.length > 1) { //otherwise ScriptType.ROOT
+            //show dialog
+            let result = await vscode.window.showQuickPick(scripts);
+            //lookup result
+            scriptIDs.some(scriptID => {
+                if (Parser.scriptName[scriptID] === result) {
+                    scriptType = scriptID;
+                    return true;
+                }
+                return false;
+            });
+        }
+        return Promise.resolve(scriptType);
+    }
+    async gotoScript(id) {
+        //console.log("GDLExtension.gotoScript");
+        if (this.editor) {
             let scriptType = Parser.ScriptType.ROOT;
-            //list only existing scripts
-            let scripts = [];
-            let scriptIDs = [];
-            for (let i = Parser.ScriptType.D; i <= lastScript; i++) {
-                let script = this.parser.getXMLSection(i);
-                if (script !== undefined) {
-                    scripts.push(Parser.scriptName[i]);
-                    scriptIDs.push(i);
-                }
+            if (!id || !(id instanceof Parser.GDLXMLSection)) { //called without script id
+                scriptType = await this.pickScript();
             }
-            if (scriptIDs.length > 1) { //otherwise ScriptType.ROOT
-                //show dialog
-                let result = yield vscode.window.showQuickPick(scripts);
-                //lookup result
-                scriptIDs.some(scriptID => {
-                    if (Parser.scriptName[scriptID] === result) {
-                        scriptType = scriptID;
-                        return true;
-                    }
-                    return false;
-                });
+            else {
+                scriptType = id.scriptType;
             }
-            return Promise.resolve(scriptType);
-        });
+            this.gotoScriptType(scriptType);
+        }
     }
-    gotoScript(id) {
-        return __awaiter(this, void 0, void 0, function* () {
-            //console.log("GDLExtension.gotoScript");
-            if (this.editor) {
-                let scriptType = Parser.ScriptType.ROOT;
-                if (!id || !(id instanceof Parser.GDLXMLSection)) { //called without script id
-                    scriptType = yield this.pickScript();
-                }
-                else {
-                    scriptType = id.scriptType;
-                }
-                this.gotoScriptType(scriptType);
+    async selectScript(id) {
+        if (this.editor) {
+            let scriptType = Parser.ScriptType.ROOT;
+            if (!id || !(id instanceof Parser.GDLXMLSection)) { //called without script id
+                scriptType = await this.pickScript();
             }
-        });
-    }
-    selectScript(id) {
-        return __awaiter(this, void 0, void 0, function* () {
-            if (this.editor) {
-                let scriptType = Parser.ScriptType.ROOT;
-                if (!id || !(id instanceof Parser.GDLXMLSection)) { //called without script id
-                    scriptType = yield this.pickScript();
-                }
-                else {
-                    scriptType = id.scriptType;
-                }
-                let script = this.parser.getXMLSection(scriptType);
-                let start = script.range.start;
-                let end = script.range.end;
-                // reveal top line
-                vscode.commands.executeCommand('revealLine', {
-                    "lineNumber": start.line,
-                    "at": "top"
-                });
-                if (scriptType !== Parser.ScriptType.ROOT) {
-                    //end of end-previous line - 3
-                    let len = this.editor.document.lineAt(end.line - 1).range.end.character;
-                    end = end.with(end.line - 1, len - 3);
-                    //start of start-next line + 9
-                    start = start.with(start.line + 1, 9);
-                }
-                //select all
-                this.editor.selection = new vscode.Selection(end, start);
+            else {
+                scriptType = id.scriptType;
             }
-        });
+            let script = this.parser.getXMLSection(scriptType);
+            let start = script.range.start;
+            let end = script.range.end;
+            // reveal top line
+            vscode.commands.executeCommand('revealLine', {
+                "lineNumber": start.line,
+                "at": "top"
+            });
+            if (scriptType !== Parser.ScriptType.ROOT) {
+                //end of end-previous line - 3
+                let len = this.editor.document.lineAt(end.line - 1).range.end.character;
+                end = end.with(end.line - 1, len - 3);
+                //start of start-next line + 9
+                start = start.with(start.line + 1, 9);
+            }
+            //select all
+            this.editor.selection = new vscode.Selection(end, start);
+        }
     }
     deleteHighlight() {
         if (this.editor) {
@@ -476,71 +447,67 @@ class GDLExtension {
         }
         return "";
     }
-    jumpInScript(scriptType) {
-        return __awaiter(this, void 0, void 0, function* () {
-            // get input # of line to jump to
-            // and go there
-            // returns false when user ESC'd line input dialog
-            let retval = false;
-            let script = this.parser.getXMLSection(scriptType);
-            if (this.editor && script !== undefined) {
-                let length = script.lineCount;
-                let savedSelection = this.editor.selection;
-                //show script start for feedback
-                this.gotoScriptType(scriptType);
-                let delta = ((scriptType === Parser.ScriptType.ROOT) ? -1 : 0);
-                // show input box
-                let promptstring = "Go to line # of " + Parser.scriptName[scriptType] + " [1 - " + length + "]";
-                let result = yield vscode.window.showInputBox({
-                    value: "1",
-                    prompt: promptstring,
-                    ignoreFocusOut: false,
-                    validateInput: (line) => this.peekline(line, promptstring, script.range.start, length, delta)
-                });
-                // jump to result
-                if (result !== undefined) {
-                    let jump = parseInt(result);
-                    if (jump !== Number.NaN) {
-                        let gotoLine = script.range.start.translate(jump + delta);
-                        if (scriptType !== Parser.ScriptType.ROOT && jump === 1) { //goto to pos. 9 of first line
-                            gotoLine = gotoLine.translate(0, 9);
-                        }
-                        // move cursor
-                        this.editor.selection = new vscode.Selection(gotoLine, gotoLine);
-                        retval = true;
+    async jumpInScript(scriptType) {
+        // get input # of line to jump to
+        // and go there
+        // returns false when user ESC'd line input dialog
+        let retval = false;
+        let script = this.parser.getXMLSection(scriptType);
+        if (this.editor && script !== undefined) {
+            let length = script.lineCount;
+            let savedSelection = this.editor.selection;
+            //show script start for feedback
+            this.gotoScriptType(scriptType);
+            let delta = ((scriptType === Parser.ScriptType.ROOT) ? -1 : 0);
+            // show input box
+            let promptstring = "Go to line # of " + Parser.scriptName[scriptType] + " [1 - " + length + "]";
+            let result = await vscode.window.showInputBox({
+                value: "1",
+                prompt: promptstring,
+                ignoreFocusOut: false,
+                validateInput: (line) => this.peekline(line, promptstring, script.range.start, length, delta)
+            });
+            // jump to result
+            if (result !== undefined) {
+                let jump = parseInt(result);
+                if (jump !== Number.NaN) {
+                    let gotoLine = script.range.start.translate(jump + delta);
+                    if (scriptType !== Parser.ScriptType.ROOT && jump === 1) { //goto to pos. 9 of first line
+                        gotoLine = gotoLine.translate(0, 9);
                     }
+                    // move cursor
+                    this.editor.selection = new vscode.Selection(gotoLine, gotoLine);
+                    retval = true;
                 }
-                if (!retval) {
-                    this.editor.selection = savedSelection;
-                }
-                this.deleteHighlight();
             }
-            return Promise.resolve(retval);
-        });
+            if (!retval) {
+                this.editor.selection = savedSelection;
+            }
+            this.deleteHighlight();
+        }
+        return Promise.resolve(retval);
     }
-    gotoRelative(id) {
-        return __awaiter(this, void 0, void 0, function* () {
-            if (this.editor) {
-                let scriptType = Parser.ScriptType.ROOT;
-                if (!id || !(id instanceof Parser.GDLXMLSection)) { //called without script id
-                    if (this.currentScript != Parser.ScriptType.ROOT) { //use current script (ROOT == no script)
-                        scriptType = this.currentScript;
-                    }
-                    else {
-                        scriptType = yield this.pickScript(Parser.ScriptType.BWM); // ask user for script
-                    }
+    async gotoRelative(id) {
+        if (this.editor) {
+            let scriptType = Parser.ScriptType.ROOT;
+            if (!id || !(id instanceof Parser.GDLXMLSection)) { //called without script id
+                if (this.currentScript != Parser.ScriptType.ROOT) { //use current script (ROOT == no script)
+                    scriptType = this.currentScript;
                 }
                 else {
-                    scriptType = id.scriptType;
-                }
-                let result = yield this.jumpInScript(scriptType);
-                while (!result && scriptType !== Parser.ScriptType.ROOT) { // pressed ESC, try again selecting another script type - find in file quits for ESC
-                    scriptType = yield this.pickScript(Parser.ScriptType.BWM);
-                    result = yield this.jumpInScript(scriptType);
+                    scriptType = await this.pickScript(Parser.ScriptType.BWM); // ask user for script
                 }
             }
-            return Promise.resolve();
-        });
+            else {
+                scriptType = id.scriptType;
+            }
+            let result = await this.jumpInScript(scriptType);
+            while (!result && scriptType !== Parser.ScriptType.ROOT) { // pressed ESC, try again selecting another script type - find in file quits for ESC
+                scriptType = await this.pickScript(Parser.ScriptType.BWM);
+                result = await this.jumpInScript(scriptType);
+            }
+        }
+        return Promise.resolve();
     }
     getScriptAtPos(pos) {
         // check if position is in range of script
@@ -578,8 +545,7 @@ class GDLExtension {
         }
     }
     updateStatusHSF() {
-        var _a;
-        if (modeGDLHSF((_a = this.editor) === null || _a === void 0 ? void 0 : _a.document) && this.hsflibpart) {
+        if (modeGDLHSF(this.editor?.document) && this.hsflibpart) {
             if (this.infoFromHSF) {
                 if (this.suggestHSF === undefined) {
                     this.suggestHSF = vscode.languages.registerCompletionItemProvider(["gdl-hsf"], this);
@@ -597,18 +563,15 @@ class GDLExtension {
             this.statusHSF.hide();
         }
     }
-    switchLang(langid) {
-        var _a;
-        return __awaiter(this, void 0, void 0, function* () {
-            if ((_a = this.editor) === null || _a === void 0 ? void 0 : _a.document) {
-                switch (langid) {
-                    case "gdl-xml":
-                    case "gdl-hsf":
-                    case "xml":
-                        vscode.languages.setTextDocumentLanguage(this.editor.document, langid);
-                }
+    async switchLang(langid) {
+        if (this.editor?.document) {
+            switch (langid) {
+                case "gdl-xml":
+                case "gdl-hsf":
+                case "xml":
+                    vscode.languages.setTextDocumentLanguage(this.editor.document, langid);
             }
-        });
+        }
     }
     insertGUID(id) {
         let guid = "";
@@ -652,77 +615,70 @@ class GDLExtension {
     getExtensionRefguidePath() {
         return this.context.asAbsolutePath('VSCodeRef');
     }
-    showRefguide() {
-        var _a;
-        return __awaiter(this, void 0, void 0, function* () {
-            if (this.editor) {
-                // create refguide view if doesn't exist
-                if (!((_a = this.refguide) === null || _a === void 0 ? void 0 : _a.opened())) {
-                    this.refguide = new refguide_1.RefGuide(this, this.refguidePath);
-                }
-                // load content
-                const word = refguide_1.RefGuide.helpFor(this.editor.document, this.editor.selection.active);
-                this.refguide.showHelp(word);
+    async showRefguide() {
+        if (this.editor) {
+            // create refguide view if doesn't exist
+            if (!this.refguide?.opened()) {
+                this.refguide = new refguide_1.RefGuide(this, this.refguidePath);
             }
-        });
+            // load content
+            const word = refguide_1.RefGuide.helpFor(this.editor.document, this.editor.selection.active);
+            this.refguide.showHelp(word);
+        }
     }
-    provideHover(document, position) {
-        return __awaiter(this, void 0, void 0, function* () {
-            // implemented only for hsf libparts
-            if (this.hsflibpart && this.infoFromHSF) {
-                let word = document.getText(document.getWordRangeAtPosition(position));
-                let p = this.hsflibpart.paramlist.get(word);
-                if (p) {
-                    return new vscode.Hover([
-                        new vscode.MarkdownString("**\"" + p.desc + "\"** `" + p.nameCS + "`"),
-                        new vscode.MarkdownString("**" + p.type + "**" +
-                            (p.fix ? " `Fix`" : "") +
-                            (p.hidden ? " `Hidden`" : "") +
-                            (p.child ? " `Child`" : "") +
-                            (p.bold ? " `BoldName`" : "")),
-                        new vscode.MarkdownString(p.meaning),
-                        new vscode.MarkdownString(p.getDefaultString())
-                    ]);
-                }
+    async provideHover(document, position) {
+        // implemented only for hsf libparts
+        if (this.hsflibpart && this.infoFromHSF) {
+            let word = document.getText(document.getWordRangeAtPosition(position));
+            let p = this.hsflibpart.paramlist.get(word);
+            if (p) {
+                return new vscode.Hover([
+                    new vscode.MarkdownString("**\"" + p.desc + "\"** `" + p.nameCS + "`" +
+                        "  \n**" + p.type + "**" +
+                        (p.fix ? " `Fix`" : "") +
+                        (p.hidden ? " `Hidden`" : "") +
+                        (p.child ? " `Child`" : "") +
+                        (p.bold ? " `BoldName`" : "") +
+                        "  \n" + p.meaning +
+                        "  \n" + p.getDefaultString())
+                ]);
             }
-            return Promise.reject(); // paramlist.xml or word not found
-        });
+        }
+        return Promise.reject(); // paramlist.xml or word not found
     }
-    provideCompletionItems(document, position) {
-        return __awaiter(this, void 0, void 0, function* () {
-            // implemented only for hsf libparts
-            if (this.hsflibpart) {
-                let completions = new vscode.CompletionList();
-                for (const p of this.hsflibpart.paramlist) {
-                    let padding = " ".repeat(34 - p.nameCS.length); // max. parameter name length is 32 chars
-                    let completion = new vscode.CompletionItem(p.nameCS + padding + p.type + p.getDimensionString(), vscode.CompletionItemKind.Field);
-                    completion.insertText = p.nameCS;
-                    completion.detail = "\"" + p.desc + "\"";
-                    completion.documentation = p.getDocString(false, false);
+    async provideCompletionItems(document, position) {
+        // implemented only for hsf libparts
+        if (this.hsflibpart) {
+            let completions = new vscode.CompletionList();
+            for (const p of this.hsflibpart.paramlist) {
+                let padding = " ".repeat(34 - p.nameCS.length); // max. parameter name length is 32 chars
+                let completion = new vscode.CompletionItem(p.nameCS + padding + p.type + p.getDimensionString(), vscode.CompletionItemKind.Field);
+                completion.insertText = p.nameCS;
+                completion.detail = "\"" + p.desc + "\"";
+                completion.documentation = p.getDocString(false, false);
+                completions.items.push(completion);
+            }
+            for (const prefix of this.hsflibpart.masterconstants) {
+                for (const c of prefix) {
+                    let completion = new vscode.CompletionItem(c.name, vscode.CompletionItemKind.Constant);
+                    completion.sortText = c.value.length.toString() + c.value; // shorter values probably smaller numbers
+                    completion.detail = c.value;
+                    let wordRange = document.getWordRangeAtPosition(position);
+                    if (wordRange) {
+                        completion.range = {
+                            inserting: wordRange,
+                            replacing: wordRange
+                        };
+                    }
+                    //completion.documentation = p.getDocString(false, false);
                     completions.items.push(completion);
                 }
-                for (const prefix of this.hsflibpart.masterconstants) {
-                    for (const c of prefix) {
-                        let completion = new vscode.CompletionItem(c.name, vscode.CompletionItemKind.Constant);
-                        completion.sortText = c.value.length.toString() + c.value; // shorter values probably smaller numbers
-                        completion.detail = c.value;
-                        let wordRange = document.getWordRangeAtPosition(position);
-                        if (wordRange) {
-                            completion.range = {
-                                inserting: wordRange,
-                                replacing: wordRange
-                            };
-                        }
-                        //completion.documentation = p.getDocString(false, false);
-                        completions.items.push(completion);
-                    }
-                }
-                return completions;
             }
-            else {
-                return undefined;
-            }
-        });
+            return completions;
+        }
+        else {
+            return undefined;
+        }
     }
     mapFuncionSymbols(scriptType) {
         //console.log("GDLExtension.mapFunctionSymbols");
@@ -746,7 +702,7 @@ class GDLExtension {
                 }
             }
             let end = this.editor.document.positionAt(this.editor.document.offsetAt(endpos) - 1);
-            return new vscode.DocumentSymbol(": " + f.name, "", vscode.SymbolKind.Method, new vscode.Range(f.range.start, end), f.range);
+            return new vscode.DocumentSymbol(f.name, "", vscode.SymbolKind.Method, new vscode.Range(f.range.start, end), f.range);
         }, this);
     }
     mapCommentSymbols(scriptType) {
@@ -761,52 +717,87 @@ class GDLExtension {
             return new vscode.DocumentSymbol("call " + m.name, m.all ? " \u00a0parameters ALL" : "", vscode.SymbolKind.Object, m.range, m.range);
         }, this);
     }
-    parseFinished(cancel) {
-        return __awaiter(this, void 0, void 0, function* () {
-            return new Promise((resolve, reject) => {
-                //console.log("GDLExtension.parseFinsihed promise created");
-                this.onDidParse(resolve);
-                cancel.onCancellationRequested(reject);
-            });
+    async parseFinished(cancel) {
+        return new Promise((resolve, reject) => {
+            //console.log("GDLExtension.parseFinsihed promise created");
+            this.onDidParse(resolve);
+            cancel.onCancellationRequested(reject);
         });
     }
-    immediateParse(document, cancel) {
-        return __awaiter(this, void 0, void 0, function* () {
-            if (this.parseTimer) {
-                this.reparseDoc(document, 0);
-                yield this.parseFinished(cancel);
-            }
-            //console.log("GDLExtension.immediateParse ready");
-        });
+    async immediateParse(document, cancel) {
+        if (this.parseTimer) {
+            this.reparseDoc(document, 0);
+            await this.parseFinished(cancel);
+        }
+        //console.log("GDLExtension.immediateParse ready");
     }
-    provideDocumentSymbols(document, cancel) {
-        return __awaiter(this, void 0, void 0, function* () {
-            //console.log("GDLExtension.provideDocumentSymbols");
-            yield this.immediateParse(document, cancel);
-            let symbols = [];
-            const allsections = this.parser.getAllSections();
-            const noroot = (allsections.length == 1 && allsections[0] instanceof Parser.GDLFile);
-            if (noroot) { // GDL-HSF
-                symbols = [...this.mapFuncionSymbols(allsections[0].scriptType),
-                    ...this.mapCallSymbols(allsections[0].scriptType),
-                    ...this.mapCommentSymbols(allsections[0].scriptType)];
-            }
-            else {
-                for (const section of allsections) {
-                    if (!(section instanceof Parser.GDLFile)) { // don't need file root in GDL-XML
-                        let showRange = (section instanceof Parser.GDLScript) ? section.innerrange : section.range;
-                        let symbol = new vscode.DocumentSymbol(section.name, "", vscode.SymbolKind.File, showRange, showRange);
-                        if (section instanceof Parser.GDLScript) {
-                            symbol.children = [...this.mapFuncionSymbols(section.scriptType),
-                                ...this.mapCallSymbols(section.scriptType),
-                                ...this.mapCommentSymbols(section.scriptType)];
-                        }
-                        symbols.push(symbol);
+    async provideDocumentSymbols(document, cancel) {
+        //console.log("GDLExtension.provideDocumentSymbols");
+        await this.immediateParse(document, cancel);
+        let symbols = [];
+        const allsections = this.parser.getAllSections();
+        const noroot = (allsections.length == 1 && allsections[0] instanceof Parser.GDLFile);
+        if (noroot) { // GDL-HSF
+            symbols = [...this.mapFuncionSymbols(Parser.ScriptType.ROOT),
+                ...this.mapCallSymbols(Parser.ScriptType.ROOT),
+                ...this.mapCommentSymbols(Parser.ScriptType.ROOT)];
+        }
+        else {
+            for (const section of allsections) {
+                if (!(section instanceof Parser.GDLFile)) { // don't need file root in GDL-XML
+                    let showRange = (section instanceof Parser.GDLScript) ? section.innerrange : section.range;
+                    let symbol = new vscode.DocumentSymbol(section.name, "", vscode.SymbolKind.File, showRange, showRange);
+                    if (section instanceof Parser.GDLScript) {
+                        symbol.children = [...this.mapFuncionSymbols(section.scriptType),
+                            ...this.mapCallSymbols(section.scriptType),
+                            ...this.mapCommentSymbols(section.scriptType)];
                     }
+                    symbols.push(symbol);
                 }
             }
-            return symbols;
-        });
+        }
+        return symbols;
+    }
+    async provideDefinition(document, position, cancel) {
+        let definitions = [];
+        const originRange = document.getWordRangeAtPosition(position);
+        if (originRange !== undefined) {
+            const origin = document.getText(originRange);
+            const lineBefore = document.lineAt(position.line).text.substring(0, originRange.start.character);
+            if (lineBefore.match(/(then|goto|gosub)\s*["'`´“”’‘]?$/i)) {
+                await this.immediateParse(document, cancel);
+                definitions = this.mapFuncionSymbols(Parser.ScriptType.ROOT)
+                    .filter(s => {
+                    return (origin == s.name || // number
+                        origin == s.name.substring(1, s.name.length - 1)); // "name"
+                }).map(s => {
+                    return {
+                        originSelectionRange: originRange,
+                        targetRange: s.range,
+                        targetSelectionRange: s.selectionRange,
+                        targetUri: document.uri
+                    };
+                });
+            }
+        }
+        return definitions;
+    }
+    async provideReferences(document, position, _context, cancel) {
+        let references = [];
+        await this.immediateParse(document, cancel);
+        const origin = this.mapFuncionSymbols(Parser.ScriptType.ROOT).filter(s => {
+            return s.selectionRange.contains(position);
+        })[0]?.name; // there shouldn't be more results
+        for (const match of document.getText().matchAll(/(then|goto|gosub)\s*/gmi)) {
+            let start = document.positionAt(match.index);
+            let end = start.translate(undefined, match[0].length);
+            let end_full = end.translate(undefined, origin.length);
+            let rest = document.getText(new vscode.Range(end, end_full));
+            if (rest == origin) {
+                references.push(new vscode.Location(document.uri, new vscode.Range(start, end_full)));
+            }
+        }
+        return references;
     }
 }
 exports.GDLExtension = GDLExtension;
@@ -833,16 +824,16 @@ function modeGDL(document) {
 }
 exports.modeGDL = modeGDL;
 function modeGDLXML(document) {
-    return (document === null || document === void 0 ? void 0 : document.languageId) === 'gdl-xml';
+    return document?.languageId === 'gdl-xml';
 }
 exports.modeGDLXML = modeGDLXML;
 function modeGDLHSF(document) {
-    return (document === null || document === void 0 ? void 0 : document.languageId) === 'gdl-hsf';
+    return document?.languageId === 'gdl-hsf';
 }
 exports.modeGDLHSF = modeGDLHSF;
 function hasLibPartData(uri) {
     //does libpartdata.xml exist in same folder?
-    if ((uri === null || uri === void 0 ? void 0 : uri.scheme) === 'file') {
+    if (uri?.scheme === 'file') {
         return fs.existsSync(vscode.Uri.joinPath(uri, "libpartdata.xml").fsPath);
     }
     else {

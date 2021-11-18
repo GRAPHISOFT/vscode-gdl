@@ -14,7 +14,6 @@
         ["call", "returned_parameters"],
         ["group", "endgroup"],
         // for identation
-        [":", "return"],
         ["do", "endwhile"]
     ],
     // symbols that are auto closed when typing

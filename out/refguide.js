@@ -131,8 +131,7 @@ class RefGuide {
         }
     }
     dispose() {
-        var _a;
-        (_a = this.refguideView) === null || _a === void 0 ? void 0 : _a.dispose();
+        this.refguideView?.dispose();
     }
     onDispose() {
         for (const c of this.callbacks) {

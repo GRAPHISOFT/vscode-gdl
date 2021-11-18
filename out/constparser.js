@@ -25,7 +25,7 @@ class Constant {
 exports.Constant = Constant;
 class Constants {
     constructor(rootfolder, filename) {
-        if (extension_1.hasLibPartData(rootfolder)) {
+        if ((0, extension_1.hasLibPartData)(rootfolder)) {
             //console.log("Constants() read master of", rootfolder.fsPath);
             this.constants = this.parse(vscode.Uri.joinPath(rootfolder, filename));
         }

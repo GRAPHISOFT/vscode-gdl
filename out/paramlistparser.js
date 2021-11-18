@@ -123,7 +123,7 @@ class Parameter {
 exports.Parameter = Parameter;
 class ParamList {
     constructor(rootfolder) {
-        if (extension_1.hasLibPartData(rootfolder)) {
+        if ((0, extension_1.hasLibPartData)(rootfolder)) {
             //console.log("ParamList() read paramlist of", rootfolder.fsPath);
             this.uri = vscode.Uri.joinPath(rootfolder, "paramlist.xml");
             this.parameters = this.parse();

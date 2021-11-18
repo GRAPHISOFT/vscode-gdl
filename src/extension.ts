@@ -34,7 +34,9 @@ type FormattedTokens = {
 export class GDLExtension
     implements vscode.HoverProvider,
                vscode.CompletionItemProvider,
-               vscode.DocumentSymbolProvider {
+               vscode.DocumentSymbolProvider,
+               vscode.DefinitionProvider,
+               vscode.ReferenceProvider {
 
     // data
     private parseTimer? : NodeJS.Timer;
@@ -133,7 +135,9 @@ export class GDLExtension
             // language features
             vscode.languages.registerHoverProvider(["gdl-hsf"], this),
             vscode.languages.registerDocumentSymbolProvider(["gdl-xml", "gdl-hsf"], this),
-            vscode.languages.registerWorkspaceSymbolProvider(new WSSymbols(context))
+            vscode.languages.registerWorkspaceSymbolProvider(new WSSymbols(context)),
+            vscode.languages.registerDefinitionProvider(["gdl-hsf"], this),
+            vscode.languages.registerReferenceProvider(["gdl-hsf"], this)
         );
     }
 
@@ -415,7 +419,7 @@ export class GDLExtension
             this.refguide?.dispose();  // will be created in showRefguide with new refguidePath
         }
 
-        let infoFromHSF = config.get<boolean>("showInfoFromHSFFiles");
+        let infoFromHSF = config.get<boolean>("showInfoFromHSF");
         if (infoFromHSF === undefined) {
             this.setInfoFromHSF(true);
         } else {
@@ -798,14 +802,15 @@ export class GDLExtension
             let p = this.hsflibpart.paramlist.get(word);
             if (p) {
                 return new vscode.Hover([
-                    new vscode.MarkdownString("**\"" + p.desc + "\"** `" + p.nameCS + "`"),
-                    new vscode.MarkdownString("**" + p.type + "**" +
+                    new vscode.MarkdownString("**\"" + p.desc + "\"** `" + p.nameCS + "`" +
+                                              "  \n**" + p.type + "**" +
                                                 (p.fix ? " `Fix`" : "") +
                                                 (p.hidden ? " `Hidden`" : "") +
                                                 (p.child ? " `Child`" : "") +
-                                                (p.bold ? " `BoldName`" : "")),
-                    new vscode.MarkdownString(p.meaning),
-                    new vscode.MarkdownString(p.getDefaultString()) ]);
+                                                (p.bold ? " `BoldName`" : "") +
+                                              "  \n" + p.meaning +
+                                              "  \n" + p.getDefaultString())
+                    ]);
             }
         }
 
@@ -870,7 +875,7 @@ export class GDLExtension
             
             let end = this.editor!.document.positionAt(this.editor!.document.offsetAt(endpos) - 1);
             return new vscode.DocumentSymbol(
-                ": " + f.name,
+                f.name,
                 "",
                 vscode.SymbolKind.Method,
                 new vscode.Range(f.range.start, end),
@@ -918,7 +923,7 @@ export class GDLExtension
         //console.log("GDLExtension.immediateParse ready");
     }
     
-    async provideDocumentSymbols (document: vscode.TextDocument, cancel : vscode.CancellationToken) : Promise<vscode.DocumentSymbol[]> {
+    async provideDocumentSymbols(document: vscode.TextDocument, cancel : vscode.CancellationToken) : Promise<vscode.DocumentSymbol[]> {
         //console.log("GDLExtension.provideDocumentSymbols");
         await this.immediateParse(document, cancel);
 
@@ -926,9 +931,9 @@ export class GDLExtension
         const allsections = this.parser.getAllSections();
         const noroot = (allsections.length == 1 && allsections[0] instanceof Parser.GDLFile);
         if (noroot) {   // GDL-HSF
-            symbols = [...this.mapFuncionSymbols(allsections[0].scriptType),
-                       ...this.mapCallSymbols(allsections[0].scriptType),
-                       ...this.mapCommentSymbols(allsections[0].scriptType)];
+            symbols = [...this.mapFuncionSymbols(Parser.ScriptType.ROOT),
+                       ...this.mapCallSymbols(Parser.ScriptType.ROOT),
+                       ...this.mapCommentSymbols(Parser.ScriptType.ROOT)];
         } else {
             for (const section of allsections) {
                 if (!(section instanceof Parser.GDLFile)) {  // don't need file root in GDL-XML
@@ -951,7 +956,59 @@ export class GDLExtension
         return symbols;
     }
 
+    async provideDefinition(document: vscode.TextDocument, position: vscode.Position, cancel: vscode.CancellationToken): Promise<vscode.LocationLink[]> {
+        let definitions : vscode.LocationLink[] = [];
 
+        const originRange = document.getWordRangeAtPosition(position);
+        if (originRange !== undefined) {
+            const origin = document.getText(originRange);
+            const lineBefore = document.lineAt(position.line).text.substring(0, originRange.start.character);
+
+            if (lineBefore.match(/(then|goto|gosub)\s*["'`´“”’‘]?$/i)) {
+                await this.immediateParse(document, cancel);
+
+                definitions = this.mapFuncionSymbols(Parser.ScriptType.ROOT)
+                    .filter(s => {
+                        return (origin == s.name ||                                 // number
+                                origin == s.name.substring(1, s.name.length - 1))   // "name"
+                    }).map(s => {
+                        return {
+                            originSelectionRange: originRange,
+                            targetRange: s.range,
+                            targetSelectionRange: s.selectionRange,
+                            targetUri: document.uri
+                        }
+                    });
+            }
+        }
+
+        return definitions;
+    }
+
+    async provideReferences(document: vscode.TextDocument, position: vscode.Position,
+                            _context: vscode.ReferenceContext, cancel: vscode.CancellationToken) : Promise<vscode.Location[]> {
+
+        let references : vscode.Location[] = [];
+
+        await this.immediateParse(document, cancel);
+
+        const origin = this.mapFuncionSymbols(Parser.ScriptType.ROOT).filter(s => {
+            return s.selectionRange.contains(position);
+        })[0]?.name; // there shouldn't be more results
+
+        for (const match of document.getText().matchAll(/(then|goto|gosub)\s*/gmi)) {
+            let start = document.positionAt(match.index!);
+            let end = start.translate(undefined, match[0].length);
+            let end_full = end.translate(undefined, origin.length);
+            let rest = document.getText(new vscode.Range(end, end_full));
+
+            if (rest == origin) {
+                references.push(new vscode.Location(document.uri, new vscode.Range(start, end_full)));
+            }
+        }
+
+        return references;
+    }
 }
 
 export function modeGDL(document? : vscode.TextDocument) : boolean {

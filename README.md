@@ -43,7 +43,7 @@ __hotspot__ or __hotspot2__ - length edit hotspot triplet
   * Type after @: to group results by type and filter them
   * This list is also visible and can be filtered in the Breadcrumbs bar and the Explorer/Outline view
   * The Breadcrumbs bar also shows which subroutine the cursor is in
-* Workspace symbols (Ctrl-T) lists library parts in the opened folders
+* Workspace symbols (Ctrl-T) searches library parts in the opened folders by name or GUID
   * The search opens with the currently selected text
   * Type to filter results
   * Select to open the same script or xml that the current editor contains, or libpartdata.xml if unknown
@@ -53,6 +53,7 @@ __hotspot__ or __hotspot2__ - length edit hotspot triplet
   * IntelliSense lists master script constants (ALL_CAPS) with their initialized values
   * IntelliSense lists parameters with their description, type, flags and default value. This list can be filtered by parameter type too.
   * These can all be toggled on/off together with Ctrl-Shift-Space
+* Go to definitions/references, find all references of subroutines in same gdl-hsf file (Ctrl-click or F12, Shift-F12, Shift-Alt-F12)
 
 # Script outline view
 
@@ -86,6 +87,7 @@ Use the Related... link at the bottom of the page to see similar commands: this 
 * Detect parentheses, array dimension and range \[]() mixups
 * Detect function calls with missing parentheses
 * Highlight illegal variable names (e.g. 0var)
+* Highlight innermost loop, macro call, group boundaries
 
 ## Extra capabilities with GDL themes
 * Different styles for 2d/3d/parameter/properties/ui script-related commands
@@ -154,6 +156,14 @@ Some valid syntaxes won't be highlighted, and some invalid syntaxes will be high
 1. Press Ctrl-S to apply changes to the user settings
 
 # Release Notes
+
+## 1.25.2
+* Go to definitions/references, find all references of subroutines in same gdl-hsf file (Ctrl-click or F12, Shift-F12, Shift-Alt-F12)
+* Exclude commented macro calls from outline and symbols
+* Workspace symbols (Ctrl-T) can find libparts by GUID
+* Highlight innermost loop, macro call, group boundaries
+* Automatic unidentation of loop end keywords and groups, automatic identation of do and repeat blocks
+* IntelliSense lists parameter types in second row
 
 ## 1.25.1
 * Document symbols (Ctrl-Shift-O)

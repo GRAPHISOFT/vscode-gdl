@@ -1,13 +1,4 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OutlineView = void 0;
 const vscode = require("vscode");
@@ -26,26 +17,20 @@ class OutlineView {
             this.refresh();
         }, this);
     }
-    newSettings(specComments, macroCalls) {
-        return __awaiter(this, void 0, void 0, function* () {
-            let changed = (this.specComments != specComments || this.macroCalls != macroCalls);
-            this.specComments = specComments;
-            this.macroCalls = macroCalls;
-            if (changed)
-                this.refresh();
-        });
-    }
-    toggleSpecComments() {
-        return __awaiter(this, void 0, void 0, function* () {
-            this.specComments = !this.specComments;
+    async newSettings(specComments, macroCalls) {
+        let changed = (this.specComments != specComments || this.macroCalls != macroCalls);
+        this.specComments = specComments;
+        this.macroCalls = macroCalls;
+        if (changed)
             this.refresh();
-        });
     }
-    toggleMacroCalls() {
-        return __awaiter(this, void 0, void 0, function* () {
-            this.macroCalls = !this.macroCalls;
-            this.refresh();
-        });
+    async toggleSpecComments() {
+        this.specComments = !this.specComments;
+        this.refresh();
+    }
+    async toggleMacroCalls() {
+        this.macroCalls = !this.macroCalls;
+        this.refresh();
     }
     refresh() {
         //console.log("OutlineView.refresh ", this.extension.updateEnabled);
@@ -55,10 +40,9 @@ class OutlineView {
     }
     getTreeItems(scriptType) {
         //console.log("OutlineView.getTreeItems", Parser.scriptName[scriptType], Date.now());
-        var _a;
         let children = [];
         //add "main" function for script longer than one line
-        if (extension_1.modeGDLXML((_a = this.extension.editor) === null || _a === void 0 ? void 0 : _a.document)) {
+        if ((0, extension_1.modeGDLXML)(this.extension.editor?.document)) {
             if (scriptType <= Parser.ScriptType.BWM) {
                 let script = this.extension.parser.getXMLSection(scriptType);
                 if ((script instanceof Parser.GDLXMLSection) && script.lineCount > 1) {

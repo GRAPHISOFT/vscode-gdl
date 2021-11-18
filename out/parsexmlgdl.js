@@ -263,7 +263,7 @@ class ParseXMLGDL {
         //console.log("ParseXMLGDL.parseScripts");
         let match;
         this.sectionList = [];
-        if (extension_1.modeGDL(document)) {
+        if ((0, extension_1.modeGDL)(document)) {
             const text = document.getText();
             while (match = GDLXMLSection.regex.exec(text)) {
                 if (match.length > 0) { // match[1] exists
@@ -293,7 +293,7 @@ class ParseXMLGDL {
         for (let i = ScriptType.ROOT; i <= ScriptType.MIGTABLE; i++) {
             this.functionList.push([]);
         }
-        if (extension_1.modeGDL(document)) {
+        if ((0, extension_1.modeGDL)(document)) {
             while (match = GDLFunction.regex.exec(document.getText())) {
                 if (match.length > 1) { // match[2] exists
                     if (match[2]) {
@@ -317,7 +317,7 @@ class ParseXMLGDL {
         for (let i = ScriptType.ROOT; i <= ScriptType.MIGTABLE; i++) {
             this.commentList.push([]);
         }
-        if (extension_1.modeGDL(document)) {
+        if ((0, extension_1.modeGDL)(document)) {
             while (match = GDLComment.regex.exec(document.getText())) {
                 if (match.length > 1) { // match[2] exists
                     const start = document.positionAt(match.index);
@@ -332,7 +332,7 @@ class ParseXMLGDL {
         //console.log("ParseXMLGDL.parseGUIDs");
         let match;
         this.GUIDList = [];
-        if (extension_1.modeGDL(document)) {
+        if ((0, extension_1.modeGDL)(document)) {
             const text = document.getText();
             // get main GUID
             this.mainGUID = undefined;
@@ -354,7 +354,7 @@ class ParseXMLGDL {
         let match;
         this.macroCallList = [];
         this.calledMacroList = [];
-        if (extension_1.modeGDL(document)) {
+        if ((0, extension_1.modeGDL)(document)) {
             for (let i = ScriptType.ROOT; i <= ScriptType.MIGTABLE; i++) {
                 this.macroCallList.push([]);
             }
@@ -393,7 +393,7 @@ class ParseXMLGDL {
         //console.log("ParseXMLGDL.parsePicts");
         let match;
         this.pictList = [];
-        if (extension_1.modeGDL(document)) {
+        if ((0, extension_1.modeGDL)(document)) {
             // store GDLPicts
             while (match = GDLPict.regex.exec(document.getText())) {
                 this.pictList.push(new GDLPict(document.positionAt(match.index), document.positionAt(match.index + match[0].length + 1), match));
