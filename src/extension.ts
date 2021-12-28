@@ -1,4 +1,6 @@
 import * as vscode from 'vscode';
+import { TextDecoder } from 'util';
+
 import * as Parser from './parsexmlgdl';
 import { OutlineView } from './scriptView';
 import { RefGuide } from './refguide';
@@ -6,7 +8,6 @@ import { HSFLibpart } from './parsehsf';
 import { WSSymbols } from './wssymbols'
 
 import path = require('path');
-import fs = require('fs');
 
 export async function activate(context: vscode.ExtensionContext) {
 
@@ -21,7 +22,9 @@ export async function activate(context: vscode.ExtensionContext) {
     }
 
     // create extension
-    context.subscriptions.push(new GDLExtension(context));
+    const extension = new GDLExtension(context);
+    context.subscriptions.push(extension);
+    setTimeout(() => extension.init(), 0); //don't block UI
 }
 
 type PromiseParse = Promise<Parser.ParseXMLGDL>;
@@ -44,6 +47,7 @@ export class GDLExtension
     private _updateEnabled: boolean = false;
     private currentScript : Parser.ScriptType = Parser.ScriptType.ROOT;
     private hsflibpart? : HSFLibpart;
+    private readonly wsSymbols : WSSymbols;
 
     // user settings
     private refguidePath: string = "";
@@ -80,11 +84,11 @@ export class GDLExtension
 
     constructor(public context : vscode.ExtensionContext) {
         this.parser = new Parser.ParseXMLGDL();  // without document only initializes
+        this.wsSymbols = new WSSymbols(context);
 
         // GDLOutline view initialization
         this.outlineView = new OutlineView(this);
         context.subscriptions.push(vscode.window.registerTreeDataProvider('GDLOutline', this.outlineView));
-        this.onActiveEditorChanged(); // after registering, will create parser from document
 
         //status bar initialization - XML
         this.statusXMLposition = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 9999);
@@ -98,8 +102,7 @@ export class GDLExtension
     	this.statusHSF.command = 'GDL.infoFromHSF';
         context.subscriptions.push(this.statusHSF);
 
-        // read configuration
-        this.onConfigChanged();
+        //init extension-relative paths
         this.initUIDecorations();
 
         context.subscriptions.push(
@@ -107,11 +110,11 @@ export class GDLExtension
             // changed settings
             vscode.workspace.onDidChangeConfiguration(async () => this.onConfigChanged()),
             // switched between open files
-            vscode.window.onDidChangeActiveTextEditor(async () => this.onActiveEditorChanged()),
+            vscode.window.onDidChangeActiveTextEditor(() => this.onActiveEditorChanged()),
             // file edited
-            vscode.workspace.onDidChangeTextDocument(async (e : vscode.TextDocumentChangeEvent) => this.onDocumentChanged(e)),
+            vscode.workspace.onDidChangeTextDocument((e : vscode.TextDocumentChangeEvent) => this.onDocumentChanged(e)),
             // opened or changed language mode
-            vscode.workspace.onDidOpenTextDocument(async (e: vscode.TextDocument) => this.onDocumentOpened(e)),
+            vscode.workspace.onDidOpenTextDocument((e: vscode.TextDocument) => this.onDocumentOpened(e)),
             // moved cursor
             vscode.window.onDidChangeTextEditorSelection(() => this.updateCurrentScript()),
 
@@ -135,24 +138,31 @@ export class GDLExtension
             // language features
             vscode.languages.registerHoverProvider(["gdl-hsf"], this),
             vscode.languages.registerDocumentSymbolProvider(["gdl-xml", "gdl-hsf"], this),
-            vscode.languages.registerWorkspaceSymbolProvider(new WSSymbols(context)),
+            vscode.languages.registerWorkspaceSymbolProvider(this.wsSymbols),
             vscode.languages.registerDefinitionProvider(["gdl-hsf"], this),
             vscode.languages.registerReferenceProvider(["gdl-hsf"], this)
         );
+    }
+
+    async init() {
+        
+        await this.onConfigChanged();           // 1 read configuration
+        this.wsSymbols.changeFolders();         // 2 start looking for workspace symbols TODO status bar progress indicator?
+        this.onActiveEditorChanged();           // 3 start parsing
     }
 
     get updateEnabled() : boolean { return this._updateEnabled; }
 
     get editor() : vscode.TextEditor | undefined { return this._editor; }
 
-    async reparseDoc(document : vscode.TextDocument | undefined, delay : number = 100) {
-        //console.log("GDLExtension.reparseDoc");
+    reparseDoc(document : vscode.TextDocument | undefined, delay : number = 100) {
+        console.log("GDLExtension.reparseDoc");
         this._updateEnabled = modeGDL(document);
         vscode.commands.executeCommand('setContext', 'GDLOutlineEnabled', this._updateEnabled);
         
         // reparse document after delay
         this.parse(document, delay).then(result => {
-            //console.log("reparseDoc resolved");
+            console.log("reparseDoc resolved");
             this.parser = result;
             this.updateUI();
             this._onDidParse.fire(null);
@@ -291,8 +301,8 @@ export class GDLExtension
         });
     }
     
-    private async onActiveEditorChanged() {
-        //console.log("GDLExtension.onActiveEditorChanged");
+    private onActiveEditorChanged() {
+        console.log("GDLExtension.onActiveEditorChanged");
         this._editor = vscode.window.activeTextEditor;
 
         // xml files opened as gdl-xml by extension
@@ -301,9 +311,9 @@ export class GDLExtension
             this.switchLang("xml");
         }
 
+        // these calls start timer to not block UI
         this.updateHsfLibpart();
-        
-        await this.reparseDoc(this._editor?.document, 0);
+        this.reparseDoc(this._editor?.document, 0);
     }
 
     private updateHsfLibpart() {
@@ -311,6 +321,13 @@ export class GDLExtension
         let rootFolder = this.getNewHSFLibpartFolder(this.hsflibpart?.rootFolder);
         if (rootFolder) {
             this.hsflibpart = new HSFLibpart(rootFolder);
+            //this doesn't have to be finsihed immediately
+            setTimeout(async (hsflibpart) => {
+                await Promise.allSettled([
+                    hsflibpart.read_master_constants(),
+                    hsflibpart.read_paramlist()]);
+                this.updateUI();    // TODO call only once when all is finished
+                }, 0, this.hsflibpart);
         } else if (rootFolder === undefined) {
             // delete HSFLibpart
             this.hsflibpart = undefined;
@@ -344,7 +361,7 @@ export class GDLExtension
     });
 
     private decorateParameters() {
-        //console.log("GDLExtension.decorateParameters", this._editor?.document.fileName);
+        console.log("GDLExtension.decorateParameters", this._editor?.document.fileName);
         let paramRanges : vscode.Range[] = [];
 
         if (this._editor && this.hsflibpart && this.infoFromHSF) {
@@ -385,23 +402,24 @@ export class GDLExtension
         this.decorateParameters();
     }
 
-    private async onDocumentChanged(changeEvent: vscode.TextDocumentChangeEvent) {
-        //console.log("GDLExtension.onDocumentChanged", changeEvent.document.uri.toString());
-        this.updateHsfLibpart();
-        await this.reparseDoc(changeEvent.document);  // with default timeout
+    private onDocumentChanged(changeEvent: vscode.TextDocumentChangeEvent) {
+        console.log("GDLExtension.onDocumentChanged", changeEvent.document.uri.toString());
+        this.reparseDoc(changeEvent.document);  // with default timeout
     }
 
-    private async onDocumentOpened(document: vscode.TextDocument) {
+    private onDocumentOpened(document: vscode.TextDocument) {
         //console.log("GDLExtension.onDocumentOpened", document.uri.toString());
         
         // handle only top editor - other can be SCM virtual document
         if (vscode.window.activeTextEditor?.document.uri == document.uri) {
-            await this.onDocumentChanged({ contentChanges: [], document: document})
+            this.updateHsfLibpart();
+            this.reparseDoc(document, 0);
         }
     }
 
-    private onConfigChanged() {
-        let config = vscode.workspace.getConfiguration("gdl");
+    private async onConfigChanged() {
+        console.log("GDLExtension.onConfigChanged");
+        const config = vscode.workspace.getConfiguration("gdl");
 
         //don't change if not found in setting
         let specComments = config.get<boolean>("showSpecialComments");
@@ -414,12 +432,12 @@ export class GDLExtension
         }
         this.outlineView.newSettings(specComments, macroCalls);
 
-        let refguidePath = config.get<string>("refguidePath");
-        let lastPath = this.refguidePath;
-        if (refguidePath !== undefined &&
-            refguidePath !== "" &&
-            fs.existsSync(refguidePath)) {
-            this.refguidePath = refguidePath;
+        const refguideSetting = config.get<string>("refguidePath");
+        const lastPath = this.refguidePath;
+        if (refguideSetting !== undefined &&
+            refguideSetting !== "" &&
+            (await fileExists(vscode.Uri.file(refguideSetting)))) {
+                this.refguidePath = refguideSetting;
         } else {
             this.refguidePath = this.getExtensionRefguidePath();
         }
@@ -799,7 +817,7 @@ export class GDLExtension
             
             // load content
             const word = RefGuide.helpFor(this.editor.document, this.editor.selection.active);
-            this.refguide.showHelp(word);
+            await this.refguide.showHelp(word);
         }
     }
 
@@ -925,6 +943,7 @@ export class GDLExtension
     }
 
     async immediateParse(document: vscode.TextDocument, cancel : vscode.CancellationToken) {
+        // if parsing already scheduled, start it immediately and wait until finishes
         if (this.parseTimer) {
             this.reparseDoc(document, 0);
             await this.parseFinished(cancel);
@@ -1034,26 +1053,48 @@ export function modeGDLHSF(document? : vscode.TextDocument) : boolean {
     return document?.languageId === 'gdl-hsf';
 }
 
-export function hasLibPartData(uri? : vscode.Uri) : boolean {
+export async function hasLibPartData(uri? : vscode.Uri) : Promise<boolean> {
     //does libpartdata.xml exist in same folder?
     if (uri?.scheme === 'file') {
-        return fs.existsSync(vscode.Uri.joinPath(uri, "libpartdata.xml").fsPath);
+        const libpartdata = vscode.Uri.joinPath(uri, "libpartdata.xml");
+        return await fileExists(libpartdata);
     } else {
         return false;
     }
 }
 
-function IsLibpart(document? : vscode.TextDocument) : boolean {
+async function IsLibpart(document? : vscode.TextDocument) : Promise<boolean> {
     if (modeGDLXML(document)) {
         // xml files opened as gdl-xml by extension
-        // if libpartdata.xml exists, this is pure xml
+        // if libpartdata.xml exists in same folder, this is pure xml
         // TODO check xml root tag instead
         // if an xml file is not saved yet, it is a libpart by languageID
-        return !hasLibPartData(vscode.Uri.joinPath(document!.uri, ".."));
+        return !(await hasLibPartData(vscode.Uri.joinPath(document!.uri, "..")));
     } else if (modeGDLHSF(document))  {
         // gdl files of libparts should have a libpartdata.xml at parent folder
-        return hasLibPartData(vscode.Uri.joinPath(document!.uri, "../.."));
+        return await hasLibPartData(vscode.Uri.joinPath(document!.uri, "../.."));
     } else {
         return false;
+    }
+}
+
+export async function fileExists(uri : vscode.Uri) : Promise<boolean> {
+    try {
+        const stat = await vscode.workspace.fs.stat(uri);
+        return !(stat.type & vscode.FileType.Directory);
+    } catch {
+        return false;
+    }
+}
+
+export async function readFile(uri: vscode.Uri, exists : boolean = false) : Promise<string | undefined> {
+    // read an utf-8 file
+    // call with exists = true to skip check
+    if (exists || await fileExists(uri)) {
+        const data = await vscode.workspace.fs.readFile(uri);
+        const utf8_decoder = new TextDecoder("utf8");
+        return utf8_decoder.decode(data);
+    } else {
+        return undefined;
     }
 }

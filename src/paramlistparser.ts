@@ -1,8 +1,6 @@
 import * as vscode from 'vscode';
 
-import { hasLibPartData } from './extension';
-
-import fs = require('fs');
+import { readFile } from './extension';
 
 export class Parameter {
     public readonly type : string;
@@ -143,36 +141,22 @@ export class Parameter {
 }
 
 export class ParamList implements Iterable<Parameter> {
-    private readonly parameters : Map<string, Parameter>;
-    readonly uri? : vscode.Uri;
+    private readonly parameters : Map<string, Parameter> = new Map<string, Parameter>();
 
-    constructor(rootfolder? : vscode.Uri) {
-        if (hasLibPartData(rootfolder)) {
-            //console.log("ParamList() read paramlist of", rootfolder.fsPath);
-            this.uri = vscode.Uri.joinPath(rootfolder!, "paramlist.xml");
-            this.parameters = this.parse();
-        } else {
-            this.parameters = new Map<string, Parameter>();
-        }
-    }
+    async addfrom(rootfolder : vscode.Uri) {
+        //console.log("ParamList.addfrom()", rootfolder.fsPath);
+        const paramlistfile = vscode.Uri.joinPath(rootfolder, "paramlist.xml");
+        const paramlist = await readFile(paramlistfile);
 
-    private parse() : Map<string, Parameter> {
-        let parameters = new Map<string, Parameter>();
-
-        let paramlist = this.uri!.fsPath;
-        if (fs.existsSync(paramlist)) {
-            let data = fs.readFileSync(paramlist, "utf8");
-
-            let parameters_ = data.match(/^\t\t<(.*?) Name=.*?>((.|[\n\r])*?)^\t\t<\/\1>/mg);
+        if (paramlist) {
+            let parameters_ = paramlist.match(/^\t\t<(.*?) Name=.*?>((.|[\n\r])*?)^\t\t<\/\1>/mg);
             if (parameters_) {
                 for (const xml of parameters_) {
                     let parameter = new Parameter(xml);
-                    parameters.set(parameter.nameCS.toLowerCase(), parameter);
+                    this.parameters.set(parameter.nameCS.toLowerCase(), parameter);
                 }
             }
         }
-
-        return parameters;
     }
 
     has(name : string) : boolean {
