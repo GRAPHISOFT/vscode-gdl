@@ -61,7 +61,7 @@ class GDLExtension {
         // file edited
         vscode.workspace.onDidChangeTextDocument(async (e) => this.onDocumentChanged(e)), 
         // opened or changed language mode
-        vscode.workspace.onDidOpenTextDocument(async (e) => this.onDocumentChanged({ contentChanges: [], document: e })), 
+        vscode.workspace.onDidOpenTextDocument(async (e) => this.onDocumentOpened(e)), 
         // moved cursor
         vscode.window.onDidChangeTextEditorSelection(() => this.updateCurrentScript()), 
         // extension commands
@@ -288,6 +288,13 @@ class GDLExtension {
         //console.log("GDLExtension.onDocumentChanged", changeEvent.document.uri.toString());
         this.updateHsfLibpart();
         await this.reparseDoc(changeEvent.document); // with default timeout
+    }
+    async onDocumentOpened(document) {
+        //console.log("GDLExtension.onDocumentOpened", document.uri.toString());
+        // handle only top editor - other can be SCM virtual document
+        if (vscode.window.activeTextEditor?.document.uri == document.uri) {
+            await this.onDocumentChanged({ contentChanges: [], document: document });
+        }
     }
     onConfigChanged() {
         let config = vscode.workspace.getConfiguration("gdl");
