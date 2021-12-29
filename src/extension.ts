@@ -15,7 +15,7 @@ export async function activate(context: vscode.ExtensionContext) {
     // create extension
     const extension = new GDLExtension(context);
     context.subscriptions.push(extension);
-    setTimeout(() => extension.init(), 10); //don't block UI
+    extension.init();   // start async operation
 }
 
 type PromiseParse = Promise<Parser.ParseXMLGDL>;
@@ -76,6 +76,7 @@ export class GDLExtension
     constructor(public context : vscode.ExtensionContext) {
         this.parser = new Parser.ParseXMLGDL();  // without document only initializes
         this.wsSymbols = new WSSymbols(context);
+        this.wsSymbols.changeFolders();          // handles waiting for result on its own
 
         // GDLOutline view initialization
         this.outlineView = new OutlineView(this);
@@ -136,10 +137,8 @@ export class GDLExtension
     }
 
     async init() {
-        
-        await this.onConfigChanged();           // 1 read configuration
-        this.wsSymbols.changeFolders();         // 2 start looking for workspace symbols TODO status bar progress indicator?
-        this.onActiveEditorChanged();           // 3 start parsing
+        await this.onConfigChanged();   // wait for configuration
+        this.onActiveEditorChanged();   // start async operation
     }
 
     get updateEnabled() : boolean { return this._updateEnabled; }
