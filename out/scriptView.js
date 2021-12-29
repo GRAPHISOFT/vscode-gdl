@@ -18,7 +18,7 @@ class OutlineView {
         }, this);
     }
     async newSettings(specComments, macroCalls) {
-        let changed = (this.specComments != specComments || this.macroCalls != macroCalls);
+        const changed = (this.specComments != specComments || this.macroCalls != macroCalls);
         this.specComments = specComments;
         this.macroCalls = macroCalls;
         if (changed)
@@ -40,11 +40,11 @@ class OutlineView {
     }
     getTreeItems(scriptType) {
         //console.log("OutlineView.getTreeItems", Parser.scriptName[scriptType], Date.now());
-        let children = [];
+        const children = [];
         //add "main" function for script longer than one line
         if ((0, extension_1.modeGDLXML)(this.extension.editor?.document)) {
             if (scriptType <= Parser.ScriptType.BWM) {
-                let script = this.extension.parser.getXMLSection(scriptType);
+                const script = this.extension.parser.getXMLSection(scriptType);
                 if ((script instanceof Parser.GDLXMLSection) && script.lineCount > 1) {
                     //start of line after script start
                     const start = new vscode.Position(script.range.start.line + 1, 0);
@@ -68,7 +68,7 @@ class OutlineView {
     // build hierarchy of tree: return children of node id
     getChildren(id) {
         //console.log("OutlineView.getChildren", (id instanceof Parser.GDLToken) ?  id.name : "root");
-        let children = [];
+        const children = [];
         if (id instanceof Parser.GDLToken) {
             if (id instanceof Parser.GDLScript) {
                 //functions, comments and macro calls
@@ -91,26 +91,26 @@ class OutlineView {
         }
         else { // root of tree
             //add mainGUID if found
-            let mainGUID = this.extension.parser.getMainGUID();
+            const mainGUID = this.extension.parser.getMainGUID();
             if (mainGUID !== undefined) {
                 children.push(mainGUID);
                 //scripts
                 // show only scripts that have some lines in them
                 for (let i = Parser.ScriptType.D; i <= Parser.ScriptType.BWM; i++) {
-                    let script = this.extension.parser.getXMLSection(i);
+                    const script = this.extension.parser.getXMLSection(i);
                     if (script !== undefined && script.lineCount > 0) {
                         children.push(script);
                     }
                 }
                 // add non-script XML sections
                 for (let i = Parser.ScriptType.MIGTABLE; i <= Parser.ScriptType.CALLEDMACROS; i++) {
-                    let script = this.extension.parser.getXMLSection(i);
+                    const script = this.extension.parser.getXMLSection(i);
                     if (script !== undefined && script.lineCount > 0) {
                         children.push(script);
                     }
                 }
                 // add GDLPicts if there is at least one
-                let picts = this.extension.parser.getPictList();
+                const picts = this.extension.parser.getPictList();
                 if (picts.length > 0) {
                     children.push(new Parser.GDLPictParent(picts.length));
                 }
@@ -240,8 +240,8 @@ class TokenUI {
         this.darkicon = "dark/GUID_icon16x16.svg";
     }
     GDLMigrationGUIDUI(token) {
-        let version = (token.version < 10 ? "\u00a0" : "") + token.version.toString();
-        let showName = version + " " + token.name + (token.automigration ? " auto" : "");
+        const version = (token.version < 10 ? "\u00a0" : "") + token.version.toString();
+        const showName = version + " " + token.name + (token.automigration ? " auto" : "");
         this.context = "GUID";
         this.label = showName;
         this.id = token.range.start.line.toString() + " GUID " + token.name;
@@ -331,7 +331,7 @@ class TokenUI {
         this.darkicon = "dark/pict_icon16x16.svg";
     }
     GDLPictUI(token) {
-        let showName = token.idString + " \u00a0" + token.file;
+        const showName = token.idString + " \u00a0" + token.file;
         this.context = "gdlpict";
         this.label = showName;
         this.id = token.range.start.line.toString() + " pict " + token.name;
@@ -339,7 +339,7 @@ class TokenUI {
         this.tooltip = token.path + "\n\nClick icon to insert index at cursor and comment at end of line.";
     }
     getTreeItem(extcontext) {
-        let treeItem = new vscode.TreeItem(this.label, this.collapsible);
+        const treeItem = new vscode.TreeItem(this.label, this.collapsible);
         treeItem.id = this.id;
         treeItem.contextValue = this.context;
         if (this.revealonclick) {

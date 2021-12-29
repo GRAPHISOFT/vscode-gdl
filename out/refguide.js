@@ -31,24 +31,24 @@ class RefGuide {
     static helpFor(document, position) {
         // return word at cursor that might have help
         let word = undefined;
-        let wordRange = document.getWordRangeAtPosition(position);
+        const wordRange = document.getWordRangeAtPosition(position);
         //do own matching regarding {2}
         if (wordRange) {
             word = document.getText(wordRange);
-            let line = document.lineAt(wordRange.start.line).text;
+            const line = document.lineAt(wordRange.start.line).text;
             // is it something{n}?
             if (word.match(/^\d+$/)) {
                 // cursor at {n}, find prefix
-                let beforeword = line.slice(0, wordRange.start.character);
-                let prefix = beforeword.match(/\w+\{$/);
+                const beforeword = line.slice(0, wordRange.start.character);
+                const prefix = beforeword.match(/\w+\{$/);
                 if (prefix && prefix.length > 0) {
                     word = prefix[0] + word + "}";
                 }
             }
             else {
                 // cursor at something, find version
-                let afterword = line.slice(wordRange.end.character);
-                let version = afterword.match(/^\{\d+\}/);
+                const afterword = line.slice(wordRange.end.character);
+                const version = afterword.match(/^\{\d+\}/);
                 if (version && version.length > 0) {
                     word = word + version[0];
                 }
@@ -85,13 +85,13 @@ class RefGuide {
     }
     static getLinkID(word) {
         // transform tube{2} to TUBE2
-        var id = word.replace(/{(\d+)\}$/, "$1").toUpperCase();
+        const id = word.replace(/{(\d+)\}$/, "$1").toUpperCase();
         //console.log("RefGuide.getLinkID", id);
         return id;
     }
     getReferenceFilename(word) {
         // transform tube{2} to TUBE2
-        var id = RefGuide.getLinkID(word);
+        const id = RefGuide.getLinkID(word);
         // make filename
         return path.join(this.refguideroot, 'reference', id + ".html");
     }
