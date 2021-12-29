@@ -144,7 +144,6 @@ export class ParamList implements Iterable<Parameter> {
     private readonly parameters : Map<string, Parameter> = new Map<string, Parameter>();
 
     async addfrom(rootfolder : vscode.Uri) {
-        //console.log("ParamList.addfrom()", rootfolder.fsPath);
         const paramlistfile = vscode.Uri.joinPath(rootfolder, "paramlist.xml");
         const paramlist = await readFile(paramlistfile);
 

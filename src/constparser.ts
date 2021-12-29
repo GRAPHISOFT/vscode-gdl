@@ -30,7 +30,6 @@ export class Constants {
     private constants: Map<string, Constant[]> = new Map<string, Constant[]>();
 
     async addfrom(rootfolder: vscode.Uri, relpath: string) {
-        //console.log("Constants.addfrom()", rootfolder.fsPath, relpath);
         const script = vscode.Uri.joinPath(rootfolder, relpath);
         const code = await readFile(script);
 

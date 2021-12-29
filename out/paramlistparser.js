@@ -125,7 +125,6 @@ class ParamList {
         this.parameters = new Map();
     }
     async addfrom(rootfolder) {
-        //console.log("ParamList.addfrom()", rootfolder.fsPath);
         const paramlistfile = vscode.Uri.joinPath(rootfolder, "paramlist.xml");
         const paramlist = await (0, extension_1.readFile)(paramlistfile);
         if (paramlist) {

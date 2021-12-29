@@ -27,7 +27,6 @@ class Constants {
         this.constants = new Map();
     }
     async addfrom(rootfolder, relpath) {
-        //console.log("Constants.addfrom()", rootfolder.fsPath, relpath);
         const script = vscode.Uri.joinPath(rootfolder, relpath);
         const code = await (0, extension_1.readFile)(script);
         if (code) {
