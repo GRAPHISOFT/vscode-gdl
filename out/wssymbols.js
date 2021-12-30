@@ -13,6 +13,30 @@ class LibpartInfo {
         this.relative_root = vscode.workspace.asRelativePath(this.root_uri, false);
         this.ws_folder = vscode.workspace.getWorkspaceFolder(this.root_uri)?.uri.fsPath ?? "";
     }
+    async relative_withFallback(relative, masterscript) {
+        // check whether has file relative to root_uri
+        // optionally offering masterscript as fallback
+        // then offering libpartdata.xml as fallback
+        let target = vscode.Uri.joinPath(this.root_uri, relative);
+        if ((await (0, extension_1.fileExists)(target))) {
+            return target;
+        }
+        else {
+            if (masterscript) {
+                target = vscode.Uri.joinPath(this.root_uri, "scripts/1d.gdl");
+            }
+            else {
+                target = this.libpartdata_uri;
+            }
+            if ((await (0, extension_1.fileExists)(target))) {
+                return target;
+            }
+            else {
+                return this.libpartdata_uri; // assume always exists
+            }
+        }
+        ;
+    }
 }
 class WSSymbols {
     constructor(context) {
@@ -49,7 +73,11 @@ class WSSymbols {
             title: 'Collecting libparts in workspace...'
         }, async () => await this.collectLibparts());
     }
-    async provideWorkspaceSymbols(_query, token) {
+    async provideWorkspaceSymbols(query, token) {
+        // when called from UI don't offer master script as fallback
+        return this.provideWorkspaceSymbols_withFallback(false, query, token);
+    }
+    async provideWorkspaceSymbols_withFallback(masterscript, query, token) {
         //console.log("provideWorkspaceSymbols");
         if (this.unprocessed) {
             //wait for workspace scanning to finish
@@ -68,25 +96,19 @@ class WSSymbols {
                 const fname = path.basename(editorpath, ext);
                 if (ext === ".gdl") {
                     // open in scripts folder
-                    open_relative = `../scripts/${fname}${ext}`;
+                    open_relative = `scripts/${fname}${ext}`;
                 }
                 else if (ext === ".xml") {
                     // open in base folder
-                    open_relative = `../${fname}${ext}`;
+                    open_relative = `${fname}${ext}`;
                 }
             }
             const targetposition = new vscode.Position(0, 0);
-            const query_lc = _query.toLowerCase();
+            const query_lc = query.toLowerCase();
             const symbolpairs = await Promise.allSettled(this.libparts
                 .filter(e => filterquery(e, query_lc))
                 .map(async (libpart) => {
-                let target = vscode.Uri.joinPath(libpart.root_uri, open_relative);
-                try {
-                    await vscode.workspace.fs.stat(target);
-                }
-                catch { // file not found, revert to libpartdata.xml
-                    target = libpart.libpartdata_uri;
-                }
+                let target = await libpart.relative_withFallback(open_relative, masterscript);
                 const libpartByName = new vscode.SymbolInformation(`"${libpart.name}"`, vscode.SymbolKind.File, "", new vscode.Location(target, targetposition));
                 const libpartByGUID = new vscode.SymbolInformation(libpart.guid, vscode.SymbolKind.File, ` -  ${libpart.name} `, new vscode.Location(target, targetposition));
                 return [libpartByName, libpartByGUID];
@@ -107,8 +129,10 @@ function filterquery(libpart, query_lc) {
     const guid_lc = libpart.guid.toLowerCase();
     let i = 0, j = 0;
     for (const char of query_lc) {
-        i = name_lc.indexOf(char, i);
-        j = guid_lc.indexOf(char, i);
+        if (i >= 0)
+            i = name_lc.indexOf(char, i);
+        if (j >= 0)
+            j = guid_lc.indexOf(char, j);
         if (i < 0 && j < 0)
             break;
     }
