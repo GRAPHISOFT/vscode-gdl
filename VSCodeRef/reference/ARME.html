@@ -1,32 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>ARME</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="ARME_gdlcommand">ARME</h3>
-				
-				<pre class="programlisting"><b id="ARME_keyword_2.7.3.36.4.1">ARME</b> l, r1, r2, h, d</pre>
-				
-					<div style="text-align: center"><img src="Images/GDL_Images/3Dshapes_arme.png" style="text-align: middle" alt="Images/GDL_Images/3Dshapes_arme.png"/></div>
-					<p>
-						A piece of tube starting from an ellipsoid in the y-z plane;
-						parameters according to the figure (penetration lines are also calculated and drawn).
-					</p>
-					
-						<pre class="programlisting">r1 &gt;= r2+d
+                
+                <pre class="programlisting"><b id="ARME_keyword_2.7.3.36.4.1">ARME</b> l, r1, r2, h, d</pre>
+                
+                    <div style="text-align: center"><img src="Images/GDL_Images/3Dshapes_arme.png" style="text-align: middle" alt="Images/GDL_Images/3Dshapes_arme.png"/></div>
+                    <p>
+                        A piece of tube starting from an ellipsoid in the y-z plane;
+                        parameters according to the figure (penetration lines are also calculated and drawn).
+                    </p>
+                    
+                        <pre class="programlisting">r1 &gt;= r2+d
 l &gt;= h*sqrt(1-(r2-d)2/r12)</pre>
-					
-				
-				<div class="example"><a id="id499181"/><p class="title"><b>Example:
+                    
+                
+                <div class="example"><a id="id508634"/><p class="title"><b>Example:
 </b></p><div class="example-contents"><div class="informaltable"><table border="0"><colgroup><col/><col/></colgroup><tbody><tr><td>
-										<pre class="programlisting">ELLIPS 3,4
+                                        <pre class="programlisting">ELLIPS 3,4
 FOR i=1 TO 6
     ARME 6,4,0.5,3,3.7-0.2*i
     ROTZ 30
 NEXT i</pre>
-									</td><td style="text-align: center">
-										<div style="text-align: center"><img src="Images/GDL_Images/3Dshapes_arme_ex1.png" style="text-align: middle" alt="Images/GDL_Images/3Dshapes_arme_ex1.png"/></div>
-									</td></tr></tbody></table></div></div></div>
-			<hr/><a href="002.007.html#ARME_gdlcommand">Related in 3D Shapes</a><p>
-				<span class="bold"><strong>GDL Reference Guide</strong></span>
-			</p><p>
-				<span class="trademark">Copyright</span><sup>©</sup> 2021 by GRAPHISOFT, all rights reserved.
-				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
-			</p></body></html>
+                                    </td><td style="text-align: center">
+                                        <div style="text-align: center"><img src="Images/GDL_Images/3Dshapes_arme_ex1.png" style="text-align: middle" alt="Images/GDL_Images/3Dshapes_arme_ex1.png"/></div>
+                                    </td></tr></tbody></table></div></div></div>
+            <hr/><a href="002.007.html#ARME_gdlcommand">Related in 3D Shapes</a><p>
+                <span class="bold"><strong>GDL Reference Guide</strong></span>
+            </p><p>
+                <span class="trademark">Copyright</span><sup>©</sup> 2022 by GRAPHISOFT, all rights reserved.
+                Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+            </p></body></html>

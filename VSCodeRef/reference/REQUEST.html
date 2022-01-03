@@ -1,31 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>REQUEST</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="REQUEST_gdlcommand">REQUEST</h3>
-					
-					<pre class="programlisting"><b id="REQUEST_keyword_2.13.5.8.4.4.1">REQUEST</b> (question_name, name | index, variable1 [, variable2, ...])</pre>
-					
-						<p>
-							The first parameter represents the question string while the second represents the object of the question (if it exists)
-							and can be of either string or numeric type (for example, the question can be "Rgb_of_material" and its object the material’s name,
-							or "Rgb_of_pen" and its object the index of the pen). The other parameters are variable names in which the return values (the answers) are stored.
-						</p>
-						<p>
-							The return value of the requests is always the number of successfully retrieved values (integer),
-							while the type of the retrieved values is defined by each request in part.
-							In the case of a badly formulated question or a nonexistent name, the return value will be 0.
-						</p>
-						<p>
-							ARCHICAD identifies the order and number of the input parameters by either the version of the command, or the exact name (as string constant) of the request option.
-							Current accepted variations:
-						</p>
-						<div class="itemizedlist"><ul class="itemizedlist"><li class="listitem"><p>n = REQUEST - default request, with 1 input parameter of string or numeric type</p></li><li class="listitem"><p>n = REQUEST{2} - 2 input parameters: string or numeric, string type</p></li><li class="listitem"><p>n = REQUEST{3} - 2 input parameters: string, string or numeric array type</p></li><li class="listitem"><p>n = REQUEST{4} - 3 input parameters: string or numeric, numeric, string type. <span class="italic">Compatibility: introduced in ARCHICAD 21.</span></p></li></ul></div>
-						<p>
-							<span class="emphasis"><em>For the list of available options see <a class="xref" href="002.015.html#REQUESTOptions_section" title="REQUEST Options">the section called “REQUEST Options”</a>.</em></span>
-						</p>
-					
-				<hr/><a href="002.013.html#REQUEST_gdlcommand">Related in Expressions and Functions</a><p>
-				<span class="bold"><strong>GDL Reference Guide</strong></span>
-			</p><p>
-				<span class="trademark">Copyright</span><sup>©</sup> 2021 by GRAPHISOFT, all rights reserved.
-				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
-			</p></body></html>
+                    
+                    <pre class="programlisting"><b id="REQUEST_keyword_2.13.5.8.4.4.1">REQUEST</b> (question_name, name | index, variable1 [, variable2, ...])</pre>
+                    
+                        <p>
+                            The first parameter represents the question string while the second represents the object of the question (if it exists)
+                            and can be of either string or numeric type (for example, the question can be "<a class="xref" href="reference/requests/RGB_OF_MATERIAL.html"><code>RGB_OF_MATERIAL</code></a>" and its object the material’s name,
+                            or "<a class="xref" href="reference/requests/RGB_OF_PEN.html"><code>RGB_OF_PEN</code></a>" and its object the index of the pen). The other parameters are variable names in which the return values (the answers) are stored.
+                        </p>
+                        <p>
+                            The return value of the requests is always the number of successfully retrieved values (integer),
+                            while the type of the retrieved values is defined by each request in part.
+                            In the case of a badly formulated question or a nonexistent name, the return value will be 0.
+                        </p>
+                        <p>
+                            ARCHICAD identifies the order and number of the input parameters by either the version of the command, or the exact name (as string constant) of the request option.
+                            Current accepted variations:
+                        </p>
+                        <div class="itemizedlist"><ul class="itemizedlist"><li class="listitem"><p>n = REQUEST - default request, with 1 input parameter of string or numeric type</p></li><li class="listitem"><p>n = REQUEST{2} - 2 input parameters: string or numeric, string type</p></li><li class="listitem"><p>n = REQUEST{3} - 2 input parameters: string, string or numeric array type</p></li><li class="listitem"><p>n = REQUEST{4} - 3 input parameters: string or numeric, numeric, string type. <span class="italic">Compatibility: introduced in ARCHICAD 21.</span></p></li></ul></div>
+                        <p>
+                            <span class="emphasis"><em>For the list of available options see <a class="xref" href="002.017.html#RequestListing_section" title="Listing of REQUESTs">the section called “Listing of REQUESTs”</a>.</em></span>
+                        </p>
+                    
+                <hr/><a href="002.013.html#REQUEST_gdlcommand">Related in Expressions and Functions</a><p>
+                <span class="bold"><strong>GDL Reference Guide</strong></span>
+            </p><p>
+                <span class="trademark">Copyright</span><sup>©</sup> 2022 by GRAPHISOFT, all rights reserved.
+                Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+            </p></body></html>

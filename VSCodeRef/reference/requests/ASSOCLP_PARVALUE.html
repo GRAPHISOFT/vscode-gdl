@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../../"/><title>ASSOCLP_PARVALUE</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlrequest"><h3 id="ASSOCLP_PARVALUE_gdlrequest" style="font-family: monospace">ASSOCLP_PARVALUE</h3>
+                    <pre class="programlisting">n = REQUEST("ASSOCLP_PARVALUE", expr, name_or_index, type, flags, dim1, dim2, p_values)</pre>
+                    
+                        <p>
+                            Returns information in the given variables on the library part parameter with which the library part containing this request is associated.
+                            Can be used in property objects, labels and marker objects.
+                        </p>
+                        <p>The function return value is the number of successfully retrieved values, 0 if the specified parameter does not exist or an error occurred.</p>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>expr: </b></code>the request’s object, associated library part parameter name or index expression.</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>name_or_index: </b></code>
+                                returns the index or the name of the parameter, depending on the previous expression type
+                                (returns index if a parameter name, name if the index is specified).
+                            </div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>type: </b></code>parameter type, possible values:</div>
+                            <div><code>1: </code>boolean</div>
+                            <div><code>2: </code>integer</div>
+                            <div><code>3: </code>real number</div>
+                            <div><code>4: </code>string</div>
+                            <div><code>5: </code>length</div>
+                            <div><code>6: </code>angle</div>
+                            <div><code>7: </code>line</div>
+                            <div><code>8: </code>material</div>
+                            <div><code>9: </code>fill</div>
+                            <div><code>10: </code>pen color</div>
+                            <div><code>11: </code>light switch</div>
+                            <div><code>12: </code>rgb color</div>
+                            <div><code>13: </code>light intensity</div>
+                            <div><code>14: </code>separator</div>
+                            <div><code>15: </code>title</div>
+                            <div><code>16: </code>building material</div>
+                            <div><code>17: </code>profile <span class="italic">Compatibility: introduced in ARCHICAD 23</span></div>
+                            
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>flags: </b></code></div><div><code>flags = j<sub>1</sub> + 2*j<sub>2</sub> + 64*j<sub>7</sub> + 128*j<sub>8</sub></code>, where each j can be 0 or 1.
+	</div>
+                            <div><code>j<sub>1</sub>: </code>child/indented in parameter list</div>
+                            <div><code>j<sub>2</sub>: </code>with bold text in parameter list</div>
+                            <div><code>j<sub>7</sub>: </code>disabled (locked in all contexts)</div>
+                            <div><code>j<sub>8</sub>: </code>hidden in the parameter list</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>dim1, dim2: </b></code>dim1 is the number of rows, dim2 the number of columns.</div>
+                            <div><code>dim1 = 0, dim2 = 0: </code>simple, scalar value</div>
+                            <div><code>dim1 &gt; 0, dim2 = 0: </code>one dimensional array</div>
+                            <div><code>dim1 &gt; 0, dim2 &gt; 0: </code>two dimensional array</div>
+                            <p>
+                                </p><pre class="programlisting">If dim2 &gt; 0, then dim1 &gt; 0.</pre><p>
+                            </p>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>p_values: </b></code>
+                                returns the parameter value or array of values. The array elements are returned successively,
+                                row by row as a one dimensional array, independently of the dimensions of the variable specified to store it.
+                                If the variable is not a dynamic array, there are as many elements stored as there is room for
+                                (for a simple variable only one, the first element). If values is a two dimensional dynamic array, all elements are stored in the first row.
+                            </div>
+                        </div>
+                    
+                <hr/><a href="002.015.html#ASSOCLP_PARVALUE_gdlrequest">Related in Miscellaneous</a><p>
+                <span class="bold"><strong>GDL Reference Guide</strong></span>
+            </p><p>
+                <span class="trademark">Copyright</span><sup>©</sup> 2022 by GRAPHISOFT, all rights reserved.
+                Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+            </p></body></html>

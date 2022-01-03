@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../../"/><title>PROPERTY_TREE_OF_PARENT</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlrequest"><h3 id="PROPERTY_TREE_OF_PARENT_gdlrequest" style="font-family: monospace">PROPERTY_TREE_OF_PARENT</h3>
+                    <pre class="programlisting">n = REQUEST("PROPERTY_TREE_OF_PARENT", propTreeInput, propTreeOutput)</pre>
+                    
+                        <p>
+                            Returns the tree of available properties of the parent object with a grouping similar to the property selector trees in Archicad.
+                            Can be used only in the UI Script of labels and markers. <span class="italic">Expression returns 0 and contains dummy return values (emtpy dictionary) if used in other situations, causing additional warning.</span>
+                        </p>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>propTreeInput: </b></code>(dictionary) defines the parameters for collecting properties of the parent object.</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>propTreeInput.propertyType: </b></code>(string) keyword defining the type of the requested properties. This key is optional, if it does not exist, the request collects all property types. Possible values:
+                            </div>
+                            <div><code>"COREPROPERTY"</code></div>
+                            <div><code>"ACPROPERTY"</code></div>
+                            <div><code>"IFCPROPERTY"</code></div>
+                            <div><code>"CLASSIFICATION"</code></div>
+                            <div><code>"PROFILEPARAMETER"</code></div>
+                            <div><code>"BUILTINPROPERTY"</code></div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>propTreeOutput: </b></code>(dictionary) the tree of available properties of the parent object </div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>propTreeOutput.treeDepth: </b></code>(integer) the depth of the property tree </div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>propTreeOutput.propertyTree: </b></code>(array) for each returned property, contains <code class="code">treeDepth + 1</code> strings: the ID of the property, then its position in the tree in the form of <code class="code">treeDepth</code> strings</div>
+                        </div>
+                    
+                    <div class="example"><a id="id602853"/><p class="title"><b>Example 1:
+</b></p><div class="example-contents"><pre class="programlisting">DICT propTreeInput, propTreeOutput
+n = REQUEST ("PROPERTY_TREE_OF_PARENT", propTreeInput, propTreeOutput)
+! propTreeOutput.treeDepth = m
+! propTreeOutput.propertyTree =    [Id1, DisplayName11, ... DisplayName1m,
+!                                   Id2, DisplayName21, ... DisplayName2m,
+!                                   ...
+!                                   Idn, DisplayNamen1, ... DisplayNamenm]</pre></div></div>
+                    <div class="example"><a id="id602856"/><p class="title"><b>Example 2:
+</b></p><div class="example-contents"><pre class="programlisting">DICT propTreeInput, propTreeOutput
+n = REQUEST ("PROPERTY_TREE_OF_PARENT", propTreeInput, propTreeOutput)
+if n &gt; 0 then 
+    ui_custom_popup_infield "stParameterName", 10, 20, 300, 19,
+        1, propTreeOutput.treeDepth, 1, "SelectedValueDescription",
+        propTreeOutput.propertyTree
+endif</pre></div></div>
+                <hr/><a href="002.015.html#PROPERTY_TREE_OF_PARENT_gdlrequest">Related in Miscellaneous</a><p>
+                <span class="bold"><strong>GDL Reference Guide</strong></span>
+            </p><p>
+                <span class="trademark">Copyright</span><sup>©</sup> 2022 by GRAPHISOFT, all rights reserved.
+                Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+            </p></body></html>

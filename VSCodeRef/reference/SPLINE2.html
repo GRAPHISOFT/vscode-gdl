@@ -1,40 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>SPLINE2</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="SPLINE2_gdlcommand">SPLINE2</h3>
-				
-				<pre class="programlisting"><b id="SPLINE2_keyword_2.8.3.18.4.1">SPLINE2</b> n, status, x1, y1,
+                
+                <pre class="programlisting"><b id="SPLINE2_keyword_2.8.3.18.4.1">SPLINE2</b> n, status, x1, y1,
         angle1, ..., xn, yn, anglen</pre>
-				
-					<div style="text-align: center"><img src="Images/GDL_Images/2Dshapes_spline2.png" style="text-align: middle" alt="Images/GDL_Images/2Dshapes_spline2.png"/></div>
-					<p>Spline, with n control points. The tangent of the spline in the control point (xi, yi) is defined by anglei, the angle with the x axis in degrees.</p>
-					
-						<pre class="programlisting">n &gt;= 2</pre>
-					
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>si: </b></code>Status values:</div>
-						<div><code>0: </code>default,</div>
-						<div><code>1: </code>closed spline; the last and first nodes of the spline will become connected, thus closing the spline,</div>
-						<div><code>2: </code>
-							automatically smoothed spline;
-							the angle parameter value of the nodes between the first and the last node is not used when generating the spline.
-							An internal autosmoothing algorithm is used.
-						</div>
-					</div>
-				
-				<div class="example"><a id="id515719"/><p class="title"><b>Example 1:
+                
+                    <div style="text-align: center"><img src="Images/GDL_Images/2Dshapes_spline2.png" style="text-align: middle" alt="Images/GDL_Images/2Dshapes_spline2.png"/></div>
+                    <p>Spline, with n control points. The tangent of the spline in the control point (xi, yi) is defined by anglei, the angle with the x axis in degrees.</p>
+                    
+                        <pre class="programlisting">n &gt;= 2</pre>
+                    
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>si: </b></code>Status values:</div>
+                        <div><code>0: </code>default,</div>
+                        <div><code>1: </code>closed spline; the last and first nodes of the spline will become connected, thus closing the spline,</div>
+                        <div><code>2: </code>
+                            automatically smoothed spline;
+                            the angle parameter value of the nodes between the first and the last node is not used when generating the spline.
+                            An internal autosmoothing algorithm is used.
+                        </div>
+                    </div>
+                
+                <div class="example"><a id="id524840"/><p class="title"><b>Example 1:
 </b></p><div class="example-contents"><div class="informaltable"><table border="0"><colgroup><col/><col/></colgroup><tbody><tr><td>
-										<pre class="programlisting">SPLINE2 5, 2,
+                                        <pre class="programlisting">SPLINE2 5, 2,
         0,   0,  60,
         1,   2,  30,
         1.5, 1.5, -30,
         3,   4,  45,
         4,   3, -45</pre>
-									</td><td>
-										<div style="text-align: center"><img src="Images/GDL_Images/2Dshapes_spline2_ex1.png" style="text-align: middle" alt="Images/GDL_Images/2Dshapes_spline2_ex1.png"/></div>
-									</td></tr></tbody></table></div></div></div>
-				<div class="example"><a id="id515739"/><p class="title"><b>Example 2:
+                                    </td><td>
+                                        <div style="text-align: center"><img src="Images/GDL_Images/2Dshapes_spline2_ex1.png" style="text-align: middle" alt="Images/GDL_Images/2Dshapes_spline2_ex1.png"/></div>
+                                    </td></tr></tbody></table></div></div></div>
+                <div class="example"><a id="id524862"/><p class="title"><b>Example 2:
 </b></p><div class="example-contents"><div class="informaltable"><table border="0"><colgroup><col/><col/></colgroup><tbody><tr><td>
-										<pre class="programlisting">n = 5
+                                        <pre class="programlisting">n = 5
 FOR i = 1 TO n
     SPLINE2 4, 0,
             0.0, 2.0, 135.0,
@@ -55,12 +55,12 @@ FOR i = 1 TO n
             0.0, 2.0, 270.0
     ADD2 2.5, 0
 NEXT i</pre>
-									</td><td>
-										<div style="text-align: center"><img src="Images/GDL_Images/2Dshapes_spline2_ex2.png" style="text-align: middle" alt="Images/GDL_Images/2Dshapes_spline2_ex2.png"/></div>
-									</td></tr></tbody></table></div></div></div>
-			<hr/><a href="002.008.html#SPLINE2_gdlcommand">Related in 2D Shapes</a><p>
-				<span class="bold"><strong>GDL Reference Guide</strong></span>
-			</p><p>
-				<span class="trademark">Copyright</span><sup>©</sup> 2021 by GRAPHISOFT, all rights reserved.
-				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
-			</p></body></html>
+                                    </td><td>
+                                        <div style="text-align: center"><img src="Images/GDL_Images/2Dshapes_spline2_ex2.png" style="text-align: middle" alt="Images/GDL_Images/2Dshapes_spline2_ex2.png"/></div>
+                                    </td></tr></tbody></table></div></div></div>
+            <hr/><a href="002.008.html#SPLINE2_gdlcommand">Related in 2D Shapes</a><p>
+                <span class="bold"><strong>GDL Reference Guide</strong></span>
+            </p><p>
+                <span class="trademark">Copyright</span><sup>©</sup> 2022 by GRAPHISOFT, all rights reserved.
+                Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+            </p></body></html>

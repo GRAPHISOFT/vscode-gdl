@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>FOR - TO - NEXT</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="FOR-TO-NEXT_gdlcommand">FOR - TO - NEXT</h3>
-				
-				<pre class="programlisting"><b id="FOR_keyword_2.14.3.2.4.1">FOR</b> variable_name = initial_value <b id="TO_keyword_2.14.3.2.4.3">TO</b> end_value [ <b id="STEP_keyword_2.14.3.2.4.5">STEP</b> step_value ] <b id="NEXT_keyword_2.14.3.2.4.7">NEXT</b> variable_name</pre>
-				
-					<p><code class="literal">FOR</code> is the first statement of a FOR loop.</p>
-					<p><code class="literal">NEXT</code> is the last statement of a FOR loop.</p>
-					<p>
-						The loop variable varies from the initial_value to the end_value by the step_value increment (or decrement)
-						in each execution of the body of the loop (statements between the FOR and NEXT statements).
-						If the loop variable exceeds the value of the end_value, the program executes the statement following the NEXT statement.
-					</p>
-					<p>If the STEP keyword and the step_value are missing, the step is assumed to be 1.</p>
-					<div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3>Changing the step_value during the execution of the loop has no effect.</div>
-					<p>A global variable is not allowed as a loop control variable.</p>
-				
-				<div class="example"><a id="id536043"/><p class="title"><b>Example 1:
+                
+                <pre class="programlisting"><b id="FOR_keyword_2.14.3.2.4.1">FOR</b> variable_name = initial_value <b id="TO_keyword_2.14.3.2.4.3">TO</b> end_value [ <b id="STEP_keyword_2.14.3.2.4.5">STEP</b> step_value ] <b id="NEXT_keyword_2.14.3.2.4.7">NEXT</b> variable_name</pre>
+                
+                    <p><code class="literal">FOR</code> is the first statement of a FOR loop.</p>
+                    <p><code class="literal">NEXT</code> is the last statement of a FOR loop.</p>
+                    <p>
+                        The loop variable varies from the initial_value to the end_value by the step_value increment (or decrement)
+                        in each execution of the body of the loop (statements between the FOR and NEXT statements).
+                        If the loop variable exceeds the value of the end_value, the program executes the statement following the NEXT statement.
+                    </p>
+                    <p>If the STEP keyword and the step_value are missing, the step is assumed to be 1.</p>
+                    <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3>Changing the step_value during the execution of the loop has no effect.</div>
+                    <p>A global variable is not allowed as a loop control variable.</p>
+                
+                <div class="example"><a id="id545431"/><p class="title"><b>Example 1:
 </b></p><div class="example-contents"><pre class="programlisting">FOR i=1 TO 10 STEP 2
     PRINT i
 NEXT i</pre></div></div>
-				<div class="example"><a id="id536058"/><p class="title"><b>Example 2:
+                <div class="example"><a id="id545425"/><p class="title"><b>Example 2:
 </b></p><div class="example-contents"><pre class="programlisting">! The two program fragments below are equivalent:
 
 ! 1st
@@ -35,13 +35,13 @@ GOTO 1
 FOR a = b TO d STEP c
     PRINT a
 NEXT a</pre><p>The above example shows that step_value = 0 causes an infinite loop.</p><p>
-						Only one NEXT statement is allowed after a FOR statement.
-						You can exit the loop with <a class="xref" href="reference/GOTO.html">the GOTO command</a> and to return after leaving,
-						but you cannot enter a loop skipping the FOR statement.
-					</p></div></div>
-			<hr/><a href="002.014.html#FOR-TO-NEXT_gdlcommand">Related in Control Statements</a><p>
-				<span class="bold"><strong>GDL Reference Guide</strong></span>
-			</p><p>
-				<span class="trademark">Copyright</span><sup>©</sup> 2021 by GRAPHISOFT, all rights reserved.
-				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
-			</p></body></html>
+                        Only one NEXT statement is allowed after a FOR statement.
+                        You can exit the loop with <a class="xref" href="reference/GOTO.html">the GOTO command</a> and to return after leaving,
+                        but you cannot enter a loop skipping the FOR statement.
+                    </p></div></div>
+            <hr/><a href="002.014.html#FOR-TO-NEXT_gdlcommand">Related in Control Statements</a><p>
+                <span class="bold"><strong>GDL Reference Guide</strong></span>
+            </p><p>
+                <span class="trademark">Copyright</span><sup>©</sup> 2022 by GRAPHISOFT, all rights reserved.
+                Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+            </p></body></html>

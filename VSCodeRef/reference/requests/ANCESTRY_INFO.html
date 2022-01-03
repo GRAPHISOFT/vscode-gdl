@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../../"/><title>ANCESTRY_INFO</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlrequest"><h3 id="ANCESTRY_INFO_gdlrequest" style="font-family: monospace">ANCESTRY_INFO</h3>
+                    <pre class="programlisting">n = REQUEST("ANCESTRY_INFO", expr, name [, guid,
+            parent_name1, parent_guid1,
+            ...
+            parent_namen, parent_guidn)</pre>
+                    
+                        <p>
+                            Ancestry information on a library part.
+                            <span class="italic">Expression returns 0 and contains dummy return values (emtpy string or 0) if used in parameter script, causing additional warning.</span>
+                        </p>
+						<div style="margin-left: 1em">
+							<div style="text-indent: -1em"><code><b>expr: </b></code>Select queried library part</div>
+							<div><code>0: </code>returns in the given variables the name and the globally unique identifier of the library part containing this request function.
+							Optionally the function returns the names and globally unique identifiers of the parents of the library part (parent_namei, parent_guidi).
+							If the parent templates are not loaded their names will be empty strings.</div>
+							<div><code>1: </code>returns information on the library part replaced by the template containing this function.
+							In this case if the template is not actually replacing, no values are returned.</div>
+						</div>
+                        <p>The return value of the request is the number of successfully retrieved values.</p>
+                    
+                    <div class="example"><a id="id598002"/><p class="title"><b>Example:
+</b></p><div class="example-contents"><pre class="programlisting">DIM strings[]
+n = REQUEST ("ANCESTRY_INFO", 1, name, guid, strings)
+IF n &gt; 2 THEN
+    ! data of replaced library part
+    TEXT2 0, -1, "replacing: " + name + ' ' + guid
+    ! parents
+    l = -2
+    FOR i = 1 TO n - 2 STEP 2
+        TEXT2 0, l, strings [i]
+        l = l - 1
+    NEXT i
+ENDIF</pre></div></div>
+                <hr/><a href="002.015.html#ANCESTRY_INFO_gdlrequest">Related in Miscellaneous</a><p>
+                <span class="bold"><strong>GDL Reference Guide</strong></span>
+            </p><p>
+                <span class="trademark">Copyright</span><sup>©</sup> 2022 by GRAPHISOFT, all rights reserved.
+                Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+            </p></body></html>

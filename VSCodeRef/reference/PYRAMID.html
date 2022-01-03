@@ -1,39 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>PYRAMID</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="PYRAMID_gdlcommand">PYRAMID</h3>
-				
-				<pre class="programlisting"><b id="PYRAMID_keyword_2.7.5.27.4.1">PYRAMID</b> n, h, mask, x1, y1, s1, ..., xn, yn, sn</pre>
-				
-					<div style="text-align: center"><img src="Images/GDL_Images/3Dshapes_pyramid.png" style="text-align: middle" alt="Images/GDL_Images/3Dshapes_pyramid.png"/></div>
-					<p>Pyramid based on a polyline in the x-y plane. The peak of the pyramid is located at (0, 0, h).</p>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>n: </b></code>number of polyline nodes.</div>
-					</div>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>mask: </b></code>
-							controls the existence of the bottom and (in the case of an open polyline) side polygon.
-						</div><div><code>mask = j<sub>1</sub> + 4*j<sub>3</sub> + 16*j<sub>5</sub></code>, where each j can be 0 or 1.
+                
+                <pre class="programlisting"><b id="PYRAMID_keyword_2.7.5.27.4.1">PYRAMID</b> n, h, mask, x1, y1, s1, ..., xn, yn, sn</pre>
+                
+                    <div style="text-align: center"><img src="Images/GDL_Images/3Dshapes_pyramid.png" style="text-align: middle" alt="Images/GDL_Images/3Dshapes_pyramid.png"/></div>
+                    <p>Pyramid based on a polyline in the x-y plane. The peak of the pyramid is located at (0, 0, h).</p>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>n: </b></code>number of polyline nodes.</div>
+                    </div>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>mask: </b></code>
+                            controls the existence of the bottom and (in the case of an open polyline) side polygon.
+                        </div><div><code>mask = j<sub>1</sub> + 4*j<sub>3</sub> + 16*j<sub>5</sub></code>, where each j can be 0 or 1.
 	</div>
-						<div><code>j<sub>1</sub>: </code>base surface is present,</div>
-						<div><code>j<sub>3</sub>: </code>side (closing) surface is present,</div>
-						<div><code>j<sub>5</sub>: </code>base edges are visible.</div>
-					</div>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>si: </b></code>status of the lateral edges.</div>
-						<div><code>0: </code>lateral edges starting from the node are all visible,</div>
-						<div><code>1: </code>lateral edges starting from the node are used for showing the contour.</div>
-					</div>
-					<p>Additional status codes allow you to create segments and arcs in the planar polyline using special constraints.</p>
-					<p>
-						<span class="italic">See <a class="xref" href="002.010.html#AdditionalStatusCodes_section" title="Additional Status Codes">the section called “Additional Status Codes”</a> for details.</span>
-					</p>
-					
-						<pre class="programlisting">h &gt; 0 and n &gt; 2</pre>
-					
-				
-				<div class="example"><a id="id500324"/><p class="title"><b>Example:
+                        <div><code>j<sub>1</sub>: </code>base surface is present,</div>
+                        <div><code>j<sub>3</sub>: </code>side (closing) surface is present,</div>
+                        <div><code>j<sub>5</sub>: </code>base edges are visible.</div>
+                    </div>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>si: </b></code>status of the lateral edges.</div>
+                        <div><code>0: </code>lateral edges starting from the node are all visible,</div>
+                        <div><code>1: </code>lateral edges starting from the node are used for showing the contour.</div>
+                    </div>
+                    <p>Additional status codes allow you to create segments and arcs in the planar polyline using special constraints.</p>
+                    <p>
+                        <span class="italic">See <a class="xref" href="002.010.html#AdditionalStatusCodes_section" title="Additional Status Codes">the section called “Additional Status Codes”</a> for details.</span>
+                    </p>
+                    
+                        <pre class="programlisting">h &gt; 0 and n &gt; 2</pre>
+                    
+                
+                <div class="example"><a id="id509728"/><p class="title"><b>Example:
 </b></p><div class="example-contents"><div class="informaltable"><table border="0"><colgroup><col/><col/></colgroup><tbody><tr><td>
-										<pre class="programlisting">PYRAMID 4, 1.5, 1+4+16,
+                                        <pre class="programlisting">PYRAMID 4, 1.5, 1+4+16,
         -2, -2, 0,
         -2, 2, 0,
         2, 2, 0,
@@ -54,12 +54,12 @@ for i = 1 to 4        ! four peaks
     ROTZ 90
 next i
 del 4</pre>
-									</td><td style="text-align: center">
-										<div style="text-align: center"><img src="Images/GDL_Images/3Dshapes_pyramid_ex.png" style="text-align: middle" alt="Images/GDL_Images/3Dshapes_pyramid_ex.png"/></div>
-									</td></tr></tbody></table></div></div></div>
-			<hr/><a href="002.007.html#PYRAMID_gdlcommand">Related in 3D Shapes</a><p>
-				<span class="bold"><strong>GDL Reference Guide</strong></span>
-			</p><p>
-				<span class="trademark">Copyright</span><sup>©</sup> 2021 by GRAPHISOFT, all rights reserved.
-				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
-			</p></body></html>
+                                    </td><td style="text-align: center">
+                                        <div style="text-align: center"><img src="Images/GDL_Images/3Dshapes_pyramid_ex.png" style="text-align: middle" alt="Images/GDL_Images/3Dshapes_pyramid_ex.png"/></div>
+                                    </td></tr></tbody></table></div></div></div>
+            <hr/><a href="002.007.html#PYRAMID_gdlcommand">Related in 3D Shapes</a><p>
+                <span class="bold"><strong>GDL Reference Guide</strong></span>
+            </p><p>
+                <span class="trademark">Copyright</span><sup>©</sup> 2022 by GRAPHISOFT, all rights reserved.
+                Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+            </p></body></html>

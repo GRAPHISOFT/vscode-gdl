@@ -1,54 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>SPRISM_{2}</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="SPRISM_2_gdlcommand">SPRISM_{2}</h3>
-				
-				<pre class="programlisting"><b id="SPRISM_2_keyword_2.7.3.18.4.1">SPRISM_{2}</b> top_material, bottom_material, side_material,
+                
+                <pre class="programlisting"><b id="SPRISM_2_keyword_2.7.3.18.4.1">SPRISM_{2}</b> top_material, bottom_material, side_material,
         n,
         xtb, ytb, xte, yte, topz, tangle,
         xbb, ybb, xbe, ybe, bottomz, bangle,
         x1, y1, s1, mat1,
         ...
         xn, yn, sn, matn</pre>
-				
-					<p>
-						Extension of <a class="xref" href="reference/SPRISM_.html">the SPRISM_ command</a>, with the possibility of having an upper and lower polygon non-parallel with the x-y plane.
-						The definition of the planes is similar to the plane definition of <a class="xref" href="reference/CROOF_.html">the CROOF_ command</a>.
-						The top and bottom of the prism is defined at the reference line. Upper and lower polygon intersection is forbidden.
-					</p>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>xtb, ytb, xte, yte: </b></code>reference line (vector) of the top polygon starting and end coordinates.</div>
-					</div>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>topz: </b></code>the 'z' level of the reference line of the top polygon.</div>
-					</div>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>tangle: </b></code>rotation angle of the top polygon around the given oriented reference line in degrees (CCW).</div>
-					</div>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>xbb, ybb, xbe, ybe: </b></code>reference line (vector) of the bottom polygon starting and end coordinates.</div>
-					</div>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>bottomz: </b></code>the 'z' level of the reference line of the bottom polygon.</div>
-					</div>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>bangle: </b></code>rotation angle of the bottom polygon around the given oriented reference line in degrees (CCW).</div>
-					</div>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>si: </b></code>
-							status code that allows you to control the visibility of polygon edges and side surfaces.
-							You can also define holes and create segments and arcs in the polyline using special constraints.
-						</div>
-					</div>
-					<p>
-						<span class="italic">See <a class="xref" href="002.010.html#StatusCodes_chapter" title="Chapter 7. Status Codes">Chapter 7, <i>Status Codes</i></a> for details.</span>
-					</p>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>mati: </b></code>material reference that allows you to control the material of the side surfaces.</div>
-					</div>
-				
-				<div class="example"><a id="id497019"/><p class="title"><b>Example:
+                
+                    <p>
+                        Extension of <a class="xref" href="reference/SPRISM_.html">the SPRISM_ command</a>, with the possibility of having an upper and lower polygon non-parallel with the x-y plane.
+                        The definition of the planes is similar to the plane definition of <a class="xref" href="reference/CROOF_.html">the CROOF_ command</a>.
+                        The top and bottom of the prism is defined at the reference line. Upper and lower polygon intersection is forbidden.
+                    </p>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>xtb, ytb, xte, yte: </b></code>reference line (vector) of the top polygon starting and end coordinates.</div>
+                    </div>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>topz: </b></code>the 'z' level of the reference line of the top polygon.</div>
+                    </div>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>tangle: </b></code>rotation angle of the top polygon around the given oriented reference line in degrees (CCW).</div>
+                    </div>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>xbb, ybb, xbe, ybe: </b></code>reference line (vector) of the bottom polygon starting and end coordinates.</div>
+                    </div>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>bottomz: </b></code>the 'z' level of the reference line of the bottom polygon.</div>
+                    </div>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>bangle: </b></code>rotation angle of the bottom polygon around the given oriented reference line in degrees (CCW).</div>
+                    </div>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>si: </b></code>
+                            status code that allows you to control the visibility of polygon edges and side surfaces.
+                            You can also define holes and create segments and arcs in the polyline using special constraints.
+                        </div>
+                    </div>
+                    <p>
+                        <span class="italic">See <a class="xref" href="002.010.html#StatusCodes_chapter" title="Chapter 7. Status Codes">Chapter 7, <i>Status Codes</i></a> for details.</span>
+                    </p>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>mati: </b></code>material reference that allows you to control the material of the side surfaces.</div>
+                    </div>
+                
+                <div class="example"><a id="id506340"/><p class="title"><b>Example:
 </b></p><div class="example-contents"><div class="informaltable"><table border="0"><colgroup><col/><col/></colgroup><tbody><tr><td>
-										<pre class="programlisting">SPRISM_{2} 'Grass', 'Earth', 'Earth',
+                                        <pre class="programlisting">SPRISM_{2} 'Grass', 'Earth', 'Earth',
         11,
         0, 0, 11, 0, 30, -30.0,
         0, 0, 0, 11, 2, 30.0,
@@ -63,12 +63,12 @@
         10, 5, 15, IND (MATERIAL, 'C15'),
         6,  4, 15, IND (MATERIAL, 'C15'),
         9,  2, -1, IND (MATERIAL, 'C15')</pre>
-									</td><td style="text-align: center">
-										<div style="text-align: center"><img src="Images/GDL_Images/3Dshapes_sprism_2_ex.png" style="text-align: middle" alt="Images/GDL_Images/3Dshapes_sprism_2_ex.png"/></div>
-									</td></tr></tbody></table></div></div></div>
-			<hr/><a href="002.007.html#SPRISM_2_gdlcommand">Related in 3D Shapes</a><p>
-				<span class="bold"><strong>GDL Reference Guide</strong></span>
-			</p><p>
-				<span class="trademark">Copyright</span><sup>©</sup> 2021 by GRAPHISOFT, all rights reserved.
-				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
-			</p></body></html>
+                                    </td><td style="text-align: center">
+                                        <div style="text-align: center"><img src="Images/GDL_Images/3Dshapes_sprism_2_ex.png" style="text-align: middle" alt="Images/GDL_Images/3Dshapes_sprism_2_ex.png"/></div>
+                                    </td></tr></tbody></table></div></div></div>
+            <hr/><a href="002.007.html#SPRISM_2_gdlcommand">Related in 3D Shapes</a><p>
+                <span class="bold"><strong>GDL Reference Guide</strong></span>
+            </p><p>
+                <span class="trademark">Copyright</span><sup>©</sup> 2022 by GRAPHISOFT, all rights reserved.
+                Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+            </p></body></html>

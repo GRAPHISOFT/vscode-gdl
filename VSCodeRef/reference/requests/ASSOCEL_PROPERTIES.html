@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../../"/><title>ASSOCEL_PROPERTIES</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlrequest"><h3 id="ASSOCEL_PROPERTIES_gdlrequest" style="font-family: monospace">ASSOCEL_PROPERTIES</h3>
+                    <pre class="programlisting">n = REQUEST("ASSOCEL_PROPERTIES", parameter_string, nr_data, data)</pre>
+                    
+                        <p>
+                            Returns, in the given variables, own property data or the element properties which the library part containing this request is associated to
+                            (in labels and associative marker objects).
+                            The function return value is the number of successfully retrieved values, 0 if no property data was found or an error occurred.
+                            The function does not work in property objects during the listing process.
+                            <span class="italic">Expression returns 0 and contains dummy return values (emtpy string or 0) if used in parameter script, causing additional warning.</span>
+                        </p>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>parameter_string: </b></code>
+                                a combination of keywords separated by commas representing the requested fields of the property data records.
+                                Records will be ordered accordingly. Possible values:
+                            </div>
+                            <div><code>"ISCOMP"</code></div>
+                            <div><code>"DBSETNAME"</code></div>
+                            <div><code>"KEYCODE"</code></div>
+                            <div><code>"KEYNAME"</code></div>
+                            <div><code>"CODE"</code></div>
+                            <div><code>"NAME"</code></div>
+                            <div><code>"FULLNAME"</code></div>
+                            <div><code>"QUANTITY"</code></div>
+                            <div><code>"TOTQUANTITY"</code></div>
+                            <div><code>"UNITCODE"</code></div>
+                            <div><code>"UNITNAME"</code></div>
+                            <div><code>"UNITFORMATSTR"</code></div>
+                            <div><code>"PROPOBJNAME"</code></div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>nr_data: </b></code>returns the number of the data items.</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>data: </b></code>
+                                returns the property data, records containing and being ordered by the fields specified in the parameter string.
+                                Values are returned as a one dimensional array which contains the requested record fields successively,
+                                independently of the dimensions of the variable specified to store it. If the variable is not a dynamic array,
+                                there are as many elements stored as there is room for (in case of a simple variable only one, the first element).
+                                If values is a two dimensional dynamic array, all elements are stored in the first row.
+                            </div>
+                        </div>
+                    
+                    <div class="example"><a id="id602552"/><p class="title"><b>Example:
+</b></p><div class="example-contents"><pre class="programlisting">DIM DATA []
+n = REQUEST ("ASSOCEL_PROPERTIES", "iscomp, code, name", nr, data)
+IF nr = 0 THEN
+    TEXT2 0, 0, "No properties"
+ELSE
+    j = 0
+    FOR i = 1 TO nr
+        IF i MOD 3 = 0 THEN
+            TEXT2 0, -j, DATA [i] ! name
+            j = j + 1
+        ENDIF
+    NEXT i
+ENDIF</pre></div></div>
+                <hr/><a href="002.015.html#ASSOCEL_PROPERTIES_gdlrequest">Related in Miscellaneous</a><p>
+                <span class="bold"><strong>GDL Reference Guide</strong></span>
+            </p><p>
+                <span class="trademark">Copyright</span><sup>©</sup> 2022 by GRAPHISOFT, all rights reserved.
+                Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+            </p></body></html>

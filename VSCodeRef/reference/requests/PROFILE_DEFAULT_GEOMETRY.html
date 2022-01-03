@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../../"/><title>PROFILE_DEFAULT_GEOMETRY</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlrequest"><h3 id="PROFILE_DEFAULT_GEOMETRY_gdlrequest" style="font-family: monospace">PROFILE_DEFAULT_GEOMETRY</h3>
+                    <pre class="programlisting">n = REQUEST("PROFILE_DEFAULT_GEOMETRY", name_or_index, n1, n2, ..., nm,
+            x11,  y11,  edgeVisible11,  vertEdgeVisible11,  additionalStatus11,  ...,
+            x1n1, y1n1, edgeVisible1n1, vertEdgeVisible1n1, additionalStatus1n1,
+            x21,  y21,  edgeVisible21,  vertEdgeVisible21,  additionalStatus21,  ...,
+            x2n2, y2n2, edgeVisible2n2, vertEdgeVisible2n2, additionalStatus2n2,
+            ...,
+            xm1,  ym1,  edgeVisiblem1,  vertEdgeVisiblem1,  additionalStatusm1,  ...,
+            xmnm, ymnm, edgeVisiblemnm, vertEdgeVisiblemnm, additionalStatusmnm)</pre>
+                    
+                        <p>Returns the original geometric data of the profile identified by name or index. <span class="italic">Expression returns 0 and contains dummy return values (emtpy string or 0) if used in parameter script, causing additional warning.</span>
+                        </p>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>n1...ni: </b></code>
+                                then number of contour nodes in each profile component. The total number of profile components (<code class="literal">m</code>) can be returned by <a class="xref" href="reference/requests/PROFILE_COMPONENTS.html">the "PROFILE_COMPONENTS" REQUEST</a>.
+                            </div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>edgeVisiblei: </b></code>
+                                contour starting from i node is visible.
+                            </div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>vertEdgeVisiblei: </b></code>
+                                vertical edge starting from i node is visible, usable in 3D (0 in case of segmented polygon).
+                            </div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>additionalStatusi: </b></code>
+                                used for segments and arcs of the polyline (set centerpoint = 900, arc using centerpoint and angle = 4000, etc.), or to mark the contour end control point (-1, this case the <code class="literal">vertEdgeVisiblei</code> and <code class="literal">edgeVisiblei</code> are set to 0 automatically).
+                            </div>
+                        </div>
+                        <p>
+                            The status parameters returned in this structure support different status type definitions of poly2, cprism, tube. Each format can be calculated with the following method:
+                        </p>
+                        <p>
+                            <span class="italic">Compatibility: introduced in ARCHICAD 21.</span>
+                        </p>
+                    
+                    <div class="example"><a id="id602173"/><p class="title"><b>Example:
+</b></p><div class="example-contents"><pre class="programlisting">poly2Status = edgeVisible + additionalStatus
+prismStatus = additionalStatus
+tubeStatus = additionalStatus
+if additionalStatus &gt;= 0 then         ! not contour end
+    if edgeVisible then
+        prismStatus = prismStatus + 15    ! j1, j2, j3, j4
+    endif
+    if verticalEdgeVisible = 0 then
+        prismStatus = prismStatus + 64    ! j7
+        ! in tube, lateral edges starting from the node are used for showing the contour
+        tubeStatus = tubeStatus + 1
+    endif
+endif</pre></div></div>
+                <hr/><a href="002.015.html#PROFILE_DEFAULT_GEOMETRY_gdlrequest">Related in Miscellaneous</a><p>
+                <span class="bold"><strong>GDL Reference Guide</strong></span>
+            </p><p>
+                <span class="trademark">Copyright</span><sup>©</sup> 2022 by GRAPHISOFT, all rights reserved.
+                Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+            </p></body></html>

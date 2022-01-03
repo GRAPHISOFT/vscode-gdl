@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../../"/><title>CONSTR_FILLS_DISPLAY</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlrequest"><h3 id="CONSTR_FILLS_DISPLAY_gdlrequest" style="font-family: monospace">CONSTR_FILLS_DISPLAY</h3>
+                    <pre class="programlisting">n = REQUEST("CONSTR_FILLS_DISPLAY", "", optionVal)</pre>
+                    
+                        <p>
+                            <span class="italic">Expression returns 0 and contains dummy return values (emtpy string or 0) if used in parameter script, causing additional warning.</span>
+                        </p>
+                        <p>
+                            <span class="italic">Compatibility up till ARCHICAD 19: returns in the given variable the value of the Cut Fills Display option as set in the Document &gt; Set Model View &gt; Model View Options.</span>
+                            (previous Construction Fills).
+                        </p>
+                        <p>
+                            <span class="italic">Compatibility starting from ARCHICAD 20: the returned value is always 6 by default (Cut fill patterns: as in Settings).</span>
+                        </p>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>optionVal: </b></code>cut fill display code.</div>
+                            <div><code>1: </code>Show cut fill contours only (previous Empty)</div>
+                            <div><code>2: </code>Show cut fill contours only with separator lines (previous No Fills)</div>
+                            <div><code>4: </code>Cut fill patterns: Solid (previous Solid)</div>
+                            <div><code>6: </code>Cut fill patterns: as in Settings (previous Vectorial Hatching)</div>
+                        </div>
+                    
+                <hr/><a href="002.015.html#CONSTR_FILLS_DISPLAY_gdlrequest">Related in Miscellaneous</a><p>
+                <span class="bold"><strong>GDL Reference Guide</strong></span>
+            </p><p>
+                <span class="trademark">Copyright</span><sup>©</sup> 2022 by GRAPHISOFT, all rights reserved.
+                Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+            </p></body></html>

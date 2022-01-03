@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../../"/><title>SUM_WITH_ROUNDING</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlrequest"><h3 id="SUM_WITH_ROUNDING_gdlrequest" style="font-family: monospace">SUM_WITH_ROUNDING</h3>
+                    <pre class="programlisting">n = REQUEST{3}("SUM_WITH_ROUNDING", req_name, addends_array, result)</pre>
+                    
+                        <p>
+                            Returns the sum of the numbers in <code class="code">addends_array</code>, with rounding according to the "Calculate Totals by" project preference.
+                            This preference can be found in Options &gt; Project Preferences &gt; Calculation Rules.
+                        </p>
+                        <p>
+                            Possible project preference settings:
+                        </p>
+                        <div class="itemizedlist"><ul class="itemizedlist"><li class="listitem"><p>"Displayed values": the request will first round the addends according to <code class="code">req_name</code>, and then sum them.</p></li><li class="listitem"><p>"Exact values": the request will simply sum the addends.</p></li></ul></div>
+                        <p>
+                            Causes warning if used in parameter script.
+                        </p>
+                        <p>
+                            <span class="italic">Compatibility: introduced in ARCHICAD 20.</span>
+                        </p>
+                        <p>
+                            <span class="bold"><strong>Return values:</strong></span>
+                        </p>
+                        <div class="itemizedlist"><ul class="itemizedlist"><li class="listitem"><p>0, if <code class="code">req_name</code> is invalid.</p></li><li class="listitem"><p>1, if the call succeeded.</p></li></ul></div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>req_name: </b></code>the name of the formatting request specifying how the addends have to be rounded if "Calculate Totals by" is set to "Displayed values".</div>
+                            <p>
+                                For example if <code class="code">req_name</code> = "<a class="xref" href="reference/requests/AREA_DIMENSION.html"><code>AREA_DIMENSION</code></a>", and the Project Preferences &gt; Dimensions &gt; Area Calculations is set to "square centimeter" with 3 decimals, rounding to 0.025, then the addends will be rounded to the multiples of 0.025 cm², that is to 0.0000025 m².
+                            </p>
+                            <p>
+                                <span class="bold"><strong>Valid request names:</strong></span>
+                            </p>
+                            <p>
+                                <a class="xref" href="reference/requests/LINEAR_DIMENSION.html"><code>LINEAR_DIMENSION</code></a>, <a class="xref" href="reference/requests/ANGULAR_DIMENSION.html"><code>ANGULAR_DIMENSION</code></a>, <a class="xref" href="reference/requests/RADIAL_DIMENSION.html"><code>RADIAL_DIMENSION</code></a>, <a class="xref" href="reference/requests/LEVEL_DIMENSION.html"><code>LEVEL_DIMENSION</code></a>, <a class="xref" href="reference/requests/ELEVATION_DIMENSION.html"><code>ELEVATION_DIMENSION</code></a>, <a class="xref" href="reference/requests/WINDOW_DOOR_DIMENSION.html"><code>WINDOW_DOOR_DIMENSION</code></a>, <a class="xref" href="reference/requests/SILL_HEIGHT_DIMENSION.html"><code>SILL_HEIGHT_DIMENSION</code></a>, <a class="xref" href="reference/requests/AREA_DIMENSION.html"><code>AREA_DIMENSION</code></a>, <a class="xref" href="reference/requests/CALC_LENGTH_UNIT.html"><code>CALC_LENGTH_UNIT</code></a>, <a class="xref" href="reference/requests/CALC_AREA_UNIT.html"><code>CALC_AREA_UNIT</code></a>, <a class="xref" href="reference/requests/CALC_VOLUME_UNIT.html"><code>CALC_VOLUME_UNIT</code></a>, <a class="xref" href="reference/requests/CALC_ANGLE_UNIT.html"><code>CALC_ANGLE_UNIT</code></a>.
+                            </p>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>addends_array: </b></code>the array of numbers to be added. Whether they have to be treated as m, m², m³ or degrees is determined by <code class="code">req_name</code>.</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>result: </b></code>a number, on return it will be set to the sum of the addends according to the "Calculate Totals by" preference. Note that <code class="code">result</code> is in the same unit as the addends. It is not converted to the target unit specified by <code class="code">req_name</code>.</div>
+                        </div>
+                    
+                <hr/><a href="002.015.html#SUM_WITH_ROUNDING_gdlrequest">Related in Miscellaneous</a><p>
+                <span class="bold"><strong>GDL Reference Guide</strong></span>
+            </p><p>
+                <span class="trademark">Copyright</span><sup>©</sup> 2022 by GRAPHISOFT, all rights reserved.
+                Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+            </p></body></html>

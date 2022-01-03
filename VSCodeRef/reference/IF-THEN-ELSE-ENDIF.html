@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>IF - THEN - ELSE - ENDIF</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="IF-THEN-ELSE-ENDIF_gdlcommand">IF - THEN - ELSE - ENDIF</h3>
-				
-				<pre class="programlisting"><b id="IF_keyword_2.14.3.7.4.1">IF</b> condition <b id="THEN_keyword_2.14.3.7.4.3">THEN</b> statement [<b id="ELSE_keyword_2.14.3.7.4.5">ELSE</b> statement]</pre>
-				<pre class="programlisting"><b id="IF_keyword_2.14.3.7.6.1">IF</b> condition <b id="THEN_keyword_2.14.3.7.6.3">THEN</b>
+                
+                <pre class="programlisting"><b id="IF_keyword_2.14.3.7.4.1">IF</b> condition <b id="THEN_keyword_2.14.3.7.4.3">THEN</b> statement [<b id="ELSE_keyword_2.14.3.7.4.5">ELSE</b> statement]</pre>
+                <pre class="programlisting"><b id="IF_keyword_2.14.3.7.6.1">IF</b> condition <b id="THEN_keyword_2.14.3.7.6.3">THEN</b>
     [statement1
     statement2
     ...
@@ -14,18 +14,18 @@
     ...
     statementn+m]
 <b id="ENDIF_keyword_2.14.3.7.6.7">ENDIF</b></pre>
-				
-					<p>
-						If you write only one command after keywords THEN and/or ELSE in the same row, there is no need for ENDIF.
-						A command after THEN or ELSE in the same row means a definite ENDIF.
-					</p>
-					<p>
-						If there is a new row after THEN, the successive commands
-						(all of them until the keyword ELSE or ENDIF) will only be executed if the expression in the condition is true (other than zero).
-						Otherwise, the commands following ELSE will be carried out. If the ELSE keyword is absent, the commands after ENDIF will be carried out.
-					</p>
-				
-				<div class="example"><a id="id536333"/><p class="title"><b>Example:
+                
+                    <p>
+                        If you write only one command after keywords THEN and/or ELSE in the same row, there is no need for ENDIF.
+                        A command after THEN or ELSE in the same row means a definite ENDIF.
+                    </p>
+                    <p>
+                        If there is a new row after THEN, the successive commands
+                        (all of them until the keyword ELSE or ENDIF) will only be executed if the expression in the condition is true (other than zero).
+                        Otherwise, the commands following ELSE will be carried out. If the ELSE keyword is absent, the commands after ENDIF will be carried out.
+                    </p>
+                
+                <div class="example"><a id="id545702"/><p class="title"><b>Example:
 </b></p><div class="example-contents"><pre class="programlisting">IF a = b THEN height = 5 ELSE height = 7
 IF needDoors THEN
     CALL "door_macro" PARAMETERS
@@ -42,9 +42,9 @@ ELSE
     ROTX 90
     TEXT 0.002, 0, name
 ENDIF</pre></div></div>
-			<hr/><a href="002.014.html#IF-THEN-ELSE-ENDIF_gdlcommand">Related in Control Statements</a><p>
-				<span class="bold"><strong>GDL Reference Guide</strong></span>
-			</p><p>
-				<span class="trademark">Copyright</span><sup>©</sup> 2021 by GRAPHISOFT, all rights reserved.
-				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
-			</p></body></html>
+            <hr/><a href="002.014.html#IF-THEN-ELSE-ENDIF_gdlcommand">Related in Control Statements</a><p>
+                <span class="bold"><strong>GDL Reference Guide</strong></span>
+            </p><p>
+                <span class="trademark">Copyright</span><sup>©</sup> 2022 by GRAPHISOFT, all rights reserved.
+                Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+            </p></body></html>

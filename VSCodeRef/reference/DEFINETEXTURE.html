@@ -1,60 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>DEFINE TEXTURE</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="DEFINETEXTURE_gdlcommand">DEFINE TEXTURE</h3>
-					
-					<pre class="programlisting"><b id="DEFINETEXTURE_keyword_2.11.4.6.4.4.1">DEFINE TEXTURE</b> name expression, x, y, mask, angle</pre>
-					
-						<p>
-							Any GDL script can include texture definition prior to the first reference to that texture name.
-							The texture can be used only in the script in which it was defined and its subsequent second generation scripts.
-						</p>
-						<div style="margin-left: 1em">
-							<div style="text-indent: -1em"><code><b>name: </b></code>name of the texture.</div>
-						</div>
-						<div style="margin-left: 1em">
-							<div style="text-indent: -1em"><code><b>expression: </b></code>
-								picture associated with the texture.
-								A string expression means a file name, a numerical expression an index of a picture stored in the library part.
-								A 0 index is a special value which refers to the preview picture of the library part.
-							</div>
-						</div>
-						<div style="margin-left: 1em">
-							<div style="text-indent: -1em"><code><b>x: </b></code>logical width of the texture.</div>
-						</div>
-						<div style="margin-left: 1em">
-							<div style="text-indent: -1em"><code><b>y: </b></code>logical height of the texture.</div>
-						</div>
-						<div style="margin-left: 1em">
-							<div style="text-indent: -1em"><code><b>mask: </b></code></div><div><code>mask = j<sub>1</sub> + 2*j<sub>2</sub> + 4*j<sub>3</sub> + 8*j<sub>4</sub> + 16*j<sub>5</sub> + 32*j<sub>6</sub> + 64*j<sub>7</sub> + 128*j<sub>8</sub> + 256*j<sub>9</sub></code>, where each j can be 0 or 1.
+                    
+                    <pre class="programlisting"><b id="DEFINETEXTURE_keyword_2.11.4.6.4.4.1">DEFINE TEXTURE</b> name expression, x, y, mask, angle</pre>
+                    
+                        <p>
+                            Any GDL script can include texture definition prior to the first reference to that texture name.
+                            The texture can be used only in the script in which it was defined and its subsequent second generation scripts.
+                        </p>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>name: </b></code>name of the texture.</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>expression: </b></code>
+                                picture associated with the texture.
+                                A string expression means a file name, a numerical expression an index of a picture stored in the library part.
+                                A 0 index is a special value which refers to the preview picture of the library part.
+                            </div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>x: </b></code>logical width of the texture.</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>y: </b></code>logical height of the texture.</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>mask: </b></code></div><div><code>mask = j<sub>1</sub> + 2*j<sub>2</sub> + 4*j<sub>3</sub> + 8*j<sub>4</sub> + 16*j<sub>5</sub> + 32*j<sub>6</sub> + 64*j<sub>7</sub> + 128*j<sub>8</sub> + 256*j<sub>9</sub></code>, where each j can be 0 or 1.
 	</div>
-							<p>Alpha channel controls (j1... j6):</p>
-							<div><code>j<sub>1</sub>: </code>alpha channel changes the transparency of texture,</div>
-							<div><code>j<sub>2</sub>: </code>
-								Bump mapping or surface normal perturbation.
-								Bump mapping uses the alpha channel to determine the amplitude of the surface normal,
-							</div>
-							<div><code>j<sub>3</sub>: </code>alpha channel changes the diffuse color of texture,</div>
-							<div><code>j<sub>4</sub>: </code>alpha channel changes the specular color of texture,</div>
-							<div><code>j<sub>5</sub>: </code>alpha channel changes the ambient color of texture,</div>
-							<div><code>j<sub>6</sub>: </code>alpha channel changes the surface color of texture,</div>
-							<p>Connection controls (j7... j9): (If the value is zero, normal mode is selected.)</p>
-							<div style="text-align: center"><img src="Images/GDL_Images/Attributes_defineTexture_connectContZero.png" style="text-align: middle" alt="Images/GDL_Images/Attributes_defineTexture_connectContZero.png"/></div>
-							<div><code>j<sub>7</sub>: </code>the texture will be shifted randomly,</div>
-							<div style="text-align: center"><img src="Images/GDL_Images/Attributes_defineTexture_connectContj7.png" style="text-align: middle" alt="Images/GDL_Images/Attributes_defineTexture_connectContj7.png"/></div>
-							<div><code>j<sub>8</sub>: </code>mirroring in x direction,</div>
-							<div style="text-align: center"><img src="Images/GDL_Images/Attributes_defineTexture_connectContj8.png" style="text-align: middle" alt="Images/GDL_Images/Attributes_defineTexture_connectContj8.png"/></div>
-							<div><code>j<sub>9</sub>: </code>mirroring in y direction.</div>
-							<div style="text-align: center"><img src="Images/GDL_Images/Attributes_defineTexture_connectContj9.png" style="text-align: middle" alt="Images/GDL_Images/Attributes_defineTexture_connectContj9.png"/></div>
-						</div>
-						<div style="margin-left: 1em">
-							<div style="text-indent: -1em"><code><b>angle: </b></code>angle of the rotation.</div>
-						</div>
-					
-					<div class="example"><a id="id521573"/><p class="title"><b>Example:
+                            <p>Alpha channel controls (j1... j6):</p>
+                            <div><code>j<sub>1</sub>: </code>alpha channel changes the transparency of texture,</div>
+                            <div><code>j<sub>2</sub>: </code>
+                                Bump mapping or surface normal perturbation.
+                                Bump mapping uses the alpha channel to determine the amplitude of the surface normal,
+                            </div>
+                            <div><code>j<sub>3</sub>: </code>alpha channel changes the diffuse color of texture,</div>
+                            <div><code>j<sub>4</sub>: </code>alpha channel changes the specular color of texture,</div>
+                            <div><code>j<sub>5</sub>: </code>alpha channel changes the ambient color of texture,</div>
+                            <div><code>j<sub>6</sub>: </code>alpha channel changes the surface color of texture,</div>
+                            <p>Connection controls (j7... j9): (If the value is zero, normal mode is selected.)</p>
+                            <div style="text-align: center"><img src="Images/GDL_Images/Attributes_defineTexture_connectContZero.png" style="text-align: middle" alt="Images/GDL_Images/Attributes_defineTexture_connectContZero.png"/></div>
+                            <div><code>j<sub>7</sub>: </code>the texture will be shifted randomly,</div>
+                            <div style="text-align: center"><img src="Images/GDL_Images/Attributes_defineTexture_connectContj7.png" style="text-align: middle" alt="Images/GDL_Images/Attributes_defineTexture_connectContj7.png"/></div>
+                            <div><code>j<sub>8</sub>: </code>mirroring in x direction,</div>
+                            <div style="text-align: center"><img src="Images/GDL_Images/Attributes_defineTexture_connectContj8.png" style="text-align: middle" alt="Images/GDL_Images/Attributes_defineTexture_connectContj8.png"/></div>
+                            <div><code>j<sub>9</sub>: </code>mirroring in y direction.</div>
+                            <div style="text-align: center"><img src="Images/GDL_Images/Attributes_defineTexture_connectContj9.png" style="text-align: middle" alt="Images/GDL_Images/Attributes_defineTexture_connectContj9.png"/></div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>angle: </b></code>angle of the rotation.</div>
+                        </div>
+                    
+                    <div class="example"><a id="id532460"/><p class="title"><b>Example:
 </b></p><div class="example-contents"><pre class="programlisting">DEFINE TEXTURE "Brick" "Brick.PICT", 1.35, 0.3, 256+128, 35.0</pre></div></div>
-				<hr/><a href="002.011.html#DEFINETEXTURE_gdlcommand">Related in Attributes</a><p>
-				<span class="bold"><strong>GDL Reference Guide</strong></span>
-			</p><p>
-				<span class="trademark">Copyright</span><sup>©</sup> 2021 by GRAPHISOFT, all rights reserved.
-				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
-			</p></body></html>
+                <hr/><a href="002.011.html#DEFINETEXTURE_gdlcommand">Related in Attributes</a><p>
+                <span class="bold"><strong>GDL Reference Guide</strong></span>
+            </p><p>
+                <span class="trademark">Copyright</span><sup>©</sup> 2022 by GRAPHISOFT, all rights reserved.
+                Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+            </p></body></html>

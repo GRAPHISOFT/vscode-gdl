@@ -30,31 +30,53 @@ class RefGuide {
     }
     static helpFor(document, position) {
         // return word at cursor that might have help
-        let word = undefined;
-        const wordRange = document.getWordRangeAtPosition(position);
-        //do own matching regarding {2}
-        if (wordRange) {
-            word = document.getText(wordRange);
-            const line = document.lineAt(wordRange.start.line).text;
-            // is it something{n}?
-            if (word.match(/^\d+$/)) {
-                // cursor at {n}, find prefix
-                const beforeword = line.slice(0, wordRange.start.character);
-                const prefix = beforeword.match(/\w+\{$/);
-                if (prefix && prefix.length > 0) {
-                    word = prefix[0] + word + "}";
-                }
-            }
-            else {
-                // cursor at something, find version
-                const afterword = line.slice(wordRange.end.character);
-                const version = afterword.match(/^\{\d+\}/);
-                if (version && version.length > 0) {
-                    word = word + version[0];
-                }
-            }
+        let wordAtCursor = RefGuide.wordAt(document, position) ?? { word: "", range: new vscode.Range(position, position) };
+        let prevWord;
+        let thisWord = (wordAtCursor.word.length > 0) ? wordAtCursor.word.toUpperCase() : undefined;
+        let nextWord;
+        let line = document.lineAt(wordAtCursor.range.start.line).text;
+        // get string before, strip trailing whitespace
+        let beforeWord = line.slice(0, wordAtCursor.range.start.character).trimEnd();
+        let before = beforeWord.length - 1;
+        if (beforeWord.length > 0) {
+            prevWord = RefGuide.wordAt(document, wordAtCursor.range.start.with(undefined, before))?.word.toUpperCase();
         }
-        return word;
+        // get string after, strip leading whitespace
+        let afterWord = line.slice(wordAtCursor.range.end.character + 1).trimStart();
+        let after = line.length - afterWord.length;
+        if (afterWord.length > 0) {
+            nextWord = RefGuide.wordAt(document, wordAtCursor.range.end.with(undefined, after))?.word.toUpperCase();
+        }
+        //console.log(prevWord, thisWord, nextWord);
+        // special multiword identifiers with space between
+        const double = new Set(["DEL", "SET", "DEFINE", "REF"]);
+        // optional SET keyword
+        const optional_set = new Set(["FILL", "LINE_TYPE", "STYLE", "MATERIAL", "BUILDING_MATERIAL"]);
+        const thisOrNext = (thisWord ?? nextWord ?? "");
+        const thisOrPrev = (thisWord ?? prevWord ?? "");
+        if (prevWord && double.has(prevWord)) {
+            return prevWord + thisOrNext;
+        }
+        else if (nextWord && double.has(thisOrPrev)) {
+            return thisOrPrev + nextWord;
+        }
+        else if (optional_set.has(thisOrNext)) {
+            return "SET" + thisWord;
+        }
+        else {
+            return thisWord;
+        }
+    }
+    static wordAt(document, position) {
+        // return GDL word at position
+        let wordAt = undefined;
+        //do own matching regarding {2}
+        let wordRange = document.getWordRangeAtPosition(position, /[_~a-z][_~0-9a-z]*(\{\d+\})?/i);
+        if (wordRange) {
+            let word = document.getText(wordRange);
+            wordAt = { word: word, range: wordRange };
+        }
+        return wordAt;
     }
     async refguideHtml(url) {
         const refguideUri = this.refguideView.webview.asWebviewUri(vscode.Uri.file(this.refguideroot));
@@ -78,6 +100,13 @@ class RefGuide {
                 node = node.parentNode;
             }
         }, true);
+        window.addEventListener('message', event => {
+            if (event.data.scroll_id) {
+                document.getElementById(event.data.scroll_id).scrollIntoView();
+            } else if (event.data.scroll_top) {
+                document.getElementsByTagName('body')[0].scrollIntoView();
+            }
+        }, true);
     </script>
 </head>`;
         const html = await (0, extension_1.readFile)(vscode.Uri.file(url.fsPath)); // convert to file uri
@@ -89,11 +118,13 @@ class RefGuide {
         //console.log("RefGuide.getLinkID", id);
         return id;
     }
-    getReferenceFilename(word) {
-        // transform tube{2} to TUBE2
-        const id = RefGuide.getLinkID(word);
+    getKeywordFilename(id) {
         // make filename
         return path.join(this.refguideroot, 'reference', id + ".html");
+    }
+    getRequestFilename(id) {
+        // make filename
+        return path.join(this.refguideroot, 'reference', 'requests', id + ".html");
     }
     getIndexFilename() {
         return path.join(this.refguideroot, "002.017.html");
@@ -102,10 +133,17 @@ class RefGuide {
         let found = false;
         let refguidefile;
         if (word != undefined) {
-            // make filename
-            refguidefile = this.getReferenceFilename(word);
-            // check if file exist
+            // transform tube{2} to TUBE2
+            var id = RefGuide.getLinkID(word);
+            // make filename & check if exists
+            // is it a keyword?
+            refguidefile = this.getKeywordFilename(id);
             found = await (0, extension_1.fileExists)(vscode.Uri.file(refguidefile));
+            // is it a request?
+            if (!found) {
+                refguidefile = this.getRequestFilename(id);
+                found = await (0, extension_1.fileExists)(vscode.Uri.file(refguidefile));
+            }
         }
         if (!found && allowIndexRedirect) { // redirect to index 
             if (word) { // shown unknown keyword (unless undefined)
@@ -120,6 +158,7 @@ class RefGuide {
     async showLink(href) {
         const uri = vscode.Uri.parse(href);
         this.refguideView.webview.html = await this.refguideHtml(uri);
+        this.refguideView.webview.postMessage({ scroll_id: uri.fragment });
     }
     async showHelp(word) {
         if (this.refguideView) {
@@ -129,6 +168,7 @@ class RefGuide {
             // debug: open in external browser
             //vscode.env.openExternal(furi);
             this.refguideView.webview.html = await this.refguideHtml(furi);
+            this.refguideView.webview.postMessage({ scroll_top: true });
             this.refguideView.reveal(vscode.ViewColumn.Beside);
         }
     }

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../../"/><title>PROPERTY_VALUE_OF_PARENT</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlrequest"><h3 id="PROPERTY_VALUE_OF_PARENT_gdlrequest" style="font-family: monospace">PROPERTY_VALUE_OF_PARENT</h3>
+                    <pre class="programlisting">n = REQUEST("PROPERTY_VALUE_OF_PARENT", "id", type, dim1, dim2, propertyValues)</pre>
+                    
+                        <p>
+                            Returns value array of the selected property.
+                            Can be used only in labels. <span class="italic">Expression returns 0 and contains dummy return values (emtpy string or 0) if used in parameter script, causing additional warning.</span>
+                        </p>
+                        <p>
+                            <span class="italic">Compatibility: introduced in ARCHICAD 20.</span>
+                        </p>
+                        <p>
+                            <span class="italic">Compatibility: length, area, volume and angle types are introduced in ARCHICAD 22.</span>
+                        </p>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>id: </b></code>(string) the ID of the selected property.</div>
+                            <p>
+                                For built-in property IDs see <a class="xref" href="002.015.html#builtin_propertyids_section" title="Built-in Property Guide">the section called “Built-in Property Guide”</a>.
+                            </p>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>type: </b></code>the type of the selected property value.</div>
+                            <div><code>1: </code>boolean</div>
+                            <div><code>2: </code>integer</div>
+                            <div><code>3: </code>real number</div>
+                            <div><code>4: </code>string</div>
+                            <div><code>5: </code>length</div>
+                            <div><code>6: </code>area</div>
+                            <div><code>7: </code>volume</div>
+                            <div><code>8: </code>angle</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>dim1, dim2: </b></code>the dimensions of the <code class="code">propertyValues</code> array.</div>
+                            <div><code>dim1 = 0, dim2 = 0: </code>simple, scalar value.</div>
+                            <div><code>dim1 &gt; 0, dim2 &gt; 0: </code>list of values.</div>
+                        </div>
+                    
+                    <div class="example"><a id="id602989"/><p class="title"><b>Example:
+</b></p><div class="example-contents"><pre class="programlisting">DIM propertyValues[]
+n = REQUEST ("PROPERTY_VALUE_OF_PARENT", "ExampleId", type, dim1, dim2, propertyValues)</pre></div></div>
+                <hr/><a href="002.015.html#PROPERTY_VALUE_OF_PARENT_gdlrequest">Related in Miscellaneous</a><p>
+                <span class="bold"><strong>GDL Reference Guide</strong></span>
+            </p><p>
+                <span class="trademark">Copyright</span><sup>©</sup> 2022 by GRAPHISOFT, all rights reserved.
+                Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+            </p></body></html>

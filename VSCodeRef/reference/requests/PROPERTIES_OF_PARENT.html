@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../../"/><title>PROPERTIES_OF_PARENT</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlrequest"><h3 id="PROPERTIES_OF_PARENT_gdlrequest" style="font-family: monospace">PROPERTIES_OF_PARENT</h3>
+                    <pre class="programlisting">n = REQUEST("PROPERTIES_OF_PARENT", propertyType, parentProperties)</pre>
+                    
+                        <p>
+                            Returns the properties of the parent object. All properties are returned in one array with the following form: ID, type, group, name.
+                            Can be used only in labels. <span class="italic">Expression returns 0 and contains dummy return values (emtpy string or 0) if used in parameter script, causing additional warning.</span>
+
+                            </p><pre class="programlisting">
+Core property:      [id,    "", "",                   PropertyName]
+AC property:        [guid,  "", "GroupName",          PropertyName]
+IFC property:       [id,    "IFC", "GroupName",       PropertyName]
+Classification:     [guid,  "Classification", "",     ClassificationSystemName]
+Profile parameter:  [guid,  "", "Profile Parameters", ParameterName]</pre><p>
+                        </p>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>propertyType: </b></code>keyword defining the type of the requested properties. Empty string retruns all types of properties. Possible values: </div>
+                            <div><code>"COREPROPERTY"</code></div>
+                            <div><code>"ACPROPERTY"</code></div>
+                            <div><code>"IFCPROPERTY"</code></div>
+                            <div><code>"CLASSIFICATION"</code></div>
+                            <div><code>"PROFILEPARAMETER"</code></div>
+                        </div>
+                        <p>
+                            <span class="italic">Compatibility: the request is introduced in ARCHICAD 20. The property type options and the Classification property type are introduced in ARCHICAD 21, the Profile parameter property type is introduced in ARCHICAD 22.</span>
+                        </p>
+                    
+                    <div class="example"><a id="id602718"/><p class="title"><b>Example:
+</b></p><div class="example-contents"><pre class="programlisting">DIM parentProperties[]
+n = REQUEST ("PROPERTIES_OF_PARENT", "", parentProperties)
+! parentProperties =   [Id1, TypeName1, GroupName1, PropertyName1,
+!                       Id2, TypeName2, GroupName2, PropertyName2,
+!                       ...
+!                       Idn, TypeNamen, GroupNamen, PropertyNamen]</pre></div></div>
+                <hr/><a href="002.015.html#PROPERTIES_OF_PARENT_gdlrequest">Related in Miscellaneous</a><p>
+                <span class="bold"><strong>GDL Reference Guide</strong></span>
+            </p><p>
+                <span class="trademark">Copyright</span><sup>©</sup> 2022 by GRAPHISOFT, all rights reserved.
+                Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+            </p></body></html>

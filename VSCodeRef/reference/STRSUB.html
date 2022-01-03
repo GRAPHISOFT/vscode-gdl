@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>STRSUB</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="STRSUB_gdlcommand">STRSUB</h3>
-					
-					<pre class="programlisting"><b id="STRSUB_keyword_2.13.5.9.8.4.1">STRSUB</b> (string_expression, start_position, characters_number)</pre>
-					
-						<p>
-							Returns a substring of the string parameter that begins at the position given by the start_position parameter
-							and its length is characters_number characters.
-						</p>
-					
-					<div class="example"><a id="id535897"/><p class="title"><b>Example:
+                    
+                    <pre class="programlisting"><b id="STRSUB_keyword_2.13.5.9.8.4.1">STRSUB</b> (string_expression, start_position, characters_number)</pre>
+                    
+                        <p>
+                            Returns a substring of the string parameter that begins at the position given by the start_position parameter
+                            and its length is characters_number characters.
+                        </p>
+                    
+                    <div class="example"><a id="id545279"/><p class="title"><b>Example:
 </b></p><div class="example-contents"><pre class="programlisting">string = "Flowers.jpeg"
 len = STRLEN (string)
 iDotPos = STRSTR (string, ".")
 TEXT2 0, -1, STRSUB (string, 1, iDotPos - 1) !Flowers
 TEXT2 0, -2, STRSUB (string, len - 4, 5)     !.jpeg</pre></div></div>
-				<hr/><a href="002.013.html#STRSUB_gdlcommand">Related in Expressions and Functions</a><p>
-				<span class="bold"><strong>GDL Reference Guide</strong></span>
-			</p><p>
-				<span class="trademark">Copyright</span><sup>©</sup> 2021 by GRAPHISOFT, all rights reserved.
-				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
-			</p></body></html>
+                <hr/><a href="002.013.html#STRSUB_gdlcommand">Related in Expressions and Functions</a><p>
+                <span class="bold"><strong>GDL Reference Guide</strong></span>
+            </p><p>
+                <span class="trademark">Copyright</span><sup>©</sup> 2022 by GRAPHISOFT, all rights reserved.
+                Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+            </p></body></html>

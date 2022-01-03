@@ -1,30 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>BODY</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="BODY_gdlcommand">BODY</h3>
-				
-				<pre class="programlisting"><b id="BODY_keyword_2.7.8.27.4.1">BODY</b> status</pre>
-				
-					<p>Composes a body defined with the above primitives.</p>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>status: </b></code>Status bits:</div><div><code>status = j<sub>1</sub> + 2*j<sub>2</sub> + 4*j<sub>3</sub> + 32*j<sub>6</sub> + 64*j<sub>7</sub></code>, where each j can be 0 or 1.
+                
+                <pre class="programlisting"><b id="BODY_keyword_2.7.8.27.4.1">BODY</b> status</pre>
+                
+                    <p>Composes a body defined with the above primitives.</p>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>status: </b></code>Status bits:</div><div><code>status = j<sub>1</sub> + 2*j<sub>2</sub> + 4*j<sub>3</sub> + 32*j<sub>6</sub> + 64*j<sub>7</sub></code>, where each j can be 0 or 1.
 	</div>
-						<div><code>j<sub>1</sub>: </code>closed body (deprecated),</div>
-						<div><code>j<sub>2</sub>: </code>body including curved surface(s) (deprecated),</div>
-						<div><code>j<sub>3</sub>: </code>surface model: when the body is cut, no surface originates on the cutting plane,</div>
-						<div><code>j<sub>6</sub>: </code>body always casts shadow independently from automatic preselection algorithm,</div>
-						<div><code>j<sub>7</sub>: </code>body never casts shadow.</div>
-						<p>
-							If neither j6 nor j7 are set, the automatic shadow preselection is performed.
-						</p>
-						<p>
-							<span class="italic">See <a class="xref" href="reference/SHADOW.html">the SHADOW command</a>.</span>
-						</p>
-						<p>
-							If the status value is negative, the engine will calculate the status of the body.
-						</p>
-					</div>
-				
-				<div class="example"><a id="id509108"/><p class="title"><b>Example:
+                        <div><code>j<sub>1</sub>: </code>closed body (deprecated),</div>
+                        <div><code>j<sub>2</sub>: </code>body including curved surface(s) (deprecated),</div>
+                        <div><code>j<sub>3</sub>: </code>surface model: when the body is cut, no surface originates on the cutting plane,</div>
+                        <div><code>j<sub>6</sub>: </code>body always casts shadow independently from automatic preselection algorithm,</div>
+                        <div><code>j<sub>7</sub>: </code>body never casts shadow.</div>
+                        <p>
+                            If neither j6 nor j7 are set, the automatic shadow preselection is performed.
+                        </p>
+                        <p>
+                            <span class="italic">See <a class="xref" href="reference/SHADOW.html">the SHADOW command</a>.</span>
+                        </p>
+                        <p>
+                            If the status value is negative, the engine will calculate the status of the body.
+                        </p>
+                    </div>
+                
+                <div class="example"><a id="id519627"/><p class="title"><b>Example:
 </b></p><div class="example-contents"><div style="text-align: center"><img src="Images/GDL_Images/3Dshapes_body_ex.png" style="text-align: middle" alt="Images/GDL_Images/3Dshapes_body_ex.png"/></div><p>1: Complete description</p><pre class="programlisting">VERT 0.0, 0.0, 0.0    !#1
 VERT 1.0, 0.0, 0.0    !#2
 VERT 1.0, 1.0, 0.0    !#3
@@ -55,9 +55,9 @@ PGON 4, 1, 0, 2, 11, -6, -10     !#4    !VERT2,3,6,7
 PGON 4, 2, 0, 3, 12, -7, -11     !#5    !VERT3,4,7,8
 PGON 4, -1, 0, 4, 9, -8, -12     !#6    !VERT1,4,5,8
 BODY 1                                  !CUBE</pre><p>
-						2: (no direct reference to the polygons or the vectors, they
-						will be calculated)
-					</p><pre class="programlisting">VERT 0.0, 0.0, 0.0     !#1
+                        2: (no direct reference to the polygons or the vectors, they
+                        will be calculated)
+                    </p><pre class="programlisting">VERT 0.0, 0.0, 0.0     !#1
 VERT 1.0, 0.0, 0.0     !#2
 VERT 1.0, 1.0, 0.0     !#3
 VERT 0.0, 1.0, 0.0     !#4
@@ -90,9 +90,9 @@ PGON 4, 0, -1, 3, 12, -7, -11   !#5
 PGON 4, 0, -1, 4, 9, -8, -12    !#6
 !VERT1,4,5,8
 BODY -1                               !CUBE</pre></div></div>
-			<hr/><a href="002.007.html#BODY_gdlcommand">Related in 3D Shapes</a><p>
-				<span class="bold"><strong>GDL Reference Guide</strong></span>
-			</p><p>
-				<span class="trademark">Copyright</span><sup>©</sup> 2021 by GRAPHISOFT, all rights reserved.
-				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
-			</p></body></html>
+            <hr/><a href="002.007.html#BODY_gdlcommand">Related in 3D Shapes</a><p>
+                <span class="bold"><strong>GDL Reference Guide</strong></span>
+            </p><p>
+                <span class="trademark">Copyright</span><sup>©</sup> 2022 by GRAPHISOFT, all rights reserved.
+                Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+            </p></body></html>

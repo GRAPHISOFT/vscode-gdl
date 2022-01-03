@@ -1,44 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>UI_BUTTON</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="UI_BUTTON_gdlcommand">UI_BUTTON</h3>
-				
-				<pre class="programlisting"><b id="UI_BUTTON_keyword_2.12.5.8.4.1">UI_BUTTON</b> type, text, x, y [, width, height, id [, url]]</pre>
-				
-					<p>
-						Button definition on current page. Buttons can be used for various purposes:
-						moving from page to page, opening a web page or performing some parameter-script defined action.
-						Buttons can contain text.
-					</p>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>type: </b></code>type of the button as follows:</div>
-						<div><code>UI_PREV: </code>if pressed, the previous page is displayed,</div>
-						<div><code>UI_NEXT: </code>if pressed, the next page is displayed,</div>
-						<div><code>UI_FUNCTION: </code>if pressed, the GLOB_UI_BUTTON_ID global variable is set to the button id specified in expression,</div>
-						<div><code>UI_LINK: </code>if pressed, the URL in expression is opened in the default web browser,</div>
-					</div>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>text: </b></code>the text that should appear on the button.</div>
-					</div>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>x, y: </b></code>the position of the button.</div>
-					</div>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>width, height: </b></code>width and height of the button in pixels.
-						If not specified (for compatibility reasons) the default values are 60 pixels for width and 20 pixels for height.</div>
-					</div>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>id: </b></code>an integer unique identifier.</div>
-					</div>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>url: </b></code>a string containing a URL.</div>
-					</div>
-					<p>
-						UI_PREV and UI_NEXT buttons are disabled if the previous/next page is not present.
-						If these buttons are pushed, the gs_ui_current_page parameter of the library part is set
-						to the index of the page to show - if there’s a parameter with this name.
-					</p>
-				
-				<div class="example"><a id="id526792"/><p class="title"><b>Example:
+                
+                <pre class="programlisting"><b id="UI_BUTTON_keyword_2.12.5.8.4.1">UI_BUTTON</b> type, text, x, y [, width, height, id [, url]]</pre>
+                
+                    <p>
+                        Button definition on current page. Buttons can be used for various purposes:
+                        moving from page to page, opening a web page or performing some parameter-script defined action.
+                        Buttons can contain text.
+                    </p>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>type: </b></code>type of the button as follows:</div>
+                        <div><code>UI_PREV: </code>if pressed, the previous page is displayed,</div>
+                        <div><code>UI_NEXT: </code>if pressed, the next page is displayed,</div>
+                        <div><code>UI_FUNCTION: </code>if pressed, the GLOB_UI_BUTTON_ID global variable is set to the button id specified in expression,</div>
+                        <div><code>UI_LINK: </code>if pressed, the URL in expression is opened in the default web browser,</div>
+                    </div>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>text: </b></code>the text that should appear on the button.</div>
+                    </div>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>x, y: </b></code>the position of the button.</div>
+                    </div>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>width, height: </b></code>width and height of the button in pixels.
+                        If not specified (for compatibility reasons) the default values are 60 pixels for width and 20 pixels for height.</div>
+                    </div>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>id: </b></code>an integer unique identifier.</div>
+                    </div>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>url: </b></code>a string containing a URL.</div>
+                    </div>
+                    <p>
+                        UI_PREV and UI_NEXT buttons are disabled if the previous/next page is not present.
+                        If these buttons are pushed, the gs_ui_current_page parameter of the library part is set
+                        to the index of the page to show - if there’s a parameter with this name.
+                    </p>
+                
+                <div class="example"><a id="id537462"/><p class="title"><b>Example:
 </b></p><div class="example-contents"><pre class="programlisting">! UI script
 UI_CURRENT_PAGE gs_ui_current_page
 UI_BUTTON UI_FUNCTION, "Go to page 9", 200,150, 70,20, 3
@@ -48,9 +48,9 @@ UI_BUTTON UI_LINK, "Visit Website", 200,180, 100,20, 0,
 if GLOB_UI_BUTTON_ID = 3 then
         parameters gs_ui_current_page = 9, ...
 endif</pre></div></div>
-			<hr/><a href="002.012.html#UI_BUTTON_gdlcommand">Related in Non-Geometric Scripts</a><p>
-				<span class="bold"><strong>GDL Reference Guide</strong></span>
-			</p><p>
-				<span class="trademark">Copyright</span><sup>©</sup> 2021 by GRAPHISOFT, all rights reserved.
-				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
-			</p></body></html>
+            <hr/><a href="002.012.html#UI_BUTTON_gdlcommand">Related in Non-Geometric Scripts</a><p>
+                <span class="bold"><strong>GDL Reference Guide</strong></span>
+            </p><p>
+                <span class="trademark">Copyright</span><sup>©</sup> 2022 by GRAPHISOFT, all rights reserved.
+                Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+            </p></body></html>

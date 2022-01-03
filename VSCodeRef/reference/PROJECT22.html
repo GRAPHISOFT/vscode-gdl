@@ -1,67 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>PROJECT2{2}</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="PROJECT22_gdlcommand">PROJECT2{2}</h3>
-				
-				<pre class="programlisting"><b id="PROJECT22_keyword_2.8.6.3.4.1">PROJECT2{2}</b> projection_code, angle, method [, backgroundColor,
+                
+                <pre class="programlisting"><b id="PROJECT22_keyword_2.8.6.3.4.1">PROJECT2{2}</b> projection_code, angle, method [, backgroundColor,
         fillOrigoX, fillOrigoY, filldirection]</pre>
-				
-					<p>
-						Creates a projection of the 3D script in the same library part and adds the generated lines to the 2D parametric symbol.
-						The 2nd version PROJECT2{2}, together with a previous <a class="xref" href="reference/SETFILL.html"><code>[SET] FILL</code></a> command,
-						allows the user to control the fill background, origin and direction of the resulting drawing from the 2D script.
-						The <code class="literal">SET FILL 0</code> shortcut to get an empty fill does not work in this case,
-						you need to reference an actual empty fill.
-					</p>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>projection_code: </b></code>the type of projection.</div>
-						<div><code>3: </code>Top view,</div>
-						<div><code>4: </code>Side view,</div>
-						<div><code>5: </code>Side view 2,</div>
-						<div><code>6: </code>Frontal axonometry,</div>
-						<div><code>7: </code>Isometric axonometry,</div>
-						<div><code>8: </code>Monometric axonometry,</div>
-						<div><code>9: </code>Dimetric axonometry,</div>
-						<div><code>-3: </code>Bottom view,</div>
-						<div><code>-6: </code>Frontal bottom view,</div>
-						<div><code>-7: </code>Isometric bottom view,</div>
-						<div><code>-8: </code>Monometric bottom view,</div>
-						<div><code>-9: </code> Dimetric bottom view.</div>
-					</div>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>angle: </b></code>the azimuth angle set in the 3D Projection Settings dialog box.</div>
-					</div>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>method: </b></code>the chosen imaging method. If invalid or none is set, the default is hidden lines (2).</div>
-						<div><code>1: </code>wireframe,</div>
-						<div><code>2: </code>hidden lines (analytic),</div>
-						<div><code>3: </code>shading,</div>
-						<div><code>16: </code>addition modifier: draws vectorial hatches (effective only in hidden line and shaded mode),</div>
-						<div><code>32: </code>addition modifier: use current attributes instead of attributes from 3D (effective only in shading mode),</div>
-						<div><code>64: </code>addition modifier: local fill orientation (effective only in shading mode),</div>
-						<div><code>128: </code>addition modifier: lines are all inner lines (effective only together with 32). Default is generic,</div>
-						<div><code>256: </code>addition modifier: lines are all contour lines (effective only together with 32, if 128 is not set). Default is generic,</div>
-						<div><code>512: </code>addition modifier: fills are all cut (effective only together with 32). Default is drafting fills,</div>
-						<div><code>1024: </code>addition modifier: fills are all cover (effective only together with 32, if 512 is not set). Default is drafting fills.</div>
-					</div>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>BackgroundColor: </b></code>background color of the fill.</div>
-					</div>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>fillOrigoX: </b></code>X coordinate of the fill origin.</div>
-					</div>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>fillOrigoY: </b></code>Y coordinate of the fill origin.</div>
-					</div>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>filldirection: </b></code>direction angle of fill.</div>
-					</div>
-					<div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><a class="xref" href="reference/SETFILL.html">the [SET] FILL command</a> is effective for PROJECT2{2}</div>
-				
-				<div class="example"><a id="id516373"/><p class="title"><b>Example:
+                
+                    <p>
+                        Creates a projection of the 3D script in the same library part and adds the generated lines to the 2D parametric symbol.
+                        The 2nd version PROJECT2{2}, together with a previous <a class="xref" href="reference/SETFILL.html"><code>[SET] FILL</code></a> command,
+                        allows the user to control the fill background, origin and direction of the resulting drawing from the 2D script.
+                        The <code class="literal">SET FILL 0</code> shortcut to get an empty fill does not work in this case,
+                        you need to reference an actual empty fill.
+                    </p>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>projection_code: </b></code>the type of projection.</div>
+                        <div><code>3: </code>Top view,</div>
+                        <div><code>4: </code>Side view,</div>
+                        <div><code>5: </code>Side view 2,</div>
+                        <div><code>6: </code>Frontal axonometry,</div>
+                        <div><code>7: </code>Isometric axonometry,</div>
+                        <div><code>8: </code>Monometric axonometry,</div>
+                        <div><code>9: </code>Dimetric axonometry,</div>
+                        <div><code>-3: </code>Bottom view,</div>
+                        <div><code>-6: </code>Frontal bottom view,</div>
+                        <div><code>-7: </code>Isometric bottom view,</div>
+                        <div><code>-8: </code>Monometric bottom view,</div>
+                        <div><code>-9: </code> Dimetric bottom view.</div>
+                    </div>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>angle: </b></code>the azimuth angle set in the 3D Projection Settings dialog box.</div>
+                    </div>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>method: </b></code>the chosen imaging method. If invalid or none is set, the default is hidden lines (2).</div>
+                        <div><code>1: </code>wireframe,</div>
+                        <div><code>2: </code>hidden lines (analytic),</div>
+                        <div><code>3: </code>shading,</div>
+                        <div><code>16: </code>addition modifier: draws vectorial hatches (effective only in hidden line and shaded mode),</div>
+                        <div><code>32: </code>addition modifier: use current attributes instead of attributes from 3D (effective only in shading mode),</div>
+                        <div><code>64: </code>addition modifier: local fill orientation (effective only in shading mode),</div>
+                        <div><code>128: </code>addition modifier: lines are all inner lines (effective only together with 32). Default is generic,</div>
+                        <div><code>256: </code>addition modifier: lines are all contour lines (effective only together with 32, if 128 is not set). Default is generic,</div>
+                        <div><code>512: </code>addition modifier: fills are all cut (effective only together with 32). Default is drafting fills,</div>
+                        <div><code>1024: </code>addition modifier: fills are all cover (effective only together with 32, if 512 is not set). Default is drafting fills.</div>
+                    </div>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>BackgroundColor: </b></code>background color of the fill.</div>
+                    </div>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>fillOrigoX: </b></code>X coordinate of the fill origin.</div>
+                    </div>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>fillOrigoY: </b></code>Y coordinate of the fill origin.</div>
+                    </div>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>filldirection: </b></code>direction angle of fill.</div>
+                    </div>
+                    <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><a class="xref" href="reference/SETFILL.html">the [SET] FILL command</a> is effective for PROJECT2{2}</div>
+                
+                <div class="example"><a id="id525464"/><p class="title"><b>Example:
 </b></p><div class="example-contents"><div class="informaltable"><table border="0"><colgroup><col/><col/></colgroup><tbody><tr><td colspan="2">
-										<span class="italic">2D</span>
-									</td></tr><tr><td>
-										<pre class="programlisting">PROJECT2 3, 270, 2
+                                        <span class="italic">2D</span>
+                                    </td></tr><tr><td>
+                                        <pre class="programlisting">PROJECT2 3, 270, 2
 
 LINE_TYPE "DASHED"
 ARC2 0, 0, A-B/3, 0, E
@@ -76,12 +76,12 @@ LINE2 0, 0, -0.05, -0.1
 LINE2 0, 0,  0.05, -0.1
 
 DEL 2</pre>
-									</td><td>
-										<div style="text-align: left"><img src="Images/GDL_Images/2Dshapes_project2_2_1.png" style="text-align: left" alt="Images/GDL_Images/2Dshapes_project2_2_1.png"/></div>
-									</td></tr><tr><td colspan="2">
-										<span class="italic">3D</span>
-									</td></tr><tr><td>
-										<pre class="programlisting">n = 12
+                                    </td><td>
+                                        <div style="text-align: left"><img src="Images/GDL_Images/2Dshapes_project2_2_1.png" style="text-align: left" alt="Images/GDL_Images/2Dshapes_project2_2_1.png"/></div>
+                                    </td></tr><tr><td colspan="2">
+                                        <span class="italic">3D</span>
+                                    </td></tr><tr><td>
+                                        <pre class="programlisting">n = 12
 E = 270
 D = 0.2
 A = 1
@@ -98,12 +98,12 @@ FOR i=1 TO n
 NEXT i
 
 DEL n*2</pre>
-									</td><td>
-										<div style="text-align: left"><img src="Images/GDL_Images/2Dshapes_project2_2_2.png" style="text-align: left" alt="Images/GDL_Images/2Dshapes_project2_2_2.png"/></div>
-									</td></tr></tbody></table></div></div></div>
-			<hr/><a href="002.008.html#PROJECT22_gdlcommand">Related in 2D Shapes</a><p>
-				<span class="bold"><strong>GDL Reference Guide</strong></span>
-			</p><p>
-				<span class="trademark">Copyright</span><sup>©</sup> 2021 by GRAPHISOFT, all rights reserved.
-				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
-			</p></body></html>
+                                    </td><td>
+                                        <div style="text-align: left"><img src="Images/GDL_Images/2Dshapes_project2_2_2.png" style="text-align: left" alt="Images/GDL_Images/2Dshapes_project2_2_2.png"/></div>
+                                    </td></tr></tbody></table></div></div></div>
+            <hr/><a href="002.008.html#PROJECT22_gdlcommand">Related in 2D Shapes</a><p>
+                <span class="bold"><strong>GDL Reference Guide</strong></span>
+            </p><p>
+                <span class="trademark">Copyright</span><sup>©</sup> 2022 by GRAPHISOFT, all rights reserved.
+                Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+            </p></body></html>

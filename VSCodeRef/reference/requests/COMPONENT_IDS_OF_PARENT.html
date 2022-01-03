@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../../"/><title>COMPONENT_IDS_OF_PARENT</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlrequest"><h3 id="COMPONENT_IDS_OF_PARENT_gdlrequest" style="font-family: monospace">COMPONENT_IDS_OF_PARENT</h3>
+                    <pre class="programlisting">n = REQUEST("COMPONENT_IDS_OF_PARENT", collectComponents, outputCompIds)</pre>
+                    
+                        <p>
+                            Returns the building material component IDs of the parent object in a dictionary form. 
+                            Can be used only in labels. <span class="italic">Expression returns 0 and contains dummy return values (emtpy string or 0) if used in parameter script, causing additional warning.</span>
+                        </p>
+                        <p>
+                            <span class="italic">Compatibility: introduced in ARCHICAD 23.</span>
+                        </p>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>collectComponents: </b></code>(dictionary) defining the method of collecting the building material components of the parent object.</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>collectComponents.collectMode: </b></code>(integer) the method of collecting the building material components. This key is optional, if it does not exist, the request uses a default collectMode of 1.
+                            </div>
+                            <div><code>1: </code>(default) returns all the building material component IDs of the parent</div>
+                            <div><code>2: </code>returns the same building material component IDs in the same order as in WALL_SKINS_PARAMS, SHELLBASE_SKINS_PARAMS, SLAB_SKINS_PARAMS or ROOF_SKINS_PARAMS - depending on the element type of the parent.
+                            </div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>outputCompIds: </b></code>(dictionary) the building material component IDs of the parent object.</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>outputCompIds.componentIds[n]: </b></code>(array) contains dictionaries for each building material component ID.</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>outputCompIds.componentIds[n].id: </b></code>(integer) the building material component ID of the parent element.</div>
+                        </div>
+                    
+                    <div class="example"><a id="id603435"/><p class="title"><b>Example:
+</b></p><div class="example-contents"><pre class="programlisting">dict collectComponents
+     collectComponents.collectMode = 1
+dict outputCompIds
+n = REQUEST ("COMPONENT_IDS_OF_PARENT", collectComponents, outputCompIds)
+! outputCompIds
+!   .componentIds[1].id
+!   .componentIds[2].id
+!   ...
+!   .componentIds[n].id</pre></div></div>
+                <hr/><a href="002.015.html#COMPONENT_IDS_OF_PARENT_gdlrequest">Related in Miscellaneous</a><p>
+                <span class="bold"><strong>GDL Reference Guide</strong></span>
+            </p><p>
+                <span class="trademark">Copyright</span><sup>©</sup> 2022 by GRAPHISOFT, all rights reserved.
+                Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+            </p></body></html>
