@@ -3,19 +3,30 @@ import * as vscode from 'vscode';
 
 import { readFile } from './extension';
 
-type LibpartInfo = {
-    readonly uri: vscode.Uri,
-    readonly guid: string
+class LibpartInfo {
+    public readonly root_uri : vscode.Uri;
+    public readonly name : string;
+    public readonly relative_root : string;
+    public readonly ws_folder : string;
+    constructor(public readonly libpartdata_uri: vscode.Uri, public readonly guid: string) {
+        this.root_uri = vscode.Uri.joinPath(this.libpartdata_uri, "..");
+        this.name = path.basename(this.root_uri.fsPath);
+        this.relative_root = vscode.workspace.asRelativePath(this.root_uri, false);
+        this.ws_folder = vscode.workspace.getWorkspaceFolder(this.root_uri)?.uri.fsPath ?? "";
+    }
 }
 
 export class WSSymbols implements vscode.WorkspaceSymbolProvider<vscode.SymbolInformation> {
 
     // folder contents indexed by root folder (for multi-root workspaces)
-    private libparts: Map<string, LibpartInfo[]>;
+    private libparts: LibpartInfo[] = [];
+    private unprocessed = true;
+
+    // fired when finished scanning workspace
+	private _onDidCollect: vscode.EventEmitter<null> = new vscode.EventEmitter<null>();
+	readonly onDidCollect: vscode.Event<null> = this._onDidCollect.event;
 
     constructor(context : vscode.ExtensionContext) {
-        this.libparts = new Map();
-
         context.subscriptions.push(
             vscode.workspace.onDidChangeWorkspaceFolders(async () => this.changeFolders()),
             vscode.workspace.onDidCreateFiles(async () => this.changeFolders()),
@@ -25,8 +36,6 @@ export class WSSymbols implements vscode.WorkspaceSymbolProvider<vscode.SymbolIn
     }
 
     private async collectLibparts() {
-        this.libparts = new Map();
-
         const libpartdata = await vscode.workspace.findFiles("**/libpartdata.xml");
         const libparts = await Promise.allSettled(
             libpartdata.map(async libpartdata_uri => {
@@ -36,34 +45,41 @@ export class WSSymbols implements vscode.WorkspaceSymbolProvider<vscode.SymbolIn
                 if (guid_) {
                     guid = guid_[1];
                 }
-                return {uri: libpartdata_uri, guid: guid};
+                return new LibpartInfo(libpartdata_uri, guid);
             }));
 
         this.libparts = libparts
             .map(result => result.status === "fulfilled" ? result.value : undefined)
-            .filter((e) : e is LibpartInfo => (e !== undefined))
-            .reduce((all, libpartinfo) => {        // map by workspace root folder
-                const folder = vscode.workspace.getWorkspaceFolder(libpartinfo.uri)?.uri.fsPath ?? "";
-                if (!all.has(folder)) {
-                    all.set(folder, []);
-                }
-                all.get(folder)!.push(libpartinfo);
-                return all;
-                }, this.libparts);
+            .filter((e) : e is LibpartInfo => (e !== undefined));
+
+        this.unprocessed = false;
+        this._onDidCollect.fire(null);
     }
 
     async changeFolders() {
-        console.log("WSSymbols changeFolders");
-        await this.collectLibparts();
+        //console.log("WSSymbols changeFolders");
+        this.unprocessed = true;
+        vscode.window.withProgress(
+            {
+              location: vscode.ProgressLocation.Window,
+              title: 'Collecting libparts in workspace...'
+            },
+            async () => await this.collectLibparts());
     }
 
     async provideWorkspaceSymbols(_query : string, token: vscode.CancellationToken): Promise<vscode.SymbolInformation[]> {
         //console.log("provideWorkspaceSymbols");
 
+        if (this.unprocessed) {
+            //wait for workspace scanning to finish
+            await new Promise((resolve, reject) => {
+                this.onDidCollect(resolve);
+                token.onCancellationRequested(reject);
+            });
+        }
+
         return new Promise(async (resolve, reject) => {
             token.onCancellationRequested(reject);
-
-            const symbols: vscode.SymbolInformation[] = [];
 
             //get filename from active editor
             const editorpath = vscode.window.activeTextEditor?.document.fileName;
@@ -81,57 +97,53 @@ export class WSSymbols implements vscode.WorkspaceSymbolProvider<vscode.SymbolIn
             }
     
             const targetposition = new vscode.Position(0, 0);
-            for (const [root, libparts] of this.libparts) {
-                const symbolpairs = await Promise.allSettled(
-                    WSSymbols.filterquery(_query, libparts).map(async libpart => {
-                        const dirname = path.dirname(libpart.uri.fsPath);
-                        const relparent = path.relative(root, path.resolve(dirname, ".."));
-                        //TODO vscode.workspace.asRelativePath
-                        let target = vscode.Uri.joinPath(libpart.uri, open_relative);
+            const query_lc = _query.toLowerCase();
+
+            const symbolpairs = await Promise.allSettled(
+                this.libparts
+                    .filter(e => filterquery(e, query_lc))
+                    .map(async libpart => {
+                        let target = vscode.Uri.joinPath(libpart.root_uri, open_relative);
                         try {
                             await vscode.workspace.fs.stat(target);
                         } catch {   // file not found, revert to libpartdata.xml
-                            target = libpart.uri;
+                            target = libpart.libpartdata_uri;
                         }
-                        const basename = path.basename(dirname);
-                        const libpartByName = new vscode.SymbolInformation(`"${basename}"`,
+                        const libpartByName = new vscode.SymbolInformation(`"${libpart.name}"`,
                                                             vscode.SymbolKind.File,
-                                                            ` -  ${relparent} `,
+                                                            "",
                                                             new vscode.Location(target, targetposition)
                                                             );
                         const libpartByGUID = new vscode.SymbolInformation(libpart.guid,
-                                                                     vscode.SymbolKind.File,
-                                                                     ` -  ${basename} `,
-                                                                     new vscode.Location(target, targetposition)
-                                                                     );
+                                                                    vscode.SymbolKind.File,
+                                                                    ` -  ${libpart.name} `,
+                                                                    new vscode.Location(target, targetposition)
+                                                                    );
 
                         return [libpartByName, libpartByGUID];
                         })
-                );
+            );
 
-                symbols.push(...symbolpairs
-                    .map(result => result.status === "fulfilled" ? result.value : undefined)
-                    .filter((e) : e is vscode.SymbolInformation[] => (e !== undefined))
-                    .flat());
-            }
+            const symbols = symbolpairs
+                .map(result => result.status === "fulfilled" ? result.value : undefined)
+                .filter((e) : e is vscode.SymbolInformation[] => (e !== undefined))
+                .flat();
 
             resolve(symbols);
         });
     }
+}
 
-    private static filterquery(query: string, libparts : LibpartInfo[]) : LibpartInfo[] {
-        const query_lc = query.toLowerCase();
-
-        return libparts.filter(libpart => {
-            const name_lc = path.basename(path.dirname(libpart.uri.fsPath)).toLowerCase();
-            const guid_lc = libpart.guid.toLowerCase();
-            let i = 0, j = 0;
-            for (const char of query_lc) {
-                i = name_lc.indexOf(char, i);
-                j = guid_lc.indexOf(char, i);
-                if (i < 0 && j < 0) break;
-            }
-            return (i >= 0 || j >= 0);
-        });
+function filterquery(libpart : LibpartInfo, query_lc : string) : libpart is LibpartInfo {
+    // select element if contains all the characters of query in order,
+    // but not necessarily continuously (as required by the API)
+    const name_lc = libpart.name.toLowerCase();
+    const guid_lc = libpart.guid.toLowerCase();
+    let i = 0, j = 0;
+    for (const char of query_lc) {
+        i = name_lc.indexOf(char, i);
+        j = guid_lc.indexOf(char, i);
+        if (i < 0 && j < 0) break;
     }
+    return (i >= 0 || j >= 0);
 }

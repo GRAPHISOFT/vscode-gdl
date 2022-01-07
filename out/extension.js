@@ -14,7 +14,7 @@ async function activate(context) {
     // create extension
     const extension = new GDLExtension(context);
     context.subscriptions.push(extension);
-    setTimeout(() => extension.init(), 0); //don't block UI
+    extension.init(); // start async operation
 }
 exports.activate = activate;
 class GDLExtension {
@@ -31,6 +31,7 @@ class GDLExtension {
         this.sectionDecorations = [];
         this.parser = new Parser.ParseXMLGDL(); // without document only initializes
         this.wsSymbols = new wssymbols_1.WSSymbols(context);
+        this.wsSymbols.changeFolders(); // handles waiting for result on its own
         // GDLOutline view initialization
         this.outlineView = new scriptView_1.OutlineView(this);
         context.subscriptions.push(vscode.window.registerTreeDataProvider('GDLOutline', this.outlineView));
@@ -64,9 +65,8 @@ class GDLExtension {
         vscode.languages.registerHoverProvider(["gdl-hsf"], this), vscode.languages.registerDocumentSymbolProvider(["gdl-xml", "gdl-hsf"], this), vscode.languages.registerWorkspaceSymbolProvider(this.wsSymbols), vscode.languages.registerDefinitionProvider(["gdl-hsf"], this), vscode.languages.registerReferenceProvider(["gdl-hsf"], this));
     }
     async init() {
-        await this.onConfigChanged(); // 1 read configuration
-        this.wsSymbols.changeFolders(); // 2 start looking for workspace symbols TODO status bar progress indicator?
-        this.onActiveEditorChanged(); // 3 start parsing
+        await this.onConfigChanged(); // wait for configuration
+        this.onActiveEditorChanged(); // start async operation
     }
     get updateEnabled() { return this._updateEnabled; }
     get editor() { return this._editor; }
