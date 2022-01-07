@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Constants = exports.Constant = void 0;
 const vscode = require("vscode");
 const extension_1 = require("./extension");
-const fs = require("fs");
 class Constant {
     constructor(gdl) {
         let result_ = gdl.match(/(?<=^\s*)([A-Z][0-9A-Z~]*)(_[0-9A-Z_~]+)?\s*=\s*(.*)\s*$/);
@@ -24,37 +23,30 @@ class Constant {
 }
 exports.Constant = Constant;
 class Constants {
-    constructor(rootfolder, filename) {
-        if ((0, extension_1.hasLibPartData)(rootfolder)) {
-            //console.log("Constants() read master of", rootfolder.fsPath);
-            this.constants = this.parse(vscode.Uri.joinPath(rootfolder, filename));
-        }
-        else {
-            this.constants = new Map();
-        }
+    constructor() {
+        this.constants = new Map();
     }
-    parse(uri) {
-        let constants = new Map();
-        let masterscript = uri.fsPath;
-        if (fs.existsSync(masterscript)) {
-            let data = fs.readFileSync(masterscript, "utf8");
-            let constants_ = data.match(/^\s*[A-Z][0-9A-Z~]*(_[0-9A-Z_~]+)?\s*=.*$/mg);
+    async addfrom(rootfolder, relpath) {
+        //console.log("Constants.addfrom()", rootfolder.fsPath, relpath);
+        let script = vscode.Uri.joinPath(rootfolder, relpath);
+        const code = await (0, extension_1.readFile)(script);
+        if (code) {
+            let constants_ = code.match(/^\s*[A-Z][0-9A-Z~]*(_[0-9A-Z_~]+)?\s*=.*$/mg);
             if (constants_) {
                 for (const gdl of constants_) {
                     let constant = new Constant(gdl);
-                    let group = constants.get(constant.prefix);
+                    let group = this.constants.get(constant.prefix);
                     if (group) {
                         group.push(constant);
                     }
                     else {
                         group = [];
                         group.push(constant);
-                        constants.set(constant.prefix, group);
+                        this.constants.set(constant.prefix, group);
                     }
                 }
             }
         }
-        return constants;
     }
     [Symbol.iterator]() {
         return this.constants.values();

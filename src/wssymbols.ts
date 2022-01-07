@@ -1,6 +1,7 @@
-import * as vscode from 'vscode';
 import path = require('path');
-import fs = require('fs');
+import * as vscode from 'vscode';
+
+import { readFile } from './extension';
 
 type LibpartInfo = {
     readonly uri: vscode.Uri,
@@ -21,55 +22,43 @@ export class WSSymbols implements vscode.WorkspaceSymbolProvider<vscode.SymbolIn
             vscode.workspace.onDidDeleteFiles(async () => this.changeFolders()),
             vscode.workspace.onDidRenameFiles(async () => this.changeFolders())
         );
-
-        this.changeFolders();
     }
 
-    get folders() {
-        return vscode.workspace.workspaceFolders ?? [];
-    }
-
-    private async collectLibparts(roots: readonly vscode.WorkspaceFolder[]) {
+    private async collectLibparts() {
         this.libparts = new Map();
-        await Promise.all(
-            roots.map(async folder => this.libparts.set(folder.uri.fsPath, await this.collectLibpartsInFolder(folder.uri)))
-        );
-    }
 
-    private async collectLibpartsInFolder(folder: vscode.Uri) : Promise<LibpartInfo[]> {
-        //console.log("WSSymbols collectLibpartsInFolder", folder.fsPath)
-        const contents = await vscode.workspace.fs.readDirectory(folder);
-        const libpartdata = contents.filter(content => content[1] & vscode.FileType.File && content[0] === "libpartdata.xml");
-        const dirs = contents.filter(content => content[1] & vscode.FileType.Directory);
+        const libpartdata = await vscode.workspace.findFiles("**/libpartdata.xml");
+        const libparts = await Promise.allSettled(
+            libpartdata.map(async libpartdata_uri => {
+                let xml = (await readFile(libpartdata_uri, true))!;    //can't be undefined because file exists
+                let guid = "";
+                let guid_ = xml.match(/^\s*<MainGUID>([-0-9A-F]*)<\/MainGUID>/mi);
+                if (guid_) {
+                    guid = guid_[1];
+                }
+                return {uri: libpartdata_uri, guid: guid};
+            }));
 
-        if (libpartdata.length > 0) {   // has libpartdata.xml
-            const libpartdata_uri = vscode.Uri.joinPath(folder, libpartdata[0][0]);    // there can be only one
-            // read mainguid
-            let data = fs.readFileSync(libpartdata_uri.fsPath, "utf8");
-            let guid_ = data.match(/^\s*<MainGUID>([-0-9A-F]*)<\/MainGUID>/mi);
-            let guid = "";
-            if (guid_) {
-                guid = guid_[1];
-            }
-            return [{uri: libpartdata_uri, guid: guid}];
-        } else {                        // no libpartdata: dive deeper
-            if (dirs.length > 0) {
-                const subtree = await Promise.all(
-                    dirs.map(async subdir => await this.collectLibpartsInFolder(vscode.Uri.joinPath(folder, subdir[0])))
-                );
-                return subtree.reduce((a, b) => a.concat(b));
-            } else {
-                return [];
-            }
-        }
+        this.libparts = libparts
+            .map(result => result.status === "fulfilled" ? result.value : undefined)
+            .filter((e) : e is LibpartInfo => (e !== undefined))
+            .reduce((all, libpartinfo) => {        // map by workspace root folder
+                let folder = vscode.workspace.getWorkspaceFolder(libpartinfo.uri)?.uri.fsPath ?? "";
+                if (!all.has(folder)) {
+                    all.set(folder, []);
+                }
+                all.get(folder)!.push(libpartinfo);
+                return all;
+                }, this.libparts);
     }
 
     async changeFolders() {
-        //console.log("WSSymbols changeFolders");
-        await this.collectLibparts(this.folders);
+        console.log("WSSymbols changeFolders");
+        await this.collectLibparts();
     }
 
     async provideWorkspaceSymbols(_query : string, token: vscode.CancellationToken): Promise<vscode.SymbolInformation[]> {
+        //console.log("provideWorkspaceSymbols");
 
         return new Promise(async (resolve, reject) => {
             token.onCancellationRequested(reject);
@@ -91,41 +80,58 @@ export class WSSymbols implements vscode.WorkspaceSymbolProvider<vscode.SymbolIn
                 }
             }
     
+            const targetposition = new vscode.Position(0, 0);
             for (const [root, libparts] of this.libparts) {
-                const symbolpairs = await Promise.all(
-                    libparts.map(async libpart => {
+                const symbolpairs = await Promise.allSettled(
+                    WSSymbols.filterquery(_query, libparts).map(async libpart => {
                         const dirname = path.dirname(libpart.uri.fsPath);
                         const relparent = path.relative(root, path.resolve(dirname, ".."));
-    
+                        //TODO vscode.workspace.asRelativePath
                         let target = vscode.Uri.joinPath(libpart.uri, open_relative);
                         try {
                             await vscode.workspace.fs.stat(target);
                         } catch {   // file not found, revert to libpartdata.xml
                             target = libpart.uri;
                         }
-    
-                        const libpartByName = new vscode.SymbolInformation(`"${path.basename(dirname)}"`,
+                        const basename = path.basename(dirname);
+                        const libpartByName = new vscode.SymbolInformation(`"${basename}"`,
                                                             vscode.SymbolKind.File,
                                                             ` -  ${relparent} `,
-                                                            new vscode.Location(target,
-                                                                                new vscode.Position(0, 0))
+                                                            new vscode.Location(target, targetposition)
                                                             );
                         const libpartByGUID = new vscode.SymbolInformation(libpart.guid,
                                                                      vscode.SymbolKind.File,
-                                                                     ` -  ${path.basename(dirname)} `,
-                                                                     new vscode.Location(target,
-                                                                                         new vscode.Position(0, 0))
+                                                                     ` -  ${basename} `,
+                                                                     new vscode.Location(target, targetposition)
                                                                      );
 
                         return [libpartByName, libpartByGUID];
                         })
                 );
 
-                symbols = symbols.concat(symbolpairs.reduce((a, b) => a.concat(...b)));
+                symbols.push(...symbolpairs
+                    .map(result => result.status === "fulfilled" ? result.value : undefined)
+                    .filter((e) : e is vscode.SymbolInformation[] => (e !== undefined))
+                    .flat());
             }
 
             resolve(symbols);
         });
     }
 
+    private static filterquery(query: string, libparts : LibpartInfo[]) : LibpartInfo[] {
+        let query_lc = query.toLowerCase();
+
+        return libparts.filter(libpart => {
+            const name_lc = path.basename(path.dirname(libpart.uri.fsPath)).toLowerCase();
+            const guid_lc = libpart.guid.toLowerCase();
+            let i = 0, j = 0;
+            for (const char of query_lc) {
+                i = name_lc.indexOf(char, i);
+                j = guid_lc.indexOf(char, i);
+                if (i < 0 && j < 0) break;
+            }
+            return (i >= 0 || j >= 0);
+        });
+    }
 }

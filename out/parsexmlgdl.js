@@ -410,7 +410,8 @@ class ParseXMLGDL {
     getAllSections() {
         //console.log("ParseXMLGDL.getAllSections");
         // skip undefineds
-        return this.sectionList.filter((e) => (e !== undefined))
+        return this.sectionList
+            .filter((e) => (e !== undefined))
             .sort((a, b) => a.range.start.line - b.range.start.line);
     }
     parseall(document) {

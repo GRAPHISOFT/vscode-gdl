@@ -2,8 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.RefGuide = void 0;
 const vscode = require("vscode");
+const extension_1 = require("./extension");
 const path = require("path");
-const fs = require("fs");
 class RefGuide {
     constructor(extension, root) {
         this.extension = extension;
@@ -18,14 +18,15 @@ class RefGuide {
             enableCommandUris: true,
             localResourceRoots: [vscode.Uri.file(root)]
         });
-        this.refguideView.webview.onDidReceiveMessage(message => {
-            //console.log(message);
-            if (message.href) {
-                this.showLink(message.href);
-            }
-        }, this, this.callbacks);
+        this.refguideView.webview.onDidReceiveMessage(this.onMessage, this, this.callbacks);
         // delete reference when user closes window
         this.refguideView.onDidDispose(() => this.onDispose(), this, this.extension.context.subscriptions);
+    }
+    async onMessage(message) {
+        //console.log(message);
+        if (message.href) {
+            await this.showLink(message.href);
+        }
     }
     static helpFor(document, position) {
         // return word at cursor that might have help
@@ -55,10 +56,10 @@ class RefGuide {
         }
         return word;
     }
-    refguideHtml(url) {
-        let refguideUri = this.refguideView.webview.asWebviewUri(vscode.Uri.file(this.refguideroot));
+    async refguideHtml(url) {
+        const refguideUri = this.refguideView.webview.asWebviewUri(vscode.Uri.file(this.refguideroot));
         // this is merged with the existing head in the files
-        let head = `<head>
+        const head = `<head>
 <meta http-equiv="Content-Security-Policy" content="img-src ${this.refguideView.webview.cspSource} 'unsafe-inline'; style-src ${this.refguideView.webview.cspSource} self 'unsafe-inline'; script-src ${this.refguideView.webview.cspSource} 'unsafe-inline';"/>
     <base href="${refguideUri}/"/>
     <script>
@@ -79,7 +80,8 @@ class RefGuide {
         }, true);
     </script>
 </head>`;
-        return head + fs.readFileSync(url.fsPath, { encoding: "utf-8" });
+        const html = await (0, extension_1.readFile)(vscode.Uri.file(url.fsPath)); // convert to file uri
+        return head + html;
     }
     static getLinkID(word) {
         // transform tube{2} to TUBE2
@@ -96,14 +98,14 @@ class RefGuide {
     getIndexFilename() {
         return path.join(this.refguideroot, "002.017.html");
     }
-    getReferenceToShow(word, allowIndexRedirect) {
-        var found = false;
-        var refguidefile;
+    async getReferenceToShow(word, allowIndexRedirect) {
+        let found = false;
+        let refguidefile;
         if (word != undefined) {
             // make filename
             refguidefile = this.getReferenceFilename(word);
             // check if file exist
-            found = fs.existsSync(refguidefile);
+            found = await (0, extension_1.fileExists)(vscode.Uri.file(refguidefile));
         }
         if (!found && allowIndexRedirect) { // redirect to index 
             if (word) { // shown unknown keyword (unless undefined)
@@ -115,18 +117,18 @@ class RefGuide {
             return (found ? refguidefile : undefined);
         }
     }
-    showLink(href) {
-        let uri = vscode.Uri.parse(href);
-        this.refguideView.webview.html = this.refguideHtml(uri);
+    async showLink(href) {
+        const uri = vscode.Uri.parse(href);
+        this.refguideView.webview.html = await this.refguideHtml(uri);
     }
-    showHelp(word) {
+    async showHelp(word) {
         if (this.refguideView) {
-            let refguidefile = this.getReferenceToShow(word, true);
+            const refguidefile = await this.getReferenceToShow(word, true);
             // load file
-            const furi = vscode.Uri.file(refguidefile || ""); // getReferenceToShow didn't return undefined 
+            const furi = vscode.Uri.file(refguidefile ?? ""); // getReferenceToShow didn't return undefined 
             // debug: open in external browser
             //vscode.env.openExternal(furi);
-            this.refguideView.webview.html = this.refguideHtml(furi);
+            this.refguideView.webview.html = await this.refguideHtml(furi);
             this.refguideView.reveal(vscode.ViewColumn.Beside);
         }
     }

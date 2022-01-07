@@ -516,7 +516,8 @@ export class ParseXMLGDL {
 	getAllSections() : GDLXMLSection[] {
 		//console.log("ParseXMLGDL.getAllSections");
 		// skip undefineds
-		return (this.sectionList.filter((e) => (e !== undefined)) as GDLXMLSection[])
+		return this.sectionList
+				.filter((e) : e is GDLXMLSection => (e !== undefined))
 				.sort((a : GDLXMLSection, b : GDLXMLSection) => a.range.start.line - b.range.start.line);
 	}
 

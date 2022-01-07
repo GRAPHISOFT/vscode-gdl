@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ParamList = exports.Parameter = void 0;
 const vscode = require("vscode");
 const extension_1 = require("./extension");
-const fs = require("fs");
 class Parameter {
     constructor(xml) {
         let result_ = xml.match(/^\t\t<(.*?) Name="(.*?)">((.|[\n\r])*?)^\t\t<\/\1>/m);
@@ -122,30 +121,22 @@ class Parameter {
 }
 exports.Parameter = Parameter;
 class ParamList {
-    constructor(rootfolder) {
-        if ((0, extension_1.hasLibPartData)(rootfolder)) {
-            //console.log("ParamList() read paramlist of", rootfolder.fsPath);
-            this.uri = vscode.Uri.joinPath(rootfolder, "paramlist.xml");
-            this.parameters = this.parse();
-        }
-        else {
-            this.parameters = new Map();
-        }
+    constructor() {
+        this.parameters = new Map();
     }
-    parse() {
-        let parameters = new Map();
-        let paramlist = this.uri.fsPath;
-        if (fs.existsSync(paramlist)) {
-            let data = fs.readFileSync(paramlist, "utf8");
-            let parameters_ = data.match(/^\t\t<(.*?) Name=.*?>((.|[\n\r])*?)^\t\t<\/\1>/mg);
+    async addfrom(rootfolder) {
+        //console.log("ParamList.addfrom()", rootfolder.fsPath);
+        const paramlistfile = vscode.Uri.joinPath(rootfolder, "paramlist.xml");
+        const paramlist = await (0, extension_1.readFile)(paramlistfile);
+        if (paramlist) {
+            let parameters_ = paramlist.match(/^\t\t<(.*?) Name=.*?>((.|[\n\r])*?)^\t\t<\/\1>/mg);
             if (parameters_) {
                 for (const xml of parameters_) {
                     let parameter = new Parameter(xml);
-                    parameters.set(parameter.nameCS.toLowerCase(), parameter);
+                    this.parameters.set(parameter.nameCS.toLowerCase(), parameter);
                 }
             }
         }
-        return parameters;
     }
     has(name) {
         return this.parameters.has(name);

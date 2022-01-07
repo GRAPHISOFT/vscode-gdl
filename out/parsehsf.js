@@ -6,11 +6,17 @@ const constparser_1 = require("./constparser");
 class HSFLibpart {
     constructor(rootFolder) {
         this.rootFolder = rootFolder;
-        this._paramlist = new paramlistparser_1.ParamList(this.rootFolder);
-        this._masterconstants = new constparser_1.Constants(this.rootFolder, "scripts/1d.gdl");
+        this._paramlist = new paramlistparser_1.ParamList();
+        this._masterconstants = new constparser_1.Constants();
     }
     get paramlist() { return this._paramlist; }
     get masterconstants() { return this._masterconstants; }
+    async read_paramlist() {
+        await this._paramlist.addfrom(this.rootFolder);
+    }
+    async read_master_constants() {
+        await this._masterconstants.addfrom(this.rootFolder, "scripts/1d.gdl");
+    }
 }
 exports.HSFLibpart = HSFLibpart;
 //# sourceMappingURL=parsehsf.js.map

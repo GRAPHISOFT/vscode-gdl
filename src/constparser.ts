@@ -1,8 +1,6 @@
 import * as vscode from 'vscode';
 
-import { hasLibPartData } from './extension';
-
-import fs = require('fs');
+import { readFile } from './extension';
 
 export class Constant {
     readonly prefix: string;
@@ -29,42 +27,31 @@ export class Constant {
 }
 
 export class Constants {
-    private constants: Map<string, Constant[]>;
+    private constants: Map<string, Constant[]> = new Map<string, Constant[]>();
 
-    constructor(rootfolder: vscode.Uri, filename: string) {
-        if (hasLibPartData(rootfolder)) {
-            //console.log("Constants() read master of", rootfolder.fsPath);
-            this.constants = this.parse(vscode.Uri.joinPath(rootfolder, filename));
-        }
-        else {
-            this.constants = new Map<string, Constant[]>();
-        }
-    }
+    async addfrom(rootfolder: vscode.Uri, relpath: string) {
+        //console.log("Constants.addfrom()", rootfolder.fsPath, relpath);
+        let script = vscode.Uri.joinPath(rootfolder, relpath);
+        const code = await readFile(script);
 
-    parse(uri: vscode.Uri) : Map<string, Constant[]> {
-        let constants = new Map<string, Constant[]>();
-        let masterscript = uri.fsPath;
-
-        if (fs.existsSync(masterscript)) {
-            let data = fs.readFileSync(masterscript, "utf8");
-            let constants_ = data.match(/^\s*[A-Z][0-9A-Z~]*(_[0-9A-Z_~]+)?\s*=.*$/mg);
+        if (code) {
+            let constants_ = code.match(/^\s*[A-Z][0-9A-Z~]*(_[0-9A-Z_~]+)?\s*=.*$/mg);
 
             if (constants_) {
                 for (const gdl of constants_) {
                     let constant = new Constant(gdl);
-                    let group = constants.get(constant.prefix);
+                    let group = this.constants.get(constant.prefix);
                     if (group) {
                         group.push(constant);
                     }
                     else {
                         group = [];
                         group.push(constant);
-                        constants.set(constant.prefix, group);
+                        this.constants.set(constant.prefix, group);
                     }
                 }
             }
         }
-        return constants;
     }
 
     [Symbol.iterator]() {
