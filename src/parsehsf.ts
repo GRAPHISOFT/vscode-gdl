@@ -9,13 +9,20 @@ export class HSFLibpart {
     private readonly _masterconstants: Constants = new Constants();
     get masterconstants() : Constants { return this._masterconstants; }
 
-    constructor(public readonly rootFolder : vscode.Uri) {}
+    readonly processing : Promise<[PromiseSettledResult<void>, PromiseSettledResult<void>]>;
 
-    async read_paramlist() {
+    constructor(public readonly rootFolder : vscode.Uri) {
+        this.processing = Promise.allSettled([  // parallel execution
+            this.read_master_constants(),
+            this.read_paramlist()
+        ]);
+    }
+
+    private async read_paramlist() {
         await this._paramlist.addfrom(this.rootFolder);
     }
 
-    async read_master_constants() {
+    private async read_master_constants() {
         await this._masterconstants.addfrom(this.rootFolder, "scripts/1d.gdl");
     }
 }

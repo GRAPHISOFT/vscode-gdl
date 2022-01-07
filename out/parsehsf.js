@@ -8,6 +8,10 @@ class HSFLibpart {
         this.rootFolder = rootFolder;
         this._paramlist = new paramlistparser_1.ParamList();
         this._masterconstants = new constparser_1.Constants();
+        this.processing = Promise.allSettled([
+            this.read_master_constants(),
+            this.read_paramlist()
+        ]);
     }
     get paramlist() { return this._paramlist; }
     get masterconstants() { return this._masterconstants; }

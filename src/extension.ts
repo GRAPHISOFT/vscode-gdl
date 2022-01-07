@@ -102,7 +102,7 @@ export class GDLExtension
             // changed settings
             vscode.workspace.onDidChangeConfiguration(async () => this.onConfigChanged()),
             // switched between open files
-            vscode.window.onDidChangeActiveTextEditor(() => this.onActiveEditorChanged()),
+            vscode.window.onDidChangeActiveTextEditor(async () => this.onActiveEditorChanged()),
             // file edited
             vscode.workspace.onDidChangeTextDocument((e : vscode.TextDocumentChangeEvent) => this.onDocumentChanged(e)),
             // opened or changed language mode
@@ -146,16 +146,16 @@ export class GDLExtension
     get editor() : vscode.TextEditor | undefined { return this._editor; }
 
     reparseDoc(document : vscode.TextDocument | undefined, delay : number = 100) {
-        console.log("GDLExtension.reparseDoc");
+        //console.log("GDLExtension.reparseDoc");
         this._updateEnabled = modeGDL(document);
         vscode.commands.executeCommand('setContext', 'GDLOutlineEnabled', this._updateEnabled);
         
         // reparse document after delay
         this.parse(document, delay).then(result => {
-            console.log("reparseDoc resolved");
+            //console.log("reparseDoc resolved");
             this.parser = result;
-            this.updateUI();
             this._onDidParse.fire(null);
+            this.updateUI();
         });
     }
 
@@ -273,7 +273,7 @@ export class GDLExtension
 							  tokens: this.parser.getAllFunctions() });
 		
         // parameter decorations
-        this.decorateParameters();
+        this.decorateParameters();  // start async operation
     }
     
     private async parse(document : vscode.TextDocument | undefined, delay : number) : PromiseParse {
@@ -291,17 +291,16 @@ export class GDLExtension
         });
     }
     
-    private onActiveEditorChanged() {
-        console.log("GDLExtension.onActiveEditorChanged");
+    private async onActiveEditorChanged() {
+        //console.log("GDLExtension.onActiveEditorChanged",  vscode.window.activeTextEditor?.document.uri.fsPath);
         this._editor = vscode.window.activeTextEditor;
 
         // xml files opened as gdl-xml by extension
         // switch non-libpart .xml to XML language
-        if (modeGDLXML(this._editor?.document) && !IsLibpart(this._editor?.document)) {
+        if (modeGDLXML(this._editor?.document) && !(await IsLibpart(this._editor?.document))) {
             this.switchLang("xml");
         }
 
-        // these calls start timer to not block UI
         this.updateHsfLibpart();
         this.reparseDoc(this._editor?.document, 0);
     }
@@ -310,14 +309,8 @@ export class GDLExtension
         // create new HSFLibpart if root folder changed
         const rootFolder = this.getNewHSFLibpartFolder(this.hsflibpart?.rootFolder);
         if (rootFolder) {
+            //start async operations
             this.hsflibpart = new HSFLibpart(rootFolder);
-            //this doesn't have to be finsihed immediately
-            setTimeout(async (hsflibpart) => {
-                await Promise.allSettled([
-                    hsflibpart.read_master_constants(),
-                    hsflibpart.read_paramlist()]);
-                this.updateUI();    // TODO call only once when all is finished
-                }, 0, this.hsflibpart);
         } else if (rootFolder === undefined) {
             // delete HSFLibpart
             this.hsflibpart = undefined;
@@ -350,21 +343,25 @@ export class GDLExtension
         fontWeight: "bold"
     });
 
-    private decorateParameters() {
-        console.log("GDLExtension.decorateParameters", this._editor?.document.fileName);
+    private async decorateParameters() {
+        //console.log("GDLExtension.decorateParameters", this._editor?.document.fileName);
         const paramRanges : vscode.Range[] = [];
 
-        if (this._editor && this.hsflibpart && this.infoFromHSF) {
-            const text = this._editor.document.getText();
-            if (text) {
-                for (const p of this.hsflibpart.paramlist) {
-                    //TODO store regexs?
-                    const find = new RegExp("\\b" + p.nameCS + "\\b", "ig");
-                    let current : RegExpExecArray | null;
-                    while ((current = find.exec(text)) !== null) {
-                        const start = this._editor.document.positionAt(current.index);
-                        const end = this._editor.document.positionAt(find.lastIndex);
-                        paramRanges.push(new vscode.Range(start, end));
+        if (this.hsflibpart) {
+            await this.hsflibpart.processing;
+            // editor and settings might change during processing
+            if (this._editor && this.infoFromHSF) {
+                const text = this._editor.document.getText();
+                if (text) {
+                    for (const p of this.hsflibpart.paramlist) {
+                        //TODO store regexs?
+                        const find = new RegExp("\\b" + p.nameCS + "\\b", "ig");
+                        let current : RegExpExecArray | null;
+                        while ((current = find.exec(text)) !== null) {
+                            const start = this._editor.document.positionAt(current.index);
+                            const end = this._editor.document.positionAt(find.lastIndex);
+                            paramRanges.push(new vscode.Range(start, end));
+                        }
                     }
                 }
             }
@@ -388,12 +385,14 @@ export class GDLExtension
 
     public setInfoFromHSF(infoFromHSF : boolean) {
         this.infoFromHSF = infoFromHSF;
-        this.updateStatusHSF();
-        this.decorateParameters();
+        if (this.editor) {
+            this.updateStatusHSF();
+            this.decorateParameters();  // start async operation
+        }
     }
 
     private onDocumentChanged(changeEvent: vscode.TextDocumentChangeEvent) {
-        console.log("GDLExtension.onDocumentChanged", changeEvent.document.uri.toString());
+        //console.log("GDLExtension.onDocumentChanged", changeEvent.document.uri.toString());
         this.reparseDoc(changeEvent.document);  // with default timeout
     }
 
@@ -408,7 +407,7 @@ export class GDLExtension
     }
 
     private async onConfigChanged() {
-        console.log("GDLExtension.onConfigChanged");
+        //console.log("GDLExtension.onConfigChanged");
         const config = vscode.workspace.getConfiguration("gdl");
 
         //don't change if not found in setting
