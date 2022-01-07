@@ -18,13 +18,13 @@ export class Parameter {
     public readonly hidden : boolean;
 
     constructor(xml : string) {
-        let result_ = xml.match(/^\t\t<(.*?) Name="(.*?)">((.|[\n\r])*?)^\t\t<\/\1>/m);
+        const result_ = xml.match(/^\t\t<(.*?) Name="(.*?)">((.|[\n\r])*?)^\t\t<\/\1>/m);
         if (result_) {
             this.type = result_[1];
             this.nameCS = result_[2];
-            let content = result_[3];
+            const content = result_[3];
 
-            let desc_ = content.match(/<Description><!\[CDATA\["(.*?)"\]\]><\/Description>/);
+            const desc_ = content.match(/<Description><!\[CDATA\["(.*?)"\]\]><\/Description>/);
             if (desc_) {
                 this.desc = desc_[1];
             } else {
@@ -44,19 +44,19 @@ export class Parameter {
                 this.vardim1 = 0;
                 this.vardim2 = 0;
             } else {
-                let defaultvalue_ = content.match(/<(Value|ArrayValues)(.*?)>((.|[\n\r])*?)(?=<\/\1>)/m);
-                let isArray = (defaultvalue_![1] == "ArrayValues")
-                let attribs = defaultvalue_![2];
-                let value = defaultvalue_![3];
+                const defaultvalue_ = content.match(/<(Value|ArrayValues)(.*?)>((.|[\n\r])*?)(?=<\/\1>)/m);
+                const isArray = (defaultvalue_![1] == "ArrayValues")
+                const attribs = defaultvalue_![2];
+                const value = defaultvalue_![3];
 
-                let meaning_ = attribs.match(/Meaning="(.*?)"/);
+                const meaning_ = attribs.match(/Meaning="(.*?)"/);
                 if (meaning_) {
                     this.meaning = meaning_[1];
                 }
 
                 if (!isArray && this.type != "Dictionary") {    // simple type
                     if (this.type == "String") {
-                        let value_ = value.match(/<!\[CDATA\[(".*?")\]\]>/);
+                        const value_ = value.match(/<!\[CDATA\[(".*?")\]\]>/);
                         if (value_) {
                             this.defaultvalue = value_[1];
                         } else {
@@ -72,8 +72,8 @@ export class Parameter {
                     
                     this.defaultvalue = value.replace(/^\s*[\n\r]*/, "").replace(/^\t\t\t\t/gm, "");
 
-                    let dim1_ = attribs.match(/FirstDimension="(\d+)"/);
-                    let dim2_ = attribs.match(/SecondDimension="(\d+)"/);
+                    const dim1_ = attribs.match(/FirstDimension="(\d+)"/);
+                    const dim2_ = attribs.match(/SecondDimension="(\d+)"/);
                     if (dim1_) {
                         this.vardim1 = parseInt(dim1_[1], 10);
                     } else {
@@ -149,10 +149,10 @@ export class ParamList implements Iterable<Parameter> {
         const paramlist = await readFile(paramlistfile);
 
         if (paramlist) {
-            let parameters_ = paramlist.match(/^\t\t<(.*?) Name=.*?>((.|[\n\r])*?)^\t\t<\/\1>/mg);
+            const parameters_ = paramlist.match(/^\t\t<(.*?) Name=.*?>((.|[\n\r])*?)^\t\t<\/\1>/mg);
             if (parameters_) {
                 for (const xml of parameters_) {
-                    let parameter = new Parameter(xml);
+                    const parameter = new Parameter(xml);
                     this.parameters.set(parameter.nameCS.toLowerCase(), parameter);
                 }
             }

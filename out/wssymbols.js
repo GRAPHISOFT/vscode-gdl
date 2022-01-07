@@ -13,9 +13,9 @@ class WSSymbols {
         this.libparts = new Map();
         const libpartdata = await vscode.workspace.findFiles("**/libpartdata.xml");
         const libparts = await Promise.allSettled(libpartdata.map(async (libpartdata_uri) => {
-            let xml = (await (0, extension_1.readFile)(libpartdata_uri, true)); //can't be undefined because file exists
+            const xml = (await (0, extension_1.readFile)(libpartdata_uri, true)); //can't be undefined because file exists
+            const guid_ = xml.match(/^\s*<MainGUID>([-0-9A-F]*)<\/MainGUID>/mi);
             let guid = "";
-            let guid_ = xml.match(/^\s*<MainGUID>([-0-9A-F]*)<\/MainGUID>/mi);
             if (guid_) {
                 guid = guid_[1];
             }
@@ -25,7 +25,7 @@ class WSSymbols {
             .map(result => result.status === "fulfilled" ? result.value : undefined)
             .filter((e) => (e !== undefined))
             .reduce((all, libpartinfo) => {
-            let folder = vscode.workspace.getWorkspaceFolder(libpartinfo.uri)?.uri.fsPath ?? "";
+            const folder = vscode.workspace.getWorkspaceFolder(libpartinfo.uri)?.uri.fsPath ?? "";
             if (!all.has(folder)) {
                 all.set(folder, []);
             }
@@ -41,7 +41,7 @@ class WSSymbols {
         //console.log("provideWorkspaceSymbols");
         return new Promise(async (resolve, reject) => {
             token.onCancellationRequested(reject);
-            let symbols = [];
+            const symbols = [];
             //get filename from active editor
             const editorpath = vscode.window.activeTextEditor?.document.fileName;
             let open_relative = "";
@@ -84,7 +84,7 @@ class WSSymbols {
         });
     }
     static filterquery(query, libparts) {
-        let query_lc = query.toLowerCase();
+        const query_lc = query.toLowerCase();
         return libparts.filter(libpart => {
             const name_lc = path.basename(path.dirname(libpart.uri.fsPath)).toLowerCase();
             const guid_lc = libpart.guid.toLowerCase();

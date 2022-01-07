@@ -22,7 +22,7 @@ export class OutlineView
     }
 
     async newSettings(specComments: boolean, macroCalls: boolean) {
-        let changed = (this.specComments != specComments || this.macroCalls != macroCalls);
+        const changed = (this.specComments != specComments || this.macroCalls != macroCalls);
         this.specComments = specComments;
         this.macroCalls = macroCalls;
         if (changed) this.refresh();
@@ -48,12 +48,12 @@ export class OutlineView
     private getTreeItems(scriptType : Parser.ScriptType) : Parser.GDLToken[] {
         //console.log("OutlineView.getTreeItems", Parser.scriptName[scriptType], Date.now());
 
-        let children : Parser.GDLToken[] = [];
+        const children : Parser.GDLToken[] = [];
 
         //add "main" function for script longer than one line
         if (modeGDLXML(this.extension.editor?.document)) {
             if (scriptType <= Parser.ScriptType.BWM) {
-                let script = this.extension.parser.getXMLSection(scriptType)!;
+                const script = this.extension.parser.getXMLSection(scriptType)!;
                 if ((script instanceof Parser.GDLXMLSection) && script.lineCount > 1) {
                     //start of line after script start
                     const start = new vscode.Position(script.range.start.line + 1, 0);
@@ -79,7 +79,7 @@ export class OutlineView
     // build hierarchy of tree: return children of node id
     getChildren(id? : Parser.GDLToken): Thenable<Parser.GDLToken[]> {
         //console.log("OutlineView.getChildren", (id instanceof Parser.GDLToken) ?  id.name : "root");
-        let children : Parser.GDLToken[] = [];
+        const children : Parser.GDLToken[] = [];
 
         if (id instanceof Parser.GDLToken) {
             if (id instanceof Parser.GDLScript) {
@@ -107,14 +107,14 @@ export class OutlineView
         } else {    // root of tree
 
             //add mainGUID if found
-            let mainGUID = this.extension.parser.getMainGUID();
+            const mainGUID = this.extension.parser.getMainGUID();
             if (mainGUID !== undefined) {
                 children.push(mainGUID);
                 
                 //scripts
                 // show only scripts that have some lines in them
                 for (let i = Parser.ScriptType.D; i <= Parser.ScriptType.BWM; i++) {
-                    let script = this.extension.parser.getXMLSection(i);
+                    const script = this.extension.parser.getXMLSection(i);
                     if (script !== undefined && script.lineCount > 0) {
                         children.push(script);
                     }
@@ -122,14 +122,14 @@ export class OutlineView
 
                 // add non-script XML sections
                 for (let i = Parser.ScriptType.MIGTABLE; i <= Parser.ScriptType.CALLEDMACROS; i++) {
-                    let script = this.extension.parser.getXMLSection(i);
+                    const script = this.extension.parser.getXMLSection(i);
                     if (script !== undefined && script.lineCount > 0) {
                         children.push(script);
                     }
                 }
 
                 // add GDLPicts if there is at least one
-                let picts = this.extension.parser.getPictList();
+                const picts = this.extension.parser.getPictList();
                 if (picts.length > 0) {
                     children.push(new Parser.GDLPictParent(picts.length));
                 }
@@ -270,8 +270,8 @@ class TokenUI {
     }
 
     private GDLMigrationGUIDUI(token: Parser.GDLMigrationGUID) {
-        let version = (token.version < 10 ? "\u00a0" : "") + token.version.toString();
-        let showName = version + " " + token.name + (token.automigration ? " auto" : "");
+        const version = (token.version < 10 ? "\u00a0" : "") + token.version.toString();
+        const showName = version + " " + token.name + (token.automigration ? " auto" : "");
 
         this.context = "GUID";
         this.label = showName;
@@ -369,7 +369,7 @@ class TokenUI {
     }
 
     private GDLPictUI(token: Parser.GDLPict) {
-        let showName = token.idString + " \u00a0" + token.file;
+        const showName = token.idString + " \u00a0" + token.file;
 
         this.context = "gdlpict";
         this.label = showName;
@@ -379,7 +379,7 @@ class TokenUI {
     }
 
     getTreeItem(extcontext: vscode.ExtensionContext): vscode.TreeItem {
-		let treeItem = new vscode.TreeItem(this.label, this.collapsible);
+		const treeItem = new vscode.TreeItem(this.label, this.collapsible);
 		
         treeItem.id = this.id;
 		treeItem.contextValue = this.context;

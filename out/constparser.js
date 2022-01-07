@@ -5,7 +5,7 @@ const vscode = require("vscode");
 const extension_1 = require("./extension");
 class Constant {
     constructor(gdl) {
-        let result_ = gdl.match(/(?<=^\s*)([A-Z][0-9A-Z~]*)(_[0-9A-Z_~]+)?\s*=\s*(.*)\s*$/);
+        const result_ = gdl.match(/(?<=^\s*)([A-Z][0-9A-Z~]*)(_[0-9A-Z_~]+)?\s*=\s*(.*)\s*$/);
         if (result_) {
             this.prefix = result_[1];
             this.id = (result_[2] ? result_[2] : "");
@@ -28,22 +28,17 @@ class Constants {
     }
     async addfrom(rootfolder, relpath) {
         //console.log("Constants.addfrom()", rootfolder.fsPath, relpath);
-        let script = vscode.Uri.joinPath(rootfolder, relpath);
+        const script = vscode.Uri.joinPath(rootfolder, relpath);
         const code = await (0, extension_1.readFile)(script);
         if (code) {
-            let constants_ = code.match(/^\s*[A-Z][0-9A-Z~]*(_[0-9A-Z_~]+)?\s*=.*$/mg);
+            const constants_ = code.match(/^\s*[A-Z][0-9A-Z~]*(_[0-9A-Z_~]+)?\s*=.*$/mg);
             if (constants_) {
                 for (const gdl of constants_) {
-                    let constant = new Constant(gdl);
-                    let group = this.constants.get(constant.prefix);
-                    if (group) {
-                        group.push(constant);
+                    const constant = new Constant(gdl);
+                    if (!this.constants.has(constant.prefix)) {
+                        this.constants.set(constant.prefix, []);
                     }
-                    else {
-                        group = [];
-                        group.push(constant);
-                        this.constants.set(constant.prefix, group);
-                    }
+                    this.constants.get(constant.prefix).push(constant);
                 }
             }
         }
