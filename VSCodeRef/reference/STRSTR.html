@@ -1,38 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>STRSTR</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="STRSTR_gdlcommand">STRSTR</h3>
-					
-					<pre class="programlisting"><b id="STRSTR_keyword_2.13.5.9.7.4.1">STRSTR</b> (string_expression1, string_expression2[, case_insensitivity])</pre>
-					
-						<p>
-							Returns the (integer) position of the first appearance of the second string in the first string.
-							If the first string doesn’t contain the second one, the function returns 0.
-						</p>
-						<p>
-							<span class="italic">Note: In case <code class="literal">string_expression2</code> is an empty string, the function returns 1.</span>
-						</p>
-						<div style="margin-left: 1em">
-							<div style="text-indent: -1em"><code><b>case_insensitivity: </b></code></div>
-							<div><code>0 or not set: </code>Case sensitive</div>
-							<div><code>1: </code>Case insensitive</div>
-						</div>
-					
-					<div class="example"><a id="id535868"/><p class="title"><b>Example 1:
+                    
+                    <pre class="programlisting"><b id="STRSTR_keyword_2.13.5.9.7.4.1">STRSTR</b> (string_expression1, string_expression2[, case_insensitivity])</pre>
+                    
+                        <p>
+                            Returns the (integer) position of the first appearance of the second string in the first string.
+                            If the first string doesn’t contain the second one, the function returns 0.
+                        </p>
+                        <p>
+                            <span class="italic">Note: In case <code class="literal">string_expression2</code> is an empty string, the function returns 1.</span>
+                        </p>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>case_insensitivity: </b></code></div>
+                            <div><code>0 or not set: </code>Case sensitive</div>
+                            <div><code>1: </code>Case insensitive</div>
+                        </div>
+                    
+                    <div class="example"><a id="id545236"/><p class="title"><b>Example 1:
 </b></p><div class="example-contents"><pre class="programlisting">szFormat = ""
-n = REQUEST ("Linear_dimension", "", szFormat)
+n = REQUEST ("LINEAR_DIMENSION", "", szFormat)
 unit = ""
 IF STRSTR (szFormat, "m")  &gt; 0 THEN unit = "m"
 IF STRSTR (szFormat, "mm") &gt; 0 THEN unit = "mm"
 IF STRSTR (szFormat, "cm") &gt; 0 THEN unit = "cm"
 IF STRSTR (szFormat, "dm") &gt; 0 THEN unit = "dm"
 TEXT2 0, 0, STR (szFormat, a) + " " + unit !1.00 m</pre></div></div>
-					<div class="example"><a id="id535861"/><p class="title"><b>Example 2:
+                    <div class="example"><a id="id545242"/><p class="title"><b>Example 2:
 </b></p><div class="example-contents"><pre class="programlisting">STRSTR ("abcdefg", "BCdEf") = 0
 STRSTR ("abcdefg", "BCdEf", 0) = 0
 STRSTR ("abcdefg", "BCdEf", 1) = 2</pre></div></div>
-				<hr/><a href="002.013.html#STRSTR_gdlcommand">Related in Expressions and Functions</a><p>
-				<span class="bold"><strong>GDL Reference Guide</strong></span>
-			</p><p>
-				<span class="trademark">Copyright</span><sup>©</sup> 2021 by GRAPHISOFT, all rights reserved.
-				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
-			</p></body></html>
+                <hr/><a href="002.013.html#STRSTR_gdlcommand">Related in Expressions and Functions</a><p>
+                <span class="bold"><strong>GDL Reference Guide</strong></span>
+            </p><p>
+                <span class="trademark">Copyright</span><sup>©</sup> 2022 by GRAPHISOFT, all rights reserved.
+                Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+            </p></body></html>

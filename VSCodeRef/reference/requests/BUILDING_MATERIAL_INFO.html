@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../../"/><title>BUILDING_MATERIAL_INFO</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlrequest"><h3 id="BUILDING_MATERIAL_INFO_gdlrequest" style="font-family: monospace">BUILDING_MATERIAL_INFO</h3>
+                    <pre class="programlisting">n = REQUEST{2}("BUILDING_MATERIAL_INFO", name_or_index, param_name, value_or_values)</pre>
+                    
+                        <p>
+                            Returns information in the given variable(s) on a parameter of the specified building material.
+                            <span class="italic">Expression returns 0 and contains dummy return values (emtpy string or 0) if used in parameter script, causing additional warning.</span>
+                            Possible building material parameter names corresponding to parameters of the building material definition:
+                        </p>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>param_name: </b></code></div>
+                            <div><code>"gs_bmat_id": </code>building material id</div>
+                            <div><code>"gs_bmat_surface": </code>building material surface index</div>
+                            <div><code>"gs_bmat_description": </code>building material description</div>
+                            <div><code>"gs_bmat_manufacturer": </code>building material manufacturer</div>
+                            <div><code>"gs_bmat_collisiondetection": </code>building material participates in collision detection (0 or 1)</div>
+                            <div><code>"gs_bmat_intersectionpriority": </code>building material intersection priority</div>
+                            <div><code>"gs_bmat_cutFill_properties": </code>building material cut fill properties (cut fill index number, cut fill foreground pen index number, cut fill background pen index number)</div>
+                            <div><code>"gs_bmat_physical_properties": </code>building material physical properties (thermal conductivity, density, heat capacity, embodied energy, embodied carbon)</div>
+                        </div>
+                    
+                    <div class="example"><a id="id601824"/><p class="title"><b>Example:
+</b></p><div class="example-contents"><pre class="programlisting">n = REQUEST{2} ("BUILDING_MATERIAL_INFO", "Brick", "gs_bmat_id", id)
+n = REQUEST{2} ("BUILDING_MATERIAL_INFO", "Brick", "gs_bmat_surface", index)
+n = REQUEST{2} ("BUILDING_MATERIAL_INFO", "Brick", "gs_bmat_physical_properties",
+                thermalConductivity, density, heatCapacity, embodiedEnergy, embodiedCarbon) </pre></div></div>
+                <hr/><a href="002.015.html#BUILDING_MATERIAL_INFO_gdlrequest">Related in Miscellaneous</a><p>
+                <span class="bold"><strong>GDL Reference Guide</strong></span>
+            </p><p>
+                <span class="trademark">Copyright</span><sup>©</sup> 2022 by GRAPHISOFT, all rights reserved.
+                Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+            </p></body></html>

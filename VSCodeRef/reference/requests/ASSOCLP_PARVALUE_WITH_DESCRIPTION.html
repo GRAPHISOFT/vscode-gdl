@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../../"/><title>ASSOCLP_PARVALUE_WITH_DESCRIPTION</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlrequest"><h3 id="ASSOCLP_PARVALUE_WITH_DESCRIPTION_gdlrequest" style="font-family: monospace">ASSOCLP_PARVALUE_WITH_DESCRIPTION</h3>
+                    <pre class="programlisting">n = REQUEST("ASSOCLP_PARVALUE_WITH_DESCRIPTION", expr, name_or_index, type,
+            flags, dim1, dim2, p_values_and_descriptions)</pre>
+                    
+						<p>
+							Works the same as <a class="xref" href="reference/requests/ASSOCLP_PARVALUE.html"><code>ASSOCLP_PARVALUE</code></a>, except instead p_values:
+						</p>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>p_values_and_descriptions: </b></code>
+                                returns the parameter value followed by the parameter description string
+                                (as specified at <a class="xref" href="reference/VALUES.html">the VALUES command</a> command) or an array of these pairs.
+                                For string type parameters the description string is always empty.
+                                The array element - array element description string pairs are returned successively,
+                                row by row as a one dimensional array, independently of the dimensions of the variable specified to store it.
+                                If the variable is not a dynamic array, there are as many elements stored as there is room for
+                                (for a simple variable only one, the first element). If values is a two dimensional dynamic array, all elements are stored in the first row.
+                            </div>
+                        </div>
+                    
+                <hr/><a href="002.015.html#ASSOCLP_PARVALUE_WITH_DESCRIPTION_gdlrequest">Related in Miscellaneous</a><p>
+                <span class="bold"><strong>GDL Reference Guide</strong></span>
+            </p><p>
+                <span class="trademark">Copyright</span><sup>©</sup> 2022 by GRAPHISOFT, all rights reserved.
+                Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+            </p></body></html>

@@ -1,58 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>SWEEPGROUP</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="SWEEPGROUP_gdlcommand">SWEEPGROUP</h3>
-				
-				<pre class="programlisting"><b id="SWEEPGROUP_keyword_2.7.12.28.4.1">SWEEPGROUP</b> (g_expr, x, y, z)</pre>
-				
-					<p>Returns a group that is created by sweeping the group parameter along the given direction.
-					The command works for solid models only.</p>
-				
-				<pre class="programlisting"><b id="SWEEPGROUP2_keyword_2.7.12.28.8.1">SWEEPGROUP{2}</b> (g_expr, x, y, z)</pre>
-				
-					<p>
-					The difference between SWEEPGROUP and SWEEPGROUP{2} is that in the former case the actual transformation matrix is applied again
-					to the direction vector of the sweeping operation with respect to the current coordinate system.
-					(In the case of SWEEPGROUP, the current transformation is applied to the direction vector twice with respect to the global coordinate system.)
-					</p>
-				
-				<pre class="programlisting"><b id="SWEEPGROUP3_keyword_2.7.12.28.12.1">SWEEPGROUP{3}</b> (g_expr, x, y, z, edgeColor, materialId, materialColor, method)</pre>
-				
-					<p>This version adds a new method selection to SWEEPGROUP{2} and works for surface models also.</p>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>edgeColor: </b></code>the color of the new edge when it differs from 0.</div>
-					</div>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>materialId: </b></code>the material of the new face when it differs from 0.</div>
-					</div>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>materialColor: </b></code>the color of the new face when the materialId is 0 and it differs from 0.</div>
-					</div>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>method: </b></code>controls the ending shape of the resulting body.</div>
-						<div><code>0: </code>same as SWEEPGROUP{2}, both ends come from the originating body,</div>
-						<div><code>1: </code>the start comes from the originating body, the sweep end is flat</div>
-					</div>
-				
-				<pre class="programlisting"><b id="SWEEPGROUP4_keyword_2.7.12.28.16.1">SWEEPGROUP{4}</b> (g_expr, x, y, z, edgeColor, materialId, materialColor, method, status)</pre>
-				
-					<p>This version adds a new status parameter to SWEEPGROUP{3}.</p>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>status: </b></code>Controls attributes of the result.</div><div><code>status = 2*j<sub>2</sub></code>, where each j can be 0 or 1.
+                
+                <pre class="programlisting"><b id="SWEEPGROUP_keyword_2.7.12.28.4.1">SWEEPGROUP</b> (g_expr, x, y, z)</pre>
+                
+                    <p>Returns a group that is created by sweeping the group parameter along the given direction.
+                    The command works for solid models only.</p>
+                
+                <pre class="programlisting"><b id="SWEEPGROUP2_keyword_2.7.12.28.8.1">SWEEPGROUP{2}</b> (g_expr, x, y, z)</pre>
+                
+                    <p>
+                    The difference between SWEEPGROUP and SWEEPGROUP{2} is that in the former case the actual transformation matrix is applied again
+                    to the direction vector of the sweeping operation with respect to the current coordinate system.
+                    (In the case of SWEEPGROUP, the current transformation is applied to the direction vector twice with respect to the global coordinate system.)
+                    </p>
+                
+                <pre class="programlisting"><b id="SWEEPGROUP3_keyword_2.7.12.28.12.1">SWEEPGROUP{3}</b> (g_expr, x, y, z, edgeColor, materialId, materialColor, method)</pre>
+                
+                    <p>This version adds a new method selection to SWEEPGROUP{2} and works for surface models also.</p>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>edgeColor: </b></code>the color of the new edge when it differs from 0.</div>
+                    </div>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>materialId: </b></code>the material of the new face when it differs from 0.</div>
+                    </div>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>materialColor: </b></code>the color of the new face when the materialId is 0 and it differs from 0.</div>
+                    </div>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>method: </b></code>controls the ending shape of the resulting body.</div>
+                        <div><code>0: </code>same as SWEEPGROUP{2}, both ends come from the originating body,</div>
+                        <div><code>1: </code>the start comes from the originating body, the sweep end is flat</div>
+                    </div>
+                
+                <pre class="programlisting"><b id="SWEEPGROUP4_keyword_2.7.12.28.16.1">SWEEPGROUP{4}</b> (g_expr, x, y, z, edgeColor, materialId, materialColor, method, status)</pre>
+                
+                    <p>This version adds a new status parameter to SWEEPGROUP{3}.</p>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>status: </b></code>Controls attributes of the result.</div><div><code>status = 2*j<sub>2</sub></code>, where each j can be 0 or 1.
 	</div>
-						<div><code>j<sub>2</sub>: </code>Keep per-polygon texture mapping parameters on the sweeped result (see <a class="xref" href="reference/PGON.html">the PGON command</a> for details).</div>
-					</div>
-				
-				<pre class="programlisting"><b id="SWEEPGROUP5_keyword_2.7.12.28.20.1">SWEEPGROUP{5}</b> (g_expr, x, y, z, edgeColor, materialId, materialColor, method, status)</pre>
-				
-					<p>
-						SWEEPGROUP{5} is an extension of the SWEEPGROUP{4} command with the possibility of using inline material definition, that means materials defined
-						in GDL script locally also can be used next to materials defined in global material definitions.
-					</p>
-					<p>
-						<span class="italic">Compatibility: introduced in ARCHICAD 22.</span>
-					</p>
-				
-				<div class="example"><a id="id513982"/><p class="title"><b>Example:
+                        <div><code>j<sub>2</sub>: </code>Keep per-polygon texture mapping parameters on the sweeped result (see <a class="xref" href="reference/PGON.html">the PGON command</a> for details).</div>
+                    </div>
+                
+                <pre class="programlisting"><b id="SWEEPGROUP5_keyword_2.7.12.28.20.1">SWEEPGROUP{5}</b> (g_expr, x, y, z, edgeColor, materialId, materialColor, method, status)</pre>
+                
+                    <p>
+                        SWEEPGROUP{5} is an extension of the SWEEPGROUP{4} command with the possibility of using inline material definition, that means materials defined
+                        in GDL script locally also can be used next to materials defined in global material definitions.
+                    </p>
+                    <p>
+                        <span class="italic">Compatibility: introduced in ARCHICAD 22.</span>
+                    </p>
+                
+                <div class="example"><a id="id523228"/><p class="title"><b>Example:
 </b></p><div class="example-contents"><div style="text-align: center"><img src="Images/GDL_Images/3Dshapes_sweepgroup_ex.png" style="text-align: middle" alt="Images/GDL_Images/3Dshapes_sweepgroup_ex.png"/></div><pre class="programlisting">GROUP "the_sphere"
     SPHERE 1
 ENDGROUP
@@ -60,9 +60,9 @@ PLACEGROUP SWEEPGROUP{2} ("the_sphere", 2, 0, 0)
 ADDX 5
 PLACEGROUP SWEEPGROUP{3} ("the_sphere", 2, 0, 0, 4, 0, 4, 1)
 del 1</pre></div></div>
-			<hr/><a href="002.007.html#SWEEPGROUP_gdlcommand">Related in 3D Shapes</a><p>
-				<span class="bold"><strong>GDL Reference Guide</strong></span>
-			</p><p>
-				<span class="trademark">Copyright</span><sup>©</sup> 2021 by GRAPHISOFT, all rights reserved.
-				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
-			</p></body></html>
+            <hr/><a href="002.007.html#SWEEPGROUP_gdlcommand">Related in 3D Shapes</a><p>
+                <span class="bold"><strong>GDL Reference Guide</strong></span>
+            </p><p>
+                <span class="trademark">Copyright</span><sup>©</sup> 2022 by GRAPHISOFT, all rights reserved.
+                Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+            </p></body></html>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../../"/><title>ZONE_RELATIONS_OF_OWNER</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlrequest"><h3 id="ZONE_RELATIONS_OF_OWNER_gdlrequest" style="font-family: monospace">ZONE_RELATIONS_OF_OWNER</h3>
+                    <pre class="programlisting">n = REQUEST("ZONE_RELATIONS_OF_OWNER", "",
+            category_name, code, name, number
+            [, category_name2, code2, name2, number2])</pre>
+                    
+                        <p>
+                            Returns in the given variables the category name &amp; code and the zone name &amp; number of the zone
+                            where the owner of the object is located. So, it is meaningful, if the library part has owner (door-window labels and door-window markers, etc.).
+                            In case of a door label, its owner is the door. For doors and windows, there can be a maximum of two related zones.
+                            The return value of the request is the number of successfully retrieved values
+                            (0 if the object has no owner, or its owner is not inside any zone).
+                            Causes warning if used in parameter script.
+                        </p>
+                    
+                <hr/><a href="002.015.html#ZONE_RELATIONS_OF_OWNER_gdlrequest">Related in Miscellaneous</a><p>
+                <span class="bold"><strong>GDL Reference Guide</strong></span>
+            </p><p>
+                <span class="trademark">Copyright</span><sup>©</sup> 2022 by GRAPHISOFT, all rights reserved.
+                Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+            </p></body></html>

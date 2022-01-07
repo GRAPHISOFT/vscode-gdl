@@ -1,7 +1,7 @@
 import path = require('path');
 import * as vscode from 'vscode';
 
-import { readFile } from './extension';
+import { fileExists, readFile } from './extension';
 
 class LibpartInfo {
     public readonly root_uri : vscode.Uri;
@@ -13,6 +13,28 @@ class LibpartInfo {
         this.name = path.basename(this.root_uri.fsPath);
         this.relative_root = vscode.workspace.asRelativePath(this.root_uri, false);
         this.ws_folder = vscode.workspace.getWorkspaceFolder(this.root_uri)?.uri.fsPath ?? "";
+    }
+
+    async relative_withFallback(relative: string, masterscript: boolean) : Promise<vscode.Uri> {
+        // check whether has file relative to root_uri
+        // optionally offering masterscript as fallback
+        // then offering libpartdata.xml as fallback
+
+        let target = vscode.Uri.joinPath(this.root_uri, relative);
+        if ((await fileExists(target))) {
+            return target;
+        } else {
+            if (masterscript) {
+                target = vscode.Uri.joinPath(this.root_uri, "scripts/1d.gdl");
+            } else {
+                target = this.libpartdata_uri;
+            }
+            if ((await fileExists(target))) {
+                return target;
+            } else {
+                return this.libpartdata_uri;   // assume always exists
+            }
+        };
     }
 }
 
@@ -67,7 +89,12 @@ export class WSSymbols implements vscode.WorkspaceSymbolProvider<vscode.SymbolIn
             async () => await this.collectLibparts());
     }
 
-    async provideWorkspaceSymbols(_query : string, token: vscode.CancellationToken): Promise<vscode.SymbolInformation[]> {
+    async provideWorkspaceSymbols(query : string, token: vscode.CancellationToken): Promise<vscode.SymbolInformation[]> {
+        // when called from UI don't offer master script as fallback
+        return this.provideWorkspaceSymbols_withFallback(false, query, token);
+    }
+
+    async provideWorkspaceSymbols_withFallback(masterscript: boolean, query : string, token: vscode.CancellationToken): Promise<vscode.SymbolInformation[]> {
         //console.log("provideWorkspaceSymbols");
 
         if (this.unprocessed) {
@@ -89,26 +116,21 @@ export class WSSymbols implements vscode.WorkspaceSymbolProvider<vscode.SymbolIn
                 const fname = path.basename(editorpath, ext);
                 if (ext === ".gdl") {
                     // open in scripts folder
-                    open_relative = `../scripts/${fname}${ext}`;
+                    open_relative = `scripts/${fname}${ext}`;
                 } else if (ext === ".xml") {
                     // open in base folder
-                    open_relative = `../${fname}${ext}`;
+                    open_relative = `${fname}${ext}`;
                 }
             }
     
             const targetposition = new vscode.Position(0, 0);
-            const query_lc = _query.toLowerCase();
+            const query_lc = query.toLowerCase();
 
-            const symbolpairs = await Promise.allSettled(
-                this.libparts
-                    .filter(e => filterquery(e, query_lc))
-                    .map(async libpart => {
-                        let target = vscode.Uri.joinPath(libpart.root_uri, open_relative);
-                        try {
-                            await vscode.workspace.fs.stat(target);
-                        } catch {   // file not found, revert to libpartdata.xml
-                            target = libpart.libpartdata_uri;
-                        }
+            const symbolpairs = await Promise.allSettled(this.libparts
+                .filter(e => filterquery(e, query_lc))
+                .map(async libpart => {
+                        let target = await libpart.relative_withFallback(open_relative, masterscript);
+
                         const libpartByName = new vscode.SymbolInformation(`"${libpart.name}"`,
                                                             vscode.SymbolKind.File,
                                                             "",

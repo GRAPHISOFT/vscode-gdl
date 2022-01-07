@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>TUBE{2}</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="TUBE2_gdlcommand">TUBE{2}</h3>
-				
-				<pre class="programlisting"><b id="TUBE2_keyword_2.7.5.39.4.1">TUBE{2}</b> top_material, bottom_material, cut_material,
+                
+                <pre class="programlisting"><b id="TUBE2_keyword_2.7.5.39.4.1">TUBE{2}</b> top_material, bottom_material, cut_material,
         n, m, mask,
         u1, w1, s1, mat1,
         ...
@@ -10,54 +10,54 @@
         x1, y1, z1, angle1,
         ...
         xm, ym, zm, anglem</pre>
-				
-					<p>
-						<span class="italic">Compatibility: introduced in ARCHICAD 21.</span>
-						Extended version of <a class="xref" href="reference/TUBE.html">the TUBE command</a>:
-					</p>
-					<div class="itemizedlist"><ul class="itemizedlist"><li class="listitem"><p>holes can be defined within the contour base polygon</p></li><li class="listitem"><p>individual surfaces attribute for top, bottom polygons and cut areas</p></li><li class="listitem"><p>individual surface attribute for side polygons belonging to the same base polygon edge</p></li></ul></div>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>V axis, W axis, U axis: </b></code>same meaning as in <a class="xref" href="reference/TUBE.html">the TUBE command</a>.</div>
-					</div>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>top_material: </b></code>surface of the closing polygon.</div>
-					</div>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>bottom_material: </b></code>surface of the starting polygon.</div>
-					</div>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>cut_material: </b></code>surface of the cut areas.</div>
-					</div>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>n, m, ui, wi: </b></code>same meaning as in <a class="xref" href="reference/TUBE.html">the TUBE command</a>.</div>
-					</div>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>xi, yi, zi, anglei: </b></code>same meaning as in <a class="xref" href="reference/TUBE.html">the TUBE command</a>. Path can not contain arcs (segmentation is manual).</div>
-					</div>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>mask: </b></code>controls the existence of the bottom and top polygons’ surfaces and edges.</div><div><code>mask = j<sub>1</sub> + 2*j<sub>2</sub> + 16*j<sub>5</sub> + 32*j<sub>6</sub> + 256*j<sub>9</sub> + 512*j<sub>10</sub> + 1024*j<sub>11</sub> + 2048*j<sub>12</sub> + 4096*j<sub>13</sub></code>, where each j can be 0 or 1.
+                
+                    <p>
+                        <span class="italic">Compatibility: introduced in ARCHICAD 21.</span>
+                        Extended version of <a class="xref" href="reference/TUBE.html">the TUBE command</a>:
+                    </p>
+                    <div class="itemizedlist"><ul class="itemizedlist"><li class="listitem"><p>holes can be defined within the contour base polygon</p></li><li class="listitem"><p>individual surfaces attribute for top, bottom polygons and cut areas</p></li><li class="listitem"><p>individual surface attribute for side polygons belonging to the same base polygon edge</p></li></ul></div>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>V axis, W axis, U axis: </b></code>same meaning as in <a class="xref" href="reference/TUBE.html">the TUBE command</a>.</div>
+                    </div>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>top_material: </b></code>surface of the closing polygon.</div>
+                    </div>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>bottom_material: </b></code>surface of the starting polygon.</div>
+                    </div>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>cut_material: </b></code>surface of the cut areas.</div>
+                    </div>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>n, m, ui, wi: </b></code>same meaning as in <a class="xref" href="reference/TUBE.html">the TUBE command</a>.</div>
+                    </div>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>xi, yi, zi, anglei: </b></code>same meaning as in <a class="xref" href="reference/TUBE.html">the TUBE command</a>. Path can not contain arcs (segmentation is manual).</div>
+                    </div>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>mask: </b></code>controls the existence of the bottom and top polygons’ surfaces and edges.</div><div><code>mask = j<sub>1</sub> + 2*j<sub>2</sub> + 16*j<sub>5</sub> + 32*j<sub>6</sub> + 256*j<sub>9</sub> + 512*j<sub>10</sub> + 1024*j<sub>11</sub> + 2048*j<sub>12</sub> + 4096*j<sub>13</sub></code>, where each j can be 0 or 1.
 	</div>
-						<div><code>j<sub>1</sub>: </code>base surface is present,</div>
-						<div><code>j<sub>2</sub>: </code>end surface is present,</div>
-						<div><code>j<sub>5</sub>: </code>base edges (at x2, y2, z2) are visible,</div>
-						<div><code>j<sub>6</sub>: </code>end edges (at xm-1, ym-1, zm-1) are visible,</div>
-						<div><code>j<sub>9</sub>: </code>side edge and surface is smooth in curved sections of the profile,</div>
-						<div><code>j<sub>10</sub>: </code>base edges participate in line elimination (<span class="italic">Compatibility: introduced in ARCHICAD 23.</span>),</div>
-						<div><code>j<sub>11</sub>: </code>end edges participate in line elimination (<span class="italic">Compatibility: introduced in ARCHICAD 23.</span>),</div>
-						<div><code>j<sub>12</sub>: </code>longitudinal edges (which connect cross sections) participate in line elimination (<span class="italic">Compatibility: introduced in ARCHICAD 23.</span>),</div>
-						<div><code>j<sub>13</sub>: </code>edges of cross sections participate in line elimination (<span class="italic">Compatibility: introduced in ARCHICAD 23.</span>).</div>
-					</div>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>si: </b></code>status of the lateral edges.</div>
-						<div><code>-1: </code>indicates the last node of a hole within the base polygon (duplicated first node of the hole), or the closing node of the outside polygon in case of a base polygon containing holes. The matn parameter is ignored in these duplicated nodes with status -1,</div>
-						<div><code>0, 1, 2: </code>same meaning as in <a class="xref" href="reference/TUBE.html">the TUBE command</a>.</div>
-					</div>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>mati: </b></code>individual surface of the side polygons belonging to the edge starting from ui, wi node of the base polygon.</div>
-					</div>
-					<p>Additional status codes allow you to create segments and arcs in the planar polyline using special constraints. Such polygon edges are automatically segmented during processing.</p>
-				
-				<div class="example"><a id="id503316"/><p class="title"><b>Example:
+                        <div><code>j<sub>1</sub>: </code>base surface is present,</div>
+                        <div><code>j<sub>2</sub>: </code>end surface is present,</div>
+                        <div><code>j<sub>5</sub>: </code>base edges (at x2, y2, z2) are visible,</div>
+                        <div><code>j<sub>6</sub>: </code>end edges (at xm-1, ym-1, zm-1) are visible,</div>
+                        <div><code>j<sub>9</sub>: </code>side edge and surface is smooth in curved sections of the profile,</div>
+                        <div><code>j<sub>10</sub>: </code>base edges participate in line elimination (<span class="italic">Compatibility: introduced in ARCHICAD 23.</span>),</div>
+                        <div><code>j<sub>11</sub>: </code>end edges participate in line elimination (<span class="italic">Compatibility: introduced in ARCHICAD 23.</span>),</div>
+                        <div><code>j<sub>12</sub>: </code>longitudinal edges (which connect cross sections) participate in line elimination (<span class="italic">Compatibility: introduced in ARCHICAD 23.</span>),</div>
+                        <div><code>j<sub>13</sub>: </code>edges of cross sections participate in line elimination (<span class="italic">Compatibility: introduced in ARCHICAD 23.</span>).</div>
+                    </div>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>si: </b></code>status of the lateral edges.</div>
+                        <div><code>-1: </code>indicates the last node of a hole within the base polygon (duplicated first node of the hole), or the closing node of the outside polygon in case of a base polygon containing holes. The matn parameter is ignored in these duplicated nodes with status -1,</div>
+                        <div><code>0, 1, 2: </code>same meaning as in <a class="xref" href="reference/TUBE.html">the TUBE command</a>.</div>
+                    </div>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>mati: </b></code>individual surface of the side polygons belonging to the edge starting from ui, wi node of the base polygon.</div>
+                    </div>
+                    <p>Additional status codes allow you to create segments and arcs in the planar polyline using special constraints. Such polygon edges are automatically segmented during processing.</p>
+                
+                <div class="example"><a id="id513339"/><p class="title"><b>Example:
 </b></p><div class="example-contents"><pre class="programlisting">
 matEnds1 = 12
 matEnds2 = 24
@@ -87,9 +87,9 @@ TUBE{2} matEnds1, matEnds2, matCut,
           0, 0,  0, 45,
           0, 0,  1, 45,
           0, 0,  2, 45</pre></div></div>
-			<hr/><a href="002.007.html#TUBE2_gdlcommand">Related in 3D Shapes</a><p>
-				<span class="bold"><strong>GDL Reference Guide</strong></span>
-			</p><p>
-				<span class="trademark">Copyright</span><sup>©</sup> 2021 by GRAPHISOFT, all rights reserved.
-				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
-			</p></body></html>
+            <hr/><a href="002.007.html#TUBE2_gdlcommand">Related in 3D Shapes</a><p>
+                <span class="bold"><strong>GDL Reference Guide</strong></span>
+            </p><p>
+                <span class="trademark">Copyright</span><sup>©</sup> 2022 by GRAPHISOFT, all rights reserved.
+                Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+            </p></body></html>

@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>KILLGROUP</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="KILLGROUP_gdlcommand">KILLGROUP</h3>
-				
-				<pre class="programlisting"><b id="KILLGROUP_keyword_2.7.12.27.4.1">KILLGROUP</b> g_expr</pre>
-				
-					<p>
-						Clears the bodies of the specified group from the memory.
-						After a KILLGROUP operation the group becomes empty. The names of killed groups cannot be reused in the same script.
-						Clearing is executed automatically at the end of the interpretation or when returning from macro calls.
-						For performance reasons this command should be used when a group is no longer needed.
-					</p>
-				
-				<div class="example"><a id="id513788"/><p class="title"><b>Example:
+                
+                <pre class="programlisting"><b id="KILLGROUP_keyword_2.7.12.27.4.1">KILLGROUP</b> g_expr</pre>
+                
+                    <p>
+                        Clears the bodies of the specified group from the memory.
+                        After a KILLGROUP operation the group becomes empty. The names of killed groups cannot be reused in the same script.
+                        Clearing is executed automatically at the end of the interpretation or when returning from macro calls.
+                        For performance reasons this command should be used when a group is no longer needed.
+                    </p>
+                
+                <div class="example"><a id="id523048"/><p class="title"><b>Example:
 </b></p><div class="example-contents"><div class="informaltable"><table border="0"><colgroup><col/><col/></colgroup><tbody><tr><td>
-										<pre class="programlisting">GROUP "box"
+                                        <pre class="programlisting">GROUP "box"
     BRICK 1, 1, 1
 ENDGROUP
 GROUP "sphere"
@@ -40,12 +40,12 @@ KILLGROUP "box"
 KILLGROUP "sphere"
 KILLGROUP "semisphere"
 KILLGROUP "brick"</pre>
-									</td><td>
-										<div style="text-align: center"><img src="Images/GDL_Images/3Dshapes_group_ex.png" style="text-align: middle" alt="Images/GDL_Images/3Dshapes_group_ex.png"/></div>
-									</td></tr></tbody></table></div></div></div>
-			<hr/><a href="002.007.html#KILLGROUP_gdlcommand">Related in 3D Shapes</a><p>
-				<span class="bold"><strong>GDL Reference Guide</strong></span>
-			</p><p>
-				<span class="trademark">Copyright</span><sup>©</sup> 2021 by GRAPHISOFT, all rights reserved.
-				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
-			</p></body></html>
+                                    </td><td>
+                                        <div style="text-align: center"><img src="Images/GDL_Images/3Dshapes_group_ex.png" style="text-align: middle" alt="Images/GDL_Images/3Dshapes_group_ex.png"/></div>
+                                    </td></tr></tbody></table></div></div></div>
+            <hr/><a href="002.007.html#KILLGROUP_gdlcommand">Related in 3D Shapes</a><p>
+                <span class="bold"><strong>GDL Reference Guide</strong></span>
+            </p><p>
+                <span class="trademark">Copyright</span><sup>©</sup> 2022 by GRAPHISOFT, all rights reserved.
+                Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+            </p></body></html>

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../../"/><title>COMPONENT_PROPERTY_VALUES_OF_PARENT</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlrequest"><h3 id="COMPONENT_PROPERTY_VALUES_OF_PARENT_gdlrequest" style="font-family: monospace">COMPONENT_PROPERTY_VALUES_OF_PARENT</h3>
+                    <pre class="programlisting">n = REQUEST("COMPONENT_PROPERTY_VALUES_OF_PARENT", compPropInput, compPropVals)</pre>
+                    
+                        <p>
+                            Returns a value dictionary for the given component ID and property IDs.
+                            Can be used only in labels. <span class="italic">Expression returns 0 and contains dummy return values (emtpy string or 0) if used in parameter script or used with unknown input dictionary key, causing additional warning.</span>
+                        </p>
+                        <p>
+                            <span class="italic">Compatibility: introduced in ARCHICAD 23.</span>
+                        </p>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>compPropInput: </b></code>(dictionary) defining the selected building material component and property IDs.</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>compPropInput.componentId: </b></code>(dictionary) contains a dictionary for the selected building material component ID.</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>compPropInput.componentId.id: </b></code>(integer) the selected building material component ID, available via <a class="xref" href="reference/requests/COMPONENT_IDS_OF_PARENT.html">the "COMPONENT_IDS_OF_PARENT" REQUEST</a>.</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>compPropInput.propertyIds[n]: </b></code>(array) contains a dictionary for each selected property ID.</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>compPropInput.propertyIds[n].id: </b></code>(string) the ID of the selected property.</div>
+                            <p>
+                                For built-in property IDs see <a class="xref" href="002.015.html#builtin_propertyids_section" title="Built-in Property Guide">the section called “Built-in Property Guide”</a>.
+                            </p>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>compPropVals: </b></code>(dictionary) the building material component property value data for the selected property IDs.</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>compPropVals.propertyValues[n]: </b></code>(array) contains a dictionary for each property value.</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>compPropVals.propertyValues[n].value_status: </b></code>the status of the selected property value</div>
+                            <div><code>1: </code>the selected property is available and has value</div>
+                            <div><code>2: </code>the selected property is available but no value has been defined for it</div>
+                            <div><code>3: </code>the property is unavailable, or the selected ID is not valid</div>
+                            <div><code>4: </code>the property value cannot be evaluated</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>compPropVals.propertyValues[n].type: </b></code>the type of the selected property value. This key only exists in case the compPropVals.propertyValues[n].value_status is 1 or 2.</div>
+                            <div><code>1: </code>boolean</div>
+                            <div><code>2: </code>integer</div>
+                            <div><code>3: </code>real number</div>
+                            <div><code>4: </code>string</div>
+                            <div><code>5: </code>length</div>
+                            <div><code>6: </code>area</div>
+                            <div><code>7: </code>volume</div>
+                            <div><code>8: </code>angle</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>compPropVals.propertyValues[n].value[]: </b></code>(array) contains the list of the selected property values.</div>
+                        </div>
+                    
+                    <div class="example"><a id="id603609"/><p class="title"><b>Example:
+</b></p><div class="example-contents"><pre class="programlisting">dict compPropInput
+     compPropInput.componentId.id = iActualID       ! From "COMPONENT_IDS_OF_PARENT" request
+     compPropInput.propertyIds[1].id = "ExampleId1"
+     compPropInput.propertyIds[2].id = "ExampleId2"
+     ...
+     compPropInput.propertyIds[n].id = "ExampleIdn"
+dict compPropVals
+n = REQUEST ("COMPONENT_PROPERTY_VALUES_OF_PARENT", compPropInput, compPropVals)
+! compPropVals =  propertyValues[1].value_status
+!                 propertyValues[1].value_status
+!                 propertyValues[1].type
+!                 propertyValues[1].value[]
+!                 propertyValues[2].value_status
+!                 propertyValues[2].type
+!                 propertyValues[2].value[]
+!                 ...
+!                 propertyValues[n].value_status
+!                 propertyValues[n].type
+!                 propertyValues[n].value[]</pre></div></div>
+                <hr/><a href="002.015.html#COMPONENT_PROPERTY_VALUES_OF_PARENT_gdlrequest">Related in Miscellaneous</a><p>
+                <span class="bold"><strong>GDL Reference Guide</strong></span>
+            </p><p>
+                <span class="trademark">Copyright</span><sup>©</sup> 2022 by GRAPHISOFT, all rights reserved.
+                Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+            </p></body></html>

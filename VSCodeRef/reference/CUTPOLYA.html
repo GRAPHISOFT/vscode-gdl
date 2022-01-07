@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>CUTPOLYA</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="CUTPOLYA_gdlcommand">CUTPOLYA</h3>
-				
-				<pre class="programlisting"><b id="CUTPOLYA_keyword_2.7.11.6.4.1">CUTPOLYA</b> n, status, d,
+                
+                <pre class="programlisting"><b id="CUTPOLYA_keyword_2.7.11.6.4.1">CUTPOLYA</b> n, status, d,
         x1, y1, mask1, ..., xn, yn, maskn [,
         x, y, z]
 [statement1
@@ -10,32 +10,32 @@ statement2
 ...
 statementn]
 <b id="CUTEND_keyword_2.7.11.6.4.3">CUTEND</b></pre>
-				
-					<p>
-						Similar to <a class="xref" href="reference/CUTPOLY.html">the CUTPOLY command</a>, but with the possibility to control the visibility of the edges of the generated polygons.
-						The cutting form is a half-infinite tube with the defined polygonal cross-section.
-						If the end of the cutting form hangs down into the body, it will cut out the corresponding area.
-					</p>
-					<div style="text-align: center"><img src="Images/GDL_Images/3Dshapes_cutpolya.png" style="text-align: middle" alt="Images/GDL_Images/3Dshapes_cutpolya.png"/></div>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>status: </b></code>controls the treatment of the generated cut polygons.</div>
-						<div><code>1: </code>use the attributes of the body for the generated polygons and edges,</div>
-						<div><code>2: </code>generated cut polygons will be treated as normal polygons.</div>
-					</div>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>d: </b></code>the distance between the local origin and the end of the half-infinite tube.</div>
-						<div><code>0: </code>means a cut with an infinite tube.</div>
-					</div>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>maski: </b></code>similar to <a class="xref" href="reference/PRISM_.html">the PRISM_ command</a>.</div><div><code>maski = j<sub>1</sub> + 2*j<sub>2</sub> + 4*j<sub>3</sub> + 64*j<sub>7</sub></code>, where each j can be 0 or 1.
+                
+                    <p>
+                        Similar to <a class="xref" href="reference/CUTPOLY.html">the CUTPOLY command</a>, but with the possibility to control the visibility of the edges of the generated polygons.
+                        The cutting form is a half-infinite tube with the defined polygonal cross-section.
+                        If the end of the cutting form hangs down into the body, it will cut out the corresponding area.
+                    </p>
+                    <div style="text-align: center"><img src="Images/GDL_Images/3Dshapes_cutpolya.png" style="text-align: middle" alt="Images/GDL_Images/3Dshapes_cutpolya.png"/></div>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>status: </b></code>controls the treatment of the generated cut polygons.</div>
+                        <div><code>1: </code>use the attributes of the body for the generated polygons and edges,</div>
+                        <div><code>2: </code>generated cut polygons will be treated as normal polygons.</div>
+                    </div>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>d: </b></code>the distance between the local origin and the end of the half-infinite tube.</div>
+                        <div><code>0: </code>means a cut with an infinite tube.</div>
+                    </div>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>maski: </b></code>similar to <a class="xref" href="reference/PRISM_.html">the PRISM_ command</a>.</div><div><code>maski = j<sub>1</sub> + 2*j<sub>2</sub> + 4*j<sub>3</sub> + 64*j<sub>7</sub></code>, where each j can be 0 or 1.
 	</div>
-						
-						
-						
-						
-					</div>
-				
-				<div class="example"><a id="id510663"/><p class="title"><b>Example:
+                        
+                        
+                        
+                        
+                    </div>
+                
+                <div class="example"><a id="id518983"/><p class="title"><b>Example:
 </b></p><div class="example-contents"><div style="text-align: center"><img src="Images/GDL_Images/3Dshapes_cutpolya_ex.png" style="text-align: middle" alt="Images/GDL_Images/3Dshapes_cutpolya_ex.png"/></div><pre class="programlisting">ROTX 90
 FOR i=1 TO 3
     FOR j=1 TO 5
@@ -58,9 +58,9 @@ FOR k=1 TO 15
     CUTEND
 NEXT k
 DEL TOP</pre></div></div>
-			<hr/><a href="002.007.html#CUTPOLYA_gdlcommand">Related in 3D Shapes</a><p>
-				<span class="bold"><strong>GDL Reference Guide</strong></span>
-			</p><p>
-				<span class="trademark">Copyright</span><sup>©</sup> 2021 by GRAPHISOFT, all rights reserved.
-				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
-			</p></body></html>
+            <hr/><a href="002.007.html#CUTPOLYA_gdlcommand">Related in 3D Shapes</a><p>
+                <span class="bold"><strong>GDL Reference Guide</strong></span>
+            </p><p>
+                <span class="trademark">Copyright</span><sup>©</sup> 2022 by GRAPHISOFT, all rights reserved.
+                Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+            </p></body></html>

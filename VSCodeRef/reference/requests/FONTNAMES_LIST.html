@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../../"/><title>FONTNAMES_LIST</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlrequest"><h3 id="FONTNAMES_LIST_gdlrequest" style="font-family: monospace">FONTNAMES_LIST</h3>
+                    <pre class="programlisting">n = REQUEST("FONTNAMES_LIST", "", fontnames)</pre>
+                    
+                        <p>
+                            Returns in the given variables the fontnames available on the current computer (with character codes included).
+                            This list (or any part of this list) can be used in a VALUES command to set up a fontname popup.
+                            The function return value is the number of successfully retrieved values, 0 if an error occurred.
+                        </p>
+                    
+                    <div class="example"><a id="id598161"/><p class="title"><b>Example:
+</b></p><div class="example-contents"><pre class="programlisting">dim fontnames[]
+n = REQUEST ("FONTNAMES_LIST", "", fontnames)
+VALUES "f" fontnames, CUSTOM</pre><p>
+                            This form of <a class="xref" href="reference/VALUES.html">the VALUES command</a> assembles a fontnames pop-up
+                            for the simple string-typed parameter "f". The "fontnames" variable contains the possible fontnames
+                            (with character codes included) which can be set manually or using <a class="xref" href="reference/requests/FONTNAMES_LIST.html">the "FONTNAMES_LIST" REQUEST</a>.
+                            The CUSTOM keyword is necessary for the correct handling of missing fonts on other platforms/computers:
+                            if it is specified, a fontname set on another platform/computer missing in the current environment will be preserved
+                            in the parameter settings as a custom value
+                            (otherwise, due to the implementation of <a class="xref" href="reference/VALUES.html">the VALUES command</a>,
+                            a missing string popup value in the parameter settings will be replaced with the first current string value).
+                            It is recommended to include this function in the ARCHICAD_Library_Master file.
+                        </p></div></div>
+                <hr/><a href="002.015.html#FONTNAMES_LIST_gdlrequest">Related in Miscellaneous</a><p>
+                <span class="bold"><strong>GDL Reference Guide</strong></span>
+            </p><p>
+                <span class="trademark">Copyright</span><sup>©</sup> 2022 by GRAPHISOFT, all rights reserved.
+                Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+            </p></body></html>

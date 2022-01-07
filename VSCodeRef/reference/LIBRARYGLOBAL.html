@@ -1,42 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>LIBRARYGLOBAL</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="LIBRARYGLOBAL_gdlcommand">LIBRARYGLOBAL</h3>
-					
-					<pre class="programlisting"><b id="LIBRARYGLOBAL_keyword_2.13.5.8.7.4.1">LIBRARYGLOBAL</b> (object_name, parameter, value)</pre>
-					
-						<p>
-							Fills value with the current model view option parameter value of the library global object defined by object_name if available.
-							A library global setting is available if the global object is currently loaded in the library,
-							or was loaded earlier and its setting was saved in the current model view option combination.
-						</p>
-						<p>
+                    
+                    <pre class="programlisting"><b id="LIBRARYGLOBAL_keyword_2.13.5.8.7.4.1">LIBRARYGLOBAL</b> (object_name, parameter, value)</pre>
+                    
+                        <p>
+                            Fills value with the current model view option parameter value of the library global object defined by object_name if available.
+                            A library global setting is available if the global object is currently loaded in the library,
+                            or was loaded earlier and its setting was saved in the current model view option combination.
+                        </p>
+                        <p>
                             Visible placed objects whose 2d or 3d scripts contain LIBRARYGLOBAL commands are refreshed when the library global object's parameters change at Model View Options. 
-							Parameter and migration scripts should not use LIBRARYGLOBAL values, the current view should not have any effect on other views.
-						</p>
-						<p>Returns 1 if successful, 0 otherwise.</p>
-						<div style="margin-left: 1em">
-							<div style="text-indent: -1em"><code><b>object_name: </b></code>name of library global object. Must be a string constant.
-								Warning: If string variables or parameters are used as object names, then the 2d and 3d view of objects querying
-								this library global object will not refresh automatically.
-							</div>
-						</div>
-						<div style="margin-left: 1em">
-							<div style="text-indent: -1em"><code><b>parameter: </b></code>name of requested parameter.</div>
-						</div>
-						<div style="margin-left: 1em">
-							<div style="text-indent: -1em"><code><b>value: </b></code>filled with the requested parameter value.</div>
-						</div>
-					
-					<div class="example"><a id="id535280"/><p class="title"><b>Example:
+                            Parameter and migration scripts should not use LIBRARYGLOBAL values, the current view should not have any effect on other views.
+                        </p>
+                        <p>Returns 1 if successful, 0 otherwise.</p>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>object_name: </b></code>name of library global object. Must be a string constant.
+                                Warning: If string variables or parameters are used as object names, then the 2d and 3d view of objects querying
+                                this library global object will not refresh automatically.
+                            </div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>parameter: </b></code>name of requested parameter.</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>value: </b></code>filled with the requested parameter value.</div>
+                        </div>
+                    
+                    <div class="example"><a id="id544687"/><p class="title"><b>Example:
 </b></p><div class="example-contents"><pre class="programlisting">success = LIBRARYGLOBAL ("MyGlobalOptions", "detLevel2D", det)
 if success &gt; 0 then
     text2 0, 0, det
 else
     text2 0, 0, "Not available"
 endif</pre></div></div>
-				<hr/><a href="002.013.html#LIBRARYGLOBAL_gdlcommand">Related in Expressions and Functions</a><p>
-				<span class="bold"><strong>GDL Reference Guide</strong></span>
-			</p><p>
-				<span class="trademark">Copyright</span><sup>©</sup> 2021 by GRAPHISOFT, all rights reserved.
-				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
-			</p></body></html>
+                <hr/><a href="002.013.html#LIBRARYGLOBAL_gdlcommand">Related in Expressions and Functions</a><p>
+                <span class="bold"><strong>GDL Reference Guide</strong></span>
+            </p><p>
+                <span class="trademark">Copyright</span><sup>©</sup> 2022 by GRAPHISOFT, all rights reserved.
+                Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+            </p></body></html>

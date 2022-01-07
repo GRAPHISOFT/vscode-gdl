@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>CUTSHAPE</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="CUTSHAPE_gdlcommand">CUTSHAPE</h3>
-				
-				<pre class="programlisting"><b id="CUTSHAPE_keyword_2.7.11.7.4.1">CUTSHAPE</b> d [, status]
+                
+                <pre class="programlisting"><b id="CUTSHAPE_keyword_2.7.11.7.4.1">CUTSHAPE</b> d [, status]
 [statement1 statement2 ... statementn]
 <b id="CUTEND_keyword_2.7.11.7.4.3">CUTEND</b></pre>
-				
-					<p>
-						Cuts a block with "d" thickness, infinite length (both sides of the y axis) and semi-infinite height (above the xy plane).
-					</p>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>status: </b></code>controls the treatment of the generated cut polygons. If not specified (for compatibility reasons) the default value is 3.</div><div><code>status = j<sub>1</sub> + 2*j<sub>2</sub></code>, where each j can be 0 or 1.
+                
+                    <p>
+                        Cuts a block with "d" thickness, infinite length (both sides of the y axis) and semi-infinite height (above the xy plane).
+                    </p>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>status: </b></code>controls the treatment of the generated cut polygons. If not specified (for compatibility reasons) the default value is 3.</div><div><code>status = j<sub>1</sub> + 2*j<sub>2</sub></code>, where each j can be 0 or 1.
 	</div>
-						<div><code>j<sub>1</sub>: </code>use the attributes of the body for the generated polygons and edges,</div>
-						<div><code>j<sub>2</sub>: </code>generated cut polygons will be treated as normal polygons.</div>
-					</div>
-				
-				<div class="example"><a id="id510746"/><p class="title"><b>Example:
+                        <div><code>j<sub>1</sub>: </code>use the attributes of the body for the generated polygons and edges,</div>
+                        <div><code>j<sub>2</sub>: </code>generated cut polygons will be treated as normal polygons.</div>
+                    </div>
+                
+                <div class="example"><a id="id519027"/><p class="title"><b>Example:
 </b></p><div class="example-contents"><div class="informaltable"><table border="0"><colgroup><col/><col/></colgroup><tbody><tr><td>
-										<pre class="programlisting">FOR i = 1 TO 5
+                                        <pre class="programlisting">FOR i = 1 TO 5
     ADDX 0.4 * i
     ADDZ 2.5
     CUTSHAPE 0.4
@@ -28,14 +28,14 @@ NEXT i
 DEL TOP
 BRICK 4.4, 0.5, 4
 FOR i = 1 TO 5
-	CUTEND
+    CUTEND
 NEXT i</pre>
-									</td><td>
-										<div style="text-align: center"><img src="Images/GDL_Images/3Dshapes_cutshape_ex.png" style="text-align: middle" alt="Images/GDL_Images/3Dshapes_cutshape_ex.png"/></div>
-									</td></tr></tbody></table></div></div></div>
-			<hr/><a href="002.007.html#CUTSHAPE_gdlcommand">Related in 3D Shapes</a><p>
-				<span class="bold"><strong>GDL Reference Guide</strong></span>
-			</p><p>
-				<span class="trademark">Copyright</span><sup>©</sup> 2021 by GRAPHISOFT, all rights reserved.
-				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
-			</p></body></html>
+                                    </td><td>
+                                        <div style="text-align: center"><img src="Images/GDL_Images/3Dshapes_cutshape_ex.png" style="text-align: middle" alt="Images/GDL_Images/3Dshapes_cutshape_ex.png"/></div>
+                                    </td></tr></tbody></table></div></div></div>
+            <hr/><a href="002.007.html#CUTSHAPE_gdlcommand">Related in 3D Shapes</a><p>
+                <span class="bold"><strong>GDL Reference Guide</strong></span>
+            </p><p>
+                <span class="trademark">Copyright</span><sup>©</sup> 2022 by GRAPHISOFT, all rights reserved.
+                Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+            </p></body></html>

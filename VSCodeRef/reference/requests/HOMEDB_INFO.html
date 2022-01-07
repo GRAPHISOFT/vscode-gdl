@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../../"/><title>HOMEDB_INFO</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlrequest"><h3 id="HOMEDB_INFO_gdlrequest" style="font-family: monospace">HOMEDB_INFO</h3>
+                    <pre class="programlisting">n = REQUEST("HOMEDB_INFO", "", homeDBIntId, homeDBUserId, homeDBName, homeContext)</pre>
+                    
+                        <p>
+                            Returns in the given variables the internal ID (integer),
+                            the user ID and name (strings) of the home database (where the library part containing this request was placed).
+                        </p>
+                        <div style="margin-left: 1em">
+							<div style="text-indent: -1em"><code><b>homeContext: </b></code>the contents of <code class="code">homeDBIntId, homeDBUserId, homeDBName</code> depend on the home database</div>
+							<div><code>1: </code>placed on the floor plan: the story internal ID, index as a string and name</div>
+							<div><code>2: </code>placed on a section: the section internal ID, reference ID and name</div>
+							<div><code>3: </code>placed on a detail: the detail internal ID, reference ID and name</div>
+							<div><code>4: </code>placed on a master layout: the layout internal ID, empty string and name</div>
+							<div><code>5: </code>placed on a layout: the layout internal ID, number and name</div>
+						</div>
+                        <p>
+                            For labels the returned data refers to the labeled element.
+                            The collected data can be used to uniquely identify elements in different ARCHICAD databases of a plan file.
+                            Causes warning if used in parameter script.
+                        </p>
+                    
+                <hr/><a href="002.015.html#HOMEDB_INFO_gdlrequest">Related in Miscellaneous</a><p>
+                <span class="bold"><strong>GDL Reference Guide</strong></span>
+            </p><p>
+                <span class="trademark">Copyright</span><sup>©</sup> 2022 by GRAPHISOFT, all rights reserved.
+                Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+            </p></body></html>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../../"/><title>COMPONENT_PROJECTED_AREA</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlrequest"><h3 id="COMPONENT_PROJECTED_AREA_gdlrequest" style="font-family: monospace">COMPONENT_PROJECTED_AREA</h3>
+                    <pre class="programlisting">n = REQUEST("COMPONENT_PROJECTED_AREA", idxSkin, projectedArea)</pre>
+                    
+                        <p>
+                            Returns the projected area of the indexed skin. Available in property script only (other scripts return 0).
+                            <span class="italic">Expression returns 0 and contains dummy return values (emtpy string or 0) if used in parameter script, causing additional warning.</span>
+                        </p>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>idxSkin: </b></code>Possible values:</div>
+                            <div><code>0: </code>for basic elements</div>
+                            <div><code>1- : </code>index of the skin in composites</div>
+                            <div><code>1- : </code>index of the component in profiles</div>
+                        </div>
+                    
+                    <div class="example"><a id="id602625"/><p class="title"><b>Example:
+</b></p><div class="example-contents"><pre class="programlisting">n = request ("COMPONENT_PROJECTED_AREA", 0, a)
+COMPONENT "Projected Area", a, "m2"</pre><p>
+                            Used in property script, first request the area of the skin, then create a component using the returned value.
+                        </p></div></div>
+                <hr/><a href="002.015.html#COMPONENT_PROJECTED_AREA_gdlrequest">Related in Miscellaneous</a><p>
+                <span class="bold"><strong>GDL Reference Guide</strong></span>
+            </p><p>
+                <span class="trademark">Copyright</span><sup>©</sup> 2022 by GRAPHISOFT, all rights reserved.
+                Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+            </p></body></html>

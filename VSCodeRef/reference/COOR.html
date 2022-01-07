@@ -1,44 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>COOR</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="COOR_gdlcommand">COOR</h3>
-				
-				<pre class="programlisting"><b id="COOR_keyword_2.7.8.24.4.1">COOR</b> wrap, vert1, vert2, vert3, vert4</pre>
-				
-					<p><span class="italic">Deprecated. See <a class="xref" href="reference/COOR3.html">the COOR{3} command</a>.</span></p>
-					<p>Local coordinate system of a BODY for the fill and texture mapping.</p>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>wrap: </b></code>wrapping mode + projection type</div>
-					</div>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>Wrapping modes: </b></code></div>
-						<div><code>1: </code>planar box (deprecated),</div>
-						<div><code>2: </code>box,</div>
-						<div><code>3: </code>cylindrical,</div>
-						<div><code>4: </code>spherical,</div>
-						<div><code>5: </code>same as the cylindrical fill mapping, but in rendering the top and the bottom surface will get a circular mapping,</div>
-						<div><code>6: </code>planar</div>
-					</div>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>Projection types: </b></code></div>
-						<div><code>256: </code>the fill always starts at the origin of the local coordinate system,</div>
-						<div><code>1024: </code>quadratic texture projection (recommended),</div>
-						<div><code>2048: </code>linear texture projection based on the average distance,</div>
-						<div><code>4096: </code>linear texture projection based on normal triangulation.</div>
-					</div>
-					<div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3>
-						The last three values are only effective with custom texture coordinate definitions
-						(<span class="italic">see <a class="xref" href="reference/TEVE.html">the TEVE command</a></span>).
-					</div>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>vert1: </b></code>index of a VERT, representing the origin of the local coordinate system.</div>
-					</div>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>vert2, vert3, vert4: </b></code>indices of VERTs defining the three coordinate axes.</div>
-					</div>
-					<p>Use a minus sign (-) before VERT indices if they are used only for defining the local coordinate system.</p>
-					<div style="text-align: center"><img src="Images/GDL_Images/3Dshapes_coor.png" style="text-align: middle" alt="Images/GDL_Images/3Dshapes_coor.png"/></div>
-				
-				<div class="example"><a id="id507897"/><p class="title"><b>Example:
+                
+                <pre class="programlisting"><b id="COOR_keyword_2.7.8.24.4.1">COOR</b> wrap, vert1, vert2, vert3, vert4</pre>
+                
+                    <p><span class="italic">Deprecated. See <a class="xref" href="reference/COOR3.html">the COOR{3} command</a>.</span></p>
+                    <p>Local coordinate system of a BODY for the fill and texture mapping.</p>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>wrap: </b></code>wrapping mode + projection type</div>
+                    </div>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>Wrapping modes: </b></code></div>
+                        <div><code>1: </code>planar box (deprecated),</div>
+                        <div><code>2: </code>box,</div>
+                        <div><code>3: </code>cylindrical,</div>
+                        <div><code>4: </code>spherical,</div>
+                        <div><code>5: </code>same as the cylindrical fill mapping, but in rendering the top and the bottom surface will get a circular mapping,</div>
+                        <div><code>6: </code>planar</div>
+                    </div>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>Projection types: </b></code></div>
+                        <div><code>256: </code>the fill always starts at the origin of the local coordinate system,</div>
+                        <div><code>1024: </code>quadratic texture projection (recommended),</div>
+                        <div><code>2048: </code>linear texture projection based on the average distance,</div>
+                        <div><code>4096: </code>linear texture projection based on normal triangulation.</div>
+                    </div>
+                    <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3>
+                        The last three values are only effective with custom texture coordinate definitions
+                        (<span class="italic">see <a class="xref" href="reference/TEVE.html">the TEVE command</a></span>).
+                    </div>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>vert1: </b></code>index of a VERT, representing the origin of the local coordinate system.</div>
+                    </div>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>vert2, vert3, vert4: </b></code>indices of VERTs defining the three coordinate axes.</div>
+                    </div>
+                    <p>Use a minus sign (-) before VERT indices if they are used only for defining the local coordinate system.</p>
+                    <div style="text-align: center"><img src="Images/GDL_Images/3Dshapes_coor.png" style="text-align: middle" alt="Images/GDL_Images/3Dshapes_coor.png"/></div>
+                
+                <div class="example"><a id="id516836"/><p class="title"><b>Example:
 For custom texture axes:</b></p><div class="example-contents"><pre class="programlisting">CSLAB_ "Brick-White", "Brick-White", "Brick-White",
         4, 0.5,
         0, 0, 0, 15,
@@ -52,9 +52,9 @@ VERT 0, 0, 0 !#3
 VERT 1, 0, 1 !#4
 COOR 2, -1, -2, -3, -4
 BODY 1</pre><div style="text-align: center"><img src="Images/GDL_Images/3Dshapes_coor_ex.png" style="text-align: middle" alt="Images/GDL_Images/3Dshapes_coor_ex.png"/></div></div></div>
-			<hr/><a href="002.007.html#COOR_gdlcommand">Related in 3D Shapes</a><p>
-				<span class="bold"><strong>GDL Reference Guide</strong></span>
-			</p><p>
-				<span class="trademark">Copyright</span><sup>©</sup> 2021 by GRAPHISOFT, all rights reserved.
-				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
-			</p></body></html>
+            <hr/><a href="002.007.html#COOR_gdlcommand">Related in 3D Shapes</a><p>
+                <span class="bold"><strong>GDL Reference Guide</strong></span>
+            </p><p>
+                <span class="trademark">Copyright</span><sup>©</sup> 2022 by GRAPHISOFT, all rights reserved.
+                Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+            </p></body></html>

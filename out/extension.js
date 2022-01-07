@@ -778,24 +778,69 @@ class GDLExtension {
         const originRange = document.getWordRangeAtPosition(position);
         if (originRange !== undefined) {
             const origin = document.getText(originRange);
-            const lineBefore = document.lineAt(position.line).text.substring(0, originRange.start.character);
-            if (lineBefore.match(/(then|goto|gosub)\s*["'`´“”’‘]?$/i)) {
-                await this.immediateParse(document, cancel);
-                definitions = this.mapFuncionSymbols(Parser.ScriptType.ROOT)
-                    .filter(s => {
-                    return (origin == s.name || // number
-                        origin == s.name.substring(1, s.name.length - 1)); // "name"
-                }).map(s => {
-                    return {
-                        originSelectionRange: originRange,
+            // try macro calls
+            const link = await this.macroLinks(document, originRange, cancel);
+            if (link !== undefined) {
+                // if there are multiple results, select target by matching workspace folder
+                if (link.length > 1) {
+                    definitions = link.filter(t => {
+                        const target_wsfolder = vscode.workspace.getWorkspaceFolder(t.targetUri);
+                        const call_wsfolder = vscode.workspace.getWorkspaceFolder(document.uri);
+                        return target_wsfolder == call_wsfolder;
+                    });
+                    // if narrowed results are zero, show all matches
+                    if (definitions.length == 0) {
+                        definitions = link;
+                    }
+                }
+                else {
+                    definitions = link;
+                }
+            }
+            else {
+                // look for subroutine calls only if not a macro call
+                const lineBefore = document.lineAt(position.line).text.substring(0, originRange.start.character);
+                if (lineBefore.match(/(then|goto|gosub)\s*["'`´“”’‘]?$/i)) {
+                    await this.immediateParse(document, cancel);
+                    definitions = this.mapFuncionSymbols(Parser.ScriptType.ROOT)
+                        .filter(s => (origin == s.name || // number
+                        origin == s.name.substring(1, s.name.length - 1))) // "name"
+                        .map(s => ({ originSelectionRange: originRange,
                         targetRange: s.range,
                         targetSelectionRange: s.selectionRange,
-                        targetUri: document.uri
-                    };
-                });
+                        targetUri: document.uri }));
+                }
             }
         }
         return definitions;
+    }
+    async macroLinks(document, originRange, cancel) {
+        // find by position in document
+        const callsymbol = this.parser.getMacroCallList(Parser.ScriptType.ROOT).find(m => m.range.contains(originRange));
+        if (callsymbol) {
+            // find exactly where is the string (can have spaces, whitespace after call)
+            let call_range;
+            const name_offset = document.getText(callsymbol.range).indexOf(callsymbol.name, 6); // start search after call "
+            if (name_offset >= 6) {
+                const call_start = callsymbol.range.start.translate(0, name_offset);
+                call_range = callsymbol.range.with(call_start, call_start.translate(0, callsymbol.name.length));
+            }
+            else {
+                call_range = callsymbol.range;
+            }
+            // get target uri from wsSymbols
+            const callname_lc = callsymbol.name.toLowerCase();
+            return (await this.wsSymbols.provideWorkspaceSymbols_withFallback(true, callname_lc, cancel))
+                // provided symbols are a loose filename match, have to be exact
+                .filter(t => (callname_lc == t.name.substring(1, t.name.length - 1).toLowerCase()))
+                .map(t => ({
+                originSelectionRange: call_range,
+                targetRange: GDLExtension.peek_range,
+                targetSelectionRange: GDLExtension.zero_range,
+                targetUri: t.location.uri
+            }));
+        }
+        return undefined;
     }
     async provideReferences(document, position, _context, cancel) {
         const references = [];
@@ -832,6 +877,8 @@ GDLExtension.functionDecoration = vscode.window.createTextEditorDecorationType({
 GDLExtension.paramDecoration = vscode.window.createTextEditorDecorationType({
     fontWeight: "bold"
 });
+GDLExtension.zero_range = new vscode.Range(0, 0, 0, 0);
+GDLExtension.peek_range = new vscode.Range(0, 0, 10, 0);
 function modeGDL(document) {
     // undefined document returns false
     // language ID 'gdl-hsf' / 'gdl-xml' returns true

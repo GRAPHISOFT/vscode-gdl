@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>MASS{2}</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="MASS2_gdlcommand">MASS{2}</h3>
-				
-				<pre class="programlisting"><b id="MASS2_keyword_2.7.5.44.4.1">MASS{2}</b> top_material, bottom_material, side_material,
+                
+                <pre class="programlisting"><b id="MASS2_keyword_2.7.5.44.4.1">MASS{2}</b> top_material, bottom_material, side_material,
           n, m, mask, h,
           x1, y1, z1, s1,
           ...
@@ -10,26 +10,26 @@
           xn+1, yn+1, zn+1, sn+1,
           ...
           xn+m, yn+m, zn+m, sn+m</pre>
-				
-					<p>
-						Extension of <a class="xref" href="reference/MASS.html">the MASS command</a> with an additional mask bit and the possibility of hiding all top edges of the mass.
-					</p>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>mask: </b></code></div><div><code>mask = j<sub>1</sub> + 4*j<sub>3</sub> + 16*j<sub>5</sub> + 32*j<sub>6</sub> + 64*j<sub>7</sub> + 128*j<sub>8</sub> + 256*j<sub>9</sub> + 512*j<sub>10</sub></code>, where each j can be 0 or 1.
+                
+                    <p>
+                        Extension of <a class="xref" href="reference/MASS.html">the MASS command</a> with an additional mask bit and the possibility of hiding all top edges of the mass.
+                    </p>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>mask: </b></code></div><div><code>mask = j<sub>1</sub> + 4*j<sub>3</sub> + 16*j<sub>5</sub> + 32*j<sub>6</sub> + 64*j<sub>7</sub> + 128*j<sub>8</sub> + 256*j<sub>9</sub> + 512*j<sub>10</sub></code>, where each j can be 0 or 1.
 	</div>
-						<div><code>j<sub>1</sub>: </code>base surface is present,</div>
-						<div><code>j<sub>3</sub>: </code>side surfaces are present,</div>
-						<div><code>j<sub>5</sub>: </code>base and side edges are visible,</div>
-						<div><code>j<sub>6</sub>: </code>top edges are visible,</div>
-						<div><code>j<sub>7</sub>: </code>top edges are visible, top surface is not smooth,</div>
-						<div><code>j<sub>8</sub>: </code>all ridges will be sharp, but the surface is smooth.</div>
-						<div><code>j<sub>9</sub>: </code>edges participate in line elimination.</div>
-						<div><code>j<sub>10</sub>: </code>all top edges will be hidden.</div>
-					</div>
-				
-				<div class="example"><a id="id503833"/><p class="title"><b>Example:
+                        <div><code>j<sub>1</sub>: </code>base surface is present,</div>
+                        <div><code>j<sub>3</sub>: </code>side surfaces are present,</div>
+                        <div><code>j<sub>5</sub>: </code>base and side edges are visible,</div>
+                        <div><code>j<sub>6</sub>: </code>top edges are visible,</div>
+                        <div><code>j<sub>7</sub>: </code>top edges are visible, top surface is not smooth,</div>
+                        <div><code>j<sub>8</sub>: </code>all ridges will be sharp, but the surface is smooth.</div>
+                        <div><code>j<sub>9</sub>: </code>edges participate in line elimination.</div>
+                        <div><code>j<sub>10</sub>: </code>all top edges will be hidden.</div>
+                    </div>
+                
+                <div class="example"><a id="id513878"/><p class="title"><b>Example:
 </b></p><div class="example-contents"><div class="informaltable"><table border="0"><colgroup><col/><col/></colgroup><tbody><tr><td>
-										<pre class="programlisting">PEN 1
+                                        <pre class="programlisting">PEN 1
 mat = IND (MATERIAL, "Metal-Aluminium")
 FOR i=1 TO 2 STEP 1
   MASS{2} mat, mat, mat,
@@ -42,12 +42,12 @@ FOR i=1 TO 2 STEP 1
   BODY -1
   ADDX 2
 NEXT i</pre>
-									</td><td style="text-align: center">
-										<div style="text-align: center"><img src="Images/GDL_Images/3Dshapes_mass_2_ex.png" style="text-align: middle" alt="Images/GDL_Images/3Dshapes_mass_2_ex.png"/></div>
-									</td></tr></tbody></table></div></div></div>
-			<hr/><a href="002.007.html#MASS2_gdlcommand">Related in 3D Shapes</a><p>
-				<span class="bold"><strong>GDL Reference Guide</strong></span>
-			</p><p>
-				<span class="trademark">Copyright</span><sup>©</sup> 2021 by GRAPHISOFT, all rights reserved.
-				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
-			</p></body></html>
+                                    </td><td style="text-align: center">
+                                        <div style="text-align: center"><img src="Images/GDL_Images/3Dshapes_mass_2_ex.png" style="text-align: middle" alt="Images/GDL_Images/3Dshapes_mass_2_ex.png"/></div>
+                                    </td></tr></tbody></table></div></div></div>
+            <hr/><a href="002.007.html#MASS2_gdlcommand">Related in 3D Shapes</a><p>
+                <span class="bold"><strong>GDL Reference Guide</strong></span>
+            </p><p>
+                <span class="trademark">Copyright</span><sup>©</sup> 2022 by GRAPHISOFT, all rights reserved.
+                Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+            </p></body></html>

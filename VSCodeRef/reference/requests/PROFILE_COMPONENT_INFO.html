@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../../"/><title>PROFILE_COMPONENT_INFO</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlrequest"><h3 id="PROFILE_COMPONENT_INFO_gdlrequest" style="font-family: monospace">PROFILE_COMPONENT_INFO</h3>
+                    <pre class="programlisting">n = REQUEST{4}("PROFILE_COMPONENT_INFO", name_or_index, component_ind, param_name, value)</pre>
+                    
+                        <p>Returns a requested attribute value of a dedicated component (by <code class="literal">component_ind</code>) of the profile identified by name or index. <span class="italic">Expression returns 0 and contains dummy return values (emtpy string or 0) if used in parameter script, causing additional warning.</span>
+                        </p>
+                        <p>
+                            The <code class="literal">component_ind</code> must be in the valid range of nComponents (defined by <a class="xref" href="reference/requests/PROFILE_COMPONENTS.html">the "PROFILE_COMPONENTS" REQUEST</a>).
+                        </p>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>param_name: </b></code>addresses attribute settings of Profile Manager, returned in <code class="literal">value</code></div>
+                            <div><code>"gs_profile_bmat": </code>building material index of the component</div>
+                            <div><code>"gs_profile_surface": </code>override surface index of the component (in case of active override settings; returns the surface of the building material otherwise)</div>
+                            <div><code>"gs_profile_showoutline": </code>"Show Outline" setting of the component</div>
+                            <div><code>"gs_profile_outlinetype": </code>"Outline Type" setting of the component</div>
+                            <div><code>"gs_profile_outlinepen": </code>"Outline Pen" setting of the component</div>
+                        </div>
+                        <p>
+                            Return attribute values can be used in any attribute related command, such as <a class="xref" href="reference/POLY2_B6.html"><code>POLY2_B{6}</code></a>, where contour sections of the polygon can be customized individually.
+                        </p>
+                        <p>
+                            <span class="italic">Compatibility: introduced in ARCHICAD 21.</span>
+                        </p>
+                        <pre class="programlisting">n = REQUEST{4}(<code class="code">"PROFILE_COMPONENT_INFO"</code>, name_or_index, component_ind, param_name,
+            value1, value2, ..., valuen)</pre>
+                        <p>Returns requested attributes of all edges in the dedicated component (by <code class="literal">component_ind</code>) of the profile identified by name or index. <span class="italic">Expression returns 0 and contains dummy return values (emtpy string or 0) if used in parameter script, causing additional warning.</span>
+                        </p>
+                        <p>
+                            The <code class="literal">component_ind</code> must be in the valid range of nComponents (defined by <a class="xref" href="reference/requests/PROFILE_COMPONENTS.html">the "PROFILE_COMPONENTS" REQUEST</a>).
+                        </p>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>param_name: </b></code>addresses attribute settings of Profile Manager, returned in <code class="literal">value</code></div>
+                            <div><code>"gs_profile_comp_surfaces": </code>individual surface indexes of edges of the component</div>
+                            <div><code>"gs_profile_comp_pens": </code>individual pen indexes of edges of the component</div>
+                            <div><code>"gs_profile_comp_linetypes": </code>individual linetype indexes of edges of the component</div>
+                        </div>
+                        <p>
+                            Return attribute values can be used in any attribute related command, such as <a class="xref" href="reference/POLY2_B6.html"><code>POLY2_B{6}</code></a>, where contour sections of the polygon can be customized individually.
+                        </p>
+                        <p>
+                            <span class="italic">Compatibility: introduced in ARCHICAD 21.</span>
+                        </p>
+                    
+                <hr/><a href="002.015.html#PROFILE_COMPONENT_INFO_gdlrequest">Related in Miscellaneous</a><p>
+                <span class="bold"><strong>GDL Reference Guide</strong></span>
+            </p><p>
+                <span class="trademark">Copyright</span><sup>©</sup> 2022 by GRAPHISOFT, all rights reserved.
+                Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+            </p></body></html>

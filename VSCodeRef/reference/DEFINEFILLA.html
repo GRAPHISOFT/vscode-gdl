@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>DEFINE FILLA</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="DEFINEFILLA_gdlcommand">DEFINE FILLA</h3>
-					
-					<pre class="programlisting"><b id="DEFINEFILLA_keyword_2.11.4.7.3.4.1">DEFINE FILLA</b> name [,] [<b id="FILLTYPES_MASK_keyword_2.11.4.7.3.4.3">FILLTYPES_MASK</b> fill_types,]
+                    
+                    <pre class="programlisting"><b id="DEFINEFILLA_keyword_2.11.4.7.3.4.1">DEFINE FILLA</b> name [,] [<b id="FILLTYPES_MASK_keyword_2.11.4.7.3.4.3">FILLTYPES_MASK</b> fill_types,]
         pattern1, pattern2, pattern3, pattern4,
         pattern5, pattern6, pattern7, pattern8,
         spacing_x, spacing_y, angle, n,
@@ -13,30 +13,30 @@
         frequencyn, directional_offsetn, directionn,
         offset_xn, offset_yn, mn,
         lengthn1, ..., lengthnm</pre>
-					
-						<div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3>This command can contain additional data definition.</div>
-						<p>
-							<span class="italic">See <a class="xref" href="002.011.html#AdditionalData_section" title="Additional Data">the section called “Additional Data”</a> for details.</span>
-						</p>
-						<div style="text-align: center"><img src="Images/GDL_Images/Attributes_defineFilla_params1.png" style="text-align: middle" alt="Images/GDL_Images/Attributes_defineFilla_params1.png"/></div>
-						<p>An extended DEFINE FILL statement.</p>
-						<div style="text-align: center"><img src="Images/GDL_Images/Attributes_defineFilla_params2.png" style="text-align: middle" alt="Images/GDL_Images/Attributes_defineFilla_params2.png"/></div>
-						<div style="margin-left: 1em">
-							<div style="text-indent: -1em"><code><b>spacing_x, spacing_y: </b></code>
-								spacing factor in the x and y direction, respectively.
-								These two parameters define a global scaling factor for the whole fill.
-								All values in the x direction will be multiplied by spacing_x and all values in the y direction will be multiplied by spacing_y.
-							</div>
-						</div>
-						<div style="margin-left: 1em">
-							<div style="text-indent: -1em"><code><b>directional_offseti: </b></code>
-								the offset of the beginning of the next similar hatch line, measured along the line’s direction.
-								Each line of the series will be drawn at a distance defined by frequencyi with an offset defined by directional_offseti.
-								The real length of the offset will be modulated by the defined spacing.
-							</div>
-						</div>
-					
-					<div class="example"><a id="id519639"/><p class="title"><b>Example:
+                    
+                        <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3>This command can contain additional data definition.</div>
+                        <p>
+                            <span class="italic">See <a class="xref" href="002.011.html#AdditionalData_section" title="Additional Data">the section called “Additional Data”</a> for details.</span>
+                        </p>
+                        <div style="text-align: center"><img src="Images/GDL_Images/Attributes_defineFilla_params1.png" style="text-align: middle" alt="Images/GDL_Images/Attributes_defineFilla_params1.png"/></div>
+                        <p>An extended DEFINE FILL statement.</p>
+                        <div style="text-align: center"><img src="Images/GDL_Images/Attributes_defineFilla_params2.png" style="text-align: middle" alt="Images/GDL_Images/Attributes_defineFilla_params2.png"/></div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>spacing_x, spacing_y: </b></code>
+                                spacing factor in the x and y direction, respectively.
+                                These two parameters define a global scaling factor for the whole fill.
+                                All values in the x direction will be multiplied by spacing_x and all values in the y direction will be multiplied by spacing_y.
+                            </div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>directional_offseti: </b></code>
+                                the offset of the beginning of the next similar hatch line, measured along the line’s direction.
+                                Each line of the series will be drawn at a distance defined by frequencyi with an offset defined by directional_offseti.
+                                The real length of the offset will be modulated by the defined spacing.
+                            </div>
+                        </div>
+                    
+                    <div class="example"><a id="id533891"/><p class="title"><b>Example:
 </b></p><div class="example-contents"><pre class="programlisting">DEFINE FILLA "TEST" 8, 142, 128, 232,
         8, 142, 128, 232,
         0.5, 0.5, 0, 2,
@@ -56,17 +56,17 @@ pat5 = 8      00001000      •
 pat6 = 142    10001110  •   •••
 pat7 = 128    10000000  •
 pat8 = 232    11101000  ••• •</pre><div class="informaltable"><table border="0"><colgroup><col/><col/></colgroup><tbody><tr><td>
-											<p>View:</p>
-										</td><td>
-											<p>Vectorial hatch:</p>
-										</td></tr><tr><td>
-											<div style="text-align: center"><img src="Images/GDL_Images/Attributes_defineFilla_ex1.png" style="text-align: middle" alt="Images/GDL_Images/Attributes_defineFilla_ex1.png"/></div>
-										</td><td>
-											<div style="text-align: center"><img src="Images/GDL_Images/Attributes_defineFilla_ex2.png" style="text-align: middle" alt="Images/GDL_Images/Attributes_defineFilla_ex2.png"/></div>
-										</td></tr></tbody></table></div></div></div>
-				<hr/><a href="002.011.html#DEFINEFILLA_gdlcommand">Related in Attributes</a><p>
-				<span class="bold"><strong>GDL Reference Guide</strong></span>
-			</p><p>
-				<span class="trademark">Copyright</span><sup>©</sup> 2021 by GRAPHISOFT, all rights reserved.
-				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
-			</p></body></html>
+                                            <p>View:</p>
+                                        </td><td>
+                                            <p>Vectorial hatch:</p>
+                                        </td></tr><tr><td>
+                                            <div style="text-align: center"><img src="Images/GDL_Images/Attributes_defineFilla_ex1.png" style="text-align: middle" alt="Images/GDL_Images/Attributes_defineFilla_ex1.png"/></div>
+                                        </td><td>
+                                            <div style="text-align: center"><img src="Images/GDL_Images/Attributes_defineFilla_ex2.png" style="text-align: middle" alt="Images/GDL_Images/Attributes_defineFilla_ex2.png"/></div>
+                                        </td></tr></tbody></table></div></div></div>
+                <hr/><a href="002.011.html#DEFINEFILLA_gdlcommand">Related in Attributes</a><p>
+                <span class="bold"><strong>GDL Reference Guide</strong></span>
+            </p><p>
+                <span class="trademark">Copyright</span><sup>©</sup> 2022 by GRAPHISOFT, all rights reserved.
+                Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+            </p></body></html>

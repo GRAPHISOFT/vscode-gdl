@@ -1,40 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>SPLINE2A</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="SPLINE2A_gdlcommand">SPLINE2A</h3>
-				
-				<pre class="programlisting"><b id="SPLINE2A_keyword_2.8.3.19.4.1">SPLINE2A</b> n, status, x1, y1, angle1, length_previous1, length_next1,
+                
+                <pre class="programlisting"><b id="SPLINE2A_keyword_2.8.3.19.4.1">SPLINE2A</b> n, status, x1, y1, angle1, length_previous1, length_next1,
         ...
         xn, yn, anglen, length_previousn,
         length_nextn</pre>
-				
-					<div style="text-align: center"><img src="Images/GDL_Images/2Dshapes_spline2A.png" style="text-align: middle" alt="Images/GDL_Images/2Dshapes_spline2A.png"/></div>
-					<p>Extension of <a class="xref" href="reference/SPLINE2.html">the SPLINE2 command</a> (Bézier spline), used mainly in automatic 2D script generation because of its complexity.</p>
-					<p>
-						For more details, <span class="italic">see “Lines / Drawing Splines” in the Documentation chapter of the ARCHICAD Help.</span>
-					</p>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>si: </b></code>Status values:</div>
-						<div><code>0: </code>default,</div>
-						<div><code>1: </code>closed spline; the last and first nodes of the spline will become connected, thus closing the spline,</div>
-						<div><code>2: </code>
-							automatically smoothed spline;
-							the angle, length_previous<sub>i</sub> and length_next<sub>i</sub> parameter values of the nodes
-							between the first and the last node are not used when generating the spline. An internal autosmoothing algorithm is used.
-						</div>
-					</div>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>xi, yi: </b></code>control point coordinates.</div>
-					</div>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>length_previousi, length_nexti: </b></code>tangent lengths for the previous and the next control points.</div>
-					</div>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>anglei: </b></code>tangent direction angle.</div>
-					</div>
-				
-				<div class="example"><a id="id515906"/><p class="title"><b>Example:
+                
+                    <div style="text-align: center"><img src="Images/GDL_Images/2Dshapes_spline2A.png" style="text-align: middle" alt="Images/GDL_Images/2Dshapes_spline2A.png"/></div>
+                    <p>Extension of <a class="xref" href="reference/SPLINE2.html">the SPLINE2 command</a> (Bézier spline), used mainly in automatic 2D script generation because of its complexity.</p>
+                    <p>
+                        For more details, <span class="italic">see “Lines / Drawing Splines” in the Documentation chapter of the ARCHICAD Help.</span>
+                    </p>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>si: </b></code>Status values:</div>
+                        <div><code>0: </code>default,</div>
+                        <div><code>1: </code>closed spline; the last and first nodes of the spline will become connected, thus closing the spline,</div>
+                        <div><code>2: </code>
+                            automatically smoothed spline;
+                            the angle, length_previous<sub>i</sub> and length_next<sub>i</sub> parameter values of the nodes
+                            between the first and the last node are not used when generating the spline. An internal autosmoothing algorithm is used.
+                        </div>
+                    </div>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>xi, yi: </b></code>control point coordinates.</div>
+                    </div>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>length_previousi, length_nexti: </b></code>tangent lengths for the previous and the next control points.</div>
+                    </div>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>anglei: </b></code>tangent direction angle.</div>
+                    </div>
+                
+                <div class="example"><a id="id525000"/><p class="title"><b>Example:
 </b></p><div class="example-contents"><div class="informaltable"><table border="0"><colgroup><col/><col/></colgroup><tbody><tr><td>
-										<pre class="programlisting">SPLINE2A 9, 2,
+                                        <pre class="programlisting">SPLINE2A 9, 2,
         0.0, 0.0, 0.0, 0.0, 0.0,
         0.7, 1.5,  15, 0.9, 1.0,
         1.9, 0.8,  72, 0.8, 0.3,
@@ -44,12 +44,12 @@
         3.5, 3.3, 338, 0.4, 0.4,
         4.7, 3.7,  36, 0.4, 0.8,
         6.0, 4.6,   0, 0.0, 0.0</pre>
-									</td><td>
-										<div style="text-align: center"><img src="Images/GDL_Images/2Dshapes_spline2A_ex.png" style="text-align: middle" alt="Images/GDL_Images/2Dshapes_spline2A_ex.png"/></div>
-									</td></tr></tbody></table></div></div></div>
-			<hr/><a href="002.008.html#SPLINE2A_gdlcommand">Related in 2D Shapes</a><p>
-				<span class="bold"><strong>GDL Reference Guide</strong></span>
-			</p><p>
-				<span class="trademark">Copyright</span><sup>©</sup> 2021 by GRAPHISOFT, all rights reserved.
-				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
-			</p></body></html>
+                                    </td><td>
+                                        <div style="text-align: center"><img src="Images/GDL_Images/2Dshapes_spline2A_ex.png" style="text-align: middle" alt="Images/GDL_Images/2Dshapes_spline2A_ex.png"/></div>
+                                    </td></tr></tbody></table></div></div></div>
+            <hr/><a href="002.008.html#SPLINE2A_gdlcommand">Related in 2D Shapes</a><p>
+                <span class="bold"><strong>GDL Reference Guide</strong></span>
+            </p><p>
+                <span class="trademark">Copyright</span><sup>©</sup> 2022 by GRAPHISOFT, all rights reserved.
+                Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+            </p></body></html>

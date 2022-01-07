@@ -1,44 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>DEFINE LINE_TYPE</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="DEFINELINE_TYPE_gdlcommand">DEFINE LINE_TYPE</h3>
-					
-					<pre class="programlisting"><b id="DEFINELINE_TYPE_keyword_2.11.4.8.2.4.1">DEFINE LINE_TYPE</b> name spacing, n,
+                    
+                    <pre class="programlisting"><b id="DEFINELINE_TYPE_keyword_2.11.4.8.2.4.1">DEFINE LINE_TYPE</b> name spacing, n,
         length1, ..., lengthn</pre>
-					
-						<div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3>This command can contain additional data definition.</div>
-						<p>
-							<span class="italic">See <a class="xref" href="002.011.html#AdditionalData_section" title="Additional Data">the section called “Additional Data”</a> for details.</span>
-						</p>
-						<p>
-							Any GDL script may include line type definitions prior to the first reference to that line-type name.
-							The line type defined this way can be used only for 2D elements in the script in which it was defined and its subsequent second generation scripts.
-						</p>
-						<div style="margin-left: 1em">
-							<div style="text-indent: -1em"><code><b>name: </b></code>name of the line type.</div>
-						</div>
-						<div style="margin-left: 1em">
-							<div style="text-indent: -1em"><code><b>spacing: </b></code>spacing factor.</div>
-						</div>
-						<div style="margin-left: 1em">
-							<div style="text-indent: -1em"><code><b>n: </b></code>number of the line parts.</div>
-						</div>
-						<div style="margin-left: 1em">
-							<div style="text-indent: -1em"><code><b>lengthi: </b></code>
-								length of the line parts (the real length is spacing * lengthi). Line parts consist of segments and spaces.
-								First line part is a segment, zero length means a dot.
-							</div>
-						</div>
-						<div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3>
-							Only simple line types - i.e. consisting only of segments and spaces - can be defined
-							with this command, defining symbol line types can be done with <a class="xref" href="reference/DEFINESYMBOL_LINE.html">the DEFINE SYMBOL_LINE command</a>.
-						</div>
-					
-					<div class="example"><a id="id524183"/><p class="title"><b>Example:
+                    
+                        <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3>This command can contain additional data definition.</div>
+                        <p>
+                            <span class="italic">See <a class="xref" href="002.011.html#AdditionalData_section" title="Additional Data">the section called “Additional Data”</a> for details.</span>
+                        </p>
+                        <p>
+                            Any GDL script may include line type definitions prior to the first reference to that line-type name.
+                            The line type defined this way can be used only for 2D elements in the script in which it was defined and its subsequent second generation scripts.
+                        </p>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>name: </b></code>name of the line type.</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>spacing: </b></code>spacing factor.</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>n: </b></code>number of the line parts.</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>lengthi: </b></code>
+                                length of the line parts (the real length is spacing * lengthi). Line parts consist of segments and spaces.
+                                First line part is a segment, zero length means a dot.
+                            </div>
+                        </div>
+                        <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3>
+                            Only simple line types - i.e. consisting only of segments and spaces - can be defined
+                            with this command, defining symbol line types can be done with <a class="xref" href="reference/DEFINESYMBOL_LINE.html">the DEFINE SYMBOL_LINE command</a>.
+                        </div>
+                    
+                    <div class="example"><a id="id534411"/><p class="title"><b>Example:
 </b></p><div class="example-contents"><pre class="programlisting">DEFINE LINE_TYPE "line - - ." 1,
         6, 0.005, 0.002, 0.001, 0.002, 0.0, 0.002</pre></div></div>
-				<hr/><a href="002.011.html#DEFINELINE_TYPE_gdlcommand">Related in Attributes</a><p>
-				<span class="bold"><strong>GDL Reference Guide</strong></span>
-			</p><p>
-				<span class="trademark">Copyright</span><sup>©</sup> 2021 by GRAPHISOFT, all rights reserved.
-				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
-			</p></body></html>
+                <hr/><a href="002.011.html#DEFINELINE_TYPE_gdlcommand">Related in Attributes</a><p>
+                <span class="bold"><strong>GDL Reference Guide</strong></span>
+            </p><p>
+                <span class="trademark">Copyright</span><sup>©</sup> 2022 by GRAPHISOFT, all rights reserved.
+                Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+            </p></body></html>
