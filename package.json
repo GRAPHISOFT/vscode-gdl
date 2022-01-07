@@ -157,36 +157,6 @@
                 "editor.wordSeparators": "`!@#$%^&*()-=+[]\\|;:'\",.<>/?"
             }
         },
-        "taskDefinitions": [
-            {
-                "type": "LP_XMLConverter",
-                "required": ["path", "command"],
-                "properties": {
-                    "path": {
-                        "type": "string",
-                        "description": "path of LP_XMLConverter"
-                    },
-                    "command": {
-                        "type": "string",
-                        "description": "command to run"
-                    }
-                },
-                "when": "processExecutionSupported && isFileSystemResource && workbenchState != empty"
-            }
-        ],
-        "problemMatchers": [
-            {
-                "name": "hsf2libpart",
-                "owner": "gdl-hsf",
-                "label": "LP_XMLConverter hsf2libpart errors",
-                "source": "LP_XMLConverter hsf2libpart",
-                "fileLocation": "absolute",
-                "pattern": {
-                    "regexp": "(.*)",
-                    "message": 0
-                }
-            }
-        ],
         "themes": [
             {
                 "label": "GDL Light",

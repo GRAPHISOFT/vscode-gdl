@@ -49,23 +49,23 @@ export class RefGuide {
     static helpFor(document: vscode.TextDocument, position: vscode.Position) : string | undefined {
         // return word at cursor that might have help
 
-        let wordAtCursor = RefGuide.wordAt(document, position) ?? { word: "", range: new vscode.Range(position, position)};
+        const wordAtCursor = RefGuide.wordAt(document, position) ?? { word: "", range: new vscode.Range(position, position)};
         
         let prevWord : string | undefined;
-        let thisWord = (wordAtCursor.word.length > 0) ? wordAtCursor.word.toUpperCase() : undefined;
+        const thisWord = (wordAtCursor.word.length > 0) ? wordAtCursor.word.toUpperCase() : undefined;
         let nextWord : string | undefined;
 
-        let line = document.lineAt(wordAtCursor.range.start.line).text;
+        const line = document.lineAt(wordAtCursor.range.start.line).text;
         // get string before, strip trailing whitespace
-        let beforeWord = line.slice(0, wordAtCursor.range.start.character).trimEnd();
-        let before = beforeWord.length - 1;
+        const beforeWord = line.slice(0, wordAtCursor.range.start.character).trimEnd();
+        const before = beforeWord.length - 1;
         if (beforeWord.length > 0) {
             prevWord = RefGuide.wordAt(document, wordAtCursor.range.start.with(undefined, before))?.word.toUpperCase();
         }
 
         // get string after, strip leading whitespace
-        let afterWord = line.slice(wordAtCursor.range.end.character + 1).trimStart();
-        let after = line.length - afterWord.length;
+        const afterWord = line.slice(wordAtCursor.range.end.character + 1).trimStart();
+        const after = line.length - afterWord.length;
         if (afterWord.length > 0) {
             nextWord = RefGuide.wordAt(document, wordAtCursor.range.end.with(undefined, after))?.word.toUpperCase();
         }
@@ -95,7 +95,7 @@ export class RefGuide {
         let wordAt = undefined;
 
         //do own matching regarding {2}
-        let wordRange = document.getWordRangeAtPosition(position, /[_~a-z][_~0-9a-z]*(\{\d+\})?/i);
+        const wordRange = document.getWordRangeAtPosition(position, /[_~a-z][_~0-9a-z]*(\{\d+\})?/i);
         
         if (wordRange) {
             let word = document.getText(wordRange);
@@ -159,7 +159,6 @@ export class RefGuide {
         return path.join(this.refguideroot, 'reference', 'requests', id + ".html")
     }
 
-
     private getIndexFilename() : string {
         return path.join(this.refguideroot, "002.017.html")
     }
@@ -171,7 +170,7 @@ export class RefGuide {
 
         if (word != undefined) {
             // transform tube{2} to TUBE2
-            var id = RefGuide.getLinkID(word);
+            const id = RefGuide.getLinkID(word);
 
             // make filename & check if exists
             // is it a keyword?

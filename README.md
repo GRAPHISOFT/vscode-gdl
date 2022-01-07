@@ -53,6 +53,7 @@ __hotspot__ or __hotspot2__ - length edit hotspot triplet
   * IntelliSense lists master script constants (ALL_CAPS) with their initialized values
   * IntelliSense lists parameters with their description, type, flags and default value. This list can be filtered by parameter type too.
   * These can all be toggled on/off together with Ctrl-Shift-Space
+  * Follow macro calls with Ctrl-click
 * Go to definitions/references, find all references of subroutines in same gdl-hsf file (Ctrl-click or F12, Shift-F12, Shift-Alt-F12)
 
 # Script outline view
@@ -73,7 +74,7 @@ __hotspot__ or __hotspot2__ - length edit hotspot triplet
   * See additional navigation icons (explained in hover text), also available as commands for setting keyboard shortcuts
 
 # Reference guide
-If the cursor is on a known keyword, command, global variable or ac_ parameter: Use Ctrl-F1 (or context menu command) to bring up its reference in a VSCode tab. Multi-word keywords (eg. define fill) aren't recognized. For unknown words, the Index is displayed.
+If the cursor is on a known keyword, command, request, global variable or ac_ parameter: Use Ctrl-F1 (or context menu command) to bring up its reference in a VSCode tab. Double-word commands (eg. define fill) are recognized. For unknown words, the Index is displayed.
 
 Use the Related... link at the bottom of the page to see similar commands: this link takes you to the chapter of the GDL Reference Guide that contains the keyword. Ctrl-C copies the selected text, Ctrl-F searches on the shown page.
 
@@ -156,6 +157,13 @@ Some valid syntaxes won't be highlighted, and some invalid syntaxes will be high
 1. Press Ctrl-S to apply changes to the user settings
 
 # Release Notes
+
+## 1.25.3
+* Follow macro calls with Ctrl-click
+* Reference guide
+** Find requests by name
+** Links are followed on long pages
+** Recognize double-word commands (DEFINE, SET)
 
 ## 1.25.2
 * Go to definitions/references, find all references of subroutines in same gdl-hsf file (Ctrl-click or F12, Shift-F12, Shift-Alt-F12)
