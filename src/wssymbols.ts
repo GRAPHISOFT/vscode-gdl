@@ -4,15 +4,22 @@ import * as vscode from 'vscode';
 import { fileExists, readFile } from './extension';
 
 class LibpartInfo {
-    public readonly root_uri : vscode.Uri;
-    public readonly name : string;
-    public readonly relative_root : string;
-    public readonly ws_folder : string;
-    constructor(public readonly libpartdata_uri: vscode.Uri, public readonly guid: string) {
-        this.root_uri = vscode.Uri.joinPath(this.libpartdata_uri, "..");
-        this.name = path.basename(this.root_uri.fsPath);
-        this.relative_root = vscode.workspace.asRelativePath(this.root_uri, false);
-        this.ws_folder = vscode.workspace.getWorkspaceFolder(this.root_uri)?.uri.fsPath ?? "";
+    private _root_uri : vscode.Uri | undefined;
+    private _name : string | undefined;
+    constructor(public readonly libpartdata_uri: vscode.Uri, public readonly guid: string) {}
+
+    get name() : string {
+        if (this._name === undefined) {
+            this._name = path.basename(this.root_uri.fsPath);
+        }
+        return this._name;
+    }
+
+    get root_uri() : vscode.Uri {
+        if (this._root_uri === undefined) {
+           this._root_uri = vscode.Uri.joinPath(this.libpartdata_uri, "..");
+        }
+        return this._root_uri;
     }
 
     async relative_withFallback(relative: string, masterscript: boolean) : Promise<vscode.Uri> {
