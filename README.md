@@ -161,9 +161,9 @@ Some valid syntaxes won't be highlighted, and some invalid syntaxes will be high
 ## 1.25.3
 * Follow macro calls with Ctrl-click
 * Reference guide
-** Find requests by name
-** Links are followed on long pages
-** Recognize double-word commands (DEFINE, SET)
+  * Find requests by name
+  * Links are followed on long pages
+  * Recognize double-word commands (DEFINE, SET)
 
 ## 1.25.2
 * Go to definitions/references, find all references of subroutines in same gdl-hsf file (Ctrl-click or F12, Shift-F12, Shift-Alt-F12)
