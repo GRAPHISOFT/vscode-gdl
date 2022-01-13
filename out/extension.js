@@ -31,7 +31,6 @@ class GDLExtension {
         this.sectionDecorations = [];
         this.parser = new Parser.ParseXMLGDL(); // without document only initializes
         this.wsSymbols = new wssymbols_1.WSSymbols(context);
-        this.wsSymbols.changeFolders(); // handles waiting for result on its own
         // GDLOutline view initialization
         this.outlineView = new scriptView_1.OutlineView(this);
         context.subscriptions.push(vscode.window.registerTreeDataProvider('GDLOutline', this.outlineView));
@@ -67,6 +66,7 @@ class GDLExtension {
     async init() {
         await this.onConfigChanged(); // wait for configuration
         this.onActiveEditorChanged(); // start async operation
+        this.wsSymbols.changeFolders(); // handles waiting for result on its own
     }
     get updateEnabled() { return this._updateEnabled; }
     get editor() { return this._editor; }
@@ -653,7 +653,6 @@ class GDLExtension {
                         (p.hidden ? " `Hidden`" : "") +
                         (p.child ? " `Child`" : "") +
                         (p.bold ? " `BoldName`" : "") +
-                        "  \n" + p.meaning +
                         "  \n" + p.getDefaultString())
                 ]);
             }

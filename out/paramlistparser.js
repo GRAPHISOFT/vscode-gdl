@@ -93,8 +93,6 @@ class Parameter {
             "**" + this.type + "**" +
             this.getFlagString("`") +
             "\n\n" +
-            (this.meaning ? this.meaning : "") +
-            "\n\n" +
             (defaultvalue ? this.getDefaultString() : ""));
     }
     getFlagString(markdown = "") {
@@ -104,15 +102,21 @@ class Parameter {
             (this.bold ? (" " + markdown + "BoldName" + markdown) : "");
     }
     getDefaultString() {
-        let defaultvalue;
-        if (this.type == "Dictionary" || this.vardim1 || this.vardim2) {
-            defaultvalue = this.getDimensionString() +
-                "\n```xml\n" + this.defaultvalue + "\n```";
+        if (this.type !== "Title") {
+            let defaultvalue;
+            if (this.type == "Dictionary" || this.vardim1 || this.vardim2) {
+                defaultvalue = this.getDimensionString() +
+                    "\n```xml\n" + this.defaultvalue + "\n```";
+            }
+            else {
+                defaultvalue = this.defaultvalue;
+            }
+            const meaning = (this.meaning ? (" meaning " + this.meaning) : "");
+            return "default " + defaultvalue + meaning;
         }
         else {
-            defaultvalue = this.defaultvalue;
+            return "";
         }
-        return "default " + defaultvalue;
     }
     getDimensionString() {
         return (this.vardim1 ? ("[" + this.vardim1 + "]") : "") +
