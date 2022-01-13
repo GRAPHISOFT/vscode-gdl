@@ -76,7 +76,6 @@ export class GDLExtension
     constructor(public context : vscode.ExtensionContext) {
         this.parser = new Parser.ParseXMLGDL();  // without document only initializes
         this.wsSymbols = new WSSymbols(context);
-        this.wsSymbols.changeFolders();          // handles waiting for result on its own
 
         // GDLOutline view initialization
         this.outlineView = new OutlineView(this);
@@ -139,6 +138,7 @@ export class GDLExtension
     async init() {
         await this.onConfigChanged();   // wait for configuration
         this.onActiveEditorChanged();   // start async operation
+        this.wsSymbols.changeFolders(); // handles waiting for result on its own
     }
 
     get updateEnabled() : boolean { return this._updateEnabled; }
@@ -824,7 +824,6 @@ export class GDLExtension
                                                 (p.hidden ? " `Hidden`" : "") +
                                                 (p.child ? " `Child`" : "") +
                                                 (p.bold ? " `BoldName`" : "") +
-                                              "  \n" + p.meaning +
                                               "  \n" + p.getDefaultString())
                     ]);
             }
