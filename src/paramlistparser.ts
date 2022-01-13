@@ -110,8 +110,6 @@ export class Parameter {
             "**" + this.type + "**" +
             this.getFlagString("`") +
             "\n\n" + 
-            (this.meaning ? this.meaning : "") +
-            "\n\n" + 
             (defaultvalue ? this.getDefaultString() : ""));
     }
 
@@ -123,15 +121,20 @@ export class Parameter {
     }
 
     public getDefaultString() : string {
-        let defaultvalue : string; 
-        if (this.type == "Dictionary" || this.vardim1 || this.vardim2) {
-            defaultvalue =  this.getDimensionString() +
-                            "\n```xml\n" + this.defaultvalue + "\n```";
-        } else {
-            defaultvalue = this.defaultvalue;
-        }
+        if (this.type !== "Title") {
+            let defaultvalue : string; 
+            if (this.type == "Dictionary" || this.vardim1 || this.vardim2) {
+                defaultvalue =  this.getDimensionString() +
+                                "\n```xml\n" + this.defaultvalue + "\n```";
+            } else {
+                defaultvalue = this.defaultvalue;
+            }
+            const meaning = (this.meaning ? (" meaning " + this.meaning) : "");
 
-        return "default " + defaultvalue;
+            return "default " + defaultvalue + meaning;
+        } else {
+            return "";
+        }
     }
 
     public getDimensionString() : string {
