@@ -132,7 +132,7 @@ class RefGuide {
     async getReferenceToShow(word, allowIndexRedirect) {
         let found = false;
         let refguidefile;
-        if (word != undefined) {
+        if (word !== undefined) {
             // transform tube{2} to TUBE2
             const id = RefGuide.getLinkID(word);
             // make filename & check if exists

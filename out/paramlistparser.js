@@ -19,27 +19,28 @@ class Parameter {
             }
             this.fix = (content.match(/<Fix\/>/) !== null);
             let flags = content.match(/(?<=<ParFlg_).*?(?=\/>)/g);
-            if (flags === null)
+            if (flags === null) {
                 flags = [];
+            }
             this.child = (flags.indexOf("Child") !== -1);
             this.bold = (flags.indexOf("BoldName") !== -1);
             this.hidden = (flags.indexOf("Hidden") !== -1);
-            if (this.type == "Title") {
+            if (this.type === "Title") {
                 this.defaultvalue = "";
                 this.vardim1 = 0;
                 this.vardim2 = 0;
             }
             else {
                 const defaultvalue_ = content.match(/<(Value|ArrayValues)(.*?)>((.|[\n\r])*?)(?=<\/\1>)/m);
-                const isArray = (defaultvalue_[1] == "ArrayValues");
+                const isArray = (defaultvalue_[1] === "ArrayValues");
                 const attribs = defaultvalue_[2];
                 const value = defaultvalue_[3];
                 const meaning_ = attribs.match(/Meaning="(.*?)"/);
                 if (meaning_) {
                     this.meaning = meaning_[1];
                 }
-                if (!isArray && this.type != "Dictionary") { // simple type
-                    if (this.type == "String") {
+                if (!isArray && this.type !== "Dictionary") { // simple type
+                    if (this.type === "String") {
                         const value_ = value.match(/<!\[CDATA\[(".*?")\]\]>/);
                         if (value_) {
                             this.defaultvalue = value_[1];
@@ -104,7 +105,7 @@ class Parameter {
     getDefaultString() {
         if (this.type !== "Title") {
             let defaultvalue;
-            if (this.type == "Dictionary" || this.vardim1 || this.vardim2) {
+            if (this.type === "Dictionary" || this.vardim1 || this.vardim2) {
                 defaultvalue = this.getDimensionString() +
                     "\n```xml\n" + this.defaultvalue + "\n```";
             }

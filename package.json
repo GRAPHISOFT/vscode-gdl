@@ -2,7 +2,7 @@
     "name": "gdl",
     "displayName": "GDL",
     "description": "Development environment for Archicad 25 GDL language (XML and HSF source code): syntax coloring, snippets, code outline, quick reference.",
-    "version": "1.25.3",
+    "version": "1.25.4-dev.1",
     "publisher": "Graphisoft",
     "author": "Péter Baksa",
     "contributors": [
@@ -21,7 +21,7 @@
         "url": "https://github.com/GRAPHISOFT/vscode-gdl"
     },
     "engines": {
-        "vscode": "^1.60.0"
+        "vscode": "^1.66.0"
     },
     "categories": [
         "Programming Languages",
@@ -492,13 +492,13 @@
         "@types/glob": "^7.2.0",
         "@types/mocha": "^9.0.0",
         "@types/node": "^14.16.0",
-        "@types/vscode": "1.60.0",
+        "@types/vscode": "1.66.0",
         "@typescript-eslint/eslint-plugin": "^5.3.0",
         "@typescript-eslint/parser": "^5.3.0",
         "eslint": "^8.1.0",
         "glob": "^7.2.0",
         "mocha": "^9.1.3",
-        "typescript": "4.4.3",
+        "typescript": "4.6.3",
         "vscode-test": "^1.6.1"
     },
     "dependencies": {}

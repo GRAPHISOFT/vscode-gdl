@@ -43,7 +43,6 @@ class LibpartInfo {
                 return this.libpartdata_uri; // assume always exists
             }
         }
-        ;
     }
 }
 class WSSymbols {
@@ -137,12 +136,15 @@ function filterquery(libpart, query_lc) {
     const guid_lc = libpart.guid.toLowerCase();
     let i = 0, j = 0;
     for (const char of query_lc) {
-        if (i >= 0)
+        if (i >= 0) {
             i = name_lc.indexOf(char, i);
-        if (j >= 0)
+        }
+        if (j >= 0) {
             j = guid_lc.indexOf(char, j);
-        if (i < 0 && j < 0)
+        }
+        if (i < 0 && j < 0) {
             break;
+        }
     }
     return (i >= 0 || j >= 0);
 }

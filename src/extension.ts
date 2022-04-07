@@ -5,7 +5,7 @@ import * as Parser from './parsexmlgdl';
 import { OutlineView } from './scriptView';
 import { RefGuide } from './refguide';
 import { HSFLibpart } from './parsehsf';
-import { WSSymbols } from './wssymbols'
+import { WSSymbols } from './wssymbols';
 
 import path = require('path');
 
@@ -23,7 +23,7 @@ type PromiseParse = Promise<Parser.ParseXMLGDL>;
 type FormattedTokens = {
 	type: vscode.TextEditorDecorationType,
 	tokens: Parser.GDLToken[]
-}
+};
 
 export class GDLExtension
     implements vscode.HoverProvider,
@@ -83,13 +83,13 @@ export class GDLExtension
 
         //status bar initialization - XML
         this.statusXMLposition = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 9999);
-        this.statusXMLposition.tooltip = "Go to Line of Script..."
+        this.statusXMLposition.tooltip = "Go to Line of Script...";
     	this.statusXMLposition.command = 'GDL.gotoRelative';
         context.subscriptions.push(this.statusXMLposition);
 
         //status bar initialization - HSF
         this.statusHSF = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left);
-        this.statusHSF.tooltip = "Show Info from HSF Files"
+        this.statusHSF.tooltip = "Show Info from HSF Files";
     	this.statusHSF.command = 'GDL.infoFromHSF';
         context.subscriptions.push(this.statusHSF);
 
@@ -250,7 +250,7 @@ export class GDLExtension
         this.updateCurrentScript();
         this.updateStatusHSF();
 
-        const isGDLXML = (this.parser.getMainGUID() != undefined);	// only gdl-xml files contain main guid in <Symbol> tag
+        const isGDLXML = (this.parser.getMainGUID() !== undefined);	// only gdl-xml files contain main guid in <Symbol> tag
 
 		// script decorations
         const sectionList = this.parser.getAllSections();
@@ -325,7 +325,7 @@ export class GDLExtension
 
         if (this._editor?.document.uri.scheme === 'file' && modeGDLHSF(this._editor.document)) {
             const parentFolder = vscode.Uri.joinPath(this._editor.document.uri, "../..");
-            if (parentFolder.fsPath != oldRoot?.fsPath) {
+            if (parentFolder.fsPath !== oldRoot?.fsPath) {
                 changed = parentFolder;
             } else {
                 changed = false;
@@ -400,7 +400,7 @@ export class GDLExtension
         //console.log("GDLExtension.onDocumentOpened", document.uri.toString());
         
         // handle only top editor - other can be SCM virtual document
-        if (vscode.window.activeTextEditor?.document.uri == document.uri) {
+        if (vscode.window.activeTextEditor?.document.uri === document.uri) {
             this.updateHsfLibpart();
             this.reparseDoc(document, 0);
         }
@@ -431,7 +431,7 @@ export class GDLExtension
             this.refguidePath = this.getExtensionRefguidePath();
         }
         // close webview if reference guide root changed
-        if (path.normalize(path.join(lastPath, ".")) != path.normalize(path.join(this.refguidePath, "."))) {   // compare normalized paths
+        if (path.normalize(path.join(lastPath, ".")) !== path.normalize(path.join(this.refguidePath, "."))) {   // compare normalized paths
             this.refguide?.dispose();  // will be created in showRefguide with new refguidePath
         }
 
@@ -652,7 +652,7 @@ export class GDLExtension
             let scriptType = Parser.ScriptType.ROOT;
 
             if (!id || !(id instanceof Parser.GDLXMLSection)) { //called without script id
-                if (this.currentScript != Parser.ScriptType.ROOT) {   //use current script (ROOT == no script)
+                if (this.currentScript !== Parser.ScriptType.ROOT) {   //use current script (ROOT == no script)
                     scriptType = this.currentScript;
                 } else {
                     scriptType = await this.pickScript(Parser.ScriptType.BWM);  // ask user for script
@@ -704,7 +704,7 @@ export class GDLExtension
     }
 
     private updateStatusXML(line : number) {
-        if (this.currentScript == Parser.ScriptType.ROOT) {
+        if (this.currentScript === Parser.ScriptType.ROOT) {
             //hide if not found 
             this.statusXMLposition.hide();
         } else {
@@ -856,7 +856,7 @@ export class GDLExtension
                         completion.range = {
                             inserting: wordRange,
                             replacing: wordRange
-                        }
+                        };
                     }
                     //completion.documentation = p.getDocString(false, false);
                     completions.items.push(completion);
@@ -945,7 +945,7 @@ export class GDLExtension
 
         let symbols : vscode.DocumentSymbol[] = [];
         const allsections = this.parser.getAllSections();
-        const noroot = (allsections.length == 1 && allsections[0] instanceof Parser.GDLFile);
+        const noroot = (allsections.length === 1 && allsections[0] instanceof Parser.GDLFile);
         if (noroot) {   // GDL-HSF
             symbols = [...this.mapFuncionSymbols(Parser.ScriptType.ROOT),
                        ...this.mapCallSymbols(Parser.ScriptType.ROOT),
@@ -962,7 +962,7 @@ export class GDLExtension
                     if (section instanceof Parser.GDLScript) {
                         symbol.children = [...this.mapFuncionSymbols(section.scriptType),
                                            ...this.mapCallSymbols(section.scriptType),
-                                           ...this.mapCommentSymbols(section.scriptType)]
+                                           ...this.mapCommentSymbols(section.scriptType)];
                     }
                     symbols.push(symbol);
                 }
@@ -987,10 +987,10 @@ export class GDLExtension
                     definitions = link.filter(t => {
                         const target_wsfolder = vscode.workspace.getWorkspaceFolder(t.targetUri);
                         const call_wsfolder = vscode.workspace.getWorkspaceFolder(document.uri);
-                        return target_wsfolder == call_wsfolder;
+                        return target_wsfolder === call_wsfolder;
                     });
                     // if narrowed results are zero, show all matches
-                    if (definitions.length == 0) {
+                    if (definitions.length === 0) {
                         definitions = link;
                     }
                 } else {
@@ -1004,8 +1004,8 @@ export class GDLExtension
                     await this.immediateParse(document, cancel);
                     
                     definitions = this.mapFuncionSymbols(Parser.ScriptType.ROOT)
-                        .filter(s => (origin == s.name ||                                 // number
-                                      origin == s.name.substring(1, s.name.length - 1)))  // "name"
+                        .filter(s => (origin === s.name ||                                 // number
+                                      origin === s.name.substring(1, s.name.length - 1)))  // "name"
                         .map(s => ({ originSelectionRange:  originRange,
                                      targetRange:           s.range,
                                      targetSelectionRange:  s.selectionRange,
@@ -1039,7 +1039,7 @@ export class GDLExtension
             const callname_lc = callsymbol.name.toLowerCase();
             return (await this.wsSymbols.provideWorkspaceSymbols_withFallback(true, callname_lc, cancel))
                 // provided symbols are a loose filename match, have to be exact
-                .filter(t => (callname_lc == t.name.substring(1, t.name.length - 1).toLowerCase()))
+                .filter(t => (callname_lc === t.name.substring(1, t.name.length - 1).toLowerCase()))
                 .map(t => ({
                     originSelectionRange:  call_range,
                     targetRange:           GDLExtension.peek_range,
@@ -1067,7 +1067,7 @@ export class GDLExtension
             const end_full = end.translate(undefined, origin.length);
             const rest = document.getText(new vscode.Range(end, end_full));
 
-            if (rest == origin) {
+            if (rest === origin) {
                 references.push(new vscode.Location(document.uri, new vscode.Range(start, end_full)));
             }
         }

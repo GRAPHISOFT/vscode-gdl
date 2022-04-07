@@ -18,11 +18,12 @@ class OutlineView {
         }, this);
     }
     async newSettings(specComments, macroCalls) {
-        const changed = (this.specComments != specComments || this.macroCalls != macroCalls);
+        const changed = (this.specComments !== specComments || this.macroCalls !== macroCalls);
         this.specComments = specComments;
         this.macroCalls = macroCalls;
-        if (changed)
+        if (changed) {
             this.refresh();
+        }
     }
     async toggleSpecComments() {
         this.specComments = !this.specComments;
@@ -54,12 +55,15 @@ class OutlineView {
             }
         }
         // merge arrays
-        if (this.extension.parser.getFunctionList(scriptType) !== undefined)
+        if (this.extension.parser.getFunctionList(scriptType) !== undefined) {
             children.push(...this.extension.parser.getFunctionList(scriptType));
-        if (this.specComments && this.extension.parser.getCommentList(scriptType) !== undefined)
+        }
+        if (this.specComments && this.extension.parser.getCommentList(scriptType) !== undefined) {
             children.push(...this.extension.parser.getCommentList(scriptType));
-        if (this.macroCalls && this.extension.parser.getMacroCallList(scriptType) !== undefined)
+        }
+        if (this.macroCalls && this.extension.parser.getMacroCallList(scriptType) !== undefined) {
             children.push(...this.extension.parser.getMacroCallList(scriptType));
+        }
         // sort by line number
         return children.sort((a, b) => {
             return a.range.start.line - b.range.start.line;
@@ -255,7 +259,7 @@ class TokenUI {
         let expand = token.hasChildren() ? vscode.TreeItemCollapsibleState.Expanded : vscode.TreeItemCollapsibleState.None;
         switch (token.scriptType) {
             case Parser.ScriptType.D:
-                if (token.lineCount == 0) {
+                if (token.lineCount === 0) {
                     expand = vscode.TreeItemCollapsibleState.None;
                 }
             case Parser.ScriptType.D:
@@ -305,8 +309,8 @@ class TokenUI {
         this.label = token.name;
         this.collapsible = expand;
         this.id = token.range.start.line.toString() + " <> " + token.name;
-        this.revealonclick = (expand == vscode.TreeItemCollapsibleState.None ? true : false);
-        this.revealLine = (expand == vscode.TreeItemCollapsibleState.None ? token.range.start.line : 0);
+        this.revealonclick = (expand === vscode.TreeItemCollapsibleState.None ? true : false);
+        this.revealLine = (expand === vscode.TreeItemCollapsibleState.None ? token.range.start.line : 0);
         this.tooltip = "Line " + (token.range.start.line + 1) + " - " + (token.range.end.line + 1);
         this.lighticon = lighticon;
         this.darkicon = darkicon;

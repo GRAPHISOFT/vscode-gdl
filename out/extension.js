@@ -170,7 +170,7 @@ class GDLExtension {
         // status bar
         this.updateCurrentScript();
         this.updateStatusHSF();
-        const isGDLXML = (this.parser.getMainGUID() != undefined); // only gdl-xml files contain main guid in <Symbol> tag
+        const isGDLXML = (this.parser.getMainGUID() !== undefined); // only gdl-xml files contain main guid in <Symbol> tag
         // script decorations
         const sectionList = this.parser.getAllSections();
         for (const section of sectionList) {
@@ -235,7 +235,7 @@ class GDLExtension {
         let changed = undefined;
         if (this._editor?.document.uri.scheme === 'file' && modeGDLHSF(this._editor.document)) {
             const parentFolder = vscode.Uri.joinPath(this._editor.document.uri, "../..");
-            if (parentFolder.fsPath != oldRoot?.fsPath) {
+            if (parentFolder.fsPath !== oldRoot?.fsPath) {
                 changed = parentFolder;
             }
             else {
@@ -297,7 +297,7 @@ class GDLExtension {
     onDocumentOpened(document) {
         //console.log("GDLExtension.onDocumentOpened", document.uri.toString());
         // handle only top editor - other can be SCM virtual document
-        if (vscode.window.activeTextEditor?.document.uri == document.uri) {
+        if (vscode.window.activeTextEditor?.document.uri === document.uri) {
             this.updateHsfLibpart();
             this.reparseDoc(document, 0);
         }
@@ -326,7 +326,7 @@ class GDLExtension {
             this.refguidePath = this.getExtensionRefguidePath();
         }
         // close webview if reference guide root changed
-        if (path.normalize(path.join(lastPath, ".")) != path.normalize(path.join(this.refguidePath, "."))) { // compare normalized paths
+        if (path.normalize(path.join(lastPath, ".")) !== path.normalize(path.join(this.refguidePath, "."))) { // compare normalized paths
             this.refguide?.dispose(); // will be created in showRefguide with new refguidePath
         }
         let infoFromHSF = config.get("showInfoFromHSF");
@@ -505,7 +505,7 @@ class GDLExtension {
         if (this.editor) {
             let scriptType = Parser.ScriptType.ROOT;
             if (!id || !(id instanceof Parser.GDLXMLSection)) { //called without script id
-                if (this.currentScript != Parser.ScriptType.ROOT) { //use current script (ROOT == no script)
+                if (this.currentScript !== Parser.ScriptType.ROOT) { //use current script (ROOT == no script)
                     scriptType = this.currentScript;
                 }
                 else {
@@ -549,7 +549,7 @@ class GDLExtension {
         this.updateStatusXML(line);
     }
     updateStatusXML(line) {
-        if (this.currentScript == Parser.ScriptType.ROOT) {
+        if (this.currentScript === Parser.ScriptType.ROOT) {
             //hide if not found 
             this.statusXMLposition.hide();
         }
@@ -750,7 +750,7 @@ class GDLExtension {
         await this.immediateParse(document, cancel);
         let symbols = [];
         const allsections = this.parser.getAllSections();
-        const noroot = (allsections.length == 1 && allsections[0] instanceof Parser.GDLFile);
+        const noroot = (allsections.length === 1 && allsections[0] instanceof Parser.GDLFile);
         if (noroot) { // GDL-HSF
             symbols = [...this.mapFuncionSymbols(Parser.ScriptType.ROOT),
                 ...this.mapCallSymbols(Parser.ScriptType.ROOT),
@@ -785,10 +785,10 @@ class GDLExtension {
                     definitions = link.filter(t => {
                         const target_wsfolder = vscode.workspace.getWorkspaceFolder(t.targetUri);
                         const call_wsfolder = vscode.workspace.getWorkspaceFolder(document.uri);
-                        return target_wsfolder == call_wsfolder;
+                        return target_wsfolder === call_wsfolder;
                     });
                     // if narrowed results are zero, show all matches
-                    if (definitions.length == 0) {
+                    if (definitions.length === 0) {
                         definitions = link;
                     }
                 }
@@ -802,8 +802,8 @@ class GDLExtension {
                 if (lineBefore.match(/(then|goto|gosub)\s*["'`´“”’‘]?$/i)) {
                     await this.immediateParse(document, cancel);
                     definitions = this.mapFuncionSymbols(Parser.ScriptType.ROOT)
-                        .filter(s => (origin == s.name || // number
-                        origin == s.name.substring(1, s.name.length - 1))) // "name"
+                        .filter(s => (origin === s.name || // number
+                        origin === s.name.substring(1, s.name.length - 1))) // "name"
                         .map(s => ({ originSelectionRange: originRange,
                         targetRange: s.range,
                         targetSelectionRange: s.selectionRange,
@@ -831,7 +831,7 @@ class GDLExtension {
             const callname_lc = callsymbol.name.toLowerCase();
             return (await this.wsSymbols.provideWorkspaceSymbols_withFallback(true, callname_lc, cancel))
                 // provided symbols are a loose filename match, have to be exact
-                .filter(t => (callname_lc == t.name.substring(1, t.name.length - 1).toLowerCase()))
+                .filter(t => (callname_lc === t.name.substring(1, t.name.length - 1).toLowerCase()))
                 .map(t => ({
                 originSelectionRange: call_range,
                 targetRange: GDLExtension.peek_range,
@@ -852,7 +852,7 @@ class GDLExtension {
             const end = start.translate(undefined, match[0].length);
             const end_full = end.translate(undefined, origin.length);
             const rest = document.getText(new vscode.Range(end, end_full));
-            if (rest == origin) {
+            if (rest === origin) {
                 references.push(new vscode.Location(document.uri, new vscode.Range(start, end_full)));
             }
         }

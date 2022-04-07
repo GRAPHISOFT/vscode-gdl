@@ -7,7 +7,7 @@ import path = require('path');
 type WordAt = {
     word: string;
     range : vscode.Range;
-}
+};
 
 export class RefGuide {
 
@@ -99,14 +99,14 @@ export class RefGuide {
         
         if (wordRange) {
             let word = document.getText(wordRange);
-            wordAt = { word: word, range: wordRange }
+            wordAt = { word: word, range: wordRange };
         }
 
         return wordAt;
     }
 
     private async refguideHtml(url: vscode.Uri) : Promise<string> {
-        const refguideUri = this.refguideView!.webview.asWebviewUri(vscode.Uri.file(this.refguideroot))
+        const refguideUri = this.refguideView!.webview.asWebviewUri(vscode.Uri.file(this.refguideroot));
         
         // this is merged with the existing head in the files
         const head = `<head>
@@ -151,16 +151,16 @@ export class RefGuide {
 
     private getKeywordFilename(id: string) : string {
         // make filename
-        return path.join(this.refguideroot, 'reference', id + ".html")
+        return path.join(this.refguideroot, 'reference', id + ".html");
     }
 
     private getRequestFilename(id: string) : string {
         // make filename
-        return path.join(this.refguideroot, 'reference', 'requests', id + ".html")
+        return path.join(this.refguideroot, 'reference', 'requests', id + ".html");
     }
 
     private getIndexFilename() : string {
-        return path.join(this.refguideroot, "002.017.html")
+        return path.join(this.refguideroot, "002.017.html");
     }
 
     private async getReferenceToShow(word: string | undefined, allowIndexRedirect: boolean) : Promise<string | undefined> {
@@ -168,7 +168,7 @@ export class RefGuide {
         let found = false;
         let refguidefile : string | undefined;
 
-        if (word != undefined) {
+        if (word !== undefined) {
             // transform tube{2} to TUBE2
             const id = RefGuide.getLinkID(word);
 

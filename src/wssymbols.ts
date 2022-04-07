@@ -41,7 +41,7 @@ class LibpartInfo {
             } else {
                 return this.libpartdata_uri;   // assume always exists
             }
-        };
+        }
     }
 }
 
@@ -170,9 +170,15 @@ function filterquery(libpart : LibpartInfo, query_lc : string) : libpart is Libp
     const guid_lc = libpart.guid.toLowerCase();
     let i = 0, j = 0;
     for (const char of query_lc) {
-        if (i >= 0) i = name_lc.indexOf(char, i);
-        if (j >= 0) j = guid_lc.indexOf(char, j);
-        if (i < 0 && j < 0) break;
+        if (i >= 0) {
+            i = name_lc.indexOf(char, i);
+        }
+        if (j >= 0) {
+            j = guid_lc.indexOf(char, j);
+        }
+        if (i < 0 && j < 0) {
+            break;
+        }
     }
     return (i >= 0 || j >= 0);
 }
