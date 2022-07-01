@@ -55,6 +55,12 @@ __hotspot__ or __hotspot2__ - length edit hotspot triplet
   * These can all be toggled on/off together with Ctrl-Shift-Space
   * Follow macro calls with Ctrl-click
 * Go to definitions/references, find all references of subroutines in same gdl-hsf file (Ctrl-click or F12, Shift-F12, Shift-Alt-F12)
+* Automatic identation on typing
+  * Increase after lines with block-opening keywords (for, if, while, group, subroutine...)
+  * Decrease after block-closing keywords (next, else, endif, endwhile, endgroup, return...)
+  * Increase after first command continuation with , or \ (prevoius line ends without , or \ and this line ends with it)
+  * Decrease after end of command (previous line ends with , or \ and this line ends without it)
+  * Line ending comments are handled, comment-only lines and difficult syntax with multiline strings are not
 
 # Script outline view
 
@@ -159,8 +165,8 @@ Some valid syntaxes won't be highlighted, and some invalid syntaxes will be high
 # Release Notes
 
 ## 1.26.1
-* Added snippets for some missing recent global variables
-* Snippet bugfixing
+* Auto-identation on typing enter and block-closing keywords
+* Snippet bugfixing, added snippets for some missing recent global variables
 
 ## 1.25.3
 * Follow macro calls with Ctrl-click

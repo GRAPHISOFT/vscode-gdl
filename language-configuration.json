@@ -3,18 +3,10 @@
         // symbol used for single line comment. Remove this entry if your language does not support line comments
         "lineComment": "!"
     },
-    // symbols used as brackets - used for colorization or identation
+    // symbols used as brackets
     "brackets": [
         ["[", "]"],
-        ["(", ")"],
-        // for identation - only unindent effective
-        ["for", "next"],    
-        ["do", "while"],
-        ["repeat", "until"],
-        ["call", "returned_parameters"],
-        ["group", "endgroup"],
-        // for identation
-        ["do", "endwhile"]
+        ["(", ")"]
     ],
     // symbols that are auto closed when typing
     "autoClosingPairs": [
@@ -50,5 +42,31 @@
             "end": "^\\s*</Script_"
         }
     },
-    "wordpattern": "[~_a-zA-Z][~_a-zA-Z0-9]*"
+    "wordpattern": "[~_a-zA-Z][~_a-zA-Z0-9]*",
+    "indentationRules": {
+        "increaseIndentPattern": "(^\\s*(([\"'`´“”’‘]).*?\\3|[0-9]+)\\s*:\\s*(!.*)?$)|(^\\s*(for|FOR|do|DO|repeat|REPEAT|call|CALL|parameters|PARAMETERS|group|GROUP|while\\b.+\\bdo|WHILE\\b.+\\bDO)\\b)|(\\b(then|THEN|else|ELSE)\\s*(!.*)?$)",
+        "decreaseIndentPattern": "^\\s*(next|NEXT|end(while|group|if)|END(WHILE|GROUP|IF)|until|UNTIL|else|ELSE|return(ed_parameters)?|RETURN(ED_PARAMETERS)?)\\b"
+    },
+    "onEnterRules": [
+        {
+            "beforeText": "^\\s*(returned_parameters|RETURNED_PARAMETERS).*[,\\\\]\\s*(!.*)?$",
+            "action": {
+                "indent": "indent"
+            }
+        },
+        {
+            "previousLineText": "^((.*([^,\\\\\\s]|:))?\\s*(!.*)?)$",
+            "beforeText": "^.+[,\\\\]\\s*(!.*)?$",
+            "action": {
+                "indent": "indent"
+            }
+        },
+        {
+            "previousLineText": "^.*[,\\\\]\\s*(!.*)?$",
+            "beforeText": "^.*[^,\\\\\\s]\\s*(!.*)?$",
+            "action": {
+                "indent": "outdent"
+            }
+        }
+    ]
 }
