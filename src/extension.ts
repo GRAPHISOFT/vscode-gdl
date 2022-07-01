@@ -6,6 +6,7 @@ import { OutlineView } from './scriptView';
 import { RefGuide } from './refguide';
 import { HSFLibpart } from './parsehsf';
 import { WSSymbols } from './wssymbols';
+import { CallTree } from './calltree';
 
 import path = require('path');
 
@@ -39,6 +40,7 @@ export class GDLExtension
     private currentScript : Parser.ScriptType = Parser.ScriptType.ROOT;
     private hsflibpart? : HSFLibpart;
     private readonly wsSymbols : WSSymbols;
+    private readonly callTree : CallTree;
 
     // user settings
     private refguidePath: string = "";
@@ -74,8 +76,9 @@ export class GDLExtension
     private readonly sectionDecorations : vscode.TextEditorDecorationType[] = [];
 
     constructor(public context : vscode.ExtensionContext) {
-        this.parser = new Parser.ParseXMLGDL();  // without document only initializes
+        this.parser = new Parser.ParseXMLGDL();  // without text only initializes
         this.wsSymbols = new WSSymbols(context);
+        this.callTree = new CallTree(context, this.wsSymbols);
 
         // GDLOutline view initialization
         this.outlineView = new OutlineView(this);
@@ -125,13 +128,16 @@ export class GDLExtension
             vscode.commands.registerCommand('GDL.refguide', async () => this.showRefguide()),
     
             vscode.commands.registerCommand('GDL.infoFromHSF', () => this.setInfoFromHSF(!this.infoFromHSF)),
+            vscode.commands.registerCommand('GDL.rescanFolders', async () => this.rescanFolders()),
+
 
             // language features
             vscode.languages.registerHoverProvider(["gdl-hsf"], this),
             vscode.languages.registerDocumentSymbolProvider(["gdl-xml", "gdl-hsf"], this),
             vscode.languages.registerWorkspaceSymbolProvider(this.wsSymbols),
             vscode.languages.registerDefinitionProvider(["gdl-hsf"], this),
-            vscode.languages.registerReferenceProvider(["gdl-hsf"], this)
+            vscode.languages.registerReferenceProvider(["gdl-hsf"], this),
+            vscode.languages.registerCallHierarchyProvider(["gdl-hsf"], this.callTree)
         );
     }
 
@@ -286,7 +292,7 @@ export class GDLExtension
             this.parseTimer = setTimeout((document? : vscode.TextDocument) => {
                 this.parseTimer = undefined;
                 //console.log("GDLExtension.parse reached timeout");
-                resolve(new Parser.ParseXMLGDL(document));
+                resolve(new Parser.ParseXMLGDL(document?.getText()));
             }, delay, document);
         });
     }
@@ -377,7 +383,7 @@ export class GDLExtension
         if (this.editor) {
             this.editor.setDecorations(tokens.type,
                 tokens.tokens.map((e : Parser.GDLToken) => {
-                    return { range: e.range };
+                    return { range: e.range(this.editor!.document) };
                 }, this)
             );
         }
@@ -389,6 +395,10 @@ export class GDLExtension
             this.updateStatusHSF();
             this.decorateParameters();  // start async operation
         }
+    }
+
+    private async rescanFolders() {
+        await this.wsSymbols.changeFolders();
     }
 
     private onDocumentChanged(changeEvent: vscode.TextDocumentChangeEvent) {
@@ -477,7 +487,7 @@ export class GDLExtension
     }
 
     private gotoScriptType(scriptType : Parser.ScriptType) {
-        const line = this.parser.getXMLSection(scriptType)!.range.start.line;
+        const line = this.parser.getXMLSection(scriptType)!.range(this.editor!.document).start.line;
 
         // reveal line
         vscode.commands.executeCommand(
@@ -549,8 +559,9 @@ export class GDLExtension
 
             const script = this.parser.getXMLSection(scriptType)!;
 
-            let start = script.range.start;
-            let end = script.range.end;
+            let range = script.innerrange(this.editor!.document);
+            let start = range.start;
+            let end = range.end;
             
             // reveal top line
             vscode.commands.executeCommand(
@@ -559,14 +570,6 @@ export class GDLExtension
                     "lineNumber" : start.line,
                     "at": "top"
                 });
-
-            if (scriptType !== Parser.ScriptType.ROOT) {
-                //end of end-previous line - 3
-                const len = this.editor.document.lineAt(end.line - 1).range.end.character;
-                end = end.with(end.line - 1, len - 3);
-                //start of start-next line + 9
-                start = start.with(start.line + 1, 9);
-            }
 
             //select all
             this.editor.selection = new vscode.Selection(end, start);
@@ -605,7 +608,13 @@ export class GDLExtension
         let retval = false;
         const script = this.parser.getXMLSection(scriptType);
         if (this.editor && script !== undefined) {
-            const length = script.lineCount;
+            let range = script.innerrange(this.editor!.document);
+            let length : number;
+            if (script instanceof Parser.GDLFile) {
+                length = range.end.line - range.start.line + 1;
+            } else {    // don't count open/closing tags
+                length = range.end.line - range.start.line - 1;
+            }
             const savedSelection = this.editor.selection;
 
             //show script start for feedback
@@ -619,7 +628,8 @@ export class GDLExtension
                                     value: "1",
                                     prompt: promptstring,
                                     ignoreFocusOut: false,
-                                    validateInput: (line : string) : string => this.peekline(line, promptstring, script!.range.start, length, delta)
+                                    validateInput: (line : string) : string =>
+                                        this.peekline(line, promptstring, range.start, length, delta)
                                     });
 
             // jump to result
@@ -627,7 +637,7 @@ export class GDLExtension
                 const jump = parseInt(result);
                 
                 if (jump !== Number.NaN) {
-                    let gotoLine = script.range.start.translate(jump + delta);
+                    let gotoLine = range.start.translate(jump + delta);
                     
                     if (scriptType !== Parser.ScriptType.ROOT && jump === 1) {   //goto to pos. 9 of first line
                         gotoLine = gotoLine.translate(0, 9);
@@ -672,14 +682,14 @@ export class GDLExtension
         return Promise.resolve();
     }
 
-    private getScriptAtPos(pos : vscode.Position) : Parser.GDLXMLSection | undefined {
+    private getScriptAtPos(pos : vscode.Position) : Parser.GDLScript | undefined {
         // check if position is in range of script
-        let script : Parser.GDLXMLSection | undefined;
-        for (let i = Parser.ScriptType.D; i <= Parser.ScriptType.BWM; i++) {
+        let script : Parser.GDLScript | undefined;
+        for (const i of Parser.Scripts) {
             script = this.parser.getXMLSection(i);
 
             if (script &&   // -> range defined
-                pos.line > script.range.start.line && pos.line < script.range.end.line) {   //<Script> tags at start and end lines
+                script.innerrange(this.editor!.document).contains(pos)) {
                     break;  // break for
             }
         }
@@ -695,8 +705,7 @@ export class GDLExtension
             const script = this.getScriptAtPos(pos);
             if (script) {
                 this.currentScript = script.scriptType;
-                line = pos.line - script.range.start.line;
-              
+                line = pos.line - this.editor.document.positionAt(script.start).line;
             }
         }
 
@@ -873,18 +882,17 @@ export class GDLExtension
         //console.log("GDLExtension.mapFunctionSymbols");
         return this.parser.getFunctionList(scriptType).map((f : Parser.GDLFunction, i : number, array : Parser.GDLFunction[]) => {
             let endpos : vscode.Position;
+            let range = f.range(this.editor!.document);
             if (i + 1 < array.length) {
                 // start of next function in same script
-                endpos = array[i + 1].range.start;
+                endpos = array[i + 1].range(this.editor!.document).start;
             } else {
                 // end of script
                 const script = this.parser.getXMLSection(scriptType);
-                if (script instanceof Parser.GDLScript) {       // gdl-xml
-                    endpos = script.innerrange.end;
-                } else if (script instanceof Parser.GDLFile) {  // gdl-hsf
-                    endpos = script.range.end;
-                } else {                                        // shouldn't happen
-                    endpos = f.range.end;
+                if (script) {
+                    endpos = script.innerrange(this.editor!.document).end;
+                } else {    // shouldn't happen
+                    endpos = range.end;
                 }
             }
             
@@ -893,32 +901,41 @@ export class GDLExtension
                 f.name,
                 "",
                 vscode.SymbolKind.Method,
-                new vscode.Range(f.range.start, end),
-                f.range);
+                new vscode.Range(range.start, end),
+                range);
         }, this);
     }
+
+    //private filterScript(scriptType : Parser.ScriptType, tokens : Parser.GDLToken[]) : Parser.GDLToken[] {
+    //    return tokens.filter(t => {
+    //        const pos = t.range(this.editor!.document).start;
+    //        return this.getScriptAtPos(pos)?.scriptType === scriptType;
+    //    });
+    //}
 
     private mapCommentSymbols(scriptType : Parser.ScriptType) {
         //console.log("GDLExtension.mapCommentSymbols");
         return this.parser.getCommentList(scriptType).map((c : Parser.GDLComment) => {
+            const range = c.range(this.editor!.document);
             return new vscode.DocumentSymbol(
                 "! " + c.name,
                 "",
                 vscode.SymbolKind.Property,
-                c.range,
-                c.range);
+                range,
+                range);
         }, this);
     }
 
     private mapCallSymbols(scriptType : Parser.ScriptType) {
         //console.log("GDLExtension.mapCallSymbols");
         return this.parser.getMacroCallList(scriptType).map((m : Parser.GDLMacroCall) => {
+            const range = m.range(this.editor!.document);
             return new vscode.DocumentSymbol(
                 "call " + m.name,
                 m.all ? " \u00a0parameters ALL" : "",
                 vscode.SymbolKind.Object,
-                m.range,
-                m.range);
+                range,
+                range);
         }, this);
     }
 
@@ -953,7 +970,9 @@ export class GDLExtension
         } else {
             for (const section of allsections) {
                 if (!(section instanceof Parser.GDLFile)) {  // don't need file root in GDL-XML
-                    const showRange = (section instanceof Parser.GDLScript) ? section.innerrange : section.range;
+                    const showRange = (section instanceof Parser.GDLScript)
+                                        ? section.innerrange(this.editor!.document)
+                                        : section.range(this.editor!.document);
                     const symbol = new vscode.DocumentSymbol(section.name,
                                                              "",
                                                              vscode.SymbolKind.File,
@@ -974,6 +993,9 @@ export class GDLExtension
 
     async provideDefinition(document: vscode.TextDocument, position: vscode.Position, cancel: vscode.CancellationToken): Promise<vscode.LocationLink[]> {
         let definitions : vscode.LocationLink[] = [];
+
+        // should we re-parse when document doesn't match this.editor.document ?
+        console.assert(document.uri.fsPath === this.editor?.document.uri.fsPath, `${document.uri.fsPath} !== ${this.editor?.document.uri.fsPath}`);
 
         const originRange = document.getWordRangeAtPosition(position);
         if (originRange !== undefined) {
@@ -1022,22 +1044,21 @@ export class GDLExtension
 
     private async macroLinks(document: vscode.TextDocument, originRange: vscode.Range, cancel: vscode.CancellationToken) : Promise<vscode.LocationLink[] | undefined> {
         // find by position in document
-        const callsymbol = this.parser.getMacroCallList(Parser.ScriptType.ROOT).find(m => m.range.contains(originRange));
+        const callsymbol = this.parser.getMacroCallList(Parser.ScriptType.ROOT)
+                                .find(m => m.range(document).contains(originRange));
         if (callsymbol) {
 
             // find exactly where is the string (can have spaces, whitespace after call)
-            let call_range : vscode.Range;
-            const name_offset = document.getText(callsymbol.range).indexOf(callsymbol.name, 6); // start search after call "
+            let call_range = callsymbol.range(document);
+            const name_offset = document.getText(call_range).indexOf(callsymbol.name, 6); // start search after call "
             if (name_offset >= 6) {
-                const call_start = callsymbol.range.start.translate(0, name_offset);
-                call_range = callsymbol.range.with(call_start, call_start.translate(0, callsymbol.name.length));
-            } else {
-                call_range = callsymbol.range;
+                const call_start = call_range.start.translate(0, name_offset);
+                call_range = call_range.with(call_start, call_start.translate(0, callsymbol.name.length));
             }
 
             // get target uri from wsSymbols
             const callname_lc = callsymbol.name.toLowerCase();
-            return (await this.wsSymbols.provideWorkspaceSymbols_withFallback(true, callname_lc, cancel))
+            return (await this.wsSymbols.provideWorkspaceSymbols_withFallback(document, true, callname_lc, false, cancel))
                 // provided symbols are a loose filename match, have to be exact
                 .filter(t => (callname_lc === t.name.substring(1, t.name.length - 1).toLowerCase()))
                 .map(t => ({
@@ -1127,6 +1148,7 @@ export async function fileExists(uri : vscode.Uri) : Promise<boolean> {
 export async function readFile(uri: vscode.Uri, exists : boolean = false) : Promise<string | undefined> {
     // read an utf-8 file
     // call with exists = true to skip check
+    // TODO add cancellation token to cancel Promise with reject
     if (exists || await fileExists(uri)) {
         const data = await vscode.workspace.fs.readFile(uri);
         const utf8_decoder = new TextDecoder("utf8");
@@ -1134,4 +1156,24 @@ export async function readFile(uri: vscode.Uri, exists : boolean = false) : Prom
     } else {
         return undefined;
     }
+}
+
+export function HSFScriptType(uri : vscode.Uri) : Parser.ScriptType | undefined {
+    // return scriptype derived from filename
+    const filename = path.basename(uri.fsPath, ".gdl");
+    return Parser.Scripts.find(script => Parser.scriptFile[script] === filename);
+}
+
+export async function fileScriptType(uri : vscode.Uri) : Promise<Parser.ScriptType | undefined> {
+    // return ScriptType.ROOT for non-HSF files
+    //      scriptype derived from filename otherwise
+    if (await hasLibPartData(vscode.Uri.joinPath(uri, "../.."))) {
+        return HSFScriptType(uri);
+    } else {
+        return Parser.ScriptType.ROOT;
+    }
+}
+
+export function HSFNameOfScript(script : vscode.Uri) : string {
+    return path.basename(path.dirname(path.dirname(script.fsPath)));
 }

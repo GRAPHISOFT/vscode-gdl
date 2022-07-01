@@ -1,8 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ParseXMLGDL = exports.GDLPict = exports.GDLPictParent = exports.GDLSection = exports.GDLScript = exports.GDLFile = exports.GDLXMLSection = exports.GDLMigrationGUID = exports.GDLMainGUID = exports.GDLMacroCall = exports.GDLCalledMacro = exports.GDLComment = exports.GDLFunction = exports.GDLToken = exports.scriptName = exports.scriptAbbrev = exports.ScriptType = void 0;
+exports.ParseXMLGDL = exports.GDLPict = exports.GDLPictParent = exports.GDLSection = exports.GDLScript = exports.GDLFile = exports.GDLXMLSection = exports.GDLMigrationGUID = exports.GDLMainGUID = exports.GDLMacroCall = exports.GDLCalledMacro = exports.GDLComment = exports.GDLFunction = exports.GDLToken = exports.Scripts = exports.ScriptsExceptMaster = exports.scriptName = exports.scriptFile = exports.scriptAbbrev = exports.ScriptType = void 0;
 const vscode = require("vscode");
-const extension_1 = require("./extension");
 var ScriptType;
 (function (ScriptType) {
     ScriptType[ScriptType["ROOT"] = 0] = "ROOT";
@@ -19,7 +18,8 @@ var ScriptType;
     ScriptType[ScriptType["CALLEDMACROS"] = 11] = "CALLEDMACROS";
     ScriptType[ScriptType["GDLPICT"] = 12] = "GDLPICT";
 })(ScriptType = exports.ScriptType || (exports.ScriptType = {}));
-exports.scriptAbbrev = ["", "MASTER", "2D", "3D", "UI", "PARAM", "PROP", "FWM", "BWM", "", "", "", ""];
+exports.scriptAbbrev = ["FILE", "MASTER", "2D", "3D", "UI", "PARAM", "PROP", "FWM", "BWM", "", "", "", ""];
+exports.scriptFile = ["", "1d", "2d", "3d", "ui", "vl", "pr", "fwm", "bwm", "", "", "", ""];
 exports.scriptName = ["file",
     "MASTER SCRIPT",
     "2D SCRIPT",
@@ -34,30 +34,42 @@ exports.scriptName = ["file",
     "CALLEDMACROS",
     "EMBEDDED PICTURES"
 ];
+exports.ScriptsExceptMaster = [ScriptType.DD,
+    ScriptType.DDD,
+    ScriptType.UI,
+    ScriptType.VL,
+    ScriptType.PR,
+    ScriptType.FWM,
+    ScriptType.BWM];
+exports.Scripts = [ScriptType.D, ...exports.ScriptsExceptMaster];
 // general interface representing a thing we want to catch
 class GDLToken {
     constructor(start, end, name) {
+        this.start = start;
+        this.end = end;
         this.name = name;
-        this.range = new vscode.Range(start, end);
+    }
+    range(document) {
+        return new vscode.Range(document.positionAt(this.start), document.positionAt(this.end));
     }
 }
 exports.GDLToken = GDLToken;
 // function definitions
 class GDLFunction extends GDLToken {
-    constructor(start, end, name, inScript) {
-        //console.log("GDLFunction()", name, inScript);
+    constructor(start, end, name) {
+        //console.log("GDLFunction()", name);
         super(start, end, name);
-        this.inScript = inScript;
     }
 }
 exports.GDLFunction = GDLFunction;
 GDLFunction.regex = /(?<=^\s*?)(([0-9]+)|((["'`´“”’‘])([^"'`´“”’‘]+)\4))\s*:/mg;
 // special comments
 class GDLComment extends GDLToken {
-    constructor(start, end, name, inScript) {
-        //console.log("GDLComment()", name, inScript);
+    // ! name
+    // ! ============
+    constructor(start, end, name) {
+        //console.log("GDLComment()", name);
         super(start, end, name);
-        this.inScript = inScript;
     }
 }
 exports.GDLComment = GDLComment;
@@ -75,11 +87,15 @@ exports.GDLCalledMacro = GDLCalledMacro;
 GDLCalledMacro.regex = /^\s*<MName><!\[CDATA\["([\D\d]*?)"\]\]><\/MName>/mig;
 // macro calls
 class GDLMacroCall extends GDLToken {
-    constructor(start, end, match, script) {
+    constructor(start, end, match) {
         //console.log("GDLMacroCall()", content);
         super(start, end, match[1]);
+        this.innerstart = start + 6 + match[0].substring(6).search(match[1]);
+        this.innerend = this.innerstart + match[1].length;
         this.all = (match.length >= 4 && match[4] !== undefined); // parameters all
-        this.inScript = script;
+    }
+    namerange(document) {
+        return new vscode.Range(document.positionAt(this.innerstart), document.positionAt(this.innerend));
     }
 }
 exports.GDLMacroCall = GDLMacroCall;
@@ -127,19 +143,29 @@ exports.GDLMigrationGUID = GDLMigrationGUID;
 GDLMigrationGUID.regex = /^\s*<(MigrationTableElement>)([\D\d]*?)<\/\1/mig;
 // toplevel XML sections (script, migtable, etc...)
 class GDLXMLSection extends GDLToken {
-    constructor(start, end, scriptType, parser) {
+    constructor(start, end, innerstart, innerend, scriptType, // integer ID of tag
+    parser, // needed for other elements' lists
+    subtext) {
         super(start, end, exports.scriptName[scriptType]);
+        this.innerstart = innerstart;
+        this.innerend = innerend;
         this.scriptType = scriptType;
         this.parser = parser;
+        this.multiline = GDLXMLSection.newlineregex.test(subtext);
+    }
+    // range in editor
+    innerrange(document) {
+        return new vscode.Range(document.positionAt(this.innerstart), document.positionAt(this.innerend));
     }
 }
 exports.GDLXMLSection = GDLXMLSection;
 GDLXMLSection.regex = /^<((Script_([123]D|UI|VL|PR|[FB]WM))|ParamSection|MigrationTable|CalledMacros)[\D\d]*?<\/\1>/mg;
+GDLXMLSection.newlineregex = /[\n\r]/;
 // whole file
 class GDLFile extends GDLXMLSection {
-    constructor(start, end, parser) {
-        super(start, end, ScriptType.ROOT, parser);
-        this.lineCount = end.line - start.line + 1;
+    constructor(start, parser, text) {
+        const end = start + text.length;
+        super(start, end, start, end, ScriptType.ROOT, parser, text);
     }
     hasChildren() {
         return false;
@@ -148,31 +174,43 @@ class GDLFile extends GDLXMLSection {
 exports.GDLFile = GDLFile;
 // GDL scripts
 class GDLScript extends GDLXMLSection {
-    constructor(start, end, scriptType, parser, document) {
-        super(start, end, scriptType, parser);
-        this.lineCount = end.line - start.line - 1;
-        const match = GDLScript.innerregex.exec(document.getText(this.range));
+    constructor(start, scriptType, parser, text) {
+        const match = GDLScript.innerregex.exec(text);
+        let innerstart;
+        let subtext;
         if (match) {
-            const innerstart = document.offsetAt(start) + match.index;
-            this.innerrange = new vscode.Range(document.positionAt(innerstart), document.positionAt(innerstart + match[0].length));
+            innerstart = start + match.index;
+            subtext = match[0];
         }
         else {
-            this.innerrange = this.range;
+            innerstart = start;
+            subtext = text;
         }
+        super(start, start + text.length, innerstart, innerstart + subtext.length, scriptType, parser, subtext);
     }
     hasChildren() {
         const functionList = this.parser.getFunctionList(this.scriptType);
         return (functionList.length > 0 || //has funtions
-            this.lineCount > 1); //longer than one line: has main function
+            this.multiline); //longer than one line: has main function
     }
 }
 exports.GDLScript = GDLScript;
 GDLScript.innerregex = /(?<=^.*?<\!\[CDATA\[).*(?=\]\]>[\n\r]*<\/Script_)/s;
 // non-script XML sections
 class GDLSection extends GDLXMLSection {
-    constructor(start, end, scriptType, parser) {
-        super(start, end, scriptType, parser);
-        this.lineCount = end.line - start.line - 1;
+    constructor(start, scriptType, parser, text) {
+        const end = start + text.length;
+        let subtext = text.substring(start, end + 1);
+        const match = GDLSection.innerregex.exec(subtext);
+        let innerstart;
+        if (match?.length) {
+            subtext = match[0]; // what if zero-length match?
+            innerstart = start + match.index;
+        }
+        else {
+            innerstart = start;
+        }
+        super(start, end, innerstart, innerstart + subtext.length, scriptType, parser, subtext);
     }
     hasChildren() {
         // migration GUIDs
@@ -188,11 +226,11 @@ class GDLSection extends GDLXMLSection {
     }
 }
 exports.GDLSection = GDLSection;
+GDLSection.innerregex = /(?<=<(ParamSection|MigrationTable|CalledMacros)[^>]*>[\n\r]+)(.*?)(?=<\/\1>)/sg;
 // parent of GDLPict leafs
 class GDLPictParent extends GDLToken {
     constructor(numChildren) {
-        const pos = new vscode.Position(0, 0);
-        super(pos, pos, exports.scriptName[ScriptType.GDLPICT]);
+        super(0, 0, exports.scriptName[ScriptType.GDLPICT]);
         this.numChildren = numChildren;
     }
 }
@@ -223,7 +261,8 @@ class GDLPict extends GDLToken {
 exports.GDLPict = GDLPict;
 GDLPict.regex = /^\s*<GDLPict[\D\d]*?SubIdent="(\d*?)"[\D\d]*?path="(.*?\/([^\/]*))"[\D\d]*?\/>/mig;
 class ParseXMLGDL {
-    constructor(document) {
+    constructor(text, functions = true, comments = true, guids = true, calledmacros = true, picts = true) {
+        //console.log("ParseXMLGDL()");
         this.sectionList = [];
         this.functionList = [];
         this.commentList = [];
@@ -231,8 +270,13 @@ class ParseXMLGDL {
         this.GUIDList = [];
         this.calledMacroList = [];
         this.pictList = [];
-        //console.log("ParseXMLGDL()");
-        this.parseall(document);
+        // this needs to be first to know script boundaries
+        this.parseScripts(text);
+        this.parseFunctions(functions ? text : undefined);
+        this.parseComments(comments ? text : undefined);
+        this.parseGUIDs(guids ? text : undefined);
+        this.parseCalledMacros(calledmacros ? text : undefined);
+        this.parsePicts(picts ? text : undefined);
     }
     getXMLSection(scriptType) {
         // not a list, only one element
@@ -259,26 +303,25 @@ class ParseXMLGDL {
     getPictList() {
         return this.pictList;
     }
-    parseScripts(document) {
+    parseScripts(text) {
         //console.log("ParseXMLGDL.parseScripts");
         let match;
         this.sectionList = [];
-        if ((0, extension_1.modeGDL)(document)) {
-            const text = document.getText();
+        if (text) {
             while (match = GDLXMLSection.regex.exec(text)) {
                 if (match.length > 0) { // match[1] exists
-                    const script = ParseXMLGDL.createGDLXMLSection(document.positionAt(match.index), document.positionAt(match.index + match[0].length), match[1], this, document);
+                    const script = ParseXMLGDL.createGDLXMLSection(match.index, match[1], this, match[0]);
                     this.sectionList[script.scriptType] = script;
                 }
             }
             // whole file
-            this.sectionList[ScriptType.ROOT] = ParseXMLGDL.createGDLXMLSection(new vscode.Position(0, 0), document.positionAt(text.length), "", this, document);
+            this.sectionList[ScriptType.ROOT] = ParseXMLGDL.createGDLXMLSection(0, "", this, text);
         }
     }
-    scriptOfPos(line) {
+    scriptOfPos(start) {
         let scriptType = ScriptType.ROOT;
         this.sectionList.some(script => {
-            if (script !== undefined && script.scriptType !== ScriptType.ROOT && (script.range.start.line <= line) && (script.range.end.line >= line)) {
+            if (script !== undefined && script.scriptType !== ScriptType.ROOT && (script.start <= start) && (script.end >= start)) {
                 scriptType = script.scriptType;
                 return true;
             }
@@ -286,15 +329,15 @@ class ParseXMLGDL {
         });
         return scriptType;
     }
-    parseFunctions(document) {
+    parseFunctions(text) {
         //console.log("ParseXMLGDL.parseFunctions");
         let match, matchedName;
         this.functionList = [];
-        for (let i = ScriptType.ROOT; i <= ScriptType.MIGTABLE; i++) {
+        for (let i = ScriptType.ROOT; i <= ScriptType.BWM; i++) {
             this.functionList.push([]);
         }
-        if ((0, extension_1.modeGDL)(document)) {
-            while (match = GDLFunction.regex.exec(document.getText())) {
+        if (text) {
+            while (match = GDLFunction.regex.exec(text)) {
                 if (match.length > 1) { // match[2] exists
                     if (match[2]) {
                         matchedName = match[2]; // number
@@ -302,71 +345,69 @@ class ParseXMLGDL {
                     else {
                         matchedName = match[3]; // name
                     }
-                    const start = document.positionAt(match.index);
-                    const end = document.positionAt(match.index + matchedName.length + 1);
-                    const scriptType = this.scriptOfPos(start.line);
-                    this.functionList[scriptType].push(new GDLFunction(start, end, matchedName, scriptType));
+                    const start = match.index;
+                    const end = match.index + matchedName.length + 1;
+                    const scriptType = this.scriptOfPos(start);
+                    this.functionList[scriptType].push(new GDLFunction(start, end, matchedName));
                 }
             }
         }
     }
-    parseComments(document) {
+    parseComments(text) {
         //console.log("ParseXMLGDL.parseComments");
         let match;
         this.commentList = [];
-        for (let i = ScriptType.ROOT; i <= ScriptType.MIGTABLE; i++) {
+        for (let i = ScriptType.ROOT; i <= ScriptType.BWM; i++) {
             this.commentList.push([]);
         }
-        if ((0, extension_1.modeGDL)(document)) {
-            while (match = GDLComment.regex.exec(document.getText())) {
+        if (text) {
+            while (match = GDLComment.regex.exec(text)) {
                 if (match.length > 1) { // match[2] exists
-                    const start = document.positionAt(match.index);
-                    const end = document.positionAt(match.index + match[0].length + 1);
-                    const scriptType = this.scriptOfPos(start.line);
-                    this.commentList[scriptType].push(new GDLComment(start, end, match[2], scriptType));
+                    const start = match.index;
+                    const end = match.index + match[0].length + 1;
+                    const scriptType = this.scriptOfPos(start);
+                    this.commentList[scriptType].push(new GDLComment(start, end, match[2]));
                 }
             }
         }
     }
-    parseGUIDs(document) {
+    parseGUIDs(text) {
         //console.log("ParseXMLGDL.parseGUIDs");
         let match;
         this.GUIDList = [];
-        if ((0, extension_1.modeGDL)(document)) {
-            const text = document.getText();
+        if (text) {
             // get main GUID
             this.mainGUID = undefined;
             while (match = GDLMainGUID.regex.exec(text)) {
                 if (match.length > 0) { // match[1] exists
-                    this.mainGUID = new GDLMainGUID(document.positionAt(match.index), document.positionAt(match.index + match[0].length + 1), match[1]);
+                    this.mainGUID = new GDLMainGUID(match.index, match.index + match[0].length + 1, match[1]);
                 }
             }
             // get migration GUIDs
             while (match = GDLMigrationGUID.regex.exec(text)) {
                 if (match.length > 1) { // match[2] exists
-                    this.GUIDList.push(new GDLMigrationGUID(document.positionAt(match.index), document.positionAt(match.index + match[0].length + 1), match[2]));
+                    this.GUIDList.push(new GDLMigrationGUID(match.index, match.index + match[0].length + 1, match[2]));
                 }
             }
         }
     }
-    parseCalledMacros(document) {
+    parseCalledMacros(text) {
         //console.log("ParseXMLGDL.parseCalledMacros");
         let match;
         this.macroCallList = [];
         this.calledMacroList = [];
-        if ((0, extension_1.modeGDL)(document)) {
-            for (let i = ScriptType.ROOT; i <= ScriptType.MIGTABLE; i++) {
-                this.macroCallList.push([]);
-            }
-            const macroCallListMap = {};
-            const text = document.getText();
+        for (let i = ScriptType.ROOT; i <= ScriptType.BWM; i++) {
+            this.macroCallList.push([]);
+        }
+        const macroCallListMap = {};
+        if (text) {
             // parse macro calls
             while (match = GDLMacroCall.regex.exec(text)) {
                 if (match.length > 0) {
-                    const start = document.positionAt(match.index);
-                    const end = document.positionAt(match.index + match[0].length + 1);
-                    const scriptType = this.scriptOfPos(start.line);
-                    const macroCall = new GDLMacroCall(start, end, match, scriptType);
+                    const start = match.index;
+                    const end = match.index + match[0].length + 1;
+                    const scriptType = this.scriptOfPos(start);
+                    const macroCall = new GDLMacroCall(start, end, match);
                     this.macroCallList[scriptType].push(macroCall);
                     // temporary map used for adding info to GDLCalledMacro later
                     if (macroCallListMap[macroCall.name] === undefined) {
@@ -382,21 +423,21 @@ class ParseXMLGDL {
                     if (calledFromScripts === undefined) {
                         calledFromScripts = new Array();
                     }
-                    const start = document.positionAt(match.index);
-                    const end = document.positionAt(match.index + match[0].length + 1);
+                    const start = match.index;
+                    const end = match.index + match[0].length + 1;
                     this.calledMacroList.push(new GDLCalledMacro(start, end, match[1], calledFromScripts));
                 }
             }
         }
     }
-    parsePicts(document) {
+    parsePicts(text) {
         //console.log("ParseXMLGDL.parsePicts");
         let match;
         this.pictList = [];
-        if ((0, extension_1.modeGDL)(document)) {
+        if (text) {
             // store GDLPicts
-            while (match = GDLPict.regex.exec(document.getText())) {
-                this.pictList.push(new GDLPict(document.positionAt(match.index), document.positionAt(match.index + match[0].length + 1), match));
+            while (match = GDLPict.regex.exec(text)) {
+                this.pictList.push(new GDLPict(match.index, match.index + match[0].length + 1, match));
             }
         }
     }
@@ -405,25 +446,16 @@ class ParseXMLGDL {
         // flatten array and sort by line number
         const functions = [];
         return functions.concat(...this.functionList)
-            .sort((a, b) => a.range.start.line - b.range.start.line);
+            .sort((a, b) => a.start - b.start);
     }
     getAllSections() {
         //console.log("ParseXMLGDL.getAllSections");
         // skip undefineds
         return this.sectionList
             .filter((e) => (e !== undefined))
-            .sort((a, b) => a.range.start.line - b.range.start.line);
+            .sort((a, b) => a.start - b.start);
     }
-    parseall(document) {
-        //console.log("ParseXMLGDL.parseall");
-        this.parseScripts(document);
-        this.parseFunctions(document);
-        this.parseComments(document);
-        this.parseGUIDs(document);
-        this.parseCalledMacros(document);
-        this.parsePicts(document);
-    }
-    static createGDLXMLSection(start, end, tag, parser, document) {
+    static createGDLXMLSection(start, tag, parser, text) {
         let scriptType;
         switch (tag) {
             case "Script_1D":
@@ -471,14 +503,14 @@ class ParseXMLGDL {
             case ScriptType.PR:
             case ScriptType.FWM:
             case ScriptType.BWM:
-                return new GDLScript(start, end, scriptType, parser, document);
+                return new GDLScript(start, scriptType, parser, text);
             case ScriptType.MIGTABLE:
             case ScriptType.PARAMSECTION:
             case ScriptType.CALLEDMACROS:
-                return new GDLSection(start, end, scriptType, parser);
+                return new GDLSection(start, scriptType, parser, text);
             case ScriptType.ROOT:
             default:
-                return new GDLFile(start, end, parser);
+                return new GDLFile(start, parser, text);
         }
     }
 }

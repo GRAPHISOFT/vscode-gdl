@@ -2,10 +2,14 @@ import path = require('path');
 import * as vscode from 'vscode';
 
 import { fileExists, readFile } from './extension';
+import * as Parser from './parsexmlgdl';
 
-class LibpartInfo {
+export class LibpartInfo {
     private _root_uri : vscode.Uri | undefined;
     private _name : string | undefined;
+    
+    private scriptsCache = new Map<Parser.ScriptType, vscode.Uri | null>();
+
     constructor(public readonly libpartdata_uri: vscode.Uri, public readonly guid: string) {}
 
     get name() : string {
@@ -33,14 +37,30 @@ class LibpartInfo {
         } else {
             if (masterscript) {
                 target = vscode.Uri.joinPath(this.root_uri, "scripts/1d.gdl");
-            } else {
-                target = this.libpartdata_uri;
             }
-            if ((await fileExists(target))) {
+            if (masterscript && await fileExists(target)) {
                 return target;
             } else {
                 return this.libpartdata_uri;   // assume always exists
             }
+        }
+    }
+
+    async scriptUri(script : Parser.ScriptType) {
+        const cachedValue = this.scriptsCache.get(script);
+
+        if (cachedValue !== undefined) {    // null if script doesn't exist
+            return cachedValue;
+        } else {
+            const target = vscode.Uri.joinPath(this.root_uri, "scripts", `${Parser.scriptFile[script]}.gdl`);
+            let result : vscode.Uri | null;
+            if (await fileExists(target)) {
+                result = target;
+            } else {
+                result = null;
+            }
+            this.scriptsCache.set(script, result);
+            return result;
         }
     }
 }
@@ -98,68 +118,79 @@ export class WSSymbols implements vscode.WorkspaceSymbolProvider<vscode.SymbolIn
 
     async provideWorkspaceSymbols(query : string, token: vscode.CancellationToken): Promise<vscode.SymbolInformation[]> {
         // when called from UI don't offer master script as fallback
-        return this.provideWorkspaceSymbols_withFallback(false, query, token);
+
+        return this.provideWorkspaceSymbols_withFallback(vscode.window.activeTextEditor?.document, false, query, true, token);
     }
 
-    async provideWorkspaceSymbols_withFallback(masterscript: boolean, query : string, token: vscode.CancellationToken): Promise<vscode.SymbolInformation[]> {
-        //console.log("provideWorkspaceSymbols");
-
-        if (this.unprocessed) {
-            //wait for workspace scanning to finish
-            await new Promise((resolve, reject) => {
-                this.onDidCollect(resolve);
-                token.onCancellationRequested(reject);
-            });
+    async provideWorkspaceSymbols_withFallback(document : vscode.TextDocument | undefined, masterscript: boolean, query : string, addGuids: boolean, token: vscode.CancellationToken): Promise<vscode.SymbolInformation[]> {
+        //get filename from document
+        let open_relative = "";
+        if (document) {
+            const editorpath = document.fileName;
+            const ext = path.extname(editorpath);
+            const fname = path.basename(editorpath, ext);
+            if (ext === ".gdl") {
+                // open in scripts folder
+                open_relative = `scripts/${fname}${ext}`;
+            } else if (ext === ".xml") {
+                // open in base folder
+                open_relative = `${fname}${ext}`;
+            }
         }
+
+        return this.provideWorkspaceSymbolsSimilarTo(open_relative, masterscript, query, addGuids, token);
+    }
+
+    private async provideWorkspaceSymbolsSimilarTo(relative : string, masterscript: boolean, query : string, addGuids: boolean, token: vscode.CancellationToken): Promise<vscode.SymbolInformation[]> {
+        //console.log("provideWorkspaceSymbols");
 
         return new Promise(async (resolve, reject) => {
             token.onCancellationRequested(reject);
 
-            //get filename from active editor
-            const editorpath = vscode.window.activeTextEditor?.document.fileName;
-            let open_relative = "";
-            if (editorpath) {
-                const ext = path.extname(editorpath);
-                const fname = path.basename(editorpath, ext);
-                if (ext === ".gdl") {
-                    // open in scripts folder
-                    open_relative = `scripts/${fname}${ext}`;
-                } else if (ext === ".xml") {
-                    // open in base folder
-                    open_relative = `${fname}${ext}`;
-                }
-            }
-    
             const targetposition = new vscode.Position(0, 0);
             const query_lc = query.toLowerCase();
 
-            const symbolpairs = await Promise.allSettled(this.libparts
-                .filter(e => filterquery(e, query_lc))
-                .map(async libpart => {
-                        let target = await libpart.relative_withFallback(open_relative, masterscript);
+            const symbolpairs = await Promise.allSettled(
+                (await this.values(token))
+                    .filter(e => filterquery(e, query_lc))
+                    .map(async libpart => {
+                            let target = await libpart.relative_withFallback(relative, masterscript);
 
-                        const libpartByName = new vscode.SymbolInformation(`"${libpart.name}"`,
-                                                            vscode.SymbolKind.File,
-                                                            "",
-                                                            new vscode.Location(target, targetposition)
-                                                            );
-                        const libpartByGUID = new vscode.SymbolInformation(libpart.guid,
-                                                                    vscode.SymbolKind.File,
-                                                                    ` -  ${libpart.name} `,
-                                                                    new vscode.Location(target, targetposition)
-                                                                    );
+                            const libpartByName = new vscode.SymbolInformation(`"${libpart.name}"`,
+                                                                vscode.SymbolKind.File,
+                                                                "",
+                                                                new vscode.Location(target, targetposition)
+                                                                );
+                            if (addGuids) {
+                                const libpartByGUID = new vscode.SymbolInformation(libpart.guid,
+                                                                vscode.SymbolKind.File,
+                                                                ` -  ${libpart.name} `,
+                                                                new vscode.Location(target, targetposition)
+                                                                );
+                                return [libpartByName, libpartByGUID];
+                            }
 
-                        return [libpartByName, libpartByGUID];
-                        })
+                            return [libpartByName, undefined];
+                            })
             );
 
             const symbols = symbolpairs
-                .map(result => result.status === "fulfilled" ? result.value : undefined)
-                .filter((e) : e is vscode.SymbolInformation[] => (e !== undefined))
-                .flat();
+                .flatMap(result => result.status === "fulfilled" ? result.value : undefined)
+                .filter((e) : e is vscode.SymbolInformation => (e !== undefined));
 
             resolve(symbols);
         });
+    }
+
+    async values(cancel: vscode.CancellationToken) {
+        if (this.unprocessed) {
+            //wait for workspace scanning to finish
+            await new Promise((resolve, reject) => {
+                cancel.onCancellationRequested(reject);
+                this.onDidCollect(resolve);
+            });
+        }
+        return [...this.libparts];
     }
 }
 

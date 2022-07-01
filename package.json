@@ -2,7 +2,7 @@
     "name": "gdl",
     "displayName": "GDL",
     "description": "Development environment for Archicad 25 GDL language (XML and HSF source code): syntax coloring, snippets, code outline, quick reference.",
-    "version": "1.26.1-dev.2",
+    "version": "1.26.1-dev.3",
     "publisher": "Graphisoft",
     "author": "Péter Baksa",
     "contributors": [
@@ -48,7 +48,8 @@
         "onCommand:GDL.switchToHSF",
         "onCommand:GDL.switchToXML",
         "onCommand:GDL.refguide",
-        "onCommand:GDL.infoFromHSF"
+        "onCommand:GDL.infoFromHSF",
+        "onCommand:GDL.rescanFolders"
     ],
     "main": "./out/extension.js",
     "contributes": {
@@ -231,6 +232,10 @@
                 {
                     "command": "GDL.infoFromHSF",
                     "when": "editorLangId == gdl-hsf && isFileSystemResource && resourceExtname == .gdl && workbenchState != empty"
+                },
+                {
+                    "command": "GDL.rescanFolders",
+                    "when": "workbenchState != empty"
                 }
             ],
             "view/title": [
@@ -344,6 +349,13 @@
                     "when": "editorLangId == gdl-hsf && isFileSystemResource && resourceExtname == .gdl && workbenchState != empty",
                     "group": "navigation"
                 }
+            ],
+            "explorer/context": [
+                {
+                    "command": "GDL.rescanFolders",
+                    "group": "2_workspace",
+                    "when": "workbenchState != empty"
+                }
             ]
         },
         "commands": [
@@ -453,7 +465,14 @@
                 "icon": "$(symbol-parameter)",
                 "category": "GDL",
                 "when": "editorLangId == gdl-hsf && isFileSystemResource && resourceExtname == .gdl && workbenchState != empty"
+            },
+            {
+                "command": "GDL.rescanFolders",
+                "title": "Re-scan library parts in workspace folders",
+                "category": "GDL",
+                "when": "workbenchState != empty"
             }
+
         ],
         "keybindings": [
             {

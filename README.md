@@ -47,6 +47,7 @@ __hotspot__ or __hotspot2__ - length edit hotspot triplet
   * The search opens with the currently selected text
   * Type to filter results
   * Select to open the same script or xml that the current editor contains, or libpartdata.xml if unknown
+  * If the workspace changed in a process outside VSCode, use the "Re-scan library parts in workspace folders" command to refresh the known library parts.
 * When a folder of HSF files is opened, further features are available:
   * Show info about parameters when the mouse hovers on them
   * Show parameters with bold font
@@ -55,6 +56,10 @@ __hotspot__ or __hotspot2__ - length edit hotspot triplet
   * These can all be toggled on/off together with Ctrl-Shift-Space
   * Follow macro calls with Ctrl-click
 * Go to definitions/references, find all references of subroutines in same gdl-hsf file (Ctrl-click or F12, Shift-F12, Shift-Alt-F12)
+* Show Call Hierarchy (Shift-Alt-H), Peek Call Hierarchy
+  * Incoming or outgoing macro calls are shown, respecting the execution context of the edited scipt. Eg. all scripts are searched outgoing from a master script, but only master and 2d scripts are searched outgoing from a 2d script.
+  * HSF library parts inside the workspace are searched. If the workspace changed in a process outside VSCode, use the "Re-scan library parts in workspace folders" command to refresh the known library parts.
+  * Until VSCode API improvement the feature is only available if the cursor is on a word (not whitespace). If the cursor is on a macro call, that macro will be searched, otherwise the edited file will be searched. Outgoing calls' peek documents are faulty, but double-clicking an item opens the correct document.
 * Automatic identation on typing
   * Increase after lines with block-opening keywords (for, if, while, group, subroutine...)
   * Decrease after block-closing keywords (next, else, endif, endwhile, endgroup, return...)
@@ -165,6 +170,8 @@ Some valid syntaxes won't be highlighted, and some invalid syntaxes will be high
 # Release Notes
 
 ## 1.26.1
+* `Show Call Hierarchy`, `Peek Call Hierarchy` context menu items list incoming or outgoing macro calls inside the workspace
+* New command `Re-scan library parts in workspace folders` available in explorer context menu to reconcile file changes outside vscode
 * Auto-identation on typing enter and block-closing keywords
 * Snippet bugfixing, added snippets for some missing recent global variables
 
@@ -178,7 +185,7 @@ Some valid syntaxes won't be highlighted, and some invalid syntaxes will be high
 ## 1.25.2
 * Go to definitions/references, find all references of subroutines in same gdl-hsf file (Ctrl-click or F12, Shift-F12, Shift-Alt-F12)
 * Exclude commented macro calls from outline and symbols
-* Workspace symbols (Ctrl-T) can find libparts by GUID
+* Workspace symbols (Ctrl-T) can find library parts by GUID
 * Highlight innermost loop, macro call, group boundaries
 * Automatic unidentation of loop end keywords and groups, automatic identation of do and repeat blocks
 * IntelliSense lists parameter types in second row
