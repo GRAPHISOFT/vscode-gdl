@@ -158,6 +158,10 @@ Some valid syntaxes won't be highlighted, and some invalid syntaxes will be high
 
 # Release Notes
 
+## 1.26.1
+* Added snippets for some missing recent global variables
+* Snippet bugfixing
+
 ## 1.25.3
 * Follow macro calls with Ctrl-click
 * Reference guide

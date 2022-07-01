@@ -754,7 +754,7 @@
     },
     "\"project2{4}\" command": {
       "prefix": "project2{4}",
-      "body": "project2{4} ${01:projectionCode}, ${02:angle},\n\t${03:useTransparency}, ${04:statusParts},\n\t${05:numCutplanes},\n\t${06:cutplaneHeight1}, ${07:...}, ${08:cutplaneHeightn},\n\n\t${09:method1}, ${10:parts1},\n\t${11:cutFillIndex1}, ${12:cutFillBgPen1},\n\t${13:cutFillOrigoX1}, ${14:cutFillOrigoY1}, ${15:cutFillDirection1},\n\t${16:cutLinePen1}, ${17:cutLineType1},\n\t${18:projectedFillIndex1},\n\t${19:projectedFillFgPen1}, ${20:projectedFillBgPen1},\n\t${21:projectedFillOrigoX1}, ${22:projectedFillOrigoY1},\n\t${23:projectedFillDirection1},\n\t${24:projectedLinePen1}, ${25:projectedLineType1},\n\t${26:...},\n\t${27:method(numCutplanes+1))}, ${28:parts(numCutplanes+1)},\n\t${29:cutFillIndex(numCutplanes+1)},\n\t${30:cutFillFgPen(numCutplanes+1)}, ${31:cutFillBgPen(numCutplanes+1)},\n\t${32:cutFillOrigoX(numCutplanes+1)}, ${33:cutFillOrigoY(numCutplanes+1)},\n\t${34:cutFillDirection(numCutplanes+1)},\n\t${35:cutLinePen(numCutplanes+1)}, ${36:cutLineType(numCutplanes+1)},\n\t${37:projectedFillIndex(numCutplanes+1)},\n\t${38:projectedFillFgPen(numCutplanes+1)}, ${39:projectedFillBgPen(numCutplanes+1)},\n\t${40:projectedFillOrigoX(numCutplanes+1)}, ${41:projectedFillOrigoY(numCutplanes+1)},\n\t${42:projectedFillDirection(numCutplanes+1)},\n\t${43:projectedLinePen(numCutplanes+1)}, ${44:projectedLineType(numCutplanes+1)}"
+      "body": "project2{4} ${01:projectionCode}, ${02:angle},\n\t${03:useTransparency}, ${04:statusParts},\n\t${05:numCutplanes},\n\t${06:cutplaneHeight1}, ${07:...}, ${08:cutplaneHeightn},\n\n\t${09:method1}, ${10:parts1},\n\t${11:cutFillIndex1}, ${12:cutFillBgPen1},\n\t${13:cutFillOrigoX1}, ${14:cutFillOrigoY1}, ${15:cutFillDirection1},\n\t${16:cutLinePen1}, ${17:cutLineType1},\n\t${18:projectedFillIndex1},\n\t${19:projectedFillFgPen1}, ${20:projectedFillBgPen1},\n\t${21:projectedFillOrigoX1}, ${22:projectedFillOrigoY1},\n\t${23:projectedFillDirection1},\n\t${24:projectedLinePen1}, ${25:projectedLineType1},\n\t${26:...},\n\t${27:method(numCutplanes+1)}, ${28:parts(numCutplanes+1)},\n\t${29:cutFillIndex(numCutplanes+1)},\n\t${30:cutFillFgPen(numCutplanes+1)}, ${31:cutFillBgPen(numCutplanes+1)},\n\t${32:cutFillOrigoX(numCutplanes+1)}, ${33:cutFillOrigoY(numCutplanes+1)},\n\t${34:cutFillDirection(numCutplanes+1)},\n\t${35:cutLinePen(numCutplanes+1)}, ${36:cutLineType(numCutplanes+1)},\n\t${37:projectedFillIndex(numCutplanes+1)},\n\t${38:projectedFillFgPen(numCutplanes+1)}, ${39:projectedFillBgPen(numCutplanes+1)},\n\t${40:projectedFillOrigoX(numCutplanes+1)}, ${41:projectedFillOrigoY(numCutplanes+1)},\n\t${42:projectedFillDirection(numCutplanes+1)},\n\t${43:projectedLinePen(numCutplanes+1)}, ${44:projectedLineType(numCutplanes+1)}"
     },
     "\"drawing2\" command": {
       "prefix": "drawing2",
@@ -1644,6 +1644,14 @@
       "prefix": "BEAM_SECT_PEN",
       "body": "BEAM_SECT_PEN"
     },
+    "\"BEAM_SEGMENT_INDEX\" global": {
+      "prefix": "BEAM_SEGMENT_INDEX",
+      "body": "BEAM_SEGMENT_INDEX"
+    },
+    "\"BEAM_SEGMENT_INFO\" global": {
+      "prefix": "BEAM_SEGMENT_INFO",
+      "body": "BEAM_SEGMENT_INFO"
+    },
     "\"BEAM_THICKNESS\" global": {
       "prefix": "BEAM_THICKNESS",
       "body": "BEAM_THICKNESS"
@@ -1767,6 +1775,14 @@
     "\"COLU_SECT_PEN\" global": {
       "prefix": "COLU_SECT_PEN",
       "body": "COLU_SECT_PEN"
+    },
+    "\"COLU_SEGMENT_INDEX\" global": {
+      "prefix": "COLU_SEGMENT_INDEX",
+      "body": "COLU_SEGMENT_INDEX"
+    },
+    "\"COLU_SEGMENT_INFO\" global": {
+      "prefix": "COLU_SEGMENT_INFO",
+      "body": "COLU_SEGMENT_INFO"
     },
     "\"COLU_VENEER_BMAT\" global": {
       "prefix": "COLU_VENEER_BMAT",
@@ -2112,6 +2128,10 @@
       "prefix": "GLOB_CUTPLANES_INFO",
       "body": "GLOB_CUTPLANES_INFO[${01:index}]"
     },
+    "\"GLOB_DIAGNOSTICS_MODE\" global": {
+      "prefix": "GLOB_DIAGNOSTICS_MODE",
+      "body": "GLOB_DIAGNOSTICS_MODE"
+    },
     "\"GLOB_DRAWING_BGD_PEN\" global": {
       "prefix": "GLOB_DRAWING_BGD_PEN",
       "body": "GLOB_DRAWING_BGD_PEN"
@@ -2376,6 +2396,10 @@
       "prefix": "LABEL_ARROWHEAD_PEN",
       "body": "LABEL_ARROWHEAD_PEN"
     },
+    "\"LABEL_ASSOC_ELEM_GEOMETRY\" global": {
+      "prefix": "LABEL_ASSOC_ELEM_GEOMETRY",
+      "body": "LABEL_ASSOC_ELEM_GEOMETRY"
+    },
     "\"LABEL_ASSOC_ELEM_ORIENTATION\" global": {
       "prefix": "LABEL_ASSOC_ELEM_ORIENTATION",
       "body": "LABEL_ASSOC_ELEM_ORIENTATION"
@@ -2587,6 +2611,34 @@
     "\"MORPH_VOLUME\" global": {
       "prefix": "MORPH_VOLUME",
       "body": "MORPH_VOLUME"
+    },
+    "\"OPENING_SYMBOL_GEOMETRY\" global": {
+      "prefix": "OPENING_SYMBOL_GEOMETRY",
+      "body": "OPENING_SYMBOL_GEOMETRY"
+    },
+    "\"OPENING_HEIGHT\" global": {
+      "prefix": "OPENING_HEIGHT",
+      "body": "OPENING_HEIGHT"
+    },
+    "\"OPENING_WIDTH\" global": {
+      "prefix": "OPENING_WIDTH",
+      "body": "OPENING_WIDTH"
+    },
+    "\"OPENING_HEADERHEIGHT_VALUES\" global": {
+      "prefix": "OPENING_HEADERHEIGHT_VALUES",
+      "body": "OPENING_HEADERHEIGHT_VALUES"
+    },
+    "\"OPENING_CENTERHEIGHT_VALUES\" global": {
+      "prefix": "OPENING_CENTERHEIGHT_VALUES",
+      "body": "OPENING_CENTERHEIGHT_VALUES"
+    },
+    "\"OPENING_SILLHEIGHT_VALUES\" global": {
+      "prefix": "OPENING_SILLHEIGHT_VALUES",
+      "body": "OPENING_SILLHEIGHT_VALUES"
+    },
+    "\"OPENING_SYMBOL_DISPLAY\" global": {
+      "prefix": "OPENING_SYMBOL_DISPLAY",
+      "body": "OPENING_SYMBOL_DISPLAY"
     },
     "\"RAIL_COMPONENTS\" global": {
       "prefix": "RAIL_COMPONENTS",
@@ -3376,6 +3428,10 @@
       "prefix": "STAIR_AREA",
       "body": "STAIR_AREA"
     },
+    "\"STAIR_BREAKMARK_GEOMETRY\" global": {
+      "prefix": "STAIR_BREAKMARK_GEOMETRY",
+      "body": "STAIR_BREAKMARK_GEOMETRY"
+    },
     "\"STAIR_DEFAULT_GOING_DEPTH\" global": {
       "prefix": "STAIR_DEFAULT_GOING_DEPTH",
       "body": "STAIR_DEFAULT_GOING_DEPTH"
@@ -3751,6 +3807,10 @@
     "\"SYMB_POS_Z\" global": {
       "prefix": "SYMB_POS_Z",
       "body": "SYMB_POS_Z"
+    },
+    "\"SYMB_POS_FROM_SURVEY_POINT\" global": {
+      "prefix": "SYMB_POS_FROM_SURVEY_POINT",
+      "body": "SYMB_POS_FROM_SURVEY_POINT"
     },
     "\"SYMB_ROTANGLE\" global": {
       "prefix": "SYMB_ROTANGLE",
@@ -4374,7 +4434,7 @@
     },
     "request (\"Zone_relations\")": {
       "prefix": "request (\"Zone_relations",
-      "body": "n = REQUEST (\"Zone_relations\", \"\",\n\t${01:category_name, ${02:code}, ${03:name}, ${04:number}\n\t[, ${05:category_name2}, ${06:code2}, ${07:name2}, ${08:number2}])"
+      "body": "n = REQUEST (\"Zone_relations\", \"\",\n\t${01:category_name}, ${02:code}, ${03:name}, ${04:number}\n\t[, ${05:category_name2}, ${06:code2}, ${07:name2}, ${08:number2}])"
     },
     "request (\"Zone_relations_of_owner\")": {
       "prefix": "request (\"Zone_relations_of_owner",
@@ -4542,7 +4602,7 @@
     },
     "request (\"REFERENCE_LEVEL_DATA\")": {
       "prefix": "request (\"REFERENCE_LEVEL_DATA",
-      "body": "n = REQUEST (\"REFERENCE_LEVEL_DATA\", \"\", ${01:name1, ${02:elev1, ${03:name2, ${04:lev2,\n\t${05:name3, ${06:elev3, ${07:name4, ${08:elev4)"
+      "body": "n = REQUEST (\"REFERENCE_LEVEL_DATA\", \"\", ${01:name1}, ${02:elev1}, ${03:name2}, ${04:lev2},\n\t${05:name3}, ${06:elev3}, ${07:name4}, ${08:elev4})"
     },
     "request (\"ANCESTRY_INFO\")": {
       "prefix": "request (\"ANCESTRY_INFO",
@@ -4606,7 +4666,7 @@
     },
     "request (\"Name_of_Profile\")": {
       "prefix": "request (\"Name_of_Profile",
-      "body": "n = REQUEST (\"Name_of_Profile\", ${01:index, ${02:name})"
+      "body": "n = REQUEST (\"Name_of_Profile\", ${01:index}, ${02:name})"
     },
     "request (\"Profile_components\")": {
       "prefix": "request (\"Profile_components",
@@ -4618,7 +4678,7 @@
     },
     "request (\"Profile_default_geometry\")": {
       "prefix": "request (\"Profile_default_geometry",
-      "body": "n = REQUEST (\"Profile_default_geometry\", ${01:name_or_index}, ${02:n1}, ${03:n2}, ${04:...}, ${05:nm,\n\t${06:x11}, ${07:y11}, ${08:edgeVisible11}, ${09:vertEdgeVisible11}, ${10:additionalStatus11}, ${11:...},\n\t${12:x1n1}, ${13:y1n1}, ${14:edgeVisible1n1}, ${15:vertEdgeVisible1n1}, ${16:additionalStatus1n1,\n\t${17:x21}, ${18:y21}, ${19:edgeVisible21}, ${20:vertEdgeVisible21}, ${21:additionalStatus21}, ${22:...,\n\t${01:x2n2}, ${23:y2n2}, ${24:edgeVisible2n2}, ${25:vertEdgeVisible2n2}, ${26:additionalStatus2n2}, ${27:...},\n\t${28:xm1}, ${29:ym1}, ${30:edgeVisiblem1}, ${31:vertEdgeVisiblem1}, ${32:additionalStatusm1}, ${33:...},\n\t${34:xmnm}, ${35:ymnm}, ${36:edgeVisiblemnm}, ${37:vertEdgeVisiblemnm}, ${38:additionalStatusmnm)"
+      "body": "n = REQUEST (\"Profile_default_geometry\", ${01:name_or_index}, ${02:n1}, ${03:n2}, ${04:...}, ${05:nm},\n\t${06:x11}, ${07:y11}, ${08:edgeVisible11}, ${09:vertEdgeVisible11}, ${10:additionalStatus11}, ${11:...},\n\t${12:x1n1}, ${13:y1n1}, ${14:edgeVisible1n1}, ${15:vertEdgeVisible1n1}, ${16:additionalStatus1n1},\n\t${17:x21}, ${18:y21}, ${19:edgeVisible21}, ${20:vertEdgeVisible21}, ${21:additionalStatus21}, ${22:...},\n\t${01:x2n2}, ${23:y2n2}, ${24:edgeVisible2n2}, ${25:vertEdgeVisible2n2}, ${26:additionalStatus2n2}, ${27:...},\n\t${28:xm1}, ${29:ym1}, ${30:edgeVisiblem1}, ${31:vertEdgeVisiblem1}, ${32:additionalStatusm1}, ${33:...},\n\t${34:xmnm}, ${35:ymnm}, ${36:edgeVisiblemnm}, ${37:vertEdgeVisiblemnm}, ${38:additionalStatusmnm})"
     },
     "request (\"Profile_component_info\") whole component": {
       "prefix": "request (\"Profile_component_info",
