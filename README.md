@@ -65,7 +65,7 @@ __hotspot__ or __hotspot2__ - length edit hotspot triplet
   * Decrease after block-closing keywords (next, else, endif, endwhile, endgroup, return...)
   * Increase after first command continuation with , or \ (prevoius line ends without , or \ and this line ends with it)
   * Decrease after end of command (previous line ends with , or \ and this line ends without it)
-  * Line ending comments are handled, comment-only lines and difficult syntax with multiline strings are not
+  * Line ending comments are handled, comment-only lines and difficult syntax with : or multiline strings are not
 
 # Script outline view
 
@@ -173,7 +173,7 @@ Some valid syntaxes won't be highlighted, and some invalid syntaxes will be high
 * `Show Call Hierarchy`, `Peek Call Hierarchy` context menu items list incoming or outgoing macro calls inside the workspace
 * New command `Re-scan library parts in workspace folders` available in explorer context menu to reconcile file changes outside vscode
 * Auto-identation on typing enter and block-closing keywords
-* Snippet bugfixing, added snippets for some missing recent global variables
+* Snippet bugfixing, added snippets for some missing recent global variables, angle editing hotspots
 
 ## 1.25.3
 * Follow macro calls with Ctrl-click

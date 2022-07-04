@@ -236,6 +236,10 @@
       "prefix": "hotspot",
       "body": "hotspot ${01:x},\t${02:y},\t0,\t\t${04:unID}, ${03:z}, 1 + 128,\t${05:displayparam}, ${06:customDescription}: ${04:unID} = ${04:unID} + 1\nhotspot ${01:x},\t${02:y},\t${03:z},\t${04:unID}, ${03:z}, 2,\t\t${05:displayparam}, ${06:customDescription}: ${04:unID} = ${04:unID} + 1\nhotspot ${01:x},\t${02:y},\t-1,\t\t${04:unID}, ${03:z}, 3,\t\t${05:displayparam}, ${06:customDescription}: ${04:unID} = ${04:unID} + 1\n$0"
     },
+    "3D angle XY plane counter-clockwise": {
+      "prefix": "hotspot",
+      "body": "hotspot ${01:cx},\t\t\t\t\t\t${02:cy},\t\t\t\t\t\t0, ${07:unID}, ${04:alpha}, 6,\t\t\t${05:displayparam}, ${06:customDescription}: ${07:unID} = ${07:unID} + 1\t! center\nhotspot ${03:r} + ${01:cx},\t\t\t\t\t${02:cy},\t\t\t\t\t\t0, ${07:unID}, ${04:alpha}, 4 + 128,\t${05:displayparam}, ${06:customDescription}: ${07:unID} = ${07:unID} + 1\t! base\nhotspot ${03:r} * cos(${04:alpha}) + ${01:cx},\tr * sin(${04:alpha}) + ${02:cy},\t0, ${07:unID}, ${04:alpha}, 5,\t\t\t${05:displayparam}, ${06:customDescription}: ${07:unID} = ${07:unID} + 1\t! moving\nhotspot ${01:cx},\t\t\t\t\t\t${02:cy},\t\t\t\t\t\t1, ${07:unID}, ${04:alpha}, 7,\t\t\t${05:displayparam}, ${06:customDescription}: ${07:unID} = ${07:unID} + 1\t! reference"
+    },
     "\"hotline\" command": {
       "prefix": "hotline",
       "body": "hotline ${01:x1}, ${02:y1}, ${03:z1}, ${04:x2}, ${05:y2}, ${06:z2}, ${07:unID}"
@@ -651,6 +655,10 @@
     "2D editable Y": {
       "prefix": "hotspot2",
       "body": "hotspot2 ${01:x},\t0,\t\t${03:unID}, ${02:y}, 1 + 128,\t${04:displayparam}, ${05:customDescription}: ${03:unID} = ${03:unID} + 1\nhotspot2 ${01:x},\t${02:y},\t${03:unID}, ${02:y}, 2,\t\t${04:displayparam}, ${05:customDescription}: ${03:unID} = ${03:unID} + 1\nhotspot2 ${01:x},\t-1,\t${03:unID}, ${02:y}, 3,\t\t${04:displayparam}, ${05:customDescription}: ${03:unID} = ${03:unID} + 1\n$0"
+    },
+    "2D angle counter-clockwise": {
+      "prefix": "hotspot2",
+      "body": "hotspot2 ${01:cx},\t\t\t\t\t${02:cy},\t\t\t\t\t\t${07:unID}, ${04:alpha}, 6,\t\t\t${05:displayparam}, ${06:customDescription}: ${07:unID} = ${07:unID} + 1\t! center\nhotspot2 ${03:r} + ${01:cx},\t\t\t\t${02:cy},\t\t\t\t\t\t${07:unID}, ${04:alpha}, 4 + 128,\t${05:displayparam}, ${06:customDescription}: ${07:unID} = ${07:unID} + 1\t! base\nhotspot2 ${03:r} * cos(${04:alpha}) + ${01:cx},\tr * sin(${04:alpha}) + ${02:cy},\t${07:unID}, ${04:alpha}, 5,\t\t\t${05:displayparam}, ${06:customDescription}: ${07:unID} = ${07:unID} + 1\t! moving"
     },
     "\"hotline2\" command": {
       "prefix": "hotline2",
