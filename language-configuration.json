@@ -44,16 +44,10 @@
     },
     "wordpattern": "[~_a-zA-Z][~_a-zA-Z0-9]*",
     "indentationRules": {
-        "increaseIndentPattern": "(^\\s*(([\"'`´“”’‘]).*?\\3|[0-9]+)\\s*:\\s*(!.*)?$)|(^\\s*(for|FOR|do|DO|repeat|REPEAT|call|CALL|parameters|PARAMETERS|group|GROUP|while\\b.+\\bdo|WHILE\\b.+\\bDO)\\b)|(\\b(then|THEN|else|ELSE)\\s*(!.*)?$)",
-        "decreaseIndentPattern": "^\\s*(next|NEXT|end(while|group|if)|END(WHILE|GROUP|IF)|until|UNTIL|else|ELSE|return(ed_parameters)?|RETURN(ED_PARAMETERS)?)\\b"
+        "increaseIndentPattern": "(^\\s*(([\"'`´“”’‘]).*?\\3|[0-9]+)\\s*:\\s*(!.*)?$)|(^\\s*(for|FOR|do|DO|repeat|REPEAT|call|CALL|parameters|PARAMETERS|group|GROUP|while\\b.+\\bdo|WHILE\\b.+\\bDO)\\b)|(\\b(then|THEN|else|ELSE)\\s*(!.*)?$)|(^\\s*(returned_parameters|RETURNED_PARAMETERS).*[,\\\\]\\s*(!.*)?$)",
+        "decreaseIndentPattern": "^\\s*(next|NEXT|end(while|group|if)|END(WHILE|GROUP|IF)|until|UNTIL|else|ELSE|return|RETURN)\\b"
     },
     "onEnterRules": [
-        {
-            "beforeText": "^\\s*(returned_parameters|RETURNED_PARAMETERS).*[,\\\\]\\s*(!.*)?$",
-            "action": {
-                "indent": "indent"
-            }
-        },
         {
             "previousLineText": "^((.*([^,\\\\\\s]|:))?\\s*(!.*)?)$",
             "beforeText": "^.+[,\\\\]\\s*(!.*)?$",

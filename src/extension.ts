@@ -906,13 +906,6 @@ export class GDLExtension
         }, this);
     }
 
-    //private filterScript(scriptType : Parser.ScriptType, tokens : Parser.GDLToken[]) : Parser.GDLToken[] {
-    //    return tokens.filter(t => {
-    //        const pos = t.range(this.editor!.document).start;
-    //        return this.getScriptAtPos(pos)?.scriptType === scriptType;
-    //    });
-    //}
-
     private mapCommentSymbols(scriptType : Parser.ScriptType) {
         //console.log("GDLExtension.mapCommentSymbols");
         return this.parser.getCommentList(scriptType).map((c : Parser.GDLComment) => {
@@ -993,9 +986,6 @@ export class GDLExtension
 
     async provideDefinition(document: vscode.TextDocument, position: vscode.Position, cancel: vscode.CancellationToken): Promise<vscode.LocationLink[]> {
         let definitions : vscode.LocationLink[] = [];
-
-        // should we re-parse when document doesn't match this.editor.document ?
-        console.assert(document.uri.fsPath === this.editor?.document.uri.fsPath, `${document.uri.fsPath} !== ${this.editor?.document.uri.fsPath}`);
 
         const originRange = document.getWordRangeAtPosition(position);
         if (originRange !== undefined) {
@@ -1145,17 +1135,22 @@ export async function fileExists(uri : vscode.Uri) : Promise<boolean> {
     }
 }
 
-export async function readFile(uri: vscode.Uri, exists : boolean = false) : Promise<string | undefined> {
+export async function readFile(uri: vscode.Uri, exists : boolean = false, cancel? : vscode.CancellationToken) : Promise<string | undefined> {
     // read an utf-8 file
     // call with exists = true to skip check
-    // TODO add cancellation token to cancel Promise with reject
-    if (exists || await fileExists(uri)) {
-        const data = await vscode.workspace.fs.readFile(uri);
-        const utf8_decoder = new TextDecoder("utf8");
-        return utf8_decoder.decode(data);
-    } else {
-        return undefined;
-    }
+    return new Promise(async (resolve, reject) => {
+        cancel?.onCancellationRequested(reject);
+
+        if (exists || await fileExists(uri)) {
+        
+            const data = await vscode.workspace.fs.readFile(uri);
+            const utf8_decoder = new TextDecoder("utf8");
+            resolve(utf8_decoder.decode(data));
+        } else {
+            resolve(undefined);
+        }
+    });
+
 }
 
 export function HSFScriptType(uri : vscode.Uri) : Parser.ScriptType | undefined {

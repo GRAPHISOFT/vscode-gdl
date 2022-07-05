@@ -242,7 +242,7 @@ export class CallTree implements vscode.CallHierarchyProvider {
             const searchUris = searchScripts.map(async (script) => libpart.scriptUri(script));  // null if script doesn't exist
             for await (const scriptUri of searchUris) {
                 if (scriptUri?.fsPath.endsWith(".gdl")) {
-                    const calledmacros = (await this.getMacroCallList(scriptUri))
+                    const calledmacros = (await this.getMacroCallList(scriptUri, cancel))
                         .filter(macro => (macro.name.toLowerCase() === targetName));
 
                     if (calledmacros.length > 0) {
@@ -269,14 +269,14 @@ export class CallTree implements vscode.CallHierarchyProvider {
             .map(e => e.to);
     }
 
-    private async getMacroCallList(scriptUri : vscode.Uri) : Promise<Parser.GDLMacroCall[]> {
+    private async getMacroCallList(scriptUri : vscode.Uri, cancel : vscode.CancellationToken) : Promise<Parser.GDLMacroCall[]> {
         const cachedValue = this.callsCache.get(scriptUri.path);
 
         if (cachedValue) {
             return cachedValue;
         } else {
             // can't use many concurrent OpenTextDocument's will be rejected, have to read file directly
-            const parser = new Parser.ParseXMLGDL(await readFile(scriptUri, true), false, false, false, true, false);
+            const parser = new Parser.ParseXMLGDL(await readFile(scriptUri, true, cancel), false, false, false, true, false);
             const result = parser.getMacroCallList(Parser.ScriptType.ROOT);
             this.callsCache.set(scriptUri.path, result);
             return result;

@@ -722,12 +722,6 @@ class GDLExtension {
             return new vscode.DocumentSymbol(f.name, "", vscode.SymbolKind.Method, new vscode.Range(range.start, end), range);
         }, this);
     }
-    //private filterScript(scriptType : Parser.ScriptType, tokens : Parser.GDLToken[]) : Parser.GDLToken[] {
-    //    return tokens.filter(t => {
-    //        const pos = t.range(this.editor!.document).start;
-    //        return this.getScriptAtPos(pos)?.scriptType === scriptType;
-    //    });
-    //}
     mapCommentSymbols(scriptType) {
         //console.log("GDLExtension.mapCommentSymbols");
         return this.parser.getCommentList(scriptType).map((c) => {
@@ -788,8 +782,6 @@ class GDLExtension {
     }
     async provideDefinition(document, position, cancel) {
         let definitions = [];
-        // should we re-parse when document doesn't match this.editor.document ?
-        console.assert(document.uri.fsPath === this.editor?.document.uri.fsPath, `${document.uri.fsPath} !== ${this.editor?.document.uri.fsPath}`);
         const originRange = document.getWordRangeAtPosition(position);
         if (originRange !== undefined) {
             const origin = document.getText(originRange);
@@ -943,18 +935,20 @@ async function fileExists(uri) {
     }
 }
 exports.fileExists = fileExists;
-async function readFile(uri, exists = false) {
+async function readFile(uri, exists = false, cancel) {
     // read an utf-8 file
     // call with exists = true to skip check
-    // TODO add cancellation token to cancel Promise with reject
-    if (exists || await fileExists(uri)) {
-        const data = await vscode.workspace.fs.readFile(uri);
-        const utf8_decoder = new util_1.TextDecoder("utf8");
-        return utf8_decoder.decode(data);
-    }
-    else {
-        return undefined;
-    }
+    return new Promise(async (resolve, reject) => {
+        cancel?.onCancellationRequested(reject);
+        if (exists || await fileExists(uri)) {
+            const data = await vscode.workspace.fs.readFile(uri);
+            const utf8_decoder = new util_1.TextDecoder("utf8");
+            resolve(utf8_decoder.decode(data));
+        }
+        else {
+            resolve(undefined);
+        }
+    });
 }
 exports.readFile = readFile;
 function HSFScriptType(uri) {

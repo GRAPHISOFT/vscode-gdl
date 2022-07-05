@@ -204,7 +204,7 @@ class CallTree {
             const searchUris = searchScripts.map(async (script) => libpart.scriptUri(script)); // null if script doesn't exist
             for await (const scriptUri of searchUris) {
                 if (scriptUri?.fsPath.endsWith(".gdl")) {
-                    const calledmacros = (await this.getMacroCallList(scriptUri))
+                    const calledmacros = (await this.getMacroCallList(scriptUri, cancel))
                         .filter(macro => (macro.name.toLowerCase() === targetName));
                     if (calledmacros.length > 0) {
                         // add one item with all found ranges
@@ -226,14 +226,14 @@ class CallTree {
             .sort((a, b) => a.from.localeCompare(b.from, "en", { sensitivity: "accent", numeric: true }))
             .map(e => e.to);
     }
-    async getMacroCallList(scriptUri) {
+    async getMacroCallList(scriptUri, cancel) {
         const cachedValue = this.callsCache.get(scriptUri.path);
         if (cachedValue) {
             return cachedValue;
         }
         else {
             // can't use many concurrent OpenTextDocument's will be rejected, have to read file directly
-            const parser = new Parser.ParseXMLGDL(await (0, extension_1.readFile)(scriptUri, true), false, false, false, true, false);
+            const parser = new Parser.ParseXMLGDL(await (0, extension_1.readFile)(scriptUri, true, cancel), false, false, false, true, false);
             const result = parser.getMacroCallList(Parser.ScriptType.ROOT);
             this.callsCache.set(scriptUri.path, result);
             return result;
