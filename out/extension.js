@@ -568,7 +568,7 @@ class GDLExtension {
         if (modeGDLHSF(this.editor?.document) && this.hsflibpart) {
             if (this.infoFromHSF) {
                 if (this.suggestHSF === undefined) {
-                    this.suggestHSF = vscode.languages.registerCompletionItemProvider(["gdl-hsf"], this);
+                    this.suggestHSF = vscode.languages.registerCompletionItemProvider("*", this);
                 }
                 this.statusHSF.text = `GDL: Show Info from HSF Files`;
             }
