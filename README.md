@@ -23,7 +23,7 @@ Use the themes _GDL Dark_ or _GDL Light_ for GDL-specific coloring
 1. In the top search field, type _gdl-_
     * Click _Edit in setting.json_ to customize editor defaults for gdl-xml and gdl-hsf files
       * tabs/spaces
-      * identation size
+      * indentation size
       * line-end rulers
 
 
@@ -60,7 +60,7 @@ __hotspot__ or __hotspot2__ - length edit hotspot triplet
   * Incoming or outgoing macro calls are shown, respecting the execution context of the edited scipt. Eg. all scripts are searched outgoing from a master script, but only master and 2d scripts are searched outgoing from a 2d script.
   * HSF library parts inside the workspace are searched. If the workspace changed in a process outside VSCode, use the "Re-scan library parts in workspace folders" command to refresh the known library parts.
   * Until VSCode API improvement the feature is only available if the cursor is on a word (not whitespace). If the cursor is on a macro call, that macro will be searched, otherwise the edited file will be searched. Outgoing calls' peek documents are faulty, but double-clicking an item opens the correct document.
-* Automatic identation on typing
+* Automatic indentation on typing
   * Increase after lines with block-opening keywords (for, if, while, group, subroutine...)
   * Decrease after block-closing keywords (next, else, endif, endwhile, endgroup, return...)
   * Increase after first command continuation with , or \ (prevoius line ends without , or \ and this line ends with it)
@@ -172,7 +172,7 @@ Some valid syntaxes won't be highlighted, and some invalid syntaxes will be high
 ## 1.26.1
 * `Show Call Hierarchy`, `Peek Call Hierarchy` context menu items list incoming or outgoing macro calls inside the workspace
 * New command `Re-scan library parts in workspace folders` available in explorer context menu to reconcile file changes outside vscode
-* Auto-identation on typing enter and block-closing keywords
+* Auto-indentation on typing enter and block-closing keywords
 * Snippet bugfixing, added snippets for some missing recent global variables, angle editing hotspots
 
 ## 1.25.3
@@ -187,7 +187,7 @@ Some valid syntaxes won't be highlighted, and some invalid syntaxes will be high
 * Exclude commented macro calls from outline and symbols
 * Workspace symbols (Ctrl-T) can find library parts by GUID
 * Highlight innermost loop, macro call, group boundaries
-* Automatic unidentation of loop end keywords and groups, automatic identation of do and repeat blocks
+* Automatic unindentation of loop end keywords and groups, automatic indentation of do and repeat blocks
 * IntelliSense lists parameter types in second row
 
 ## 1.25.1
