@@ -7,8 +7,10 @@ import { RefGuide } from './refguide';
 import { HSFLibpart } from './parsehsf';
 import { WSSymbols } from './wssymbols';
 import { CallTree } from './calltree';
+import { Constants } from './constparser';
 
 import path = require('path');
+import { Jumps } from './jumpparser';
 
 export async function activate(context: vscode.ExtensionContext) {
     //console.log("extension.activate");
@@ -313,10 +315,15 @@ export class GDLExtension
 
     private updateHsfLibpart() {
         // create new HSFLibpart if root folder changed
-        const rootFolder = this.getNewHSFLibpartFolder(this.hsflibpart?.rootFolder);
-        if (rootFolder) {
-            //start async operations
-            this.hsflibpart = new HSFLibpart(rootFolder);
+        const rootFolder = this.getNewHSFLibpartFolder(this.hsflibpart?.info.root_uri);
+        if (rootFolder !== undefined) {
+            const script = HSFScriptType(this._editor!.document.uri)!;
+            if (rootFolder) {
+                //start async operations
+                this.hsflibpart = new HSFLibpart(rootFolder, script);
+            } else {
+                this.hsflibpart?.refresh(script);
+            }
         } else if (rootFolder === undefined) {
             // delete HSFLibpart
             this.hsflibpart = undefined;
@@ -403,13 +410,14 @@ export class GDLExtension
 
     private onDocumentChanged(changeEvent: vscode.TextDocumentChangeEvent) {
         //console.log("GDLExtension.onDocumentChanged", changeEvent.document.uri.toString());
+        this.updateHsfLibpart();
         this.reparseDoc(changeEvent.document);  // with default timeout
     }
 
     private onDocumentOpened(document: vscode.TextDocument) {
         //console.log("GDLExtension.onDocumentOpened", document.uri.toString());
         
-        // handle only top editor - other can be SCM virtual document
+        // handle only top editor - other can be SCM virtual document / other document opened by extension
         if (vscode.window.activeTextEditor?.document.uri === document.uri) {
             this.updateHsfLibpart();
             this.reparseDoc(document, 0);
@@ -728,10 +736,9 @@ export class GDLExtension
                 if (this.suggestHSF === undefined) {
                     this.suggestHSF = vscode.languages.registerCompletionItemProvider("*", this);
                 }
-                this.statusHSF.text = `GDL: Show Info from HSF Files`;
+                this.statusHSF.text = `GDL-HSF Parameter Hints ON`;
             } else {
-                this.cancelSuggestHSF();
-                this.statusHSF.text = `GDL: Show Info from Local File Only`;
+                this.statusHSF.text = `GDL-HSF Parameter Hints OFF`;
             }
             this.statusHSF.show();
         } else {
@@ -855,7 +862,18 @@ export class GDLExtension
                 completions.items.push(completion);
             }
 
-            for (const prefix of this.hsflibpart.masterconstants) {
+            let masterconstants : Constants | undefined = undefined;
+            let scriptType = HSFScriptType(document.uri)!;
+            if (scriptType !== Parser.ScriptType.D) {
+                // get master script constants
+                masterconstants = await this.hsflibpart.constants(Parser.ScriptType.D);
+            }
+
+            // get current script constants
+            const editedconstants = await this.hsflibpart.constants(scriptType);
+
+            const mergedconstants = [...masterconstants ?? [], ...editedconstants];
+            for (const prefix of mergedconstants) {
                 for (const c of prefix) {
                     const completion = new vscode.CompletionItem(c.name, vscode.CompletionItemKind.Constant);
                     completion.sortText = c.value.length.toString() + c.value;  // shorter values probably smaller numbers
@@ -878,32 +896,36 @@ export class GDLExtension
         }
     }
 
-    private mapFuncionSymbols(scriptType : Parser.ScriptType) {
-        //console.log("GDLExtension.mapFunctionSymbols");
-        return this.parser.getFunctionList(scriptType).map((f : Parser.GDLFunction, i : number, array : Parser.GDLFunction[]) => {
+    private static mapFunctionSymbols(parser : Parser.ParseXMLGDL, scriptType : Parser.ScriptType, document : vscode.TextDocument) {
+        return parser.getFunctionList(scriptType).map((f : Parser.GDLFunction, i : number, array : Parser.GDLFunction[]) => {
             let endpos : vscode.Position;
-            let range = f.range(this.editor!.document);
+            let range = f.range(document);
             if (i + 1 < array.length) {
                 // start of next function in same script
-                endpos = array[i + 1].range(this.editor!.document).start;
+                endpos = array[i + 1].range(document).start;
             } else {
                 // end of script
-                const script = this.parser.getXMLSection(scriptType);
+                const script = parser.getXMLSection(scriptType);
                 if (script) {
-                    endpos = script.innerrange(this.editor!.document).end;
+                    endpos = script.innerrange(document).end;
                 } else {    // shouldn't happen
                     endpos = range.end;
                 }
             }
             
-            const end = this.editor!.document.positionAt(this.editor!.document.offsetAt(endpos) - 1);
+            const end = document.positionAt(document.offsetAt(endpos) - 1);
             return new vscode.DocumentSymbol(
                 f.name,
                 "",
                 vscode.SymbolKind.Method,
                 new vscode.Range(range.start, end),
                 range);
-        }, this);
+        });
+    }
+
+    private mapOwnFuncionSymbols(scriptType : Parser.ScriptType) {
+        //console.log("GDLExtension.mapOwnFunctionSymbols");
+        return GDLExtension.mapFunctionSymbols(this.parser, scriptType, this.editor!.document);
     }
 
     private mapCommentSymbols(scriptType : Parser.ScriptType) {
@@ -957,7 +979,7 @@ export class GDLExtension
         const allsections = this.parser.getAllSections();
         const noroot = (allsections.length === 1 && allsections[0] instanceof Parser.GDLFile);
         if (noroot) {   // GDL-HSF
-            symbols = [...this.mapFuncionSymbols(Parser.ScriptType.ROOT),
+            symbols = [...this.mapOwnFuncionSymbols(Parser.ScriptType.ROOT),
                        ...this.mapCallSymbols(Parser.ScriptType.ROOT),
                        ...this.mapCommentSymbols(Parser.ScriptType.ROOT)];
         } else {
@@ -972,7 +994,7 @@ export class GDLExtension
                                                              showRange,
                                                              showRange);
                     if (section instanceof Parser.GDLScript) {
-                        symbol.children = [...this.mapFuncionSymbols(section.scriptType),
+                        symbol.children = [...this.mapOwnFuncionSymbols(section.scriptType),
                                            ...this.mapCallSymbols(section.scriptType),
                                            ...this.mapCommentSymbols(section.scriptType)];
                     }
@@ -1010,19 +1032,31 @@ export class GDLExtension
                 }
             } else {
                 // look for subroutine calls only if not a macro call
-                const lineBefore = document.lineAt(position.line).text.substring(0, originRange.start.character);
+                const jumps = new Jumps(document.lineAt(position.line).text);
                 
-                if (lineBefore.match(/(then|goto|gosub)\s*["'`´“”’‘]?$/i)) {
-                    await this.immediateParse(document, cancel);
-                    
-                    definitions = this.mapFuncionSymbols(Parser.ScriptType.ROOT)
-                        .filter(s => (origin === s.name ||                                 // number
-                                      origin === s.name.substring(1, s.name.length - 1)))  // "name"
-                        .map(s => ({ originSelectionRange:  originRange,
-                                     targetRange:           s.range,
-                                     targetSelectionRange:  s.selectionRange,
-                                     targetUri:             document.uri }));
+                if (jumps.jumps.find(j => j.range.contains(position.with(0)))) {
+                    let functionSymbols : {symbol: vscode.DocumentSymbol, document: vscode.TextDocument}[] = [];
+
+                    for await (const scriptUri of await this.hsflibpart!.info.allScripts()) {
+                        if (scriptUri) {
+                            const otherdoc = await vscode.workspace.openTextDocument(scriptUri);
+                            const otherscript = new Parser.ParseXMLGDL(otherdoc.getText(),
+                            true, false, false, false, false);
+                            
+                            functionSymbols = functionSymbols.concat(
+                                GDLExtension.mapFunctionSymbols(otherscript, Parser.ScriptType.ROOT, otherdoc)
+                                            .map(s => {return {symbol: s, document: otherdoc}}));
+                        }
                     }
+                                
+                    definitions = functionSymbols
+                        .filter(s => (origin === s.symbol.name ||                                        // number
+                                      origin === s.symbol.name.substring(1, s.symbol.name.length - 1)))  // "name"
+                        .map(s => ({ originSelectionRange:  originRange,
+                                     targetRange:           s.symbol.range,
+                                     targetSelectionRange:  s.symbol.selectionRange,
+                                     targetUri:             s.document.uri }));
+                }
             }
         }
 
@@ -1064,25 +1098,36 @@ export class GDLExtension
     async provideReferences(document: vscode.TextDocument, position: vscode.Position,
                             _context: vscode.ReferenceContext, cancel: vscode.CancellationToken) : Promise<vscode.Location[]> {
 
-        const references : vscode.Location[] = [];
+        let references : vscode.Location[] = [];
 
         await this.immediateParse(document, cancel);
 
-        const origin = this.mapFuncionSymbols(Parser.ScriptType.ROOT).filter(s => {
+        // should we provide references of a definition?
+        let label = this.mapOwnFuncionSymbols(Parser.ScriptType.ROOT).filter(s => {
             return s.selectionRange.contains(position);
         })[0]?.name; // there shouldn't be more results
 
-        for (const match of document.getText().matchAll(/(then|goto|gosub)\s*/gmi)) {
-            const start = document.positionAt(match.index!);
-            const end = start.translate(undefined, match[0].length);
-            const end_full = end.translate(undefined, origin.length);
-            const rest = document.getText(new vscode.Range(end, end_full));
-
-            if (rest === origin) {
-                references.push(new vscode.Location(document.uri, new vscode.Range(start, end_full)));
+        // should we provide all other references like this?
+        if (label === undefined) {
+            const jumps = new Jumps(document.getText());
+            const selection = jumps.jumps.find(j => j.range.contains(position));
+            if (selection !== undefined) {
+                label = selection.target;
             }
         }
+        
+        if (label !== undefined) {
+            for await (const scriptUri of await this.hsflibpart!.info.allScripts()) {
+                if (scriptUri) {
+                    const searchDocument = await vscode.workspace.openTextDocument(scriptUri);
 
+                    const jumps = new Jumps(searchDocument.getText());
+                    references = references.concat(jumps.jumps.filter(j => j.target === label)
+                                                              .map(j => new vscode.Location(searchDocument.uri, j.range)));
+                }
+            }
+        }
+        
         return references;
     }
 }
