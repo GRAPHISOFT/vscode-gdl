@@ -19,7 +19,7 @@ class HSFLibpart {
         await this._paramlist.addfrom(this.rootFolder);
     }
     async read_master_constants() {
-        await this._masterconstants.addfrom(this.rootFolder, "scripts/1d.gdl");
+        await this._masterconstants.addfromfile(this.rootFolder, "scripts/1d.gdl");
     }
 }
 exports.HSFLibpart = HSFLibpart;
