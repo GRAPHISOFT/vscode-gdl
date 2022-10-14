@@ -29,12 +29,10 @@ export class Constant {
 export class Constants {
     private constants: Map<string, Constant[]> = new Map<string, Constant[]>();
 
-    async addfrom(rootfolder: vscode.Uri, relpath: string) {
-        const script = vscode.Uri.joinPath(rootfolder, relpath);
-        const code = await readFile(script);
-
-        if (code) {
-            const constants_ = code.match(/^\s*[A-Z][0-9A-Z~]*(_[0-9A-Z_~]+)?\s*=.*$/mg);
+    addfromtext(code: string | undefined) {
+        if (code !== undefined) {
+            const constants_ = code.match(/^\s*[A-Z][0-9A-Z~]*(_[0-9A-Z_~]+)?\s*=.*(?<!(\\|then|THEN|,))\s*$/mg);
+                                    //ABC[_ABC] = * but not ending \ or then or , (multiline conditions, macro paramlist)
 
             if (constants_) {
                 for (const gdl of constants_) {
@@ -47,6 +45,11 @@ export class Constants {
                 }
             }
         }
+    }
+
+    async addfromfile(rootfolder: vscode.Uri, relpath: string) {
+        const script = vscode.Uri.joinPath(rootfolder, relpath);
+        this.addfromtext(await readFile(script));
     }
 
     [Symbol.iterator]() {
