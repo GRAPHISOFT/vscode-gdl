@@ -11,6 +11,7 @@ const wssymbols_1 = require("./wssymbols");
 const calltree_1 = require("./calltree");
 const constparser_1 = require("./constparser");
 const path = require("path");
+const jumpparser_1 = require("./jumpparser");
 async function activate(context) {
     //console.log("extension.activate");
     // create extension
@@ -302,7 +303,7 @@ class GDLExtension {
     }
     onDocumentOpened(document) {
         //console.log("GDLExtension.onDocumentOpened", document.uri.toString());
-        // handle only top editor - other can be SCM virtual document
+        // handle only top editor - other can be SCM virtual document / other document opened by extension
         if (vscode.window.activeTextEditor?.document.uri === document.uri) {
             this.updateHsfLibpart();
             this.reparseDoc(document, 0);
@@ -820,14 +821,14 @@ class GDLExtension {
             }
             else {
                 // look for subroutine calls only if not a macro call
-                const lineBefore = document.lineAt(position.line).text.substring(0, originRange.start.character);
-                if (lineBefore.match(/(then|goto|gosub)\s*["'`´“”’‘]?$/i)) {
+                const jumps = new jumpparser_1.Jumps(document.lineAt(position.line).text);
+                if (jumps.jumps.find(j => j.range.contains(position.with(0)))) {
                     let masterFunctionSymbols = undefined;
                     // defining same subroutines in two scripts and calling from master is possible,
                     //      but gives build warnings and not a good practice
                     // therefore we don't check definitions in other scripts from master script, just the other way around
-                    if (this.infoFromHSF &&
-                        HSFScriptType(document.uri) !== Parser.ScriptType.D) {
+                    if ( //this.infoFromHSF &&
+                    HSFScriptType(document.uri) !== Parser.ScriptType.D) {
                         const masterfile = path.normalize(path.join(document.uri.fsPath, "..", "1d.gdl"));
                         const masterdoc = await vscode.workspace.openTextDocument(vscode.Uri.file(masterfile));
                         const master = new Parser.ParseXMLGDL(masterdoc.getText(), true, false, false, false, false);
@@ -878,29 +879,46 @@ class GDLExtension {
         return undefined;
     }
     async provideReferences(document, position, _context, cancel) {
-        const references = [];
+        let references = [];
         await this.immediateParse(document, cancel);
-        const origin = this.mapOwnFuncionSymbols(Parser.ScriptType.ROOT).filter(s => {
+        // should we provide references of a definition?
+        let label = this.mapOwnFuncionSymbols(Parser.ScriptType.ROOT).filter(s => {
             return s.selectionRange.contains(position);
         })[0]?.name; // there shouldn't be more results
         const scriptType = HSFScriptType(document.uri);
-        const searchScripts = (this.infoFromHSF)
-            ? Parser.getRelatedScripts(scriptType).filter(script => script !== scriptType) // exclude current script
-            : [];
-        const libpart = (await this.wsSymbols.values(cancel)).find(e => e.root_uri.fsPath === this.hsflibpart.rootFolder.fsPath);
-        let searchUris = searchScripts.map(async (script) => libpart?.scriptUri(script));
-        searchUris.push(Promise.resolve(document.uri)); // current script read from document
-        for await (const scriptUri of searchUris) {
-            if (scriptUri) {
-                const searchDocument = await vscode.workspace.openTextDocument(scriptUri);
-                for (const match of searchDocument.getText().matchAll(/(then|goto|gosub)\s*/gmi)) {
-                    const start = searchDocument.positionAt(match.index);
-                    const end = start.translate(undefined, match[0].length);
-                    const end_full = end.translate(undefined, origin.length);
-                    const rest = searchDocument.getText(new vscode.Range(end, end_full));
-                    if (rest === origin) {
-                        references.push(new vscode.Location(searchDocument.uri, new vscode.Range(start, end_full)));
-                    }
+        let searchScripts;
+        // should we provide all other references like this?
+        if (label === undefined) {
+            const jumps = new jumpparser_1.Jumps(document.getText());
+            const selection = jumps.jumps.find(j => j.range.contains(position));
+            if (selection !== undefined) {
+                label = selection.target;
+                // only master-defined subroutines are called from other scripts
+                // search all scripts only if definition is in master script
+                const definition = await this.provideDefinition(document, position, cancel);
+                if (definition.find(d => d.targetUri.fsPath.endsWith("1d.gdl"))) {
+                    searchScripts = Parser.Scripts;
+                }
+                else {
+                    searchScripts = [scriptType];
+                }
+            }
+        }
+        else {
+            searchScripts = Parser.getRelatedScripts(scriptType);
+        }
+        //searchScripts = this.infoFromHSF ? searchScripts : [scriptType];
+        if (label !== undefined) {
+            const libpart = (await this.wsSymbols.values(cancel)).find(e => e.root_uri.fsPath === this.hsflibpart.rootFolder.fsPath);
+            let searchUris = searchScripts.map(async (script) => (script === scriptType)
+                ? document.uri // shortcut for current document
+                : libpart?.scriptUri(script));
+            for await (const scriptUri of searchUris) {
+                if (scriptUri) {
+                    const searchDocument = await vscode.workspace.openTextDocument(scriptUri);
+                    const jumps = new jumpparser_1.Jumps(searchDocument.getText());
+                    references = references.concat(jumps.jumps.filter(j => j.target === label)
+                        .map(j => new vscode.Location(searchDocument.uri, j.range)));
                 }
             }
         }
