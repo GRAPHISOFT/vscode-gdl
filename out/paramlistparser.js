@@ -2,7 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ParamList = exports.Parameter = void 0;
 const vscode = require("vscode");
-const extension_1 = require("./extension");
 class Parameter {
     constructor(xml) {
         const result_ = xml.match(/^\t\t<(.*?) Name="(.*?)">((.|[\n\r])*?)^\t\t<\/\1>/m);
@@ -131,9 +130,9 @@ class ParamList {
     }
     async addfrom(rootfolder) {
         const paramlistfile = vscode.Uri.joinPath(rootfolder, "paramlist.xml");
-        const paramlist = await (0, extension_1.readFile)(paramlistfile);
+        const paramlist = await vscode.workspace.openTextDocument(paramlistfile);
         if (paramlist) {
-            const parameters_ = paramlist.match(/^\t\t<(.*?) Name=.*?>((.|[\n\r])*?)^\t\t<\/\1>/mg);
+            const parameters_ = paramlist.getText().match(/^\t\t<(.*?) Name=.*?>((.|[\n\r])*?)^\t\t<\/\1>/mg);
             if (parameters_) {
                 for (const xml of parameters_) {
                     const parameter = new Parameter(xml);

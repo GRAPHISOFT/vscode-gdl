@@ -1,7 +1,5 @@
 import * as vscode from 'vscode';
 
-import { readFile } from './extension';
-
 export class Constant {
     readonly prefix: string;
     readonly id: string;
@@ -49,7 +47,8 @@ export class Constants {
 
     async addfromfile(rootfolder: vscode.Uri, relpath: string) {
         const script = vscode.Uri.joinPath(rootfolder, relpath);
-        this.addfromtext(await readFile(script));
+        const document = await vscode.workspace.openTextDocument(script)
+        this.addfromtext(document.getText());
     }
 
     [Symbol.iterator]() {
