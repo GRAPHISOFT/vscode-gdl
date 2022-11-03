@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Constants = exports.Constant = void 0;
 const vscode = require("vscode");
+const extension_1 = require("./extension");
 class Constant {
     constructor(gdl) {
         const result_ = gdl.match(/(?<=^\s*)([A-Z][0-9A-Z~]*)(_[0-9A-Z_~]+)?\s*=\s*(.*)\s*$/);
@@ -42,8 +43,7 @@ class Constants {
     }
     async addfromfile(rootfolder, relpath) {
         const script = vscode.Uri.joinPath(rootfolder, relpath);
-        const document = await vscode.workspace.openTextDocument(script);
-        this.addfromtext(document.getText());
+        this.addfromtext(await (0, extension_1.readFile)(script));
     }
     [Symbol.iterator]() {
         return this.constants.values();
