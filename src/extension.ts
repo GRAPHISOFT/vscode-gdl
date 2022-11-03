@@ -7,7 +7,6 @@ import { RefGuide } from './refguide';
 import { HSFLibpart } from './parsehsf';
 import { WSSymbols } from './wssymbols';
 import { CallTree } from './calltree';
-import { Constants } from './constparser';
 
 import path = require('path');
 
@@ -856,19 +855,7 @@ export class GDLExtension
                 completions.items.push(completion);
             }
 
-            let masterconstants : Constants | undefined = undefined;
-            let scriptType = HSFScriptType(document.uri)!;
-            if (Parser.ScriptsExceptMaster.includes(scriptType)) {
-                // get master script (not the edited one) constants from saved file
-                masterconstants = this.hsflibpart.masterconstants;
-            }
-
-            // get current script constants from edited text
-            const editedconstants = new Constants();
-            editedconstants.addfromtext(document.getText());
-
-            const mergedconstants = [...masterconstants ?? [], ...editedconstants];
-            for (const prefix of mergedconstants) {
+            for (const prefix of this.hsflibpart.masterconstants) {
                 for (const c of prefix) {
                     const completion = new vscode.CompletionItem(c.name, vscode.CompletionItemKind.Constant);
                     completion.sortText = c.value.length.toString() + c.value;  // shorter values probably smaller numbers

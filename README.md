@@ -51,7 +51,7 @@ __hotspot__ or __hotspot2__ - length edit hotspot triplet
 * When a folder of HSF files is opened, further features are available:
   * Show info about parameters when the mouse hovers on them
   * Show parameters with bold font
-  * IntelliSense lists constants (ALL_CAPS) with their initialized values
+  * IntelliSense lists master script constants (ALL_CAPS) with their initialized values
   * IntelliSense lists parameters with their description, type, flags and default value. This list can be filtered by parameter type too.
   * These can all be toggled on/off together with Ctrl-Shift-Space
   * Follow macro calls with Ctrl-click
@@ -169,9 +169,6 @@ Some valid syntaxes won't be highlighted, and some invalid syntaxes will be high
 
 # Release Notes
 
-## 1.26.2
-* Intellisense reads constants from edited file too, besides saved master script version
-
 ## 1.26.1
 * `Show Call Hierarchy`, `Peek Call Hierarchy` context menu items list incoming or outgoing macro calls inside the workspace
 * New command `Re-scan library parts in workspace folders` available in explorer context menu to reconcile file changes outside vscode
@@ -196,7 +193,7 @@ Some valid syntaxes won't be highlighted, and some invalid syntaxes will be high
 ## 1.25.1
 * Document symbols (Ctrl-Shift-O)
 * Workspace symbols (Ctrl-T)
-* IntelliSense lists parameters and constants (toggle with Ctrl-Shift-Space)
+* IntelliSense lists parameters and master script constants (toggle with Ctrl-Shift-Space)
 * Show parameter info in hover
 * Show parameters with bold font
 * Highlighting of built-in property ID strings
