@@ -28,16 +28,6 @@ export const ScriptsExceptMaster = [ScriptType.DD,
 
 export const Scripts = [ScriptType.D, ...ScriptsExceptMaster];
 
-export function getRelatedScripts(scriptType : ScriptType) : ScriptType[] {
-	// returns scripts related to scriptType
-	if (scriptType === ScriptType.D) {
-		// master script relates to all scripts
-		return Scripts;
-	} else {
-		// others relate to master and self
-		return [ScriptType.D, scriptType];
-	}
-}
 
 // general interface representing a thing we want to catch
 export abstract class GDLToken {

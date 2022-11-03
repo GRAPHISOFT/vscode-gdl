@@ -124,6 +124,16 @@ class CallTree {
             resolve(this.getCallHierarchyOutgoingCalls(item, cancel));
         });
     }
+    static getScriptsToSearch(searchMode) {
+        if (searchMode === Parser.ScriptType.D) {
+            // master script mode should search all scripts
+            return Parser.Scripts;
+        }
+        else {
+            // otherwise search mode and master
+            return [Parser.ScriptType.D, searchMode];
+        }
+    }
     async getUrisToSearch(item, searchScripts, cancel) {
         let uris;
         if (item.kind !== vscode.SymbolKind.File) {
@@ -149,7 +159,7 @@ class CallTree {
     }
     async getCallHierarchyOutgoingCalls(item, cancel) {
         const searchMode = CallTree.getContext(item.detail);
-        const searchScripts = Parser.getRelatedScripts(searchMode);
+        const searchScripts = CallTree.getScriptsToSearch(searchMode);
         let calls;
         if (searchMode === Parser.ScriptType.D) {
             // add all subscripts if looking at master script
@@ -187,7 +197,7 @@ class CallTree {
             targetName = (await document).getText(item.selectionRange).toLowerCase();
         }
         const searchMode = CallTree.getIncomingMode(item.uri, CallTree.getContext(item.detail));
-        const searchScripts = Parser.getRelatedScripts(searchMode);
+        const searchScripts = CallTree.getScriptsToSearch(searchMode);
         const libparts = await this.wsSymbols.values(cancel);
         const calldata = libparts.map(async (libpart) => {
             let results = [];
