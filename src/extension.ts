@@ -316,14 +316,9 @@ export class GDLExtension
     private updateHsfLibpart() {
         // create new HSFLibpart if root folder changed
         const rootFolder = this.getNewHSFLibpartFolder(this.hsflibpart?.info.root_uri);
-        if (rootFolder !== undefined) {
-            const script = HSFScriptType(this._editor!.document.uri)!;
-            if (rootFolder) {
-                //start async operations
-                this.hsflibpart = new HSFLibpart(rootFolder, script);
-            } else {
-                this.hsflibpart?.refresh(script);
-            }
+        if (rootFolder) {
+            //start async operations
+            this.hsflibpart = new HSFLibpart(rootFolder);
         } else if (rootFolder === undefined) {
             // delete HSFLibpart
             this.hsflibpart = undefined;
@@ -410,7 +405,6 @@ export class GDLExtension
 
     private onDocumentChanged(changeEvent: vscode.TextDocumentChangeEvent) {
         //console.log("GDLExtension.onDocumentChanged", changeEvent.document.uri.toString());
-        this.updateHsfLibpart();
         this.reparseDoc(changeEvent.document);  // with default timeout
     }
 
@@ -736,9 +730,10 @@ export class GDLExtension
                 if (this.suggestHSF === undefined) {
                     this.suggestHSF = vscode.languages.registerCompletionItemProvider("*", this);
                 }
-                this.statusHSF.text = `GDL-HSF Parameter Hints ON`;
+                this.statusHSF.text = `GDL: Show Info from HSF Files`;
             } else {
-                this.statusHSF.text = `GDL-HSF Parameter Hints OFF`;
+                this.cancelSuggestHSF();
+                this.statusHSF.text = `GDL: Show Info from Local File Only`;
             }
             this.statusHSF.show();
         } else {
@@ -864,13 +859,14 @@ export class GDLExtension
 
             let masterconstants : Constants | undefined = undefined;
             let scriptType = HSFScriptType(document.uri)!;
-            if (scriptType !== Parser.ScriptType.D) {
-                // get master script constants
-                masterconstants = await this.hsflibpart.constants(Parser.ScriptType.D);
+            if (Parser.ScriptsExceptMaster.includes(scriptType)) {
+                // get master script (not the edited one) constants from saved file
+                masterconstants = this.hsflibpart.masterconstants;
             }
 
-            // get current script constants
-            const editedconstants = await this.hsflibpart.constants(scriptType);
+            // get current script constants from edited text
+            const editedconstants = new Constants();
+            editedconstants.addfromtext(document.getText());
 
             const mergedconstants = [...masterconstants ?? [], ...editedconstants];
             for (const prefix of mergedconstants) {

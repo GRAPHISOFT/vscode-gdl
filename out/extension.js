@@ -9,6 +9,7 @@ const refguide_1 = require("./refguide");
 const parsehsf_1 = require("./parsehsf");
 const wssymbols_1 = require("./wssymbols");
 const calltree_1 = require("./calltree");
+const constparser_1 = require("./constparser");
 const path = require("path");
 const jumpparser_1 = require("./jumpparser");
 async function activate(context) {
@@ -222,15 +223,9 @@ class GDLExtension {
     updateHsfLibpart() {
         // create new HSFLibpart if root folder changed
         const rootFolder = this.getNewHSFLibpartFolder(this.hsflibpart?.info.root_uri);
-        if (rootFolder !== undefined) {
-            const script = HSFScriptType(this._editor.document.uri);
-            if (rootFolder) {
-                //start async operations
-                this.hsflibpart = new parsehsf_1.HSFLibpart(rootFolder, script);
-            }
-            else {
-                this.hsflibpart?.refresh(script);
-            }
+        if (rootFolder) {
+            //start async operations
+            this.hsflibpart = new parsehsf_1.HSFLibpart(rootFolder);
         }
         else if (rootFolder === undefined) {
             // delete HSFLibpart
@@ -304,7 +299,6 @@ class GDLExtension {
     }
     onDocumentChanged(changeEvent) {
         //console.log("GDLExtension.onDocumentChanged", changeEvent.document.uri.toString());
-        this.updateHsfLibpart();
         this.reparseDoc(changeEvent.document); // with default timeout
     }
     onDocumentOpened(document) {
@@ -578,10 +572,11 @@ class GDLExtension {
                 if (this.suggestHSF === undefined) {
                     this.suggestHSF = vscode.languages.registerCompletionItemProvider("*", this);
                 }
-                this.statusHSF.text = `GDL-HSF Parameter Hints ON`;
+                this.statusHSF.text = `GDL: Show Info from HSF Files`;
             }
             else {
-                this.statusHSF.text = `GDL-HSF Parameter Hints OFF`;
+                this.cancelSuggestHSF();
+                this.statusHSF.text = `GDL: Show Info from Local File Only`;
             }
             this.statusHSF.show();
         }
@@ -686,12 +681,13 @@ class GDLExtension {
             }
             let masterconstants = undefined;
             let scriptType = HSFScriptType(document.uri);
-            if (scriptType !== Parser.ScriptType.D) {
-                // get master script constants
-                masterconstants = await this.hsflibpart.constants(Parser.ScriptType.D);
+            if (Parser.ScriptsExceptMaster.includes(scriptType)) {
+                // get master script (not the edited one) constants from saved file
+                masterconstants = this.hsflibpart.masterconstants;
             }
-            // get current script constants
-            const editedconstants = await this.hsflibpart.constants(scriptType);
+            // get current script constants from edited text
+            const editedconstants = new constparser_1.Constants();
+            editedconstants.addfromtext(document.getText());
             const mergedconstants = [...masterconstants ?? [], ...editedconstants];
             for (const prefix of mergedconstants) {
                 for (const c of prefix) {
