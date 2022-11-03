@@ -891,36 +891,32 @@ export class GDLExtension
         }
     }
 
-    private static mapFunctionSymbols(parser : Parser.ParseXMLGDL, scriptType : Parser.ScriptType, document : vscode.TextDocument) {
-        return parser.getFunctionList(scriptType).map((f : Parser.GDLFunction, i : number, array : Parser.GDLFunction[]) => {
+    private mapFuncionSymbols(scriptType : Parser.ScriptType) {
+        //console.log("GDLExtension.mapFunctionSymbols");
+        return this.parser.getFunctionList(scriptType).map((f : Parser.GDLFunction, i : number, array : Parser.GDLFunction[]) => {
             let endpos : vscode.Position;
-            let range = f.range(document);
+            let range = f.range(this.editor!.document);
             if (i + 1 < array.length) {
                 // start of next function in same script
-                endpos = array[i + 1].range(document).start;
+                endpos = array[i + 1].range(this.editor!.document).start;
             } else {
                 // end of script
-                const script = parser.getXMLSection(scriptType);
+                const script = this.parser.getXMLSection(scriptType);
                 if (script) {
-                    endpos = script.innerrange(document).end;
+                    endpos = script.innerrange(this.editor!.document).end;
                 } else {    // shouldn't happen
                     endpos = range.end;
                 }
             }
             
-            const end = document.positionAt(document.offsetAt(endpos) - 1);
+            const end = this.editor!.document.positionAt(this.editor!.document.offsetAt(endpos) - 1);
             return new vscode.DocumentSymbol(
                 f.name,
                 "",
                 vscode.SymbolKind.Method,
                 new vscode.Range(range.start, end),
                 range);
-        });
-    }
-
-    private mapOwnFuncionSymbols(scriptType : Parser.ScriptType) {
-        //console.log("GDLExtension.mapOwnFunctionSymbols");
-        return GDLExtension.mapFunctionSymbols(this.parser, scriptType, this.editor!.document);
+        }, this);
     }
 
     private mapCommentSymbols(scriptType : Parser.ScriptType) {
@@ -974,7 +970,7 @@ export class GDLExtension
         const allsections = this.parser.getAllSections();
         const noroot = (allsections.length === 1 && allsections[0] instanceof Parser.GDLFile);
         if (noroot) {   // GDL-HSF
-            symbols = [...this.mapOwnFuncionSymbols(Parser.ScriptType.ROOT),
+            symbols = [...this.mapFuncionSymbols(Parser.ScriptType.ROOT),
                        ...this.mapCallSymbols(Parser.ScriptType.ROOT),
                        ...this.mapCommentSymbols(Parser.ScriptType.ROOT)];
         } else {
@@ -989,7 +985,7 @@ export class GDLExtension
                                                              showRange,
                                                              showRange);
                     if (section instanceof Parser.GDLScript) {
-                        symbol.children = [...this.mapOwnFuncionSymbols(section.scriptType),
+                        symbol.children = [...this.mapFuncionSymbols(section.scriptType),
                                            ...this.mapCallSymbols(section.scriptType),
                                            ...this.mapCommentSymbols(section.scriptType)];
                     }
@@ -1030,37 +1026,15 @@ export class GDLExtension
                 const lineBefore = document.lineAt(position.line).text.substring(0, originRange.start.character);
                 
                 if (lineBefore.match(/(then|goto|gosub)\s*["'`´“”’‘]?$/i)) {
-
-                    let masterFunctionSymbols = undefined;
-
-                    // defining same subroutines in two scripts and calling from master is possible,
-                    //      but gives build warnings and not a good practice
-                    // therefore we don't check definitions in other scripts from master script, just the other way around
-                    if (this.infoFromHSF &&
-                        HSFScriptType(document.uri) !== Parser.ScriptType.D) {
-
-                        const masterfile =  path.normalize(
-                                            path.join(document.uri.fsPath, "..", "1d.gdl"));
-                        const masterdoc =   await vscode.workspace.openTextDocument(vscode.Uri.file(masterfile));
-                        const master = new Parser.ParseXMLGDL(masterdoc.getText(),
-                                                              true, false, false, false, false);
-
-                        masterFunctionSymbols = GDLExtension.mapFunctionSymbols(master, Parser.ScriptType.ROOT, masterdoc)
-                                                            .map(s => {return {symbol: s, document: masterdoc}});;
-                    }
-                    
                     await this.immediateParse(document, cancel);
-                    const ownFunctionSymbols = this.mapOwnFuncionSymbols(Parser.ScriptType.ROOT)
-                                                   .map(s => {return {symbol: s, document: this.editor!.document}});
-                    const mergedFunctionSymbols = [...masterFunctionSymbols ?? [], ...ownFunctionSymbols];
                     
-                    definitions = mergedFunctionSymbols
-                        .filter(s => (origin === s.symbol.name ||                                 // number
-                                      origin === s.symbol.name.substring(1, s.symbol.name.length - 1)))  // "name"
+                    definitions = this.mapFuncionSymbols(Parser.ScriptType.ROOT)
+                        .filter(s => (origin === s.name ||                                 // number
+                                      origin === s.name.substring(1, s.name.length - 1)))  // "name"
                         .map(s => ({ originSelectionRange:  originRange,
-                                     targetRange:           s.symbol.range,
-                                     targetSelectionRange:  s.symbol.selectionRange,
-                                     targetUri:             s.document.uri }));
+                                     targetRange:           s.range,
+                                     targetSelectionRange:  s.selectionRange,
+                                     targetUri:             document.uri }));
                     }
             }
         }
@@ -1107,36 +1081,21 @@ export class GDLExtension
 
         await this.immediateParse(document, cancel);
 
-        const origin = this.mapOwnFuncionSymbols(Parser.ScriptType.ROOT).filter(s => {
+        const origin = this.mapFuncionSymbols(Parser.ScriptType.ROOT).filter(s => {
             return s.selectionRange.contains(position);
         })[0]?.name; // there shouldn't be more results
 
-        const scriptType = HSFScriptType(document.uri)!;
-        const searchScripts = (this.infoFromHSF)
-                                    ? Parser.getRelatedScripts(scriptType).filter(script => script !== scriptType)  // exclude current script
-                                    : [];
-            
-        const libpart = (await this.wsSymbols.values(cancel)).find(e => e.root_uri.fsPath === this.hsflibpart!.rootFolder.fsPath);
-        let searchUris = searchScripts.map(async (script) => libpart?.scriptUri(script));
-        searchUris.push(Promise.resolve(document.uri)); // current script read from document
+        for (const match of document.getText().matchAll(/(then|goto|gosub)\s*/gmi)) {
+            const start = document.positionAt(match.index!);
+            const end = start.translate(undefined, match[0].length);
+            const end_full = end.translate(undefined, origin.length);
+            const rest = document.getText(new vscode.Range(end, end_full));
 
-        for await (const scriptUri of searchUris) {
-            if (scriptUri) {
-                const searchDocument = await vscode.workspace.openTextDocument(scriptUri);
-
-                for (const match of searchDocument.getText().matchAll(/(then|goto|gosub)\s*/gmi)) {
-                    const start = searchDocument.positionAt(match.index!);
-                    const end = start.translate(undefined, match[0].length);
-                    const end_full = end.translate(undefined, origin.length);
-                    const rest = searchDocument.getText(new vscode.Range(end, end_full));
-        
-                    if (rest === origin) {
-                        references.push(new vscode.Location(searchDocument.uri, new vscode.Range(start, end_full)));
-                    }
-                }
+            if (rest === origin) {
+                references.push(new vscode.Location(document.uri, new vscode.Range(start, end_full)));
             }
         }
-        
+
         return references;
     }
 }
