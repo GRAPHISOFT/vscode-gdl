@@ -222,7 +222,7 @@ class GDLExtension {
     }
     updateHsfLibpart() {
         // create new HSFLibpart if root folder changed
-        const rootFolder = this.getNewHSFLibpartFolder(this.hsflibpart?.info.root_uri);
+        const rootFolder = this.getNewHSFLibpartFolder(this.hsflibpart?.rootFolder);
         if (rootFolder) {
             //start async operations
             this.hsflibpart = new parsehsf_1.HSFLibpart(rootFolder);
@@ -823,16 +823,24 @@ class GDLExtension {
                 // look for subroutine calls only if not a macro call
                 const jumps = new jumpparser_1.Jumps(document.lineAt(position.line).text);
                 if (jumps.jumps.find(j => j.range.contains(position.with(0)))) {
-                    let functionSymbols = [];
-                    for await (const scriptUri of await this.hsflibpart.info.allScripts()) {
-                        if (scriptUri) {
-                            const otherdoc = await vscode.workspace.openTextDocument(scriptUri);
-                            const otherscript = new Parser.ParseXMLGDL(otherdoc.getText(), true, false, false, false, false);
-                            functionSymbols = functionSymbols.concat(GDLExtension.mapFunctionSymbols(otherscript, Parser.ScriptType.ROOT, otherdoc)
-                                .map(s => { return { symbol: s, document: otherdoc }; }));
-                        }
+                    let masterFunctionSymbols = undefined;
+                    // defining same subroutines in two scripts and calling from master is possible,
+                    //      but gives build warnings and not a good practice
+                    // therefore we don't check definitions in other scripts from master script, just the other way around
+                    if ( //this.infoFromHSF &&
+                    HSFScriptType(document.uri) !== Parser.ScriptType.D) {
+                        const masterfile = path.normalize(path.join(document.uri.fsPath, "..", "1d.gdl"));
+                        const masterdoc = await vscode.workspace.openTextDocument(vscode.Uri.file(masterfile));
+                        const master = new Parser.ParseXMLGDL(masterdoc.getText(), true, false, false, false, false);
+                        masterFunctionSymbols = GDLExtension.mapFunctionSymbols(master, Parser.ScriptType.ROOT, masterdoc)
+                            .map(s => { return { symbol: s, document: masterdoc }; });
+                        ;
                     }
-                    definitions = functionSymbols
+                    await this.immediateParse(document, cancel);
+                    const ownFunctionSymbols = this.mapOwnFuncionSymbols(Parser.ScriptType.ROOT)
+                        .map(s => { return { symbol: s, document: this.editor.document }; });
+                    const mergedFunctionSymbols = [...masterFunctionSymbols ?? [], ...ownFunctionSymbols];
+                    definitions = mergedFunctionSymbols
                         .filter(s => (origin === s.symbol.name || // number
                         origin === s.symbol.name.substring(1, s.symbol.name.length - 1))) // "name"
                         .map(s => ({ originSelectionRange: originRange,
@@ -877,16 +885,35 @@ class GDLExtension {
         let label = this.mapOwnFuncionSymbols(Parser.ScriptType.ROOT).filter(s => {
             return s.selectionRange.contains(position);
         })[0]?.name; // there shouldn't be more results
+        const scriptType = HSFScriptType(document.uri);
+        let searchScripts;
         // should we provide all other references like this?
         if (label === undefined) {
             const jumps = new jumpparser_1.Jumps(document.getText());
             const selection = jumps.jumps.find(j => j.range.contains(position));
             if (selection !== undefined) {
                 label = selection.target;
+                // only master-defined subroutines are called from other scripts
+                // search all scripts only if definition is in master script
+                const definition = await this.provideDefinition(document, position, cancel);
+                if (definition.find(d => d.targetUri.fsPath.endsWith("1d.gdl"))) {
+                    searchScripts = Parser.Scripts;
+                }
+                else {
+                    searchScripts = [scriptType];
+                }
             }
         }
+        else {
+            searchScripts = Parser.getRelatedScripts(scriptType);
+        }
+        //searchScripts = this.infoFromHSF ? searchScripts : [scriptType];
         if (label !== undefined) {
-            for await (const scriptUri of await this.hsflibpart.info.allScripts()) {
+            const libpart = (await this.wsSymbols.values(cancel)).find(e => e.root_uri.fsPath === this.hsflibpart.rootFolder.fsPath);
+            let searchUris = searchScripts.map(async (script) => (script === scriptType)
+                ? document.uri // shortcut for current document
+                : libpart?.scriptUri(script));
+            for await (const scriptUri of searchUris) {
                 if (scriptUri) {
                     const searchDocument = await vscode.workspace.openTextDocument(scriptUri);
                     const jumps = new jumpparser_1.Jumps(searchDocument.getText());
