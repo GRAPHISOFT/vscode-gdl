@@ -170,7 +170,7 @@ Some valid syntaxes won't be highlighted, and some invalid syntaxes will be high
 # Release Notes
 
 ## 1.26.2
-* Intellisense reads constants from edited file too, besides master script
+* Intellisense reads constants from edited file too, besides saved master script version
 * Find references/definition handles subroutines defined in master script
 
 ## 1.26.1
