@@ -63,6 +63,11 @@ export class LibpartInfo {
             return result;
         }
     }
+
+    async allScripts() {
+        // return array of uris for each script, null if doesn't exist on disk
+        return Parser.Scripts.map(async (script) => await this.scriptUri(script));
+    }
 }
 
 export class WSSymbols implements vscode.WorkspaceSymbolProvider<vscode.SymbolInformation> {
