@@ -55,7 +55,7 @@ __hotspot__ or __hotspot2__ - length edit hotspot triplet
   * IntelliSense lists parameters with their description, type, flags and default value. This list can be filtered by parameter type too.
   * These can all be toggled on/off together with Ctrl-Shift-Space
   * Follow macro calls with Ctrl-click
-* Go to definitions/references, find all references of subroutines in same libpart (Ctrl-click or F12, Shift-F12, Shift-Alt-F12)
+* Go to definitions/references, find all references of subroutines in same gdl-hsf file (Ctrl-click or F12, Shift-F12, Shift-Alt-F12)
 * Show Call Hierarchy (Shift-Alt-H), Peek Call Hierarchy
   * Incoming or outgoing macro calls are shown, respecting the execution context of the edited scipt. Eg. all scripts are searched outgoing from a master script, but only master and 2d scripts are searched outgoing from a 2d script.
   * HSF library parts inside the workspace are searched. If the workspace changed in a process outside VSCode, use the "Re-scan library parts in workspace folders" command to refresh the known library parts.
@@ -171,7 +171,6 @@ Some valid syntaxes won't be highlighted, and some invalid syntaxes will be high
 
 ## 1.26.2
 * Intellisense reads constants from edited file too, besides saved master script version
-* Find references/definition handles subroutines defined in master script
 
 ## 1.26.1
 * `Show Call Hierarchy`, `Peek Call Hierarchy` context menu items list incoming or outgoing macro calls inside the workspace
