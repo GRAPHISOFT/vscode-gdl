@@ -222,7 +222,7 @@ class GDLExtension {
     updateHsfLibpart() {
         // create new HSFLibpart if root folder changed
         const rootFolder = this.getNewHSFLibpartFolder(this.hsflibpart?.info.root_uri);
-        if (rootFolder !== undefined) {
+        if (rootFolder !== undefined && this._editor !== undefined) { // no editor on startup
             const script = HSFScriptType(this._editor.document.uri);
             if (rootFolder) {
                 //start async operations
@@ -801,11 +801,11 @@ class GDLExtension {
     }
     async provideDefinition(document, position, cancel) {
         let definitions = [];
-        const originRange = document.getWordRangeAtPosition(position);
-        if (originRange !== undefined) {
-            const origin = document.getText(originRange);
-            // try macro calls
-            const link = await this.macroLinks(document, originRange, cancel);
+        const label = this.isMacroCall(document, position) // Parser.GDLMacroCall
+            ?? this.isSubroutineDefinition(position) // vscode.DocumentSymbol
+            ?? this.isSubroutineCall(document, position); // Jump
+        if (label instanceof Parser.GDLMacroCall) {
+            const link = await this.macroLinks(label, document, cancel);
             if (link !== undefined) {
                 // if there are multiple results, select target by matching workspace folder
                 if (link.length > 1) {
@@ -823,78 +823,82 @@ class GDLExtension {
                     definitions = link;
                 }
             }
-            else {
-                // look for subroutine calls only if not a macro call
-                const jumps = new jumpparser_1.Jumps(document.lineAt(position.line).text);
-                if (jumps.jumps.find(j => j.range.contains(position.with(0)))) {
-                    let functionSymbols = [];
-                    for await (const scriptUri of await this.hsflibpart.info.allScripts()) {
-                        if (scriptUri) {
-                            const otherdoc = await vscode.workspace.openTextDocument(scriptUri);
-                            const otherscript = new Parser.ParseXMLGDL(otherdoc.getText(), true, false, false, false, false);
-                            functionSymbols = functionSymbols.concat(GDLExtension.mapFunctionSymbols(otherscript, Parser.ScriptType.ROOT, otherdoc)
-                                .map(s => { return { symbol: s, document: otherdoc }; }));
-                        }
+        }
+        else if (label !== undefined) {
+            if (label instanceof vscode.DocumentSymbol) { //subroutine definition, link back to itself
+                definitions = [{ originSelectionRange: label.selectionRange,
+                        targetRange: label.range,
+                        targetSelectionRange: label.selectionRange,
+                        targetUri: document.uri }];
+            }
+            else { // subroutine call
+                let functionSymbols = [];
+                for await (const scriptUri of await this.hsflibpart.info.allScripts()) {
+                    if (scriptUri) {
+                        const otherdoc = await vscode.workspace.openTextDocument(scriptUri);
+                        const otherscript = new Parser.ParseXMLGDL(otherdoc.getText(), true, false, false, false, false);
+                        functionSymbols = functionSymbols.concat(GDLExtension.mapFunctionSymbols(otherscript, Parser.ScriptType.ROOT, otherdoc)
+                            .map(s => { return { symbol: s, document: otherdoc }; }));
                     }
-                    definitions = functionSymbols
-                        .filter(s => (origin === s.symbol.name || // number
-                        origin === s.symbol.name.substring(1, s.symbol.name.length - 1))) // "name"
-                        .map(s => ({ originSelectionRange: originRange,
-                        targetRange: s.symbol.range,
-                        targetSelectionRange: s.symbol.selectionRange,
-                        targetUri: s.document.uri }));
                 }
+                definitions = functionSymbols
+                    .filter(s => (label.target === s.symbol.name || // number
+                    label.target === s.symbol.name.substring(1, s.symbol.name.length - 1))) // "name"
+                    .map(s => ({ originSelectionRange: label.range,
+                    targetRange: s.symbol.range,
+                    targetSelectionRange: s.symbol.selectionRange,
+                    targetUri: s.document.uri }));
             }
         }
         return definitions;
     }
-    async macroLinks(document, originRange, cancel) {
-        // find by position in document
-        const callsymbol = this.parser.getMacroCallList(Parser.ScriptType.ROOT)
-            .find(m => m.range(document).contains(originRange));
-        if (callsymbol) {
-            // find exactly where is the string (can have spaces, whitespace after call)
-            let call_range = callsymbol.range(document);
-            const name_offset = document.getText(call_range).indexOf(callsymbol.name, 6); // start search after call "
-            if (name_offset >= 6) {
-                const call_start = call_range.start.translate(0, name_offset);
-                call_range = call_range.with(call_start, call_start.translate(0, callsymbol.name.length));
-            }
-            // get target uri from wsSymbols
-            const callname_lc = callsymbol.name.toLowerCase();
-            return (await this.wsSymbols.provideWorkspaceSymbols_withFallback(document, true, callname_lc, false, cancel))
-                // provided symbols are a loose filename match, have to be exact
-                .filter(t => (callname_lc === t.name.substring(1, t.name.length - 1).toLowerCase()))
-                .map(t => ({
-                originSelectionRange: call_range,
-                targetRange: GDLExtension.peek_range,
-                targetSelectionRange: GDLExtension.zero_range,
-                targetUri: t.location.uri
-            }));
+    async macroLinks(callsymbol, document, cancel) {
+        // find exactly where is the string (can have spaces, whitespace after call)
+        let call_range = callsymbol.range(document);
+        const name_offset = document.getText(call_range).indexOf(callsymbol.name, 6); // start search after call "
+        if (name_offset >= 6) {
+            const call_start = call_range.start.translate(0, name_offset);
+            call_range = call_range.with(call_start, call_start.translate(0, callsymbol.name.length));
         }
-        return undefined;
+        // get target uri from wsSymbols
+        const callname_lc = callsymbol.name.toLowerCase();
+        return (await this.wsSymbols.provideWorkspaceSymbols_withFallback(document, true, callname_lc, false, cancel))
+            // provided symbols are a loose filename match, have to be exact
+            .filter(t => (callname_lc === t.name.substring(1, t.name.length - 1).toLowerCase()))
+            .map(t => ({
+            originSelectionRange: call_range,
+            targetRange: GDLExtension.peek_range,
+            targetSelectionRange: GDLExtension.zero_range,
+            targetUri: t.location.uri
+        }));
+    }
+    isMacroCall(document, position) {
+        return this.parser.getMacroCallList(Parser.ScriptType.ROOT)
+            .find(m => m.range(document).contains(position));
+    }
+    isSubroutineDefinition(position) {
+        // return subroutine label or undefined if not found
+        return this.mapOwnFuncionSymbols(Parser.ScriptType.ROOT)
+            .filter(s => s.selectionRange.contains(position))[0]; // there shouldn't be more results
+    }
+    isSubroutineCall(document, position) {
+        // return subroutine label at position
+        const jumps = new jumpparser_1.Jumps(document.getText());
+        return jumps.jumps.find(j => j.range.contains(position));
     }
     async provideReferences(document, position, _context, cancel) {
         let references = [];
         await this.immediateParse(document, cancel);
-        // should we provide references of a definition?
-        let label = this.mapOwnFuncionSymbols(Parser.ScriptType.ROOT).filter(s => {
-            return s.selectionRange.contains(position);
-        })[0]?.name; // there shouldn't be more results
-        // should we provide all other references like this?
-        if (label === undefined) {
-            const jumps = new jumpparser_1.Jumps(document.getText());
-            const selection = jumps.jumps.find(j => j.range.contains(position));
-            if (selection !== undefined) {
-                label = selection.target;
-            }
-        }
+        const label = this.isSubroutineDefinition(position) // vscode.DocumentSymbol
+            ?? this.isSubroutineCall(document, position); // Jump
         if (label !== undefined) {
+            const target = (label instanceof vscode.DocumentSymbol) ? label.name : label.target;
+            //const target = ("command" in label) ? label.target : label.name;
             for await (const scriptUri of await this.hsflibpart.info.allScripts()) {
                 if (scriptUri) {
                     const searchDocument = await vscode.workspace.openTextDocument(scriptUri);
                     const jumps = new jumpparser_1.Jumps(searchDocument.getText());
-                    references = references.concat(jumps.jumps.filter(j => j.target === label)
+                    references = references.concat(jumps.jumps.filter(j => j.target === target)
                         .map(j => new vscode.Location(searchDocument.uri, j.range)));
                 }
             }
