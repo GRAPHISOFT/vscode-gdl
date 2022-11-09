@@ -2,7 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Constants = exports.Constant = void 0;
 const vscode = require("vscode");
-const extension_1 = require("./extension");
 class Constant {
     constructor(gdl) {
         const result_ = gdl.match(/(?<=^\s*)([A-Z][0-9A-Z~]*)(_[0-9A-Z_~]+)?\s*=\s*(.*)\s*$/);
@@ -26,11 +25,10 @@ class Constants {
     constructor() {
         this.constants = new Map();
     }
-    async addfrom(rootfolder, relpath) {
-        const script = vscode.Uri.joinPath(rootfolder, relpath);
-        const code = await (0, extension_1.readFile)(script);
-        if (code) {
-            const constants_ = code.match(/^\s*[A-Z][0-9A-Z~]*(_[0-9A-Z_~]+)?\s*=.*$/mg);
+    addfromtext(code) {
+        if (code !== undefined) {
+            const constants_ = code.match(/^\s*[A-Z][0-9A-Z~]*(_[0-9A-Z_~]+)?\s*=.*(?<!(\\|then|THEN|,))\s*$/mg);
+            //ABC[_ABC] = * but not ending \ or then or , (multiline conditions, macro paramlist)
             if (constants_) {
                 for (const gdl of constants_) {
                     const constant = new Constant(gdl);
@@ -41,6 +39,11 @@ class Constants {
                 }
             }
         }
+    }
+    async addfromfile(rootfolder, relpath) {
+        const script = vscode.Uri.joinPath(rootfolder, relpath);
+        const document = await vscode.workspace.openTextDocument(script);
+        this.addfromtext(document.getText());
     }
     [Symbol.iterator]() {
         return this.constants.values();

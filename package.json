@@ -2,7 +2,7 @@
     "name": "gdl",
     "displayName": "GDL",
     "description": "Development environment for Archicad 25 GDL language (XML and HSF source code): syntax coloring, snippets, code outline, quick reference.",
-    "version": "1.26.1",
+    "version": "1.26.2-dev.1",
     "publisher": "Graphisoft",
     "author": "Péter Baksa",
     "contributors": [
@@ -120,7 +120,7 @@
                 "gdl.showInfoFromHSF": {
                     "type": "boolean",
                     "default": true,
-                    "description": "At GDL-HSF Language Mode the IntelliSense lists parameters and master scripts constants with their initilalized values. The parameter's names are showing as bold and have info in hover. "
+                    "description": "At GDL-HSF Language Mode the parameter's names are showing as bold and have info in hover. "
                 }
             }
         },
@@ -461,7 +461,7 @@
             },
             {
                 "command": "GDL.infoFromHSF",
-                "title": "Show Info from HSF Files",
+                "title": "GDL-HSF Parameter Hints",
                 "icon": "$(symbol-parameter)",
                 "category": "GDL",
                 "when": "editorLangId == gdl-hsf && isFileSystemResource && resourceExtname == .gdl && workbenchState != empty"

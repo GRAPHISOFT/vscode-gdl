@@ -155,16 +155,6 @@ export class CallTree implements vscode.CallHierarchyProvider {
         });
     }
 
-    static getScriptsToSearch(searchMode : Parser.ScriptType) : Parser.ScriptType[] {
-        if (searchMode === Parser.ScriptType.D) {
-            // master script mode should search all scripts
-            return Parser.Scripts;
-        } else {
-            // otherwise search mode and master
-            return [Parser.ScriptType.D, searchMode];
-        }
-    }
-
     async getUrisToSearch(item : vscode.CallHierarchyItem, searchScripts : Parser.ScriptType[], cancel : vscode.CancellationToken) : Promise<vscode.Uri[]>{
         let uris : Array<vscode.Uri>;
 
@@ -192,7 +182,7 @@ export class CallTree implements vscode.CallHierarchyProvider {
 
     async getCallHierarchyOutgoingCalls(item : vscode.CallHierarchyItem, cancel : vscode.CancellationToken) : Promise<vscode.CallHierarchyOutgoingCall[]> {
         const searchMode = CallTree.getContext(item.detail);
-        const searchScripts = CallTree.getScriptsToSearch(searchMode);
+        const searchScripts = Parser.getRelatedScripts(searchMode);
         let calls : Promise<vscode.CallHierarchyOutgoingCall[]>[];
         if (searchMode === Parser.ScriptType.D) {
             // add all subscripts if looking at master script
@@ -233,7 +223,7 @@ export class CallTree implements vscode.CallHierarchyProvider {
         }
         
         const searchMode = CallTree.getIncomingMode(item.uri, CallTree.getContext(item.detail));
-        const searchScripts = CallTree.getScriptsToSearch(searchMode);
+        const searchScripts = Parser.getRelatedScripts(searchMode);
 
         const libparts = await this.wsSymbols.values(cancel);
         const calldata = libparts.map(async (libpart) => {
