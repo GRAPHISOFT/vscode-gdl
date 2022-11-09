@@ -171,7 +171,7 @@ Some valid syntaxes won't be highlighted, and some invalid syntaxes will be high
 ## 1.26.2
 * Intellisense reads constants from edited file too, besides master script
 * IntelliSense parameters and constants can no longer be toggled with Ctrl-Alt-Space, use vscode settings to filter the results (`editor.suggest.showFields`, `editor.suggest.showConstants`)
-* Find references/definition handles subroutines defined in master script
+* Find references/definition handles subroutines in all scripts, not just the edited one
 
 ## 1.26.1
 * `Show Call Hierarchy`, `Peek Call Hierarchy` context menu items list incoming or outgoing macro calls inside the workspace
