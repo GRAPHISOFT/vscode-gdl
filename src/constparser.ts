@@ -45,9 +45,8 @@ export class Constants {
         }
     }
 
-    async addfromfile(rootfolder: vscode.Uri, relpath: string) {
-        const script = vscode.Uri.joinPath(rootfolder, relpath);
-        const document = await vscode.workspace.openTextDocument(script)
+    async addfromfile(scriptUri: vscode.Uri) {
+        const document = await vscode.workspace.openTextDocument(scriptUri);
         this.addfromtext(document.getText());
     }
 
