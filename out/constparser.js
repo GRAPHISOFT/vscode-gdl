@@ -40,9 +40,8 @@ class Constants {
             }
         }
     }
-    async addfromfile(rootfolder, relpath) {
-        const script = vscode.Uri.joinPath(rootfolder, relpath);
-        const document = await vscode.workspace.openTextDocument(script);
+    async addfromfile(scriptUri) {
+        const document = await vscode.workspace.openTextDocument(scriptUri);
         this.addfromtext(document.getText());
     }
     [Symbol.iterator]() {

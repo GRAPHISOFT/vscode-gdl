@@ -30,7 +30,10 @@ class HSFLibpart {
         let constants = this._constants.get(script);
         if (constants === undefined) {
             constants = new constparser_1.Constants();
-            await constants.addfromfile(this.info.root_uri, `scripts/${Parser.scriptFile[script]}.gdl`);
+            const uri = await this.info.scriptUri(script);
+            if (uri !== null) {
+                await constants.addfromfile(uri);
+            }
             this._constants.set(script, constants);
         }
         return constants;
