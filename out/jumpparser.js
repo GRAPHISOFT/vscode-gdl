@@ -8,19 +8,13 @@ class Jumps {
             .flatMap(Jumps.matchLine);
     }
     static matchLine(line, linenumber) {
-        const match = line.match(Jumps.regex);
-        if (match) {
-            return [{
-                    command: match[1].toLowerCase(),
-                    target: match[3],
-                    range: new vscode.Range(linenumber, match.index, linenumber, match.index + match[0].length)
-                }];
-        }
-        else {
-            return [];
-        }
+        return [...line.matchAll(Jumps.regex)].map(match => ({
+            //command: match[1].toLowerCase(),
+            target: match[3],
+            range: new vscode.Range(linenumber, match.index, linenumber, match.index + match[0].length)
+        }));
     }
 }
 exports.Jumps = Jumps;
-Jumps.regex = /((then|goto|gosub)\s+)(([0-9]+)|((["'`´“”’‘])([^"'`´“”’‘]+)\6))/i;
+Jumps.regex = /((then|goto|gosub|else)\s+)(([0-9]+)|((["'`´“”’‘])([^"'`´“”’‘]+)\6))/ig;
 //# sourceMappingURL=jumpparser.js.map
