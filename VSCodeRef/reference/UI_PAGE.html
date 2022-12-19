@@ -1,48 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>UI_PAGE</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="UI_PAGE_gdlcommand">UI_PAGE</h3>
-				
-				<pre class="programlisting"><b id="UI_PAGE_keyword_2.12.5.6.4.1">UI_PAGE</b> page_number [, parent_id, page_title [, image]]</pre>
-				
-					<p>
-						Page directive, defines the page that the interface elements are placed on. Default page numbering starts at 1, but any starting number is usable.
-						If there is no UI_PAGE command in the Interface Script, each element will be displayed on the first page by default.
-						Moving between pages can be defined in different ways:
-					</p>
-					<div class="itemizedlist"><ul class="itemizedlist"><li class="listitem"><p>
-								The easiest way is to let ARCHICAD do it:
-								in the object editor, press the "Hierarchical Pages" button in the User Interface Script window, and fill in the optional parameters of the UI_PAGE command.
-								In this case the page_number of the page selected from the tree is passed to the library part through the "gs_ui_current_page" parameter. No need to set a value list for the paging parameter:
-								ARCHICAD collects and sorts all valid page ID-s from the UI_PAGE command's parameters by pre-reading the object's ui script.
-							</p></li><li class="listitem"><p>
-								Another method is to use two buttons created with the UI_NEXT and UI_PREV commands, placing them on every page to manipulate the value of the "gs_ui_current_page" parameter.
-								See <a class="xref" href="reference/UI_BUTTON.html">the UI_BUTTON command</a> for more information.
-							</p></li><li class="listitem"><p>
-								In case the new hierarchical page setup is not required, to create dynamic page handling, use the <a class="xref" href="reference/UI_INFIELD3.html">the UI_INFIELD{3} command</a>.
-								Set a value list for "gs_ui_current_page" parameter, and place a popup using its values on every page.
-							</p></li></ul></div>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>page_number: </b></code>the page number, a positive integer. Following interface elements are placed on this page.</div>
-					</div>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>parent_id: </b></code>positive integer, the parent id of the page. The special value -1 value means root parent. Only evaluated if "Hierarchical Pages" is set.</div>
-					</div>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>page_title: </b></code>title string of the page, appears on the top of the page and the tree view popup of the pages. Only evaluated if "Hierarchical Pages" is set.</div>
-					</div>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>image: </b></code>file name or index number of a picture stored in the library part. If specified and not empty or 0, this icon associated
-							to the page is displayed on the top of the page and in tree view popup of the pages, next to the title.  Only evaluated if "Hierarchical Pages" is set.</div>
-					</div>
-					<p>
-						Warning: In the simple way of paging, any break of continuity in the page numbering forces the insertion of a new page without buttons,
-						and therefore there will be no possibility to go to any other page from there.
-						This restriction can be circumvented using <a class="xref" href="reference/UI_CURRENT_PAGE.html">the UI_CURRENT_PAGE command</a>.
-					</p>
-				
-			<hr/><a href="002.012.html#UI_PAGE_gdlcommand">Related in Non-Geometric Scripts</a><p>
-				<span class="bold"><strong>GDL Reference Guide</strong></span>
-			</p><p>
-				<span class="trademark">Copyright</span><sup>©</sup> 2022 by GRAPHISOFT, all rights reserved.
-				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
-			</p></body></html>
+                
+                <pre class="programlisting"><b id="UI_PAGE_keyword_2.12.5.6.4.1">UI_PAGE</b> page_number [, parent_id, page_title [, image]]</pre>
+                
+                    <p>
+                        Page directive, defines the page that the interface elements are placed on. Default page numbering starts at 1, but any starting number is usable.
+                        If there is no UI_PAGE command in the Interface Script, each element will be displayed on the first page by default.
+                        Moving between pages can be defined in different ways:
+                    </p>
+                    <div class="itemizedlist"><ul class="itemizedlist"><li class="listitem"><p>
+                                The easiest way is to let Archicad do it:
+                                in the object editor, press the "Hierarchical Pages" button in the User Interface Script window, and fill in the optional parameters of the UI_PAGE command.
+                                In this case the page_number of the page selected from the tree is passed to the library part through the "gs_ui_current_page" parameter. No need to set a value list for the paging parameter:
+                                Archicad collects and sorts all valid page ID-s from the UI_PAGE command's parameters by pre-reading the object's ui script.
+                            </p></li><li class="listitem"><p>
+                                Another method is to use two buttons created with the UI_NEXT and UI_PREV commands, placing them on every page to manipulate the value of the "gs_ui_current_page" parameter.
+                                See <a class="xref" href="reference/UI_BUTTON.html">the UI_BUTTON command</a> for more information.
+                            </p></li><li class="listitem"><p>
+                                In case the new hierarchical page setup is not required, to create dynamic page handling, use the <a class="xref" href="reference/UI_INFIELD3.html">the UI_INFIELD{3} command</a>.
+                                Set a value list for "gs_ui_current_page" parameter, and place a popup using its values on every page.
+                            </p></li></ul></div>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>page_number: </b></code>the page number, a positive integer. Following interface elements are placed on this page.</div>
+                    </div>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>parent_id: </b></code>positive integer, the parent id of the page. The special value -1 value means root parent. Only evaluated if "Hierarchical Pages" is set.</div>
+                    </div>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>page_title: </b></code>title string of the page, appears on the top of the page and the tree view popup of the pages. Only evaluated if "Hierarchical Pages" is set.</div>
+                    </div>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>image: </b></code>file name or index number of a picture stored in the library part. If specified and not empty or 0, this icon associated
+                            to the page is displayed on the top of the page and in tree view popup of the pages, next to the title.  Only evaluated if "Hierarchical Pages" is set.</div>
+                    </div>
+                    <p>
+                        Warning: In the simple way of paging, any break of continuity in the page numbering forces the insertion of a new page without buttons,
+                        and therefore there will be no possibility to go to any other page from there.
+                        This restriction can be circumvented using <a class="xref" href="reference/UI_CURRENT_PAGE.html">the UI_CURRENT_PAGE command</a>.
+                    </p>
+                
+            <hr/><a href="002.012.html#UI_PAGE_gdlcommand">Related in Non-Geometric Scripts</a><p>
+                <span class="bold"><strong>GDL Reference Guide</strong></span>
+            </p><p>
+                <span class="trademark">Copyright</span><sup>©</sup> 2023 by Graphisoft, all rights reserved.
+                Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+            </p></body></html>

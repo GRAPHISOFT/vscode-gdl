@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>CWALL_</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="CWALL__gdlcommand">CWALL_</h3>
-				
-				<pre class="programlisting"><b id="CWALL__keyword_2.7.3.24.4.1">CWALL_</b> left_material, right_material, side_material,
+                
+                <pre class="programlisting"><b id="CWALL__keyword_2.7.3.24.4.1">CWALL_</b> left_material, right_material, side_material,
         height, x1, x2, x3, x4, t,
         mask1, mask2, mask3, mask4,
         n,
@@ -13,76 +13,76 @@
         a1, b1, c1, d1,
         ...
         am, bm, cm, dm</pre>
-				
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>Left_material, right_material, side_material: </b></code>Material names/indices for the left, right and side surfaces. (The left and right sides of the wall follow the x axis.)</div>
-					</div>
-					<div style="text-align: center"><img src="Images/GDL_Images/3Dshapes_cwall_.png" style="text-align: middle" alt="Images/GDL_Images/3Dshapes_cwall_.png"/></div>
-					<p>The reference line of the wall is always transformed to coincide with the x axis. The sides of the wall are in the x-z plane.</p>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>height: </b></code>The height of the wall relative to its base.</div>
-					</div>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>x1, x2, x3, x4: </b></code>
-							The projected endpoints of the wall lying on the x-y plane as seen below.
-							If the wall stands on its own, then x1 = x4 = 0, x2 = x3 = the length of the wall.
-						</div>
-					</div>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>t: </b></code>the thickness of the wall.</div>
-						<div><code>t &lt; 0: </code>if the body of the wall is to the right of the x axis,</div>
-						<div><code>t &gt; 0: </code>if the body of the wall is to the left of the x axis,</div>
-						<div><code>t = 0: </code>if the wall is represented by a polygon and frames are generated around the holes.</div>
-					</div>
-					<div style="text-align: center"><img src="Images/GDL_Images/3Dshapes_cwall_thickness.png" style="text-align: middle" alt="Images/GDL_Images/3Dshapes_cwall_thickness.png"/></div>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>mask1, mask2, mask3, mask4: </b></code>
-							Control the visibility of edges and side polygons.
-						</div><div><code>mask1, mask2, mask3, mask4 = j<sub>1</sub> + 2*j<sub>2</sub> + 4*j<sub>3</sub> + 8*j<sub>4</sub></code>, where each j can be 0 or 1.
+                
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>Left_material, right_material, side_material: </b></code>Material names/indices for the left, right and side surfaces. (The left and right sides of the wall follow the x axis.)</div>
+                    </div>
+                    <div style="text-align: center"><img src="Images/GDL_Images/3Dshapes_cwall_.png" style="text-align: middle" alt="Images/GDL_Images/3Dshapes_cwall_.png"/></div>
+                    <p>The reference line of the wall is always transformed to coincide with the x axis. The sides of the wall are in the x-z plane.</p>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>height: </b></code>The height of the wall relative to its base.</div>
+                    </div>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>x1, x2, x3, x4: </b></code>
+                            The projected endpoints of the wall lying on the x-y plane as seen below.
+                            If the wall stands on its own, then x1 = x4 = 0, x2 = x3 = the length of the wall.
+                        </div>
+                    </div>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>t: </b></code>the thickness of the wall.</div>
+                        <div><code>t &lt; 0: </code>if the body of the wall is to the right of the x axis,</div>
+                        <div><code>t &gt; 0: </code>if the body of the wall is to the left of the x axis,</div>
+                        <div><code>t = 0: </code>if the wall is represented by a polygon and frames are generated around the holes.</div>
+                    </div>
+                    <div style="text-align: center"><img src="Images/GDL_Images/3Dshapes_cwall_thickness.png" style="text-align: middle" alt="Images/GDL_Images/3Dshapes_cwall_thickness.png"/></div>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>mask1, mask2, mask3, mask4: </b></code>
+                            Control the visibility of edges and side polygons.
+                        </div><div><code>mask1, mask2, mask3, mask4 = j<sub>1</sub> + 2*j<sub>2</sub> + 4*j<sub>3</sub> + 8*j<sub>4</sub></code>, where each j can be 0 or 1.
 	</div>
-						<p>
-							The j1, j2, j3 bits represent whether the edges of the side polygon are present (1) or omitted (0).
-							The j4 bit represents whether edges on the side polygon arisen from cut are present (1) or omitted (0).
-						</p>
-						
-						
-						
-						
-					</div>
-					<div style="text-align: center"><img src="Images/GDL_Images/3Dshapes_cwall_mask.png" style="text-align: middle" alt="Images/GDL_Images/3Dshapes_cwall_mask.png"/></div>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>n: </b></code>the number of openings in the wall.</div>
-					</div>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>x_starti, y_lowi, x_endi, y_highi: </b></code>coordinates of the openings as shown below.</div>
-					</div>
-					<div style="text-align: center"><img src="Images/GDL_Images/3Dshapes_cwall_openings.png" style="text-align: middle" alt="Images/GDL_Images/3Dshapes_cwall_openings.png"/></div>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>frame_showni: </b></code></div>
-						<div><code>1: </code>if the edges of the hole are visible,</div>
-						<div><code>0: </code>if the edges of the hole are invisible,</div>
-						<div><code>&lt; 0: </code>
-							control the visibility of each of the opening’s edges separately: frame_showni = -(1*j1 + 2*j2 + 4*j3 + 8*j4 + 16*j5 + 32*j6 + 64*j7 + 128*j8), where j1, j2, ..., j8 can be either 0 or 1.
-							The numbers j1 to j4 control the visibility of the edges of the hole on the left-hand side of the wall surface,
-							while j5 to j8 affect the edges on the right-hand side, as shown on the illustration below.
-						</div>
-					</div>
-					<div style="text-align: center"><img src="Images/GDL_Images/3Dshapes_cwall_frameshown.png" style="text-align: middle" alt="Images/GDL_Images/3Dshapes_cwall_frameshown.png"/></div>
-					<p>An edge that is perpendicular to the surface of the wall is visible if there are visible edges drawn from both of its endpoints.</p>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>m: </b></code>the number of cutting planes.</div>
-					</div>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>ai, bi, ci, di: </b></code>
-							coefficients of the equation defining the cutting plane [ai*x + bi*y + ci*z = di].
-							Parts on the positive side of the cutting plane (i.e., ai*x + bi*y + ci*z &gt; di) will be cut and removed
-						</div>
-					</div>
-					<div style="text-align: center"><img src="Images/GDL_Images/3Dshapes_cwall_cutting.png" style="text-align: middle" alt="Images/GDL_Images/3Dshapes_cwall_cutting.png"/></div>
-				
-			<hr/><a href="002.007.html#CWALL__gdlcommand">Related in 3D Shapes</a><p>
-				<span class="bold"><strong>GDL Reference Guide</strong></span>
-			</p><p>
-				<span class="trademark">Copyright</span><sup>©</sup> 2022 by GRAPHISOFT, all rights reserved.
-				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
-			</p></body></html>
+                        <p>
+                            The j1, j2, j3 bits represent whether the edges of the side polygon are present (1) or omitted (0).
+                            The j4 bit represents whether edges on the side polygon arisen from cut are present (1) or omitted (0).
+                        </p>
+                        
+                        
+                        
+                        
+                    </div>
+                    <div style="text-align: center"><img src="Images/GDL_Images/3Dshapes_cwall_mask.png" style="text-align: middle" alt="Images/GDL_Images/3Dshapes_cwall_mask.png"/></div>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>n: </b></code>the number of openings in the wall.</div>
+                    </div>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>x_starti, y_lowi, x_endi, y_highi: </b></code>coordinates of the openings as shown below.</div>
+                    </div>
+                    <div style="text-align: center"><img src="Images/GDL_Images/3Dshapes_cwall_openings.png" style="text-align: middle" alt="Images/GDL_Images/3Dshapes_cwall_openings.png"/></div>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>frame_showni: </b></code></div>
+                        <div><code>1: </code>if the edges of the hole are visible,</div>
+                        <div><code>0: </code>if the edges of the hole are invisible,</div>
+                        <div><code>&lt; 0: </code>
+                            control the visibility of each of the opening’s edges separately: frame_showni = -(1*j1 + 2*j2 + 4*j3 + 8*j4 + 16*j5 + 32*j6 + 64*j7 + 128*j8), where j1, j2, ..., j8 can be either 0 or 1.
+                            The numbers j1 to j4 control the visibility of the edges of the hole on the left-hand side of the wall surface,
+                            while j5 to j8 affect the edges on the right-hand side, as shown on the illustration below.
+                        </div>
+                    </div>
+                    <div style="text-align: center"><img src="Images/GDL_Images/3Dshapes_cwall_frameshown.png" style="text-align: middle" alt="Images/GDL_Images/3Dshapes_cwall_frameshown.png"/></div>
+                    <p>An edge that is perpendicular to the surface of the wall is visible if there are visible edges drawn from both of its endpoints.</p>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>m: </b></code>the number of cutting planes.</div>
+                    </div>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>ai, bi, ci, di: </b></code>
+                            coefficients of the equation defining the cutting plane [ai*x + bi*y + ci*z = di].
+                            Parts on the positive side of the cutting plane (i.e., ai*x + bi*y + ci*z &gt; di) will be cut and removed
+                        </div>
+                    </div>
+                    <div style="text-align: center"><img src="Images/GDL_Images/3Dshapes_cwall_cutting.png" style="text-align: middle" alt="Images/GDL_Images/3Dshapes_cwall_cutting.png"/></div>
+                
+            <hr/><a href="002.007.html#CWALL__gdlcommand">Related in 3D Shapes</a><p>
+                <span class="bold"><strong>GDL Reference Guide</strong></span>
+            </p><p>
+                <span class="trademark">Copyright</span><sup>©</sup> 2023 by Graphisoft, all rights reserved.
+                Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+            </p></body></html>

@@ -1,33 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>NURBSLUMP</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="NURBSLUMP_gdlcommand">NURBSLUMP</h3>
-					
-					<pre class="programlisting"><b id="NURBSLUMP_keyword_2.7.9.17.9.4.1">NURBSLUMP</b> n, face1, face2, ..., facen</pre>
-					
-						<p>
-							Defines a solid part - a geometrically connected subset - of a solid NURBS body.
-						</p>
-						<div style="margin-left: 1em">
-							<div style="text-indent: -1em"><code><b>n: </b></code>number of bounding faces (including optional void-separator zeros).</div>
-						</div>
-						<div style="margin-left: 1em">
-							<div style="text-indent: -1em"><code><b>facei: </b></code>gdl-index of NURBS face bounding the lump</div>
-							<div class="itemizedlist"><ul class="itemizedlist"><li class="listitem"><p>May be zero, indicating the end of shell and the beginning of another shell (void-separator).</p></li><li class="listitem"><p>Negative index means face is used in opposite direction. For positive index the backward side of the face correspond to the interior of the lump, for negative index the front side looks to the interior.</p></li></ul></div>
-						</div>
-						<p>
-							The boundary of a lump may fall to several closed shells: one outer shell which separates the lump from the infinite outer region of the space; and zero or more inner - void - shells which separate the lump from cavity regions.
-							The faces of one shell must compose a continuous part of the face list. These different parts for different shells must be separated by a 0 value. The first shell must be the outer shell.
-							The faces of a shell must connect at common edges, but no ordering is assumed in the list.
-						</p>
-						<p>
-							Note that the faces of a shell may be connected to other faces which are not in the shell or are in another shell (because edges can have more than two faces).
-							Each face must be used in only one lump.
-							Neither shell of a lump can be open - open bodies have no lumps and no shells.
-						</p>
-					
-				<hr/><a href="002.007.html#NURBSLUMP_gdlcommand">Related in 3D Shapes</a><p>
-				<span class="bold"><strong>GDL Reference Guide</strong></span>
-			</p><p>
-				<span class="trademark">Copyright</span><sup>©</sup> 2022 by GRAPHISOFT, all rights reserved.
-				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
-			</p></body></html>
+                    
+                    <pre class="programlisting"><b id="NURBSLUMP_keyword_2.7.9.17.9.4.1">NURBSLUMP</b> n, face1, face2, ..., facen</pre>
+                    
+                        <p>
+                            Defines a solid part - a geometrically connected subset - of a solid NURBS body.
+                        </p>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>n: </b></code>number of bounding faces (including optional void-separator zeros).</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>facei: </b></code>gdl-index of NURBS face bounding the lump</div>
+                            <div class="itemizedlist"><ul class="itemizedlist"><li class="listitem"><p>May be zero, indicating the end of shell and the beginning of another shell (void-separator).</p></li><li class="listitem"><p>Negative index means face is used in opposite direction. For positive index the backward side of the face correspond to the interior of the lump, for negative index the front side looks to the interior.</p></li></ul></div>
+                        </div>
+                        <p>
+                            The boundary of a lump may fall to several closed shells: one outer shell which separates the lump from the infinite outer region of the space; and zero or more inner - void - shells which separate the lump from cavity regions.
+                            The faces of one shell must compose a continuous part of the face list. These different parts for different shells must be separated by a 0 value. The first shell must be the outer shell.
+                            The faces of a shell must connect at common edges, but no ordering is assumed in the list.
+                        </p>
+                        <p>
+                            Note that the faces of a shell may be connected to other faces which are not in the shell or are in another shell (because edges can have more than two faces).
+                            Each face must be used in only one lump.
+                            Neither shell of a lump can be open - open bodies have no lumps and no shells.
+                        </p>
+                    
+                <hr/><a href="002.007.html#NURBSLUMP_gdlcommand">Related in 3D Shapes</a><p>
+                <span class="bold"><strong>GDL Reference Guide</strong></span>
+            </p><p>
+                <span class="trademark">Copyright</span><sup>©</sup> 2023 by Graphisoft, all rights reserved.
+                Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+            </p></body></html>

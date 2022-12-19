@@ -1,35 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>WALLHOLE2</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="WALLHOLE2_gdlcommand">WALLHOLE2</h3>
-							
-							<pre class="programlisting"><b id="WALLHOLE2_keyword_2.15.9.5.6.2.4.4.1">WALLHOLE2</b> n, fill_control, fill_pen, fill_background_pen,
+                            
+                            <pre class="programlisting"><b id="WALLHOLE2_keyword_2.15.9.5.6.2.4.4.1">WALLHOLE2</b> n, fill_control, fill_pen, fill_background_pen,
         fillOrigoX, fillOrigoY, fillAngle,
         x1, y1, s1,
         ...
         xn, yn, sn</pre>
-							
-								<p>
-									Wall opening definition for the plan view coupled with a cover polygon.
-									Only the cut part of the wall is affected, view wall polygons stay intact.
-								</p>
-								<p>The cover polygon has no contour.</p>
-								<p>This command can be used in the 2D script of door/window objects only.</p>
-								<p>The parameterization of the command is mainly the same as the one of <a class="xref" href="reference/POLY2_B2.html">the POLY2_B{2} command</a>.</p>
-								<div style="margin-left: 1em">
-									<div style="text-indent: -1em"><code><b>fill_control: </b></code></div><div><code>fill_control = 2*j<sub>2</sub> + 8*j<sub>4</sub> + 16*j<sub>5</sub> + 32*j<sub>6</sub> + 64*j<sub>7</sub></code>, where each j can be 0 or 1.
+                            
+                                <p>
+                                    Wall opening definition for the plan view coupled with a cover polygon.
+                                    Only the cut part of the wall is affected, view wall polygons stay intact.
+                                </p>
+                                <p>The cover polygon has no contour.</p>
+                                <p>This command can be used in the 2D script of door/window objects only.</p>
+                                <p>The parameterization of the command is mainly the same as the one of <a class="xref" href="reference/POLY2_B2.html">the POLY2_B{2} command</a>.</p>
+                                <div style="margin-left: 1em">
+                                    <div style="text-indent: -1em"><code><b>fill_control: </b></code></div><div><code>fill_control = 2*j<sub>2</sub> + 8*j<sub>4</sub> + 16*j<sub>5</sub> + 32*j<sub>6</sub> + 64*j<sub>7</sub></code>, where each j can be 0 or 1.
 	</div>
-									<div><code>j<sub>2</sub>: </code>draw cover fill on the polygon,</div>
-									<div><code>j<sub>4</sub>: </code>local fill orientation,</div>
-									<div><code>j<sub>5</sub>: </code>local fill should align with the wall direction
-										(fill origin is at the wall origin and directions are matching),
-									</div>
-									<div><code>j<sub>6</sub>: </code>fill is cut fill (default is drafting fill),</div>
-									<div><code>j<sub>7</sub>: </code>fill is cover fill (only if j6 = 0, default is drafting fill).</div>
-								</div>
-							
-						<hr/><a href="002.015.html#WALLHOLE2_gdlcommand">Related in Miscellaneous</a><p>
-				<span class="bold"><strong>GDL Reference Guide</strong></span>
-			</p><p>
-				<span class="trademark">Copyright</span><sup>©</sup> 2022 by GRAPHISOFT, all rights reserved.
-				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
-			</p></body></html>
+                                    <div><code>j<sub>2</sub>: </code>draw cover fill on the polygon,</div>
+                                    <div><code>j<sub>4</sub>: </code>local fill orientation,</div>
+                                    <div><code>j<sub>5</sub>: </code>local fill should align with the wall direction
+                                        (fill origin is at the wall origin and directions are matching),
+                                    </div>
+                                    <div><code>j<sub>6</sub>: </code>fill is cut fill (default is drafting fill),</div>
+                                    <div><code>j<sub>7</sub>: </code>fill is cover fill (only if j6 = 0, default is drafting fill).</div>
+                                </div>
+                            
+                        <hr/><a href="002.015.html#WALLHOLE2_gdlcommand">Related in Miscellaneous</a><p>
+                <span class="bold"><strong>GDL Reference Guide</strong></span>
+            </p><p>
+                <span class="trademark">Copyright</span><sup>©</sup> 2023 by Graphisoft, all rights reserved.
+                Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+            </p></body></html>
