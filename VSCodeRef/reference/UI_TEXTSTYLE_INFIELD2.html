@@ -1,46 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>UI_TEXTSTYLE_INFIELD{2}</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="UI_TEXTSTYLE_INFIELD2_gdlcommand">UI_TEXTSTYLE_INFIELD{2}</h3>
-				
-				<pre class="programlisting"><b id="UI_TEXTSTYLE_INFIELD2_keyword_2.12.5.28.4.1">UI_TEXTSTYLE_INFIELD{2}</b> "name", faceCodeMask, x, y,
-									buttonWidth, buttonHeight [, buttonOffsetX]</pre>
-				
-					<p>
-						<span class="italic">Compatibility: introduced in ARCHICAD 22.</span>
-					</p>
-					<p>
-						Generates a row of puschcheckbuttons specifically used to set font style via an integer parameter, with similar appearance as seen in the general program interface.
-						The format of the set value matches the input parameter of <a class="xref" href="reference/DEFINESTYLE2.html">the DEFINE STYLE{2} command</a>.
-						Both icons and tooltips are referenced from ARCHICAD itself, according to the localized version.
-						The enabled buttons are displayed in a single-row arrangement.
-					</p>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>name: </b></code>parameter name or name as string expression for UI_TEXTSTYLE_INFIELD and parameter name as string expression (or text array indexed value) for UI_TEXTSTYLE_INFIELD{2}.</div>
-					</div>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>faceCodeMask: </b></code>used bits add the matching font style option to the control:</div><div><code>faceCodeMask = j<sub>1</sub> + 2*j<sub>2</sub> + 4*j<sub>3</sub> + 32*j<sub>6</sub> + 64*j<sub>7</sub> + 128*j<sub>8</sub></code>, where each j can be 0 or 1.
+                
+                <pre class="programlisting"><b id="UI_TEXTSTYLE_INFIELD2_keyword_2.12.5.28.4.1">UI_TEXTSTYLE_INFIELD{2}</b> "name", faceCodeMask, x, y,
+                                    buttonWidth, buttonHeight [, buttonOffsetX]</pre>
+                
+                    <p>
+                        <span class="italic">Compatibility: introduced in Archicad 22.</span>
+                    </p>
+                    <p>
+                        Generates a row of puschcheckbuttons specifically used to set font style via an integer parameter, with similar appearance as seen in the general program interface.
+                        The format of the set value matches the input parameter of <a class="xref" href="reference/DEFINESTYLE2.html">the DEFINE STYLE{2} command</a>.
+                        Both icons and tooltips are referenced from Archicad itself, according to the localized version.
+                        The enabled buttons are displayed in a single-row arrangement.
+                    </p>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>name: </b></code>parameter name or name as string expression for UI_TEXTSTYLE_INFIELD and parameter name as string expression (or text array indexed value) for UI_TEXTSTYLE_INFIELD{2}.</div>
+                    </div>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>faceCodeMask: </b></code>used bits add the matching font style option to the control:</div><div><code>faceCodeMask = j<sub>1</sub> + 2*j<sub>2</sub> + 4*j<sub>3</sub> + 32*j<sub>6</sub> + 64*j<sub>7</sub> + 128*j<sub>8</sub></code>, where each j can be 0 or 1.
 	</div>
-						<div><code>j<sub>1</sub>: </code>bold,</div>
-						<div><code>j<sub>2</sub>: </code>italic,</div>
-						<div><code>j<sub>3</sub>: </code>underline,</div>
-						<div><code>j<sub>6</sub>: </code>superscript,</div>
-						<div><code>j<sub>7</sub>: </code>subscript,</div>
-						<div><code>j<sub>8</sub>: </code>strikethrough.</div>
-						<p>If faceCodeMask = 0, then all possible font style buttons are displayed. In case of an invalid <code class="literal">faceCodeMask</code>, "Check Script" returns with warning ("Invalid mask value used").</p>
-					</div>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>x, y: </b></code>the position of the first button (top left anchor).</div>
-					</div>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>buttonWidth, buttonHeight: </b></code>width and height of one button in pixels. Full width can be calculated by using the <code class="literal">faceCodeMask</code>, the <code class="literal">buttonWidth</code> and the <code class="literal">buttonOffsetX</code> values, if necessary.</div>
-					</div>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>buttonOffsetX: </b></code>distance between neighboring buttons in the row, in pixels. Automatic, if not set.</div>
-					</div>
-				
-			<hr/><a href="002.012.html#UI_TEXTSTYLE_INFIELD2_gdlcommand">Related in Non-Geometric Scripts</a><p>
-				<span class="bold"><strong>GDL Reference Guide</strong></span>
-			</p><p>
-				<span class="trademark">Copyright</span><sup>©</sup> 2022 by GRAPHISOFT, all rights reserved.
-				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
-			</p></body></html>
+                        <div><code>j<sub>1</sub>: </code>bold,</div>
+                        <div><code>j<sub>2</sub>: </code>italic,</div>
+                        <div><code>j<sub>3</sub>: </code>underline,</div>
+                        <div><code>j<sub>6</sub>: </code>superscript,</div>
+                        <div><code>j<sub>7</sub>: </code>subscript,</div>
+                        <div><code>j<sub>8</sub>: </code>strikethrough.</div>
+                        <p>If faceCodeMask = 0, then all possible font style buttons are displayed. In case of an invalid <code class="literal">faceCodeMask</code>, "Check Script" returns with warning ("Invalid mask value used").</p>
+                    </div>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>x, y: </b></code>the position of the first button (top left anchor).</div>
+                    </div>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>buttonWidth, buttonHeight: </b></code>width and height of one button in pixels. Full width can be calculated by using the <code class="literal">faceCodeMask</code>, the <code class="literal">buttonWidth</code> and the <code class="literal">buttonOffsetX</code> values, if necessary.</div>
+                    </div>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>buttonOffsetX: </b></code>distance between neighboring buttons in the row, in pixels. Automatic, if not set.</div>
+                    </div>
+                
+            <hr/><a href="002.012.html#UI_TEXTSTYLE_INFIELD2_gdlcommand">Related in Non-Geometric Scripts</a><p>
+                <span class="bold"><strong>GDL Reference Guide</strong></span>
+            </p><p>
+                <span class="trademark">Copyright</span><sup>©</sup> 2023 by Graphisoft, all rights reserved.
+                Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+            </p></body></html>

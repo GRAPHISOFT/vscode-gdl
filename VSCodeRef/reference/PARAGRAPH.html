@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>PARAGRAPH</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="PARAGRAPH_gdlcommand">PARAGRAPH</h3>
-					
-					<pre class="programlisting"><b id="PARAGRAPH_keyword_2.11.4.9.4.4.1">PARAGRAPH</b> name alignment, firstline_indent,
+                    
+                    <pre class="programlisting"><b id="PARAGRAPH_keyword_2.11.4.9.4.4.1">PARAGRAPH</b> name alignment, firstline_indent,
         left_indent, right_indent, line_spacing [,
         tab_position1, ...]
     [PEN index]
@@ -21,63 +21,63 @@
     'string n'
     ...
 <b id="ENDPARAGRAPH_keyword_2.11.4.9.4.4.3">ENDPARAGRAPH</b></pre>
-					
-						<p>
-							GDL scripts may include paragraph definitions prior to the first reference to that paragraph name.
-							The paragraph defined this way can be used only in the script in which it was defined and its subsequent second generation scripts.
-							A paragraph is defined to be a sequence of an arbitrary number of strings (max 256 characters long each) with different attributes:
-							style, pen and material (3D).
-							If no attributes are specified inside the paragraph definition, actual (or default) attributes are used.
-							The new lines included in a paragraph string (using the special character '\n') will automatically split the string
-							into identical paragraphs, each containing one line.
-							Paragraph definitions can be referenced by name in <a class="xref" href="reference/TEXTBLOCK.html">the TEXTBLOCK command</a>.
-							All length type parameters (firstline_indent, left_indent, right_indent, tab_position) meaning millimeters or meters
-							depends on the fixed_height parameter of the TEXTBLOCK definition.
-						</p>
-						<div style="margin-left: 1em">
-							<div style="text-indent: -1em"><code><b>name: </b></code>
-								name of the paragraph. Can be either string or integer.
-								Integer identifiers works only with <a class="xref" href="reference/TEXTBLOCK_.html">the TEXTBLOCK_ command</a></div>
-						</div>
-						<div style="margin-left: 1em">
-							<div style="text-indent: -1em"><code><b>alignment: </b></code>alignment of the paragraph strings. Possible values:</div>
-							<div><code>1: </code>left aligned,</div>
-							<div><code>2: </code>center aligned,</div>
-							<div><code>3: </code>right aligned,</div>
-							<div><code>4: </code>full justified.</div>
-						</div>
-						<div style="margin-left: 1em">
-							<div style="text-indent: -1em"><code><b>firstline_indent: </b></code>first line indentation, in mm or m in model space.</div>
-						</div>
-						<div style="margin-left: 1em">
-							<div style="text-indent: -1em"><code><b>left_indent: </b></code>left indentation, in mm or m in model space.</div>
-						</div>
-						<div style="margin-left: 1em">
-							<div style="text-indent: -1em"><code><b>right_indent: </b></code>right indentation, in mm or m in model space.</div>
-						</div>
-						<div style="margin-left: 1em">
-							<div style="text-indent: -1em"><code><b>line_spacing: </b></code>
-								line spacing factor. The default distance between the lines (character size + distance to the next line)
-								defined by the actual style will be multiplied by this number.
-							</div>
-						</div>
-						<div style="margin-left: 1em">
-							<div style="text-indent: -1em"><code><b>tab_positioni: </b></code>
-								consecutive tabulator positions (each relative to the beginning of the paragraph), in mm or m in model space.
-								Tabulators in the paragraph strings will snap to these positions.
-								If no tabulator positions are specified, default values are used (12.7 mm).
-								Works only with '\t' special character.
-							</div>
-						</div>
-						<div style="margin-left: 1em">
-							<div style="text-indent: -1em"><code><b>stringi: </b></code>
-								part of the text. Can be either constant string or string type parameter.
-							</div>
-						</div>
-					
-				<hr/><a href="002.011.html#PARAGRAPH_gdlcommand">Related in Attributes</a><p>
-				<span class="bold"><strong>GDL Reference Guide</strong></span>
-			</p><p>
-				<span class="trademark">Copyright</span><sup>©</sup> 2022 by GRAPHISOFT, all rights reserved.
-				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
-			</p></body></html>
+                    
+                        <p>
+                            GDL scripts may include paragraph definitions prior to the first reference to that paragraph name.
+                            The paragraph defined this way can be used only in the script in which it was defined and its subsequent second generation scripts.
+                            A paragraph is defined to be a sequence of an arbitrary number of strings (max 256 characters long each) with different attributes:
+                            style, pen and material (3D).
+                            If no attributes are specified inside the paragraph definition, actual (or default) attributes are used.
+                            The new lines included in a paragraph string (using the special character '\n') will automatically split the string
+                            into identical paragraphs, each containing one line.
+                            Paragraph definitions can be referenced by name in <a class="xref" href="reference/TEXTBLOCK.html">the TEXTBLOCK command</a>.
+                            All length type parameters (firstline_indent, left_indent, right_indent, tab_position) meaning millimeters or meters
+                            depends on the fixed_height parameter of the TEXTBLOCK definition.
+                        </p>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>name: </b></code>
+                                name of the paragraph. Can be either string or integer.
+                                Integer identifiers works only with <a class="xref" href="reference/TEXTBLOCK_.html">the TEXTBLOCK_ command</a></div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>alignment: </b></code>alignment of the paragraph strings. Possible values:</div>
+                            <div><code>1: </code>left aligned,</div>
+                            <div><code>2: </code>center aligned,</div>
+                            <div><code>3: </code>right aligned,</div>
+                            <div><code>4: </code>full justified.</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>firstline_indent: </b></code>first line indentation, in mm or m in model space.</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>left_indent: </b></code>left indentation, in mm or m in model space.</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>right_indent: </b></code>right indentation, in mm or m in model space.</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>line_spacing: </b></code>
+                                line spacing factor. The default distance between the lines (character size + distance to the next line)
+                                defined by the actual style will be multiplied by this number.
+                            </div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>tab_positioni: </b></code>
+                                consecutive tabulator positions (each relative to the beginning of the paragraph), in mm or m in model space.
+                                Tabulators in the paragraph strings will snap to these positions.
+                                If no tabulator positions are specified, default values are used (12.7 mm).
+                                Works only with '\t' special character.
+                            </div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>stringi: </b></code>
+                                part of the text. Can be either constant string or string type parameter.
+                            </div>
+                        </div>
+                    
+                <hr/><a href="002.011.html#PARAGRAPH_gdlcommand">Related in Attributes</a><p>
+                <span class="bold"><strong>GDL Reference Guide</strong></span>
+            </p><p>
+                <span class="trademark">Copyright</span><sup>©</sup> 2023 by Graphisoft, all rights reserved.
+                Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+            </p></body></html>

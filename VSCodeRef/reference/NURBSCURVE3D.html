@@ -1,42 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>NURBSCURVE3D</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="NURBSCURVE3D_gdlcommand">NURBSCURVE3D</h3>
-					
-					<pre class="programlisting"><b id="NURBSCURVE3D_keyword_2.7.9.16.4.4.1">NURBSCURVE3D</b> degree, nControlPoints,
-								knot_1, knot_2, ..., knot_m,
-								cPoint_1_x, cPoint_1_y, cPoint_1_z, weight_1,
-								cPoint_2_x, cPoint_2_y, cPoint_2_z, weight_2,
-								...,
-								cPoint_n_x, cPoint_n_y, cPoint_n_z, weight_n</pre>
-					
-						<p>
-							2 and 3 dimensional NURBS curves with given degree, knotvector, controlpoints and weigths.
-						</p>
-						<div style="margin-left: 1em">
-							<div style="text-indent: -1em"><code><b>degree: </b></code>degree of NURBS curve, one less than order of curve (order = degree + 1), positive</div>
-						</div>
-						<div style="margin-left: 1em">
-							<div style="text-indent: -1em"><code><b>nControlPoints: </b></code>number of control points (n), greater than the degree of the curve (not less than the order)</div>
-						</div>
-						<div style="margin-left: 1em">
-							<div style="text-indent: -1em"><code><b>knot_i: </b></code>index i knot value </div>
-							<div class="itemizedlist"><ul class="itemizedlist"><li class="listitem"><p>number of knot values (m, the size of knot vector) is given by the following: m = degree + 1 + n</p></li><li class="listitem"><p>knots are in non-descending order (knot_i &lt;= knot_{i+1})</p></li><li class="listitem"><p>equal knot values are allowed, with multiplicity up to degree, or with multiplicity up to degree+1 for the first and last knot.</p></li></ul></div>
-						</div>
-						<div style="margin-left: 1em">
-							<div style="text-indent: -1em"><code><b>cPoint_i_x, cPoint_i_y, cPoint_i_z: </b></code>coordinates of index i control point</div>
-						</div>
-						<div style="margin-left: 1em">
-							<div style="text-indent: -1em"><code><b>weight_i: </b></code>weigth of index i control point, positive</div>
-						</div>
-						<p>Periodic curves are not handled separately, but described as floating (not clamped) NURBS curves which are geometrically closed and have appropriately continuous connection at the the ends. This is ensured by repeating sufficient number of control points and knot-intervals at the end:
-						</p>
-						<div class="itemizedlist"><ul class="itemizedlist"><li class="listitem"><p>the last degree many control points are duplicates of the first degree many control points (not in reverse order),</p></li><li class="listitem"><p>the first twice-the-degree number of knot-differences (knot_1-knot_0, knot_2-knot_1, ...) are the same as the last ones in the knot vector (these are the knots which are in connection with the first (or last) degree many control points).</p></li></ul></div>
-						<p>The usable domain of a curve is the closed interval between knot_{degree + 1} and knot_{m - degree}.
-						</p>
-					
-				<hr/><a href="002.007.html#NURBSCURVE3D_gdlcommand">Related in 3D Shapes</a><p>
-				<span class="bold"><strong>GDL Reference Guide</strong></span>
-			</p><p>
-				<span class="trademark">Copyright</span><sup>©</sup> 2022 by GRAPHISOFT, all rights reserved.
-				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
-			</p></body></html>
+                    
+                    <pre class="programlisting"><b id="NURBSCURVE3D_keyword_2.7.9.16.4.4.1">NURBSCURVE3D</b> degree, nControlPoints,
+                                knot_1, knot_2, ..., knot_m,
+                                cPoint_1_x, cPoint_1_y, cPoint_1_z, weight_1,
+                                cPoint_2_x, cPoint_2_y, cPoint_2_z, weight_2,
+                                ...,
+                                cPoint_n_x, cPoint_n_y, cPoint_n_z, weight_n</pre>
+                    
+                        <p>
+                            2 and 3 dimensional NURBS curves with given degree, knotvector, controlpoints and weigths.
+                        </p>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>degree: </b></code>degree of NURBS curve, one less than order of curve (order = degree + 1), positive</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>nControlPoints: </b></code>number of control points (n), greater than the degree of the curve (not less than the order)</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>knot_i: </b></code>index i knot value </div>
+                            <div class="itemizedlist"><ul class="itemizedlist"><li class="listitem"><p>number of knot values (m, the size of knot vector) is given by the following: m = degree + 1 + n</p></li><li class="listitem"><p>knots are in non-descending order (knot_i &lt;= knot_{i+1})</p></li><li class="listitem"><p>equal knot values are allowed, with multiplicity up to degree, or with multiplicity up to degree+1 for the first and last knot.</p></li></ul></div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>cPoint_i_x, cPoint_i_y, cPoint_i_z: </b></code>coordinates of index i control point</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>weight_i: </b></code>weigth of index i control point, positive</div>
+                        </div>
+                        <p>Periodic curves are not handled separately, but described as floating (not clamped) NURBS curves which are geometrically closed and have appropriately continuous connection at the the ends. This is ensured by repeating sufficient number of control points and knot-intervals at the end:
+                        </p>
+                        <div class="itemizedlist"><ul class="itemizedlist"><li class="listitem"><p>the last degree many control points are duplicates of the first degree many control points (not in reverse order),</p></li><li class="listitem"><p>the first twice-the-degree number of knot-differences (knot_1-knot_0, knot_2-knot_1, ...) are the same as the last ones in the knot vector (these are the knots which are in connection with the first (or last) degree many control points).</p></li></ul></div>
+                        <p>The usable domain of a curve is the closed interval between knot_{degree + 1} and knot_{m - degree}.
+                        </p>
+                    
+                <hr/><a href="002.007.html#NURBSCURVE3D_gdlcommand">Related in 3D Shapes</a><p>
+                <span class="bold"><strong>GDL Reference Guide</strong></span>
+            </p><p>
+                <span class="trademark">Copyright</span><sup>©</sup> 2023 by Graphisoft, all rights reserved.
+                Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+            </p></body></html>

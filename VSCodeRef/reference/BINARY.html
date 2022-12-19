@@ -1,54 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>BINARY</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="BINARY_gdlcommand">BINARY</h3>
-				
-				<pre class="programlisting"><b id="BINARY_keyword_2.7.13.2.4.1">BINARY</b> mode [, section, elementID]</pre>
-				
-					<p>
-						Special command to include inline binary objects into a GDL macro.
-						A set of vertices, vectors, edges, polygons, bodies and materials is read from a special section of the library part file.
-						These are transformed according to the current transformations and merged into the 3D model.
-					</p>
-					<p>The data contained in the binary section is not editable by the user.</p>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>mode: </b></code>defines pencolor and material attribute definition usage.</div>
-						<div><code>0: </code>the current PEN and MATERIAL settings are in effect,</div>
-						<div><code>1: </code>
-							the current PEN and MATERIAL settings have no effect.
-							The library part will be shown with the stored colors and material definitions. Surface appearance is constant,
-						</div>
-						<div><code>2: </code>the stored PEN and MATERIAL settings are used, non-defined materials are replaced by current settings,</div>
-						<div><code>3: </code>the stored PEN and MATERIAL settings are used, non-defined materials are replaced by the stored default attributes.</div>
-					</div>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>section: </b></code>index of the binary part, from 1 to 16.</div>
-						<div><code>0: </code>you can refer simultaneously to all the existing binary parts,</div>
-						<div><code>1: </code>Only these sections can be saved from within GDL, BINARY commands without the section argument will also refer to this,</div>
-						<div><code>2-16: </code>can be used by third party tools.</div>
-					</div>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>elementID: </b></code>ID of an element of this binary part. This parameter is generated during the import process.</div>
-					</div>
-					<p>If you open files with a different data structure (e.g., DXF or ZOOM) their 3D description will be converted into binary format.</p>
-					<p>
-						You can save a library part in binary format from the main Library Part editing window through the Save as... command.
-						If the Save in binary format checkbox is marked in the Save as... dialog box,
-						the GDL text of the current library part will be replaced with a binary description.
-					</p>
-					<p>
-						Hint: Saving the 3D model after a 3D cutaway operation in binary format will save the truncated model.
-						This way, you can create cut shapes.
-					</p>
-					<p>You can only save your library part in binary format if you have already generated its 3D model.</p>
-					<p>
-						By replacing the GDL description of your library part with a binary description
-						you can considerably reduce the 3D conversion time of the item.
-						On the other hand, the binary 3D description is not parametric and takes more disk space than an algorithmic GDL script.
-					</p>
-				
-			<hr/><a href="002.007.html#BINARY_gdlcommand">Related in 3D Shapes</a><p>
-				<span class="bold"><strong>GDL Reference Guide</strong></span>
-			</p><p>
-				<span class="trademark">Copyright</span><sup>©</sup> 2022 by GRAPHISOFT, all rights reserved.
-				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
-			</p></body></html>
+                
+                <pre class="programlisting"><b id="BINARY_keyword_2.7.13.2.4.1">BINARY</b> mode [, section, elementID]</pre>
+                
+                    <p>
+                        Special command to include inline binary objects into a GDL macro.
+                        A set of vertices, vectors, edges, polygons, bodies and materials is read from a special section of the library part file.
+                        These are transformed according to the current transformations and merged into the 3D model.
+                    </p>
+                    <p>The data contained in the binary section is not editable by the user.</p>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>mode: </b></code>defines pencolor and material attribute definition usage.</div>
+                        <div><code>0: </code>the current PEN and MATERIAL settings are in effect,</div>
+                        <div><code>1: </code>
+                            the current PEN and MATERIAL settings have no effect.
+                            The library part will be shown with the stored colors and material definitions. Surface appearance is constant,
+                        </div>
+                        <div><code>2: </code>the stored PEN and MATERIAL settings are used, non-defined materials are replaced by current settings,</div>
+                        <div><code>3: </code>the stored PEN and MATERIAL settings are used, non-defined materials are replaced by the stored default attributes.</div>
+                    </div>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>section: </b></code>index of the binary part, from 1 to 16.</div>
+                        <div><code>0: </code>you can refer simultaneously to all the existing binary parts,</div>
+                        <div><code>1: </code>Only these sections can be saved from within GDL, BINARY commands without the section argument will also refer to this,</div>
+                        <div><code>2-16: </code>can be used by third party tools.</div>
+                    </div>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>elementID: </b></code>ID of an element of this binary part. This parameter is generated during the import process.</div>
+                    </div>
+                    <p>If you open files with a different data structure (e.g., DXF or ZOOM) their 3D description will be converted into binary format.</p>
+                    <p>
+                        You can save a library part in binary format from the main Library Part editing window through the Save as... command.
+                        If the Save in binary format checkbox is marked in the Save as... dialog box,
+                        the GDL text of the current library part will be replaced with a binary description.
+                    </p>
+                    <p>
+                        Hint: Saving the 3D model after a 3D cutaway operation in binary format will save the truncated model.
+                        This way, you can create cut shapes.
+                    </p>
+                    <p>You can only save your library part in binary format if you have already generated its 3D model.</p>
+                    <p>
+                        By replacing the GDL description of your library part with a binary description
+                        you can considerably reduce the 3D conversion time of the item.
+                        On the other hand, the binary 3D description is not parametric and takes more disk space than an algorithmic GDL script.
+                    </p>
+                
+            <hr/><a href="002.007.html#BINARY_gdlcommand">Related in 3D Shapes</a><p>
+                <span class="bold"><strong>GDL Reference Guide</strong></span>
+            </p><p>
+                <span class="trademark">Copyright</span><sup>©</sup> 2023 by Graphisoft, all rights reserved.
+                Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+            </p></body></html>

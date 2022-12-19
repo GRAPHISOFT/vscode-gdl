@@ -1,40 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>DEFINE STYLE{2}</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="DEFINESTYLE2_gdlcommand">DEFINE STYLE{2}</h3>
-					
-					<pre class="programlisting"><b id="DEFINESTYLE2_keyword_2.11.4.9.3.4.1">DEFINE STYLE{2}</b> name font_family, size, face_code</pre>
-					
-						<p>New version of style definition, recommended to be used with <a class="xref" href="reference/PARAGRAPH.html"><code>PARAGRAPH</code></a> definitions.</p>
-						<div style="margin-left: 1em">
-							<div style="text-indent: -1em"><code><b>name: </b></code>name of the style.</div>
-						</div>
-						<div style="margin-left: 1em">
-							<div style="text-indent: -1em"><code><b>font_family: </b></code>name of the used font family (e.g., Garamond).</div>
-						</div>
-						<div style="margin-left: 1em">
-							<div style="text-indent: -1em"><code><b>size: </b></code>height of the characters in mm or m in model space.</div>
-						</div>
-						<div style="margin-left: 1em">
-							<div style="text-indent: -1em"><code><b>face_code: </b></code>a combination of the following values:</div><div><code>face_code = j<sub>1</sub> + 2*j<sub>2</sub> + 4*j<sub>3</sub> + 32*j<sub>6</sub> + 64*j<sub>7</sub> + 128*j<sub>8</sub></code>, where each j can be 0 or 1.
+                    
+                    <pre class="programlisting"><b id="DEFINESTYLE2_keyword_2.11.4.9.3.4.1">DEFINE STYLE{2}</b> name font_family, size, face_code</pre>
+                    
+                        <p>New version of style definition, recommended to be used with <a class="xref" href="reference/PARAGRAPH.html"><code>PARAGRAPH</code></a> definitions.</p>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>name: </b></code>name of the style.</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>font_family: </b></code>name of the used font family (e.g., Garamond).</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>size: </b></code>height of the characters in mm or m in model space.</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>face_code: </b></code>a combination of the following values:</div><div><code>face_code = j<sub>1</sub> + 2*j<sub>2</sub> + 4*j<sub>3</sub> + 32*j<sub>6</sub> + 64*j<sub>7</sub> + 128*j<sub>8</sub></code>, where each j can be 0 or 1.
 	</div>
-							<div><code>j<sub>1</sub>: </code>bold,</div>
-							<div><code>j<sub>2</sub>: </code>italic,</div>
-							<div><code>j<sub>3</sub>: </code>underline,</div>
-							<div><code>j<sub>6</sub>: </code>superscript,</div>
-							<div><code>j<sub>7</sub>: </code>subscript,</div>
-							<div><code>j<sub>8</sub>: </code>strikethrough.</div>
-							<p>If face_code = 0, then style is normal.</p>
-						</div>
-						<p>
-							If the defined style is used with <a class="xref" href="reference/TEXT2.html">the TEXT2 command</a>, size means character heights in millimeters,
-							while the superscript, subscript and strikethrough face_code values are not effective.
-							If used with PARAGRAPH strings in the RICHTEXT2 and RICHTEXT commands,
-							size meaning millimeters or meters depends on the fixed_height parameter of the TEXTBLOCK definition.
-						</p>
-					
-				<hr/><a href="002.011.html#DEFINESTYLE2_gdlcommand">Related in Attributes</a><p>
-				<span class="bold"><strong>GDL Reference Guide</strong></span>
-			</p><p>
-				<span class="trademark">Copyright</span><sup>©</sup> 2022 by GRAPHISOFT, all rights reserved.
-				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
-			</p></body></html>
+                            <div><code>j<sub>1</sub>: </code>bold,</div>
+                            <div><code>j<sub>2</sub>: </code>italic,</div>
+                            <div><code>j<sub>3</sub>: </code>underline,</div>
+                            <div><code>j<sub>6</sub>: </code>superscript,</div>
+                            <div><code>j<sub>7</sub>: </code>subscript,</div>
+                            <div><code>j<sub>8</sub>: </code>strikethrough.</div>
+                            <p>If face_code = 0, then style is normal.</p>
+                        </div>
+                        <p>
+                            If the defined style is used with <a class="xref" href="reference/TEXT2.html">the TEXT2 command</a>, size means character heights in millimeters,
+                            while the superscript, subscript and strikethrough face_code values are not effective.
+                            If used with PARAGRAPH strings in the RICHTEXT2 and RICHTEXT commands,
+                            size meaning millimeters or meters depends on the fixed_height parameter of the TEXTBLOCK definition.
+                        </p>
+                    
+                <hr/><a href="002.011.html#DEFINESTYLE2_gdlcommand">Related in Attributes</a><p>
+                <span class="bold"><strong>GDL Reference Guide</strong></span>
+            </p><p>
+                <span class="trademark">Copyright</span><sup>©</sup> 2023 by Graphisoft, all rights reserved.
+                Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+            </p></body></html>
