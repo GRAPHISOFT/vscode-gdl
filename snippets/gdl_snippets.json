@@ -566,7 +566,7 @@
     },
     "\"group\" command": {
       "prefix": "group",
-      "body": "group \"${01:name}\",\n\t${02:statement1},\n\t${03:...},\n\t${04:statementn}\nendgroup\n$0"
+      "body": "group \"${01:name}\"\n\t${02:statement1},\n\t${03:...},\n\t${04:statementn}\nendgroup\n$0"
     },
     "\"addgroup\" command": {
       "prefix": "addgroup",
