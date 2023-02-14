@@ -31,7 +31,7 @@ Use the themes _GDL Dark_ or _GDL Light_ for GDL-specific coloring
 
 __any GDL command, global or request__ - expand required parameters
 
-__sub__ - subroutine header and body
+__subroutine__ - subroutine header and body
 
 __hotspot__ or __hotspot2__ - length edit hotspot triplet
 
@@ -172,6 +172,7 @@ Some valid syntaxes won't be highlighted, and some invalid syntaxes will be high
 * Intellisense reads constants from edited file too, besides master script
 * IntelliSense parameters and constants can no longer be toggled with Ctrl-Alt-Space, use vscode settings to filter the results (`editor.suggest.showFields`, `editor.suggest.showConstants`)
 * Find references/definition handles subroutines in all scripts, not just the edited one
+* Snippet bugfixing
 
 ## 1.26.1
 * `Show Call Hierarchy`, `Peek Call Hierarchy` context menu items list incoming or outgoing macro calls inside the workspace
