@@ -1,35 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>PGON{2}</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="PGON2_gdlcommand">PGON{2}</h3>
-				
-				<pre class="programlisting"><b id="PGON2_keyword_2.7.8.21.4.1">PGON{2}</b> n, vect, status, wrap, edge_or_wrap1, ..., edge_or_wrapn</pre>
-				
-					<p>The first three parameters are similar to the ones at <a class="xref" href="reference/PGON.html">the PGON command</a>.</p>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>wrap: </b></code>wrapping mode + projection type.</div>
-						<div><code>0: </code>the global wrapping mode is applied,</div>
-						<div><code>&gt; 0: </code>the meaning is the same as it is in <a class="xref" href="reference/COOR.html">the COOR command</a>.</div>
-					</div>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>edge_or_wrap1, ..., edge_or_wrapn: </b></code>The number and meaning of these parameters are based on the wrap definition:</div>
-						<div><code>edge1, ..., edgen: </code>
-							if wrap is 0; in this case <code class="literal">edgen</code> means the same as at <a class="xref" href="reference/PGON.html">the PGON command</a>,
-							and globally defined texture mapping will be applied;
-						</div>
-						<div><code>x1, y1, z1, x2, y2, z2, x3, y3, z3, x4, y4, z4, edge1, ..., edgen: </code>
-							if wrapping mode isn't 0 in wrap;
-							in this case <code class="literal">xi, yi, zi</code> coordinates defining the coordinate system of the texture mapping for the polygon;
-						</div>
-						<div><code>edge1, u1, v1, ..., edgen, un, vn: </code>
-							if wrapping mode is 0 but projection type isn't 0 in wrap;
-							in this case <code class="literal">ui, vi</code> texture space coordinates are the same as at <a class="xref" href="reference/TEVE.html">the TEVE command</a>;
-							the mapping will affect the currently defined polygon only.
-						</div>
-					</div>
-				
-			<hr/><a href="002.007.html#PGON2_gdlcommand">Related in 3D Shapes</a><p>
-				<span class="bold"><strong>GDL Reference Guide</strong></span>
-			</p><p>
-				<span class="trademark">Copyright</span><sup>©</sup> 2022 by GRAPHISOFT, all rights reserved.
-				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
-			</p></body></html>
+                
+                <pre class="programlisting"><b id="PGON2_keyword_2.7.8.21.4.1">PGON{2}</b> n, vect, status, wrap, edge_or_wrap1, ..., edge_or_wrapn</pre>
+                
+                    <p>The first three parameters are similar to the ones at <a class="xref" href="reference/PGON.html">the PGON command</a>.</p>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>wrap: </b></code>wrapping mode + projection type.</div>
+                        <div><code>0: </code>the global wrapping mode is applied,</div>
+                        <div><code>&gt; 0: </code>the meaning is the same as it is in <a class="xref" href="reference/COOR.html">the COOR command</a>.</div>
+                    </div>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>edge_or_wrap1, ..., edge_or_wrapn: </b></code>The number and meaning of these parameters are based on the wrap definition:</div>
+                        <div><code>edge1, ..., edgen: </code>
+                            if wrap is 0; in this case <code class="literal">edgen</code> means the same as at <a class="xref" href="reference/PGON.html">the PGON command</a>,
+                            and globally defined texture mapping will be applied;
+                        </div>
+                        <div><code>x1, y1, z1, x2, y2, z2, x3, y3, z3, x4, y4, z4, edge1, ..., edgen: </code>
+                            if wrapping mode isn't 0 in wrap;
+                            in this case <code class="literal">xi, yi, zi</code> coordinates defining the coordinate system of the texture mapping for the polygon;
+                        </div>
+                        <div><code>edge1, u1, v1, ..., edgen, un, vn: </code>
+                            if wrapping mode is 0 but projection type isn't 0 in wrap;
+                            in this case <code class="literal">ui, vi</code> texture space coordinates are the same as at <a class="xref" href="reference/TEVE.html">the TEVE command</a>;
+                            the mapping will affect the currently defined polygon only.
+                        </div>
+                    </div>
+                
+            <hr/><a href="002.007.html#PGON2_gdlcommand">Related in 3D Shapes</a><p>
+                <span class="bold"><strong>GDL Reference Guide</strong></span>
+            </p><p>
+                <span class="trademark">Copyright</span><sup>©</sup> 2022 by Graphisoft, all rights reserved.
+                Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+            </p></body></html>

@@ -1,35 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>EDGE</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="EDGE_gdlcommand">EDGE</h3>
-				
-				<pre class="programlisting"><b id="EDGE_keyword_2.7.8.19.4.1">EDGE</b> vert1, vert2, pgon1, pgon2, status</pre>
-				
-					<p>Definition of an edge.</p>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>vert1, vert2: </b></code>index of the endpoints. The vert1 and vert2 indices must be different and referenced to previously defined VERTs.</div>
-					</div>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>pgon1, pgon2: </b></code>indices of the neighboring polygons. Zero and negative values have special meanings:</div>
-						<div><code>0: </code>terminal or standalone edge,</div>
-						<div><code>&lt; 0: </code>possible neighbors will be searched for,</div>
-					</div>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>status: </b></code>Status bits:</div><div><code>status = j<sub>1</sub> + 2*j<sub>2</sub> + 4*j<sub>3</sub> + 8*j<sub>4</sub> + 16*j<sub>5</sub> + 32*j<sub>6</sub> + 64*j<sub>7</sub> + 262144*j<sub>19</sub></code>, where each j can be 0 or 1.
+                
+                <pre class="programlisting"><b id="EDGE_keyword_2.7.8.19.4.1">EDGE</b> vert1, vert2, pgon1, pgon2, status</pre>
+                
+                    <p>Definition of an edge.</p>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>vert1, vert2: </b></code>index of the endpoints. The vert1 and vert2 indices must be different and referenced to previously defined VERTs.</div>
+                    </div>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>pgon1, pgon2: </b></code>indices of the neighboring polygons. Zero and negative values have special meanings:</div>
+                        <div><code>0: </code>terminal or standalone edge,</div>
+                        <div><code>&lt; 0: </code>possible neighbors will be searched for,</div>
+                    </div>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>status: </b></code>Status bits:</div><div><code>status = j<sub>1</sub> + 2*j<sub>2</sub> + 4*j<sub>3</sub> + 8*j<sub>4</sub> + 16*j<sub>5</sub> + 32*j<sub>6</sub> + 64*j<sub>7</sub> + 262144*j<sub>19</sub></code>, where each j can be 0 or 1.
 	</div>
-						<div><code>j<sub>1</sub>: </code>invisible edge,</div>
-						<div><code>j<sub>2</sub>: </code>edge of a curved surface.</div>
-						<p>Reserved status bits for future use:</p>
-						<div><code>j<sub>3</sub>: </code>first edge of a curved surface (effective only when j2=1),</div>
-						<div><code>j<sub>4</sub>: </code>last edge of a curved surface (effective only when j2=1),</div>
-						<div><code>j<sub>5</sub>: </code>the edge is an arc segment,</div>
-						<div><code>j<sub>6</sub>: </code>first segment of an arc (effective only when j4=1),</div>
-						<div><code>j<sub>7</sub>: </code>last segment of an arc (effective only when j4=1),</div>
-						<div><code>j<sub>19</sub>: </code>render sharp edge between 2 curved polygons (effective only when j2=1).</div>
-					</div>
-				
-			<hr/><a href="002.007.html#EDGE_gdlcommand">Related in 3D Shapes</a><p>
-				<span class="bold"><strong>GDL Reference Guide</strong></span>
-			</p><p>
-				<span class="trademark">Copyright</span><sup>©</sup> 2022 by GRAPHISOFT, all rights reserved.
-				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
-			</p></body></html>
+                        <div><code>j<sub>1</sub>: </code>invisible edge,</div>
+                        <div><code>j<sub>2</sub>: </code>edge of a curved surface.</div>
+                        <p>Reserved status bits for future use:</p>
+                        <div><code>j<sub>3</sub>: </code>first edge of a curved surface (effective only when j2=1),</div>
+                        <div><code>j<sub>4</sub>: </code>last edge of a curved surface (effective only when j2=1),</div>
+                        <div><code>j<sub>5</sub>: </code>the edge is an arc segment,</div>
+                        <div><code>j<sub>6</sub>: </code>first segment of an arc (effective only when j4=1),</div>
+                        <div><code>j<sub>7</sub>: </code>last segment of an arc (effective only when j4=1),</div>
+                        <div><code>j<sub>19</sub>: </code>render sharp edge between 2 curved polygons (effective only when j2=1).</div>
+                    </div>
+                
+            <hr/><a href="002.007.html#EDGE_gdlcommand">Related in 3D Shapes</a><p>
+                <span class="bold"><strong>GDL Reference Guide</strong></span>
+            </p><p>
+                <span class="trademark">Copyright</span><sup>©</sup> 2022 by Graphisoft, all rights reserved.
+                Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+            </p></body></html>

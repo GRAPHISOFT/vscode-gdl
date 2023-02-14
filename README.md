@@ -31,7 +31,7 @@ Use the themes _GDL Dark_ or _GDL Light_ for GDL-specific coloring
 
 __any GDL command, global or request__ - expand required parameters
 
-__sub__ - subroutine header and body
+__subroutine__ - subroutine header and body
 
 __hotspot__ or __hotspot2__ - length edit hotspot triplet
 
@@ -49,13 +49,12 @@ __hotspot__ or __hotspot2__ - length edit hotspot triplet
   * Select to open the same script or xml that the current editor contains, or libpartdata.xml if unknown
   * If the workspace changed in a process outside VSCode, use the "Re-scan library parts in workspace folders" command to refresh the known library parts.
 * When a folder of HSF files is opened, further features are available:
-  * Show info about parameters when the mouse hovers on them
-  * Show parameters with bold font
+  * Show info about parameters when the mouse hovers on them (can be toggled on/off with Ctrl-Alt-Space)
+  * Show parameters with bold font (can be toggled on/off with Ctrl-Alt-Space)
   * IntelliSense lists constants (ALL_CAPS) with their initialized values
   * IntelliSense lists parameters with their description, type, flags and default value. This list can be filtered by parameter type too.
-  * These can all be toggled on/off together with Ctrl-Shift-Space
-  * Follow macro calls with Ctrl-click
-* Go to definitions/references, find all references of subroutines in same gdl-hsf file (Ctrl-click or F12, Shift-F12, Shift-Alt-F12)
+  * Follow macro and subroutine calls with Ctrl-click
+* Go to definitions/references, find all references of subroutines in same libpart (Ctrl-click or F12, Shift-F12, Shift-Alt-F12)
 * Show Call Hierarchy (Shift-Alt-H), Peek Call Hierarchy
   * Incoming or outgoing macro calls are shown, respecting the execution context of the edited scipt. Eg. all scripts are searched outgoing from a master script, but only master and 2d scripts are searched outgoing from a 2d script.
   * HSF library parts inside the workspace are searched. If the workspace changed in a process outside VSCode, use the "Re-scan library parts in workspace folders" command to refresh the known library parts.
@@ -170,7 +169,10 @@ Some valid syntaxes won't be highlighted, and some invalid syntaxes will be high
 # Release Notes
 
 ## 1.26.2
-* Intellisense reads constants from edited file too, besides saved master script version
+* Intellisense reads constants from edited file too, besides master script
+* IntelliSense parameters and constants can no longer be toggled with Ctrl-Alt-Space, use vscode settings to filter the results (`editor.suggest.showFields`, `editor.suggest.showConstants`)
+* Find references/definition handles subroutines in all scripts, not just the edited one
+* Snippet bugfixing
 
 ## 1.26.1
 * `Show Call Hierarchy`, `Peek Call Hierarchy` context menu items list incoming or outgoing macro calls inside the workspace

@@ -1,51 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>NEWPARAMETER</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="NEWPARAMETER_gdlcommand">NEWPARAMETER</h3>
-				
-				<pre class="programlisting"><b id="NEWPARAMETER_keyword_2.12.7.6.4.1">NEWPARAMETER</b> "name", "type" [, dim1 [, dim2]]</pre>
-				
-					<p>
-						Adds a new parameter to the parameters of a library part in the Backward Migration Script.
-						The parameter creation happens only after the full interpretation of the script.
-						If a parameter with the given name already exists in the parameters list, an error occurs.
-					</p>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>name: </b></code>string expression, name of the parameter to be created.</div>
-					</div>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>type: </b></code>string expression, type of the parameter. Possible values are:</div>
-						<div><code>Integer</code></div>
-						<div><code>Length</code></div>
-						<div><code>Angle</code></div>
-						<div><code>RealNum</code></div>
-						<div><code>LightSwitch</code></div>
-						<div><code>ColorRGB</code></div>
-						<div><code>Intensity</code></div>
-						<div><code>LineType</code></div>
-						<div><code>Material</code></div>
-						<div><code>FillPattern</code></div>
-						<div><code>PenColor</code></div>
-						<div><code>String</code></div>
-						<div><code>Boolean</code></div>
-						<div><code>BuildingMaterial</code><span class="italic">(Compatibility: introduced in ARCHICAD 22.)</span></div>
-						<div><code>Profile</code><span class="italic">(Compatibility: introduced in ARCHICAD 22.)</span></div>
-						<div><code>Dictionary</code><span class="italic">(Compatibility: introduced in ARCHICAD 24.)</span></div>
-					</div>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>dim1, dim2: </b></code>
-							dim1 is the first dimension of the parameter, 0 if not set. dim2 is the second dimension of the parameter, 0 if not set.
-						</div>
-						<div><code>dim1 = 0, dim2 = 0: </code>the parameter is a scalar parameter,</div>
-						<div><code>dim1 &gt; 0, dim2 = 0: </code>the parameter is a 1 dimensional array,</div>
-						<div><code>dim1 &gt; 0, dim2 &gt; 0: </code>the parameter is a 2 dimensional array,</div>
-					</div>
-					
-						<pre class="programlisting">If dim2 &gt; 0, then dim1 &gt; 0.</pre>
-					
-				
-			<hr/><a href="002.012.html#NEWPARAMETER_gdlcommand">Related in Non-Geometric Scripts</a><p>
-				<span class="bold"><strong>GDL Reference Guide</strong></span>
-			</p><p>
-				<span class="trademark">Copyright</span><sup>©</sup> 2022 by GRAPHISOFT, all rights reserved.
-				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
-			</p></body></html>
+                
+                <pre class="programlisting"><b id="NEWPARAMETER_keyword_2.12.7.6.4.1">NEWPARAMETER</b> "name", "type" [, dim1 [, dim2]]</pre>
+                
+                    <p>
+                        Adds a new parameter to the parameters of a library part in the Backward Migration Script.
+                        The parameter creation happens only after the full interpretation of the script.
+                        If a parameter with the given name already exists in the parameters list, an error occurs.
+                    </p>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>name: </b></code>string expression, name of the parameter to be created.</div>
+                    </div>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>type: </b></code>string expression, type of the parameter. Possible values are:</div>
+                        <div><code>Integer</code></div>
+                        <div><code>Length</code></div>
+                        <div><code>Angle</code></div>
+                        <div><code>RealNum</code></div>
+                        <div><code>LightSwitch</code></div>
+                        <div><code>ColorRGB</code></div>
+                        <div><code>Intensity</code></div>
+                        <div><code>LineType</code></div>
+                        <div><code>Material</code></div>
+                        <div><code>FillPattern</code></div>
+                        <div><code>PenColor</code></div>
+                        <div><code>String</code></div>
+                        <div><code>Boolean</code></div>
+                        <div><code>BuildingMaterial</code><span class="italic">(Compatibility: introduced in Archicad 22.)</span></div>
+                        <div><code>Profile</code><span class="italic">(Compatibility: introduced in Archicad 22.)</span></div>
+                        <div><code>Dictionary</code><span class="italic">(Compatibility: introduced in Archicad 24.)</span></div>
+                    </div>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>dim1, dim2: </b></code>
+                            dim1 is the first dimension of the parameter, 0 if not set. dim2 is the second dimension of the parameter, 0 if not set.
+                        </div>
+                        <div><code>dim1 = 0, dim2 = 0: </code>the parameter is a scalar parameter,</div>
+                        <div><code>dim1 &gt; 0, dim2 = 0: </code>the parameter is a 1 dimensional array,</div>
+                        <div><code>dim1 &gt; 0, dim2 &gt; 0: </code>the parameter is a 2 dimensional array,</div>
+                    </div>
+                    
+                        <pre class="programlisting">If dim2 &gt; 0, then dim1 &gt; 0.</pre>
+                    
+                
+            <hr/><a href="002.012.html#NEWPARAMETER_gdlcommand">Related in Non-Geometric Scripts</a><p>
+                <span class="bold"><strong>GDL Reference Guide</strong></span>
+            </p><p>
+                <span class="trademark">Copyright</span><sup>©</sup> 2022 by Graphisoft, all rights reserved.
+                Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+            </p></body></html>

@@ -28,6 +28,16 @@ export const ScriptsExceptMaster = [ScriptType.DD,
 
 export const Scripts = [ScriptType.D, ...ScriptsExceptMaster];
 
+export function getRelatedScripts(scriptType : ScriptType) : ScriptType[] {
+	// returns scripts related to scriptType
+	if (scriptType === ScriptType.D) {
+		// master script relates to all scripts
+		return Scripts;
+	} else {
+		// others relate to master and self
+		return [ScriptType.D, scriptType];
+	}
+}
 
 // general interface representing a thing we want to catch
 export abstract class GDLToken {
@@ -81,7 +91,7 @@ export class GDLCalledMacro extends GDLToken {
 
 // macro calls
 export class GDLMacroCall extends GDLToken {
-	public static readonly regex = /(?<!!.*)\bcall\s*"([\w ]*)"(\s*(,\r?\n\s*)?(parameters\s*all))?/mig;
+	public static readonly regex = /(?<!!.*)\bcall\s*"(.*?)"(\s*(,\r?\n\s*)?(parameters\s*all))?/mig;
 
 	// TODO LIBRARYGLOBALS?
 

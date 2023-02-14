@@ -12,19 +12,23 @@
                     </div>
                     <div style="margin-left: 1em">
                         <div style="text-indent: -1em"><code><b>num_expressioni, num_values_arrayi: </b></code>
-                            simple value definition for a numerical parameter, or array expression containing multiple numerical values. Available only for VALUES{2}</div>
+                            simple value definition for a numerical parameter, or array expression containing multiple numerical values.
+                        </div>
+                        <p>
+                            If num_expression1 has an explicit '+' sign, the ',' after the parameter name must be added.
+                        </p>
                     </div>
                     <div style="margin-left: 1em">
                         <div style="text-indent: -1em"><code><b>descriptioni, descriptions_arrayi: </b></code>description string of the numerical value i, or array expression containing multiple description strings of
                         the values defined by num_values_arrayi (array dimensions must match). Available only for VALUES{2}</div>
                     </div>
                 
-                <div class="example"><a id="id536958"/><p class="title"><b>Example 1:
+                <div class="example"><a id="id541931"/><p class="title"><b>Example 1:
 Simple value lists</b></p><div class="example-contents"><pre class="programlisting">VALUES "par1" 1, 2, 3
 VALUES "par2" "a", "b"
 VALUES "par3" 1, CUSTOM, SIN (30)
 VALUES "par4" 4, RANGE(5, 10], 12, RANGE(,20] STEP 14.5, 0.5, CUSTOM</pre></div></div>
-                <div class="example"><a id="id536978"/><p class="title"><b>Example 2:
+                <div class="example"><a id="id541932"/><p class="title"><b>Example 2:
 Read all string values from a file for use in a value list</b></p><div class="example-contents"><pre class="programlisting">DIM sarray[]
 ! file in the library, containing parameter data
 filename = "ProjectNotes.txt"
@@ -47,6 +51,6 @@ VALUES "RefNote" sarray</pre></div></div>
             <hr/><a href="002.012.html#VALUES2_gdlcommand">Related in Non-Geometric Scripts</a><p>
                 <span class="bold"><strong>GDL Reference Guide</strong></span>
             </p><p>
-                <span class="trademark">Copyright</span><sup>©</sup> 2022 by GRAPHISOFT, all rights reserved.
+                <span class="trademark">Copyright</span><sup>©</sup> 2022 by Graphisoft, all rights reserved.
                 Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
             </p></body></html>

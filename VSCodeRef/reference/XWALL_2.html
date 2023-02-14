@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>XWALL_{2}</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="XWALL_2_gdlcommand">XWALL_{2}</h3>
-				
-				<pre class="programlisting"><b id="XWALL_2_keyword_2.7.3.27.4.1">XWALL_{2}</b> left_material, right_material, vertical_material, horizontal_material,
+                
+                <pre class="programlisting"><b id="XWALL_2_keyword_2.7.3.27.4.1">XWALL_{2}</b> left_material, right_material, vertical_material, horizontal_material,
           height, x1, x2, x3, x4,
           y1, y2, y3, y4,
           t, radius,
@@ -19,32 +19,32 @@
           ...
           am, bm, cm, dm,
           status</pre>
-				
-					<p>Extended wall definition based on the same data structure as the XWALL_ element.</p>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>silldepthi: </b></code>
-							logical depth of the opening sill. If the j9 bit of the frame_showni parameter is set,
-							the wall side materials wraps the hole polygons, silldepthi defining the separator line between them.
-						</div>
-					</div>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>frame_showni: </b></code></div>
-						<div><code>1: </code>if the edges of the hole are visible,</div>
-						<div><code>0: </code>if the edges of the hole are invisible,</div>
-						<div><code>&lt; 0: </code>
-							control the visibility of each of the opening’s edges separately:
-							frame_showni = -(1*j1 + 2*j2 + 4*j3 + 8*j4 + 16*j5 + 32*j6 + 64*j7 + 128*j8 + 256*j9 + 512*j10), where j1, j2, ..., j10 can be either 0 or 1.
-							There are two additional values to control the material wrapping.
-							The meaning of the j1, j2, ..., j8 values are the same as at the CWALL_ and XWALL_ commands.
-							The j9 value controls the material of the hole polygons. If j9 is 1, the hole inherits the side materials of the wall.
-							The j10 value controls the form of the separator line between the hole materials on the upper and lower polygons of the hole in case of a bent wall.
-							If the j10 value is 1, the separator line will be straight, otherwise curved.
-						</div>
-					</div>
-				
-			<hr/><a href="002.007.html#XWALL_2_gdlcommand">Related in 3D Shapes</a><p>
-				<span class="bold"><strong>GDL Reference Guide</strong></span>
-			</p><p>
-				<span class="trademark">Copyright</span><sup>©</sup> 2022 by GRAPHISOFT, all rights reserved.
-				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
-			</p></body></html>
+                
+                    <p>Extended wall definition based on the same data structure as the XWALL_ element.</p>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>silldepthi: </b></code>
+                            logical depth of the opening sill. If the j9 bit of the frame_showni parameter is set,
+                            the wall side materials wraps the hole polygons, silldepthi defining the separator line between them.
+                        </div>
+                    </div>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>frame_showni: </b></code></div>
+                        <div><code>1: </code>if the edges of the hole are visible,</div>
+                        <div><code>0: </code>if the edges of the hole are invisible,</div>
+                        <div><code>&lt; 0: </code>
+                            control the visibility of each of the opening’s edges separately:
+                            frame_showni = -(1*j1 + 2*j2 + 4*j3 + 8*j4 + 16*j5 + 32*j6 + 64*j7 + 128*j8 + 256*j9 + 512*j10), where j1, j2, ..., j10 can be either 0 or 1.
+                            There are two additional values to control the material wrapping.
+                            The meaning of the j1, j2, ..., j8 values are the same as at the CWALL_ and XWALL_ commands.
+                            The j9 value controls the material of the hole polygons. If j9 is 1, the hole inherits the side materials of the wall.
+                            The j10 value controls the form of the separator line between the hole materials on the upper and lower polygons of the hole in case of a bent wall.
+                            If the j10 value is 1, the separator line will be straight, otherwise curved.
+                        </div>
+                    </div>
+                
+            <hr/><a href="002.007.html#XWALL_2_gdlcommand">Related in 3D Shapes</a><p>
+                <span class="bold"><strong>GDL Reference Guide</strong></span>
+            </p><p>
+                <span class="trademark">Copyright</span><sup>©</sup> 2022 by Graphisoft, all rights reserved.
+                Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+            </p></body></html>

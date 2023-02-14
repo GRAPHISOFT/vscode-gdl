@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>EXTRUDEDSHELL</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="EXTRUDEDSHELL_gdlcommand">EXTRUDEDSHELL</h3>
-				
-				<pre class="programlisting"><b id="EXTRUDEDSHELL_keyword_2.7.5.49.4.1">EXTRUDEDSHELL</b> topMat, bottomMat, sideMat_1, sideMat_2, sideMat_3, sideMat_4,
+                
+                <pre class="programlisting"><b id="EXTRUDEDSHELL_keyword_2.7.5.49.4.1">EXTRUDEDSHELL</b> topMat, bottomMat, sideMat_1, sideMat_2, sideMat_3, sideMat_4,
         defaultMat,
         n, offset, thickness, flipped, trimmingBody,
         x_tb, y_tb, x_te, y_te, topz, tangle,
@@ -13,61 +13,61 @@
         x_1, y_1, s_1,
         ...
         x_n, y_n, s_n</pre>
-				
-					<p>Surface created by first extruding a polyline, then adding thickness to it.</p>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>topMat, bottomMat, sideMat_1, sideMat_2, sideMat_3, sideMat_4: </b></code>Materials on the top, bottom and four sides of the object.</div>
-					</div>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>defaultMat: </b></code>
-							the numeric index of the "inner" material of the object.
-							This material becomes visible at cut surfaces, e.g., if the object is cut by a plane.
-						</div>
-					</div>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>n: </b></code>number of profile base polyline vertices.</div>
-					</div>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>offset: </b></code>an offset for the thickness of the shell. Cannot be negative.</div>
-					</div>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>thickness: </b></code>the thickness of the shell.</div>
-					</div>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>flipped: </b></code></div>
-						<div><code>1: </code>if the shell should be flipped,</div>
-						<div><code>0: </code>otherwise. </div>
-					</div>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>trimmingBody: </b></code></div>
-						<div><code>1: </code>if the shell is to be closed for trimming purposes,</div>
-						<div><code>0: </code>otherwise. </div>
-					</div>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>x_tb, y_tb, x_te, y_te, topz, tangle: </b></code>
-							Specify the top plane of the extrusion.
-							The meaning of the parameters is the same as for <a class="xref" href="reference/SPRISM_2.html">the SPRISM_{2} command</a>.
-						</div>
-					</div>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>x_bb, y_bb, x_be, y_be, bottomz, bangle: </b></code>
-							Specify the bottom plane of the extrusion.
-							The meaning of the parameters is the same as for <a class="xref" href="reference/SPRISM_2.html">the SPRISM_{2} command</a>.
-						</div>
-					</div>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>preThickenTran_i: </b></code>a transformation executed before thickening. See <a class="xref" href="reference/XFORM.html">the XFORM command</a> for the meaning of parameters.</div>
-					</div>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>x_i, y_i, s_i: </b></code>
-							X and Y coordinates and status values for the base profile polyline. See <a class="xref" href="reference/EXTRUDE.html">the EXTRUDE command</a> for details.
-							The visibility of the sides cannot be controlled with the status.
-						</div>
-					</div>
-				
-			<hr/><a href="002.007.html#EXTRUDEDSHELL_gdlcommand">Related in 3D Shapes</a><p>
-				<span class="bold"><strong>GDL Reference Guide</strong></span>
-			</p><p>
-				<span class="trademark">Copyright</span><sup>©</sup> 2022 by GRAPHISOFT, all rights reserved.
-				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
-			</p></body></html>
+                
+                    <p>Surface created by first extruding a polyline, then adding thickness to it.</p>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>topMat, bottomMat, sideMat_1, sideMat_2, sideMat_3, sideMat_4: </b></code>Materials on the top, bottom and four sides of the object.</div>
+                    </div>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>defaultMat: </b></code>
+                            the numeric index of the "inner" material of the object.
+                            This material becomes visible at cut surfaces, e.g., if the object is cut by a plane.
+                        </div>
+                    </div>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>n: </b></code>number of profile base polyline vertices.</div>
+                    </div>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>offset: </b></code>an offset for the thickness of the shell. Cannot be negative.</div>
+                    </div>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>thickness: </b></code>the thickness of the shell.</div>
+                    </div>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>flipped: </b></code></div>
+                        <div><code>1: </code>if the shell should be flipped,</div>
+                        <div><code>0: </code>otherwise. </div>
+                    </div>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>trimmingBody: </b></code></div>
+                        <div><code>1: </code>if the shell is to be closed for trimming purposes,</div>
+                        <div><code>0: </code>otherwise. </div>
+                    </div>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>x_tb, y_tb, x_te, y_te, topz, tangle: </b></code>
+                            Specify the top plane of the extrusion.
+                            The meaning of the parameters is the same as for <a class="xref" href="reference/SPRISM_2.html">the SPRISM_{2} command</a>.
+                        </div>
+                    </div>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>x_bb, y_bb, x_be, y_be, bottomz, bangle: </b></code>
+                            Specify the bottom plane of the extrusion.
+                            The meaning of the parameters is the same as for <a class="xref" href="reference/SPRISM_2.html">the SPRISM_{2} command</a>.
+                        </div>
+                    </div>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>preThickenTran_i: </b></code>a transformation executed before thickening. See <a class="xref" href="reference/XFORM.html">the XFORM command</a> for the meaning of parameters.</div>
+                    </div>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>x_i, y_i, s_i: </b></code>
+                            X and Y coordinates and status values for the base profile polyline. See <a class="xref" href="reference/EXTRUDE.html">the EXTRUDE command</a> for details.
+                            The visibility of the sides cannot be controlled with the status.
+                        </div>
+                    </div>
+                
+            <hr/><a href="002.007.html#EXTRUDEDSHELL_gdlcommand">Related in 3D Shapes</a><p>
+                <span class="bold"><strong>GDL Reference Guide</strong></span>
+            </p><p>
+                <span class="trademark">Copyright</span><sup>©</sup> 2022 by Graphisoft, all rights reserved.
+                Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+            </p></body></html>

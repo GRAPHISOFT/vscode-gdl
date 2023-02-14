@@ -1,32 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>VALUES</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="VALUES_gdlcommand">VALUES</h3>
-				
-				<pre class="programlisting"><b id="VALUES_keyword_2.12.4.4.4.1">VALUES</b> "parameter_name" [,]value_definition1 [, value_definition2, ...]</pre>
-				<pre class="programlisting"><b id="VALUES_keyword_2.12.4.4.6.1">VALUES</b> "fill_parameter_name" [[,] <b id="FILLTYPES_MASK_keyword_2.12.4.4.6.3">FILLTYPES_MASK</b> fill_types], value_definition1
-			[, value_definition2, ...]</pre>
+                
+                <pre class="programlisting"><b id="VALUES_keyword_2.12.4.4.4.1">VALUES</b> "parameter_name" [,]value_definition1 [, value_definition2, ...]</pre>
+                <pre class="programlisting"><b id="VALUES_keyword_2.12.4.4.6.1">VALUES</b> "fill_parameter_name" [[,] <b id="FILLTYPES_MASK_keyword_2.12.4.4.6.3">FILLTYPES_MASK</b> fill_types], value_definition1
+            [, value_definition2, ...]</pre>
                 <pre class="programlisting"><b id="VALUES_keyword_2.12.4.4.8.1">VALUES</b> "profile_parameter_name" [[,] <b id="PROFILETYPES_MASK_keyword_2.12.4.4.8.3">PROFILETYPES_MASK</b> profile_types], value_definition1
             [, value_definition2, ...]</pre>
-				
-					<p>Defines a value restriction for a parameter (except dictionary types). The command has a special syntax for fill type and profile type parameters. If used on an array parameter, the restriction will be applied to all items individually.</p>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>parameter_name: </b></code>name of an existing parameter</div>
-					</div>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>fill_parameter_name: </b></code>name of an existing fillpattern type parameter</div>
-					</div>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>fill_types: </b></code></div><div><code>fill_types = j<sub>1</sub> + 2*j<sub>2</sub> + 4*j<sub>3</sub></code>, where each j can be 0 or 1.
+                
+                    <p>Defines a value restriction for a parameter (except dictionary types). The command has a special syntax for fill type and profile type parameters. If used on an array parameter, the restriction will be applied to all items individually.</p>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>parameter_name: </b></code>name of an existing parameter</div>
+                    </div>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>fill_parameter_name: </b></code>name of an existing fillpattern type parameter</div>
+                    </div>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>fill_types: </b></code></div><div><code>fill_types = j<sub>1</sub> + 2*j<sub>2</sub> + 4*j<sub>3</sub></code>, where each j can be 0 or 1.
 	</div>
-						<div><code>j<sub>1</sub>: </code>cut fills,</div>
-						<div><code>j<sub>2</sub>: </code>cover fills,</div>
-						<div><code>j<sub>3</sub>: </code>drafting fills.</div>
-					</div>
-					<p>
-						Can be used for fill-pattern type parameters only.
-						The fill popup for this parameter will contain only those types of fills which are specified by the bits set to 1.
-						Default is all fills (0).
-					</p>
+                        <div><code>j<sub>1</sub>: </code>cut fills,</div>
+                        <div><code>j<sub>2</sub>: </code>cover fills,</div>
+                        <div><code>j<sub>3</sub>: </code>drafting fills.</div>
+                    </div>
+                    <p>
+                        Can be used for fill-pattern type parameters only.
+                        The fill popup for this parameter will contain only those types of fills which are specified by the bits set to 1.
+                        Default is all fills (0).
+                    </p>
                     <div style="margin-left: 1em">
                         <div style="text-indent: -1em"><code><b>profile_parameter_name: </b></code>name of an existing profile type parameter</div>
                     </div>
@@ -46,27 +46,30 @@
                         Using VALUES with masking can filter the value list, leaving only the corresponding profiles of the bits set to 1.
                         Individual profile indexes can be listed as regular value definitions as well.
                     </p>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>value_definitioni: </b></code>value definition, can be:</div>
-						<div><code>expression: </code>numerical or string expression, or</div>
-						<div><code>CUSTOM: </code>keyword, meaning that any custom value can be entered, or</div>
-						<div><code>RANGE: </code>range definition, with optional step</div>
-						<p>
-							<code class="literal">RANGE left_delimiter[lower_limit], [upper_limit]right_delimiter [STEP step_start_value, step_value]</code>
-						</p>
-						<p>
-							left_delimiter: [, meaning &gt;=, or (, meaning &gt;;
-							lower_limit: lower limit expression;
-							upper_limit: upper limit expression;
-							right_delimiter: ], meaning &lt;=, or ), meaning &lt;;
-							step_start_value: starting value;
-							step_value: step value.
-						</p>
-					</div>
-				
-			<hr/><a href="002.012.html#VALUES_gdlcommand">Related in Non-Geometric Scripts</a><p>
-				<span class="bold"><strong>GDL Reference Guide</strong></span>
-			</p><p>
-				<span class="trademark">Copyright</span><sup>©</sup> 2022 by GRAPHISOFT, all rights reserved.
-				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
-			</p></body></html>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>value_definitioni: </b></code>value definition, can be:</div>
+                        <div><code>expression: </code>numerical or string expression, or</div>
+                        <div><code>CUSTOM: </code>keyword, meaning that any custom value can be entered, or</div>
+                        <div><code>RANGE: </code>range definition, with optional step</div>
+                        <p>
+                            <code class="literal">RANGE left_delimiter[lower_limit], [upper_limit]right_delimiter [STEP step_start_value, step_value]</code>
+                        </p>
+                        <p>
+                            left_delimiter: [, meaning &gt;=, or (, meaning &gt;;
+                            lower_limit: lower limit expression;
+                            upper_limit: upper limit expression;
+                            right_delimiter: ], meaning &lt;=, or ), meaning &lt;;
+                            step_start_value: starting value;
+                            step_value: step value.
+                        </p>
+                        <p>
+                            If value_definition1 is a numerical expression with explicit '+' sign, the ',' after the parameter name must be added.
+                        </p>
+                    </div>
+                
+            <hr/><a href="002.012.html#VALUES_gdlcommand">Related in Non-Geometric Scripts</a><p>
+                <span class="bold"><strong>GDL Reference Guide</strong></span>
+            </p><p>
+                <span class="trademark">Copyright</span><sup>©</sup> 2022 by Graphisoft, all rights reserved.
+                Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+            </p></body></html>

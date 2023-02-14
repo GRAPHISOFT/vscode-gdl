@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ParseXMLGDL = exports.GDLPict = exports.GDLPictParent = exports.GDLSection = exports.GDLScript = exports.GDLFile = exports.GDLXMLSection = exports.GDLMigrationGUID = exports.GDLMainGUID = exports.GDLMacroCall = exports.GDLCalledMacro = exports.GDLComment = exports.GDLFunction = exports.GDLToken = exports.Scripts = exports.ScriptsExceptMaster = exports.scriptName = exports.scriptFile = exports.scriptAbbrev = exports.ScriptType = void 0;
+exports.ParseXMLGDL = exports.GDLPict = exports.GDLPictParent = exports.GDLSection = exports.GDLScript = exports.GDLFile = exports.GDLXMLSection = exports.GDLMigrationGUID = exports.GDLMainGUID = exports.GDLMacroCall = exports.GDLCalledMacro = exports.GDLComment = exports.GDLFunction = exports.GDLToken = exports.getRelatedScripts = exports.Scripts = exports.ScriptsExceptMaster = exports.scriptName = exports.scriptFile = exports.scriptAbbrev = exports.ScriptType = void 0;
 const vscode = require("vscode");
 var ScriptType;
 (function (ScriptType) {
@@ -42,6 +42,18 @@ exports.ScriptsExceptMaster = [ScriptType.DD,
     ScriptType.FWM,
     ScriptType.BWM];
 exports.Scripts = [ScriptType.D, ...exports.ScriptsExceptMaster];
+function getRelatedScripts(scriptType) {
+    // returns scripts related to scriptType
+    if (scriptType === ScriptType.D) {
+        // master script relates to all scripts
+        return exports.Scripts;
+    }
+    else {
+        // others relate to master and self
+        return [ScriptType.D, scriptType];
+    }
+}
+exports.getRelatedScripts = getRelatedScripts;
 // general interface representing a thing we want to catch
 class GDLToken {
     constructor(start, end, name) {
@@ -99,7 +111,7 @@ class GDLMacroCall extends GDLToken {
     }
 }
 exports.GDLMacroCall = GDLMacroCall;
-GDLMacroCall.regex = /(?<!!.*)\bcall\s*"([\w ]*)"(\s*(,\r?\n\s*)?(parameters\s*all))?/mig;
+GDLMacroCall.regex = /(?<!!.*)\bcall\s*"(.*?)"(\s*(,\r?\n\s*)?(parameters\s*all))?/mig;
 // main GUID
 class GDLMainGUID extends GDLToken {
     constructor(start, end, guid) {

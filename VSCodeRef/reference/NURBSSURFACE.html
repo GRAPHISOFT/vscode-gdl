@@ -1,51 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>NURBSSURFACE</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="NURBSSURFACE_gdlcommand">NURBSSURFACE</h3>
-					
-					<pre class="programlisting"><b id="NURBSSURFACE_keyword_2.7.9.16.5.4.1">NURBSSURFACE</b> degree_u, degree_v, nu, nv,
-							knot_u_1, knot_u_2, ..., knot_u_mu,
-							knot_v_1, knot_v_2, ..., knot_v_mv,
-							cPoint_1_1_x, cPoint_1_1_y, cPoint_1_1_z, weight_1_1,
-							cPoint_1_2_x, cPoint_1_2_y, cPoint_1_2_z, weight_1_2,
-							...,
-							cPoint_1_nv_x, cPoint_1_nv_y, cPoint_1_nv_z, weight_1_nv,
-							cPoint_2_1_x, cPoint_2_1_y, cPoint_2_1_z, weight_2_1,
-							...,
-							cPoint_nu_nv_x, cPoint_nu_nv_y, cPoint_nu_nv_z, weight_nu_nv</pre>
-					
-						<p>
-							3-dimensional NURBS surface with u-v parameter space, given degree, knotvectors in u and v directions and given controlpoint, weigth net.
-							Degrees are one less than orders of surface (order_u = degree_u + 1), degrees are positive.
-						</p>
-						<div style="margin-left: 1em">
-							<div style="text-indent: -1em"><code><b>degree_u: </b></code>degree of surface in the u parameter direction</div>
-						</div>
-						<div style="margin-left: 1em">
-							<div style="text-indent: -1em"><code><b>degree_v: </b></code>degree of surface in the v parameter direction</div>
-						</div>
-						<div style="margin-left: 1em">
-							<div style="text-indent: -1em"><code><b>nu, nv: </b></code>number of control points in u and v directions, greater than degree (not less than order) of then surface in given direction</div>
-						</div>
-						<div style="margin-left: 1em">
-							<div style="text-indent: -1em"><code><b>knot_u_i, knot_v_i: </b></code>index i knot value in u and v directions</div>
-							<div class="itemizedlist"><ul class="itemizedlist"><li class="listitem"><p>their number (the size of knot vector) is given by the following: mu = degree_u + 1 + nu</p></li><li class="listitem"><p>knots are in non-descending order (knot_u_i &lt;= knot_u_{i+1}, knot_v_i &lt;= knot_v_{i+1})</p></li><li class="listitem"><p>equal knot values are allowed, with multiplicity up to degree, or with multiplicity up to degree+1 for the first and last knot.</p></li></ul></div>
-						</div>
-						<div style="margin-left: 1em">
-							<div style="text-indent: -1em"><code><b>cPoint_i_j_x, cPoint_i_j_y, cPoint_i_j_z: </b></code>control point on the control point net, index i in the u direction, index j in the v direction</div>
-						</div>
-						<div style="margin-left: 1em">
-							<div style="text-indent: -1em"><code><b>weight_i_j: </b></code>weight for control point cPoint_ij, positive</div>
-						</div>
-						<p>
-							Surfaces may be periodic in either (u or v) direction or in both directions.
-							Periodic surfaces are not handled separately, but described as floating (not clamped) NURBS surfaces which are geometrically closed and have appropriately continuous connection at the the ends. This is ensured the same way as in case of curves.
-						</p>
-						<p>The usable domain of a surface is the cross product of the closed intervals between knot_u_{degree_u + 1}, knot_u_{mu - degree_u} and knot_v_{degree_v + 1}, knot_v_{mv - degree_v} respectively.
-						</p>
-					
-				<hr/><a href="002.007.html#NURBSSURFACE_gdlcommand">Related in 3D Shapes</a><p>
-				<span class="bold"><strong>GDL Reference Guide</strong></span>
-			</p><p>
-				<span class="trademark">Copyright</span><sup>©</sup> 2022 by GRAPHISOFT, all rights reserved.
-				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
-			</p></body></html>
+                    
+                    <pre class="programlisting"><b id="NURBSSURFACE_keyword_2.7.9.16.5.4.1">NURBSSURFACE</b> degree_u, degree_v, nu, nv,
+                            knot_u_1, knot_u_2, ..., knot_u_mu,
+                            knot_v_1, knot_v_2, ..., knot_v_mv,
+                            cPoint_1_1_x, cPoint_1_1_y, cPoint_1_1_z, weight_1_1,
+                            cPoint_1_2_x, cPoint_1_2_y, cPoint_1_2_z, weight_1_2,
+                            ...,
+                            cPoint_1_nv_x, cPoint_1_nv_y, cPoint_1_nv_z, weight_1_nv,
+                            cPoint_2_1_x, cPoint_2_1_y, cPoint_2_1_z, weight_2_1,
+                            ...,
+                            cPoint_nu_nv_x, cPoint_nu_nv_y, cPoint_nu_nv_z, weight_nu_nv</pre>
+                    
+                        <p>
+                            3-dimensional NURBS surface with u-v parameter space, given degree, knotvectors in u and v directions and given controlpoint, weigth net.
+                            Degrees are one less than orders of surface (order_u = degree_u + 1), degrees are positive.
+                        </p>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>degree_u: </b></code>degree of surface in the u parameter direction</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>degree_v: </b></code>degree of surface in the v parameter direction</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>nu, nv: </b></code>number of control points in u and v directions, greater than degree (not less than order) of then surface in given direction</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>knot_u_i, knot_v_i: </b></code>index i knot value in u and v directions</div>
+                            <div class="itemizedlist"><ul class="itemizedlist"><li class="listitem"><p>their number (the size of knot vector) is given by the following: mu = degree_u + 1 + nu</p></li><li class="listitem"><p>knots are in non-descending order (knot_u_i &lt;= knot_u_{i+1}, knot_v_i &lt;= knot_v_{i+1})</p></li><li class="listitem"><p>equal knot values are allowed, with multiplicity up to degree, or with multiplicity up to degree+1 for the first and last knot.</p></li></ul></div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>cPoint_i_j_x, cPoint_i_j_y, cPoint_i_j_z: </b></code>control point on the control point net, index i in the u direction, index j in the v direction</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>weight_i_j: </b></code>weight for control point cPoint_ij, positive</div>
+                        </div>
+                        <p>
+                            Surfaces may be periodic in either (u or v) direction or in both directions.
+                            Periodic surfaces are not handled separately, but described as floating (not clamped) NURBS surfaces which are geometrically closed and have appropriately continuous connection at the the ends. This is ensured the same way as in case of curves.
+                        </p>
+                        <p>The usable domain of a surface is the cross product of the closed intervals between knot_u_{degree_u + 1}, knot_u_{mu - degree_u} and knot_v_{degree_v + 1}, knot_v_{mv - degree_v} respectively.
+                        </p>
+                    
+                <hr/><a href="002.007.html#NURBSSURFACE_gdlcommand">Related in 3D Shapes</a><p>
+                <span class="bold"><strong>GDL Reference Guide</strong></span>
+            </p><p>
+                <span class="trademark">Copyright</span><sup>©</sup> 2022 by Graphisoft, all rights reserved.
+                Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+            </p></body></html>

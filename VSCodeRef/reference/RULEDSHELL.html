@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>RULEDSHELL</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="RULEDSHELL_gdlcommand">RULEDSHELL</h3>
-				
-				<pre class="programlisting"><b id="RULEDSHELL_keyword_2.7.5.58.4.1">RULEDSHELL</b> topMat, bottomMat,
+                
+                <pre class="programlisting"><b id="RULEDSHELL_keyword_2.7.5.58.4.1">RULEDSHELL</b> topMat, bottomMat,
         sideMat_1, sideMat_2, sideMat_3, sideMat_4, defaultMat,
         n, m, g,
         offset, thickness, flipped, trimmingBody,
@@ -21,72 +21,72 @@
         generatrixFirstIndex_1, generatrixSecondIndex_1,
         ...
         generatrixFirstIndex_g, generatrixSecondIndex_g</pre>
-				
-					<p>Surface created by connecting two polylines.</p>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>topMat, bottomMat, sideMat_1, sideMat_2, sideMat_3, sideMat_4: </b></code>Materials on the top, bottom and four sides of the object.</div>
-					</div>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>defaultMat: </b></code>
-							the numeric index of the "inner" material of the object.
-							This material becomes visible at cut surfaces, e.g., if the object is cut by a plane.
-						</div>
-					</div>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>n: </b></code>number of vertices for first profile base polyline.</div>
-					</div>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>m: </b></code>number of vertices for second profile base polyline.</div>
-					</div>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>g: </b></code>number of generatrices.</div>
-					</div>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>offset: </b></code>an offset for the thickness of the shell. Cannot be negative.</div>
-					</div>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>thickness: </b></code>thickness of the shell.</div>
-					</div>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>flipped: </b></code></div>
-						<div><code>1: </code>if the shell should be flipped,</div>
-						<div><code>0: </code>otherwise</div>
-					</div>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>preThickenTran: </b></code>a transformation executed before thickening. See <a class="xref" href="reference/XFORM.html">the XFORM command</a> for the meaning of parameters.</div>
-					</div>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>trimmingBody: </b></code></div>
-						<div><code>1: </code>if the shell is to be closed for trimming purposes,</div>
-						<div><code>0: </code>otherwise</div>
-					</div>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>firstpolyX, firstpolyY, firstpolyS: </b></code>
-							X and Y coordinates and status values for the first base profile polyline.
-							See <a class="xref" href="reference/REVOLVE.html">the REVOLVE command</a> for details.
-						</div>
-					</div>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>secondpolyX, secondpolyY, secondpolyS: </b></code>
-							X and Y coordinates and status values for the second base profile polyline. See <a class="xref" href="reference/REVOLVE.html">the REVOLVE command</a> for details.
-						</div>
-					</div>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>profile2Tran: </b></code>
-							a transformation executed on the second profile.
-							Use this transformation to position the second profile relative to the first one. See <a class="xref" href="reference/XFORM.html">the XFORM command</a> for the meaning of parameters.
-						</div>
-					</div>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>generatrixFirstIndex, generatrixSecondIndex: </b></code>
-							pairs of indexes, one from the first polyline and one from the second polyline.
-							The vertexes with the given indexes will be connected with a line.
-						</div>
-					</div>
-				
-			<hr/><a href="002.007.html#RULEDSHELL_gdlcommand">Related in 3D Shapes</a><p>
-				<span class="bold"><strong>GDL Reference Guide</strong></span>
-			</p><p>
-				<span class="trademark">Copyright</span><sup>©</sup> 2022 by GRAPHISOFT, all rights reserved.
-				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
-			</p></body></html>
+                
+                    <p>Surface created by connecting two polylines.</p>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>topMat, bottomMat, sideMat_1, sideMat_2, sideMat_3, sideMat_4: </b></code>Materials on the top, bottom and four sides of the object.</div>
+                    </div>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>defaultMat: </b></code>
+                            the numeric index of the "inner" material of the object.
+                            This material becomes visible at cut surfaces, e.g., if the object is cut by a plane.
+                        </div>
+                    </div>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>n: </b></code>number of vertices for first profile base polyline.</div>
+                    </div>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>m: </b></code>number of vertices for second profile base polyline.</div>
+                    </div>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>g: </b></code>number of generatrices.</div>
+                    </div>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>offset: </b></code>an offset for the thickness of the shell. Cannot be negative.</div>
+                    </div>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>thickness: </b></code>thickness of the shell.</div>
+                    </div>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>flipped: </b></code></div>
+                        <div><code>1: </code>if the shell should be flipped,</div>
+                        <div><code>0: </code>otherwise</div>
+                    </div>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>preThickenTran: </b></code>a transformation executed before thickening. See <a class="xref" href="reference/XFORM.html">the XFORM command</a> for the meaning of parameters.</div>
+                    </div>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>trimmingBody: </b></code></div>
+                        <div><code>1: </code>if the shell is to be closed for trimming purposes,</div>
+                        <div><code>0: </code>otherwise</div>
+                    </div>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>firstpolyX, firstpolyY, firstpolyS: </b></code>
+                            X and Y coordinates and status values for the first base profile polyline.
+                            See <a class="xref" href="reference/REVOLVE.html">the REVOLVE command</a> for details.
+                        </div>
+                    </div>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>secondpolyX, secondpolyY, secondpolyS: </b></code>
+                            X and Y coordinates and status values for the second base profile polyline. See <a class="xref" href="reference/REVOLVE.html">the REVOLVE command</a> for details.
+                        </div>
+                    </div>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>profile2Tran: </b></code>
+                            a transformation executed on the second profile.
+                            Use this transformation to position the second profile relative to the first one. See <a class="xref" href="reference/XFORM.html">the XFORM command</a> for the meaning of parameters.
+                        </div>
+                    </div>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>generatrixFirstIndex, generatrixSecondIndex: </b></code>
+                            pairs of indexes, one from the first polyline and one from the second polyline.
+                            The vertexes with the given indexes will be connected with a line.
+                        </div>
+                    </div>
+                
+            <hr/><a href="002.007.html#RULEDSHELL_gdlcommand">Related in 3D Shapes</a><p>
+                <span class="bold"><strong>GDL Reference Guide</strong></span>
+            </p><p>
+                <span class="trademark">Copyright</span><sup>©</sup> 2022 by Graphisoft, all rights reserved.
+                Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+            </p></body></html>

@@ -1,54 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../"/><title>PROJECT2{3}</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlcommand"><h3 id="PROJECT23_gdlcommand">PROJECT2{3}</h3>
-				
-				<pre class="programlisting"><b id="PROJECT23_keyword_2.8.6.4.4.1">PROJECT2{3}</b> projection_code, angle, method, parts [, backgroundColor,
+                
+                <pre class="programlisting"><b id="PROJECT23_keyword_2.8.6.4.4.1">PROJECT2{3}</b> projection_code, angle, method, parts [, backgroundColor,
         fillOrigoX, fillOrigoY, filldirection][[,]
         PARAMETERS name1=value1, ..., namen=valuen]</pre>
-				
-					<p>
-						Creates a projection of the 3D script in the same library part and adds the generated lines to the 2D parametric symbol.
-						The third version, PROJECT2{3}, adds the possibility to define which parts of the projected model are required
-						and to control separately the attributes of the cut and view part, including the line type.
-						You can also generate the projection with actual parameters set in the command.
-					</p>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>method: </b></code>the chosen imaging method. If invalid or none is set, the default is hidden lines (2).</div>
-						<div><code>1: </code>wireframe,</div>
-						<div><code>2: </code>hidden lines (analytic),</div>
-						<div><code>3: </code>shading,</div>
-						<div><code>16: </code>addition modifier: draws vectorial hatches (effective only in hidden line and shaded mode),</div>
-						<div><code>32: </code>addition modifier: use current attributes instead of attributes from 3D (effective only in shading mode),</div>
-						<div><code>64: </code>addition modifier: local fill orientation (effective only in shading mode),</div>
-						<div><code>128: </code>addition modifier: lines are all inner lines (effective only together with 32). Default is generic.</div>
-						<div><code>256: </code>addition modifier: lines are all contour lines (effective only together with 32, if 128 is not set). Default is generic.</div>
-						<div><code>512: </code>addition modifier: fills are all cut (effective only together with 32). Default is drafting fills.</div>
-						<div><code>1024: </code>addition modifier: fills are all cover (effective only together with 32, if 512 is not set). Default is drafting fills.</div>
-						<div><code>2048: </code>addition modifier: modifiers 16, 32, 64, 128, 256, 512, 1024 and fill attribute parameters are effective only for the view part of the projection. By default they are effective for all parts.</div>
-						<div><code>4096: </code>addition modifier: modifiers 16, 32, 64, 128, 256, 512, 1024 and fill attribute parameters are effective only for the cut part of the projection. By default they are effective for all parts.</div>
-						<div><code>8192: </code>addition modifier: cut fills are slanted.</div>
-						<div><code>16384: </code>addition modifier: enables transparency for transparent surfaces. Note that transparency in this case means full transparency for surfaces with transmittance greater than 50, everything else is non-transparent.</div>
-					</div>
-					<p>Known limitation: lines of the cut part cannot be treated separately, only all lines together can be set to be inner or contour.</p>
-					<p><span class="italic">Compatibility note: up to ARCHICAD 19, cut polygons were generated with attributes defined by <a class="xref" href="reference/SECT_FILL.html">the SECT_FILL command</a> or <a class="xref" href="reference/SECT_ATTRS.html">the SECT_ATTRS command</a> in the 3D script. From ARCHICAD 20 the attributes of the cut polygons are defined by the cover fill of the outer surfaces (in case the addition modifier 32 is not set).</span>
-					</p>
-					<div style="margin-left: 1em">
-						<div style="text-indent: -1em"><code><b>parts: </b></code>defines the parts to generate. The 1+2+4+8+16+32 value means all parts.</div><div><code>parts = j<sub>1</sub> + 2*j<sub>2</sub> + 4*j<sub>3</sub> + 8*j<sub>4</sub> + 16*j<sub>5</sub> + 32*j<sub>6</sub></code>, where each j can be 0 or 1.
+                
+                    <p>
+                        Creates a projection of the 3D script in the same library part and adds the generated lines to the 2D parametric symbol.
+                        The third version, PROJECT2{3}, adds the possibility to define which parts of the projected model are required
+                        and to control separately the attributes of the cut and view part, including the line type.
+                        You can also generate the projection with actual parameters set in the command.
+                    </p>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>method: </b></code>the chosen imaging method. If invalid or none is set, the default is hidden lines (2).</div>
+                        <div><code>1: </code>wireframe,</div>
+                        <div><code>2: </code>hidden lines (analytic),</div>
+                        <div><code>3: </code>shading,</div>
+                        <div><code>16: </code>addition modifier: draws vectorial hatches (effective only in hidden line and shaded mode),</div>
+                        <div><code>32: </code>addition modifier: use current attributes instead of attributes from 3D (effective only in shading mode),</div>
+                        <div><code>64: </code>addition modifier: local fill orientation (effective only in shading mode),</div>
+                        <div><code>128: </code>addition modifier: lines are all inner lines (effective only together with 32). Default is generic.</div>
+                        <div><code>256: </code>addition modifier: lines are all contour lines (effective only together with 32, if 128 is not set). Default is generic.</div>
+                        <div><code>512: </code>addition modifier: fills are all cut (effective only together with 32). Default is drafting fills.</div>
+                        <div><code>1024: </code>addition modifier: fills are all cover (effective only together with 32, if 512 is not set). Default is drafting fills.</div>
+                        <div><code>2048: </code>addition modifier: modifiers 16, 32, 64, 128, 256, 512, 1024 and fill attribute parameters are effective only for the view part of the projection. By default they are effective for all parts.</div>
+                        <div><code>4096: </code>addition modifier: modifiers 16, 32, 64, 128, 256, 512, 1024 and fill attribute parameters are effective only for the cut part of the projection. By default they are effective for all parts.</div>
+                        <div><code>8192: </code>addition modifier: cut fills are slanted.</div>
+                        <div><code>16384: </code>addition modifier: enables transparency for transparent surfaces. Note that transparency in this case means full transparency for surfaces with transmittance greater than 50, everything else is non-transparent.</div>
+                    </div>
+                    <p>Known limitation: lines of the cut part cannot be treated separately, only all lines together can be set to be inner or contour.</p>
+                    <p><span class="italic">Compatibility note: up to Archicad 19, cut polygons were generated with attributes defined by <a class="xref" href="reference/SECT_FILL.html">the SECT_FILL command</a> or <a class="xref" href="reference/SECT_ATTRS.html">the SECT_ATTRS command</a> in the 3D script. From Archicad 20 the attributes of the cut polygons are defined by the cover fill of the outer surfaces (in case the addition modifier 32 is not set).</span>
+                    </p>
+                    <div style="margin-left: 1em">
+                        <div style="text-indent: -1em"><code><b>parts: </b></code>defines the parts to generate. The 1+2+4+8+16+32 value means all parts.</div><div><code>parts = j<sub>1</sub> + 2*j<sub>2</sub> + 4*j<sub>3</sub> + 8*j<sub>4</sub> + 16*j<sub>5</sub> + 32*j<sub>6</sub></code>, where each j can be 0 or 1.
 	</div>
-						<p>
-							The j1, j2, j3, j4, j5, j6 numbers represent whether the corresponding parts of the projected model are present (1) or omitted (0):
-						</p>
-						<div><code>j<sub>1</sub>: </code>cut polygons (effective only in shading mode),</div>
-						<div><code>j<sub>2</sub>: </code>cut polygon edges,</div>
-						<div><code>j<sub>3</sub>: </code>view polygons,</div>
-						<div><code>j<sub>4</sub>: </code>view polygon edges,</div>
-						<div><code>j<sub>5</sub>: </code>project 3D hotspots as static 2D hotspots,</div>
-						<div><code>j<sub>6</sub>: </code>project 3D hotlines and hotarcs (including related 3D hotspots converted to static 2D hotspots).</div>
-				</div>
-				
-			<hr/><a href="002.008.html#PROJECT23_gdlcommand">Related in 2D Shapes</a><p>
-				<span class="bold"><strong>GDL Reference Guide</strong></span>
-			</p><p>
-				<span class="trademark">Copyright</span><sup>©</sup> 2022 by GRAPHISOFT, all rights reserved.
-				Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
-			</p></body></html>
+                        <p>
+                            The j1, j2, j3, j4, j5, j6 numbers represent whether the corresponding parts of the projected model are present (1) or omitted (0):
+                        </p>
+                        <div><code>j<sub>1</sub>: </code>cut polygons (effective only in shading mode),</div>
+                        <div><code>j<sub>2</sub>: </code>cut polygon edges,</div>
+                        <div><code>j<sub>3</sub>: </code>view polygons,</div>
+                        <div><code>j<sub>4</sub>: </code>view polygon edges,</div>
+                        <div><code>j<sub>5</sub>: </code>project 3D hotspots as static 2D hotspots,</div>
+                        <div><code>j<sub>6</sub>: </code>project 3D hotlines and hotarcs (including related 3D hotspots converted to static 2D hotspots).</div>
+                </div>
+                
+            <hr/><a href="002.008.html#PROJECT23_gdlcommand">Related in 2D Shapes</a><p>
+                <span class="bold"><strong>GDL Reference Guide</strong></span>
+            </p><p>
+                <span class="trademark">Copyright</span><sup>©</sup> 2022 by Graphisoft, all rights reserved.
+                Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+            </p></body></html>
