@@ -33,7 +33,8 @@ export class GDLExtension
                vscode.CompletionItemProvider,
                vscode.DocumentSymbolProvider,
                vscode.DefinitionProvider,
-               vscode.ReferenceProvider {
+               vscode.ReferenceProvider,
+               vscode.DocumentDropEditProvider {
 
     // data
     private parseTimer? : NodeJS.Timer;
@@ -139,7 +140,8 @@ export class GDLExtension
             vscode.languages.registerWorkspaceSymbolProvider(this.wsSymbols),
             vscode.languages.registerDefinitionProvider(["gdl-hsf"], this),
             vscode.languages.registerReferenceProvider(["gdl-hsf"], this),
-            vscode.languages.registerCallHierarchyProvider(["gdl-hsf"], this.callTree)
+            vscode.languages.registerCallHierarchyProvider(["gdl-hsf"], this.callTree),
+            vscode.languages.registerDocumentDropEditProvider(["gdl-hsf"], this)
         );
     }
 
@@ -826,6 +828,77 @@ export class GDLExtension
         }
     }
 
+    async provideDocumentDropEdits(document: vscode.TextDocument, position: vscode.Position, dataTransfer: vscode.DataTransfer, cancel: vscode.CancellationToken): Promise<vscode.DocumentDropEdit> {
+        let dedit = new vscode.DocumentDropEdit("");
+        for (const [mime, item] of dataTransfer) {
+            const file = item.asFile();
+            if (file) {
+                const fname = file.uri?.fsPath ?? file.name;
+                if (mime === "image/png" ||
+                    mime === "image/svg+xml" ||
+                    mime === "image/jpeg" ||
+                    mime === "image/gif" ||
+                    mime === "image/tiff" ) {
+                        console.log(`image ${fname}`);
+                        const fname_noext = path.basename(fname, path.extname(fname));
+
+                        // TODO external image (don't add to libpartdata) if file is in current workspace
+                        const libpartdata_uri = await getLibPartData(document);
+                        if (libpartdata_uri) {
+                            // add to libpartdata
+                            const libpartdata_doc = await vscode.workspace.openTextDocument(libpartdata_uri);
+
+                            if (libpartdata_doc) {
+                                if (!dedit.additionalEdit) {
+                                    dedit.additionalEdit = new vscode.WorkspaceEdit();
+                                }
+
+                                const libpartdata = libpartdata_doc.getText();
+                                let insertPos = libpartdata_doc.positionAt(libpartdata.length - 1);
+                                
+                                const found = libpartdata.search(/<\/LibpartData>/mig);
+                                if (found !== -1) {
+                                    insertPos = libpartdata_doc.positionAt(found);
+                                }
+
+                                let insertMime : string;
+                                if (mime === "image/svg+xml") {
+                                    insertMime = "image/svg";
+                                } else {
+                                    insertMime = mime;
+                                }
+
+                                // TODO calculate once, increase with looping
+                                let maxcount = -1;
+                                for (const match of libpartdata.matchAll(/<GDLPict.*?\s*SubIdent\s*=\s*"(\d+)"/mig)) {
+                                    maxcount = Math.max(maxcount, parseInt(match[1]))
+                                }
+
+                                const gdl = `${maxcount + 1}\t! ${maxcount + 1}: ${fname_noext}\n`;
+                                dedit.insertText += gdl;
+
+                                const fname_nopath = path.basename(fname);
+                                // TODO svg use different attributes
+                                const imgref = `\t<GDLPict MIME="${insertMime}" Name="${fname_nopath}" SectVersion="19" SectionFlags="1" SubIdent="${maxcount + 1}"/>\n`;
+                                const newpath = path.join(libpartdata_uri.fsPath, "..", "images", fname_nopath);
+
+                                // TODO ask for overwrite
+                                dedit.additionalEdit.createFile(vscode.Uri.file(newpath),
+                                                                { overwrite: true,
+                                                                  contents: file});
+                                dedit.additionalEdit.insert(libpartdata_uri, insertPos, imgref);
+                            }
+                        }
+                    } else {
+                        console.log(`unknown ${fname}`);
+                    }
+            } else {
+                console.log(mime, "not a file");
+            }
+        }
+        return dedit;
+    }
+
     async provideHover (document: vscode.TextDocument, position: vscode.Position): Promise<vscode.Hover> {
         // implemented only for hsf libparts
         if (this.hsflibpart && this.infoFromHSF) {
@@ -1157,6 +1230,17 @@ export async function hasLibPartData(uri? : vscode.Uri) : Promise<boolean> {
     } else {
         return false;
     }
+}
+
+export async function getLibPartData(document? : vscode.TextDocument) : Promise<vscode.Uri | undefined> {
+    //does libpartdata.xml exist in same folder?
+    if (document?.uri.scheme === 'file' && modeGDLHSF(document)) {
+        const libpartdata = vscode.Uri.joinPath(document.uri, "..", "..", "libpartdata.xml");
+        if (await fileExists(libpartdata)) {
+            return libpartdata;
+        }
+    }
+    return undefined;
 }
 
 async function IsLibpart(document? : vscode.TextDocument) : Promise<boolean> {
