@@ -654,67 +654,89 @@ class GDLExtension {
         }
     }
     async provideDocumentDropEdits(document, position, dataTransfer, cancel) {
-        let dedit = new vscode.DocumentDropEdit("");
-        for (const [mime, item] of dataTransfer) {
-            const file = item.asFile();
-            if (file) {
-                const fname = file.uri?.fsPath ?? file.name;
-                if (mime === "image/png" ||
-                    mime === "image/svg+xml" ||
-                    mime === "image/jpeg" ||
-                    mime === "image/gif" ||
-                    mime === "image/tiff") {
-                    console.log(`image ${fname}`);
-                    const fname_noext = path.basename(fname, path.extname(fname));
-                    // TODO external image (don't add to libpartdata) if file is in current workspace
-                    const libpartdata_uri = await getLibPartData(document);
-                    if (libpartdata_uri) {
-                        // add to libpartdata
-                        const libpartdata_doc = await vscode.workspace.openTextDocument(libpartdata_uri);
-                        if (libpartdata_doc) {
-                            if (!dedit.additionalEdit) {
-                                dedit.additionalEdit = new vscode.WorkspaceEdit();
-                            }
-                            const libpartdata = libpartdata_doc.getText();
-                            let insertPos = libpartdata_doc.positionAt(libpartdata.length - 1);
-                            const found = libpartdata.search(/<\/LibpartData>/mig);
-                            if (found !== -1) {
-                                insertPos = libpartdata_doc.positionAt(found);
-                            }
-                            let insertMime;
-                            if (mime === "image/svg+xml") {
-                                insertMime = "image/svg";
-                            }
-                            else {
-                                insertMime = mime;
-                            }
-                            // TODO calculate once, increase with looping
-                            let maxcount = -1;
-                            for (const match of libpartdata.matchAll(/<GDLPict.*?\s*SubIdent\s*=\s*"(\d+)"/mig)) {
-                                maxcount = Math.max(maxcount, parseInt(match[1]));
-                            }
-                            const gdl = `${maxcount + 1}\t! ${maxcount + 1}: ${fname_noext}\n`;
-                            dedit.insertText += gdl;
-                            const fname_nopath = path.basename(fname);
-                            // TODO svg use different attributes
-                            const imgref = `\t<GDLPict MIME="${insertMime}" Name="${fname_nopath}" SectVersion="19" SectionFlags="1" SubIdent="${maxcount + 1}"/>\n`;
-                            const newpath = path.join(libpartdata_uri.fsPath, "..", "images", fname_nopath);
-                            // TODO ask for overwrite
-                            dedit.additionalEdit.createFile(vscode.Uri.file(newpath), { overwrite: true,
-                                contents: file });
-                            dedit.additionalEdit.insert(libpartdata_uri, insertPos, imgref);
+        let edit = new vscode.DocumentDropEdit("");
+        const accepted = Array.from(dataTransfer).filter(d => (d[0] === "image/png" ||
+            d[0] === "image/svg+xml" ||
+            d[0] === "image/jpeg" ||
+            d[0] === "image/gif" ||
+            d[0] === "image/tiff"))
+            .map(d => ({ mime: d[0], item: d[1], file: d[1].asFile() }))
+            .filter((d) => d.file !== undefined);
+        // TODO external image (don't add to libpartdata) if file is in current workspace
+        if (accepted.length > 0) {
+            // add images as embedded pictures
+            const libpartdata_uri = await getLibPartData(document);
+            if (libpartdata_uri) {
+                const libpartdata_doc = await vscode.workspace.openTextDocument(libpartdata_uri);
+                if (libpartdata_doc) {
+                    // process libpartdata
+                    const libpartdata = libpartdata_doc.getText();
+                    let insertIndex = -1;
+                    let endPos = -1;
+                    for (const match of libpartdata.matchAll(/<GDLPict.*?\s*SubIdent\s*=\s*"(\d+)".*?>/migd)) {
+                        insertIndex = Math.max(insertIndex, parseInt(match[1]));
+                        endPos = Math.max(endPos, match.indices[0][1]);
+                    }
+                    let insertPos;
+                    if (endPos == -1) {
+                        const found = libpartdata.search(/<\/LibpartData>/mig);
+                        if (found !== -1) {
+                            insertPos = libpartdata_doc.positionAt(found);
+                        }
+                        else {
+                            //insert at end
+                            insertPos = libpartdata_doc.positionAt(libpartdata.length - 1);
                         }
                     }
+                    else {
+                        insertPos = libpartdata_doc.positionAt(endPos + 1);
+                    }
+                    for (const image of accepted) {
+                        insertIndex++;
+                        const fname = image.file.uri?.fsPath ?? image.file.name;
+                        const fname_noext = path.basename(fname, path.extname(fname));
+                        const fname_nopath = path.basename(fname);
+                        //console.log(`${image.mime} ${fname}`);
+                        if (!edit.additionalEdit) {
+                            edit.additionalEdit = new vscode.WorkspaceEdit();
+                        }
+                        let insertMime;
+                        if (image.mime === "image/svg+xml") {
+                            insertMime = "image/svg";
+                        }
+                        else {
+                            insertMime = image.mime;
+                        }
+                        // index reference
+                        edit.insertText += `${insertIndex}\t! ${insertIndex}: ${fname_noext}\n`;
+                        // comments
+                        //bad UX for insertion as additionalEdit only
+                        //const endofline = position.with(undefined, document.lineAt(position.line).range.end.character);
+                        //const comment = `\t! ${insertIndex}: ${fname_noext}\n`;
+                        //edit.additionalEdit.insert(document.uri, endofline, comment,
+                        //    { label: "Add image(s)",
+                        //      description: "as embedded picture(s)",
+                        //      iconPath: new vscode.ThemeIcon("settings-edit"),
+                        //      needsConfirmation: false });
+                        // TODO svg use different attributes
+                        const imgref = `\t<GDLPict MIME="${insertMime}" Name="${fname_nopath}" SectVersion="19" SectionFlags="1" SubIdent="${insertIndex}"/>\n`;
+                        const newpath = path.join(libpartdata_uri.fsPath, "..", "images", fname_nopath);
+                        // file
+                        edit.additionalEdit.createFile(vscode.Uri.file(newpath), { overwrite: true,
+                            contents: image.file }, { label: "Copy file(s)",
+                            description: "overwriting existing",
+                            iconPath: new vscode.ThemeIcon("explorer-view-icon"),
+                            needsConfirmation: true });
+                        // libpartdata entry
+                        edit.additionalEdit.insert(libpartdata_uri, insertPos, imgref, { label: "Add image(s)",
+                            description: "as embedded picture(s)",
+                            iconPath: new vscode.ThemeIcon("settings-edit"),
+                            needsConfirmation: false });
+                    }
                 }
-                else {
-                    console.log(`unknown ${fname}`);
-                }
-            }
-            else {
-                console.log(mime, "not a file");
             }
         }
-        return dedit;
+        return edit;
     }
     async provideHover(document, position) {
         // implemented only for hsf libparts
