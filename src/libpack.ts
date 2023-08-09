@@ -6,7 +6,7 @@ import { GDLExtension } from './extension';
 
 export type PathNameTableEntry = {
     fileName: string,
-    meta?: { translatePathName?: string},
+    meta?: { translatePathName?: boolean | null },
     virtualFileName: string,
     virtualPath: string[],
 }
@@ -15,17 +15,49 @@ export class PathNameTreeItem {
     public folders: Map<string, PathNameTreeItem>;
     public files: Map<string, PathNameTreeItem>;
 
-    constructor(folders: PathNameTreeItem[], files: PathNameTreeItem[], public label: string, public id: string = "root:") {
+    constructor(private entry: PathNameTableEntry | undefined, folders: PathNameTreeItem[], files: PathNameTreeItem[], public label: string, public id: string = "root:") {
         this.folders = new Map(folders.map(e => [e.label, e]));
         this.files = new Map(files.map(e => [e.label, e]));
     }
 
     getTreeItem() {
-        const collapsible = (this.folders.size + this.files.size) > 0   ? vscode.TreeItemCollapsibleState.Expanded
-                                                                        : vscode.TreeItemCollapsibleState.None;
+        //expand folders containing only subfolders
+        let collapsible;
+        if (this.folders.size > 0 && this.files.size === 0) {
+            collapsible = vscode.TreeItemCollapsibleState.Expanded;
+        } else {
+            if (this.files.size > 0) {
+                collapsible = vscode.TreeItemCollapsibleState.Collapsed;
+            } else {
+                collapsible = vscode.TreeItemCollapsibleState.None;
+            }
+        }
         const item = new vscode.TreeItem(this.label, collapsible);
         item.id = this.id;
+        if (this.entry) {
+            item.tooltip = this.entry.fileName;
+            if (this.entry.meta) {
+                item.tooltip += `\n\n${JSON.stringify(this.entry.meta)}`;
+            }
+            
+            //item.resourceUri = this.uri;
+            //item.description = true;
+        }
+        if (this.folders.size + this.files.size > 0) {
+            item.iconPath = vscode.ThemeIcon.Folder;
+        } else {
+            if (this.entry?.meta?.translatePathName === true) {
+                item.iconPath = new vscode.ThemeIcon("book");
+            } else {
+                item.iconPath = vscode.ThemeIcon.File;
+            }
+        }
+
         return item;
+    }
+
+    static compareLabel(a : PathNameTreeItem, b : PathNameTreeItem) {
+        return a.label.localeCompare(b.label);
     }
 }
 
@@ -37,7 +69,7 @@ export class PathNameTableView
     private _onDidChangeTreeData: vscode.EventEmitter<ChangeEvent> = new vscode.EventEmitter<ChangeEvent>();
     readonly onDidChangeTreeData: vscode.Event<ChangeEvent> = this._onDidChangeTreeData.event;
 
-    private root: PathNameTreeItem = new PathNameTreeItem([], [], "Pathnametable not loaded");
+    private root: PathNameTreeItem = new PathNameTreeItem(undefined, [], [], "Pathnametable not loaded");
 
     // hash for known extensions
     private static knownImageExtensions = { ".jpg":     undefined,
@@ -75,14 +107,14 @@ export class PathNameTableView
     
     /** creates tree by virtualPath */
     private createTree(json: PathNameTableEntry[], message: string) {
-        this.root = new PathNameTreeItem([], [], message);
+        this.root = new PathNameTreeItem(undefined, [], [], message);
 
         for (const entry of json) {
             let parent = this.root;
             for (const folder of entry.virtualPath) {
                 let nextParent = parent.folders.get(folder);
                 if (nextParent === undefined) {
-                    const newItem = new PathNameTreeItem([], [], folder, path.join(parent.id, folder));
+                    const newItem = new PathNameTreeItem(undefined, [], [], folder, path.join(parent.id, folder));
                     parent.folders.set(folder, newItem);
                     nextParent = newItem;
                 }
@@ -91,7 +123,8 @@ export class PathNameTableView
 
             const id = path.join(...entry.virtualPath, entry.virtualFileName);
             parent.files.set(   entry.virtualFileName,
-                                new PathNameTreeItem(   [], [],
+                                new PathNameTreeItem(   entry,
+                                                        [], [],
                                                         entry.virtualFileName,
                                                         id));
         }
@@ -106,8 +139,10 @@ export class PathNameTableView
     getChildren(element?: PathNameTreeItem | undefined): vscode.ProviderResult<PathNameTreeItem[]> {
         if (element === undefined) {    // provide root element
             return [this.root];
-        } 
-        return [...element.folders.values(), ...element.files.values()];
+        }
+        const sortedFolders = [...element.folders.values()].sort(PathNameTreeItem.compareLabel);
+        const sortedFiles = [...element.files.values()].sort(PathNameTreeItem.compareLabel);
+        return [...sortedFolders, ...sortedFiles];
     }
 
 }
