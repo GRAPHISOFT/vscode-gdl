@@ -5,6 +5,7 @@ const vscode = require("vscode");
 const util_1 = require("util");
 const Parser = require("./parsexmlgdl");
 const scriptView_1 = require("./scriptView");
+const libpack_1 = require("./libpack");
 const refguide_1 = require("./refguide");
 const parsehsf_1 = require("./parsehsf");
 const wssymbols_1 = require("./wssymbols");
@@ -36,7 +37,8 @@ class GDLExtension {
         this.callTree = new calltree_1.CallTree(context, this.wsSymbols);
         // GDLOutline view initialization
         this.outlineView = new scriptView_1.OutlineView(this);
-        context.subscriptions.push(vscode.window.registerTreeDataProvider('GDLOutline', this.outlineView));
+        this.pathnametableView = new libpack_1.PathNameTableView(this);
+        context.subscriptions.push(vscode.window.registerTreeDataProvider('GDLOutline', this.outlineView), vscode.window.registerTreeDataProvider('PathNameTableView', this.pathnametableView));
         //status bar initialization - XML
         this.statusXMLposition = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 9999);
         this.statusXMLposition.tooltip = "Go to Line of Script...";
@@ -216,6 +218,7 @@ class GDLExtension {
         if (modeGDLXML(this._editor?.document) && !(await IsLibpart(this._editor?.document))) {
             this.switchLang("xml");
         }
+        this.pathnametableView.refresh();
         this.updateHsfLibpart();
         this.reparseDoc(this._editor?.document, 0);
     }
@@ -304,6 +307,7 @@ class GDLExtension {
     }
     onDocumentChanged(changeEvent) {
         //console.log("GDLExtension.onDocumentChanged", changeEvent.document.uri.toString());
+        this.pathnametableView.refresh();
         this.updateHsfLibpart();
         this.reparseDoc(changeEvent.document); // with default timeout
     }
@@ -311,6 +315,7 @@ class GDLExtension {
         //console.log("GDLExtension.onDocumentOpened", document.uri.toString());
         // handle only top editor - other can be SCM virtual document / other document opened by extension
         if (vscode.window.activeTextEditor?.document.uri === document.uri) {
+            this.pathnametableView.refresh();
             this.updateHsfLibpart();
             this.reparseDoc(document, 0);
         }

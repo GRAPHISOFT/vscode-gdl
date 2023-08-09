@@ -3,6 +3,7 @@ import { TextDecoder } from 'util';
 
 import * as Parser from './parsexmlgdl';
 import { OutlineView } from './scriptView';
+import { PathNameTableView } from './libpack';
 import { RefGuide } from './refguide';
 import { HSFLibpart } from './parsehsf';
 import { WSSymbols } from './wssymbols';
@@ -54,6 +55,7 @@ export class GDLExtension
     private statusHSF : vscode.StatusBarItem;
     private refguide? : RefGuide;
     public outlineView : OutlineView;
+    public pathnametableView : PathNameTableView;
 
 	// fired when finished parsing, multiple delays might occur before starting
 	private _onDidParse: vscode.EventEmitter<null> = new vscode.EventEmitter<null>();
@@ -84,7 +86,9 @@ export class GDLExtension
 
         // GDLOutline view initialization
         this.outlineView = new OutlineView(this);
-        context.subscriptions.push(vscode.window.registerTreeDataProvider('GDLOutline', this.outlineView));
+        this.pathnametableView = new PathNameTableView(this);
+        context.subscriptions.push( vscode.window.registerTreeDataProvider('GDLOutline', this.outlineView),
+                                    vscode.window.registerTreeDataProvider('PathNameTableView', this.pathnametableView));
 
         //status bar initialization - XML
         this.statusXMLposition = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 9999);
@@ -309,6 +313,7 @@ export class GDLExtension
             this.switchLang("xml");
         }
 
+        this.pathnametableView.refresh();
         this.updateHsfLibpart();
         this.reparseDoc(this._editor?.document, 0);
     }
@@ -410,15 +415,17 @@ export class GDLExtension
 
     private onDocumentChanged(changeEvent: vscode.TextDocumentChangeEvent) {
         //console.log("GDLExtension.onDocumentChanged", changeEvent.document.uri.toString());
+        this.pathnametableView.refresh();
         this.updateHsfLibpart();
         this.reparseDoc(changeEvent.document);  // with default timeout
     }
-
+    
     private onDocumentOpened(document: vscode.TextDocument) {
         //console.log("GDLExtension.onDocumentOpened", document.uri.toString());
         
         // handle only top editor - other can be SCM virtual document / other document opened by extension
         if (vscode.window.activeTextEditor?.document.uri === document.uri) {
+            this.pathnametableView.refresh();
             this.updateHsfLibpart();
             this.reparseDoc(document, 0);
         }
