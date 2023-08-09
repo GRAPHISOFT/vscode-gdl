@@ -21,24 +21,52 @@ async function activate(context) {
 }
 exports.activate = activate;
 class GDLExtension {
+    context;
+    // data
+    parseTimer;
+    parser;
+    _updateEnabled = false;
+    currentScript = Parser.ScriptType.ROOT;
+    hsflibpart;
+    wsSymbols;
+    callTree;
+    // user settings
+    refguidePath = "";
+    infoFromHSF = true;
+    // UI elements
+    _editor;
+    statusXMLposition;
+    statusHSF;
+    refguide;
+    outlineView;
+    pathnametableView;
+    // fired when finished parsing, multiple delays might occur before starting
+    _onDidParse = new vscode.EventEmitter();
+    onDidParse = this._onDidParse.event;
+    // UI style
+    static lineHighLight = vscode.window.createTextEditorDecorationType({
+        isWholeLine: true,
+        borderColor: new vscode.ThemeColor("editor.lineHighlightBorder"),
+        borderWidth: "2px",
+        borderStyle: "solid",
+        backgroundColor: new vscode.ThemeColor("editor.lineHighlightBackground")
+    });
+    static functionDecoration = vscode.window.createTextEditorDecorationType({
+        isWholeLine: true,
+        overviewRulerColor: '#cc3333',
+        overviewRulerLane: vscode.OverviewRulerLane.Right,
+    });
+    suggestHSF;
+    sectionDecorations = [];
     constructor(context) {
         this.context = context;
-        this._updateEnabled = false;
-        this.currentScript = Parser.ScriptType.ROOT;
-        // user settings
-        this.refguidePath = "";
-        this.infoFromHSF = true;
-        // fired when finished parsing, multiple delays might occur before starting
-        this._onDidParse = new vscode.EventEmitter();
-        this.onDidParse = this._onDidParse.event;
-        this.sectionDecorations = [];
         this.parser = new Parser.ParseXMLGDL(); // without text only initializes
         this.wsSymbols = new wssymbols_1.WSSymbols(context);
         this.callTree = new calltree_1.CallTree(context, this.wsSymbols);
         // GDLOutline view initialization
         this.outlineView = new scriptView_1.OutlineView(this);
-        this.pathnametableView = new libpack_1.PathNameTableView(this);
-        context.subscriptions.push(vscode.window.registerTreeDataProvider('GDLOutline', this.outlineView), vscode.window.registerTreeDataProvider('PathNameTableView', this.pathnametableView));
+        this.pathnametableView = new libpack_1.PathNameTableView(context);
+        context.subscriptions.push(vscode.window.registerTreeDataProvider('GDLOutline', this.outlineView));
         //status bar initialization - XML
         this.statusXMLposition = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 9999);
         this.statusXMLposition.tooltip = "Go to Line of Script...";
@@ -261,6 +289,9 @@ class GDLExtension {
         }
         return changed;
     }
+    static paramDecoration = vscode.window.createTextEditorDecorationType({
+        fontWeight: "bold"
+    });
     async decorateParameters() {
         //console.log("GDLExtension.decorateParameters", this._editor?.document.fileName);
         const paramRanges = [];
@@ -857,6 +888,8 @@ class GDLExtension {
         }
         return definitions;
     }
+    static zero_range = new vscode.Range(0, 0, 0, 0);
+    static peek_range = new vscode.Range(0, 0, 10, 0);
     async macroLinks(callsymbol, document, cancel) {
         // find exactly where is the string (can have spaces, whitespace after call)
         let call_range = callsymbol.range(document);
@@ -912,24 +945,6 @@ class GDLExtension {
     }
 }
 exports.GDLExtension = GDLExtension;
-// UI style
-GDLExtension.lineHighLight = vscode.window.createTextEditorDecorationType({
-    isWholeLine: true,
-    borderColor: new vscode.ThemeColor("editor.lineHighlightBorder"),
-    borderWidth: "2px",
-    borderStyle: "solid",
-    backgroundColor: new vscode.ThemeColor("editor.lineHighlightBackground")
-});
-GDLExtension.functionDecoration = vscode.window.createTextEditorDecorationType({
-    isWholeLine: true,
-    overviewRulerColor: '#cc3333',
-    overviewRulerLane: vscode.OverviewRulerLane.Right,
-});
-GDLExtension.paramDecoration = vscode.window.createTextEditorDecorationType({
-    fontWeight: "bold"
-});
-GDLExtension.zero_range = new vscode.Range(0, 0, 0, 0);
-GDLExtension.peek_range = new vscode.Range(0, 0, 10, 0);
 function modeGDL(document) {
     // undefined document returns false
     // language ID 'gdl-hsf' / 'gdl-xml' returns true

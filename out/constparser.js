@@ -3,6 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Constants = exports.Constant = void 0;
 const vscode = require("vscode");
 class Constant {
+    prefix;
+    id;
+    value;
     constructor(gdl) {
         const result_ = gdl.match(/(?<=^\s*)([A-Z][0-9A-Z~]*)(_[0-9A-Z_~]+)?\s*=\s*(.*)\s*$/);
         if (result_) {
@@ -22,9 +25,7 @@ class Constant {
 }
 exports.Constant = Constant;
 class Constants {
-    constructor() {
-        this.constants = new Map();
-    }
+    constants = new Map();
     addfromtext(code) {
         if (code !== undefined) {
             const constants_ = code.match(/^\s*[A-Z][0-9A-Z~]*(_[0-9A-Z_~]+)?\s*=.*(?<!(\\|then|THEN|,))\s*$/mg);

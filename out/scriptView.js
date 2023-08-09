@@ -5,13 +5,14 @@ const vscode = require("vscode");
 const Parser = require("./parsexmlgdl");
 const extension_1 = require("./extension");
 class OutlineView {
+    extension;
+    _onDidChangeTreeData = new vscode.EventEmitter();
+    onDidChangeTreeData = this._onDidChangeTreeData.event;
+    specComments = true;
+    macroCalls = true;
     constructor(extension) {
         //console.log("OutlineView())");
         this.extension = extension;
-        this._onDidChangeTreeData = new vscode.EventEmitter();
-        this.onDidChangeTreeData = this._onDidChangeTreeData.event;
-        this.specComments = true;
-        this.macroCalls = true;
         // parsed file
         this.extension.onDidParse(() => {
             this.refresh();
@@ -133,16 +134,16 @@ class OutlineView {
 }
 exports.OutlineView = OutlineView;
 class TokenUI {
+    label = "";
+    collapsible = vscode.TreeItemCollapsibleState.None;
+    id = "";
+    context = "";
+    revealonclick = true;
+    revealLine = 0;
+    tooltip = "";
+    lighticon = "";
+    darkicon = "";
     constructor(token, document) {
-        this.label = "";
-        this.collapsible = vscode.TreeItemCollapsibleState.None;
-        this.id = "";
-        this.context = "";
-        this.revealonclick = true;
-        this.revealLine = 0;
-        this.tooltip = "";
-        this.lighticon = "";
-        this.darkicon = "";
         switch (token.constructor) {
             case Parser.GDLFunction:
                 this.GDLFunctionUI(token, document);

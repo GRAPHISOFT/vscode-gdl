@@ -86,9 +86,8 @@ export class GDLExtension
 
         // GDLOutline view initialization
         this.outlineView = new OutlineView(this);
-        this.pathnametableView = new PathNameTableView(this);
-        context.subscriptions.push( vscode.window.registerTreeDataProvider('GDLOutline', this.outlineView),
-                                    vscode.window.registerTreeDataProvider('PathNameTableView', this.pathnametableView));
+        this.pathnametableView = new PathNameTableView(context);
+        context.subscriptions.push(vscode.window.registerTreeDataProvider('GDLOutline', this.outlineView));
 
         //status bar initialization - XML
         this.statusXMLposition = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 9999);
