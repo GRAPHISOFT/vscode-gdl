@@ -12,20 +12,32 @@ function compareFileName(a, b) {
     return byExt;
 }
 class PathNameTreeItem {
-    parent;
+    _parent;
     entry;
     children = new Map();
     static ROOT = "root:";
+    static PLACEHOLDER = ":";
     id;
     isFile;
     label;
     /** call with undefined parent to create root, call with undefined entry to create folder */
-    constructor(id, parent, entry) {
-        this.parent = parent;
+    constructor(id, _parent, entry) {
+        this._parent = _parent;
         this.entry = entry;
         this.label = id; // id used for UI label
-        this.id = parent ? id : PathNameTreeItem.ROOT;
+        this.id = this.parent ? id : PathNameTreeItem.ROOT;
         this.isFile = (entry !== undefined); // only files have a PathNameTableEntry
+    }
+    set parent(parent) {
+        if (this.parent === undefined) {
+            throw new Error("root element can't be moved");
+        }
+        else {
+            this._parent = parent;
+        }
+    }
+    get parent() {
+        return this._parent;
     }
     /** calculated using parent */
     fullID() {
@@ -51,7 +63,8 @@ class PathNameTreeItem {
     }
     getTreeItem() {
         let collapsible;
-        if (this.isFile) {
+        const emptyFolder = !this.isFile && this.parent && this.children.size === 1 && this.children.has(PathNameTreeItem.PLACEHOLDER);
+        if (this.isFile || emptyFolder) {
             collapsible = vscode.TreeItemCollapsibleState.None;
         }
         else {
@@ -83,6 +96,10 @@ class PathNameTreeItem {
             else {
                 item.iconPath = vscode.ThemeIcon.File;
             }
+        }
+        else if (emptyFolder) {
+            item.iconPath = new vscode.ThemeIcon("folder", new vscode.ThemeColor("errorForeground"));
+            item.label = item.label + " [empty]";
         } // don't show folder icon, horizontal positioning is counter-intuitive
         return item;
     }
@@ -91,6 +108,22 @@ class PathNameTreeItem {
     }
     files() {
         return [...this.children.values()].filter(e => e.isFile === true);
+    }
+    addChild(id, entry) {
+        const newItem = new PathNameTreeItem(id, this, entry);
+        this.children.set(newItem.id, newItem);
+        if (id !== PathNameTreeItem.PLACEHOLDER) {
+            this.deleteChild(PathNameTreeItem.PLACEHOLDER);
+        }
+        return newItem;
+    }
+    deleteChild(id, keepEmptyFolder = false) {
+        this.children.delete(id);
+        if (keepEmptyFolder && this.children.size === 0 && !this.isFile) {
+            // keep empty folders with hidden placeholder file
+            this.addChild(PathNameTreeItem.PLACEHOLDER, { fileName: PathNameTreeItem.PLACEHOLDER,
+                virtualFileName: PathNameTreeItem.PLACEHOLDER });
+        }
     }
     static compareLabel(a, b) {
         return a.label.localeCompare(b.label);
@@ -114,6 +147,12 @@ class PathNameTableView {
     constructor(context) {
         let view = vscode.window.createTreeView('PathNameTableView', { treeDataProvider: this, showCollapseAll: true, canSelectMany: true, dragAndDropController: this });
         context.subscriptions.push(view);
+        // TODO actions
+        // sort
+        // expand all
+        // delete empty folders
+        // create folder
+        // move selection to folder
     }
     /** reads JSON in active editor, then triggers a refresh of the UI */
     refresh() {
@@ -144,14 +183,11 @@ class PathNameTableView {
             for (const folder of entry.virtualPath) {
                 let nextParent = parent.children.get(folder);
                 if (nextParent === undefined) {
-                    const newItem = new PathNameTreeItem(folder, parent, undefined);
-                    parent.children.set(newItem.id, newItem);
-                    nextParent = newItem;
+                    nextParent = parent.addChild(folder, undefined); // TODO keep empty folders in data without placeholder file, write & read from json
                 }
                 parent = nextParent;
             }
-            const newItem = new PathNameTreeItem(entry.virtualFileName, parent, entry);
-            parent.children.set(newItem.id, newItem);
+            parent.addChild(entry.virtualFileName, entry);
         }
         this._onDidChangeTreeData.fire();
     }
@@ -163,7 +199,7 @@ class PathNameTableView {
             return [this.root];
         }
         const sortedFolders = [...element.folders()].sort(PathNameTreeItem.compareLabel);
-        const sortedFiles = [...element.files()].sort(PathNameTreeItem.compareLabel);
+        const sortedFiles = [...element.files().filter(e => e.id !== PathNameTreeItem.PLACEHOLDER)].sort(PathNameTreeItem.compareLabel);
         return [...sortedFolders, ...sortedFiles];
     }
     handleDrag(source, dataTransfer, _token) {
@@ -183,19 +219,18 @@ class PathNameTableView {
         }
         // select which ones to handle
         const targetFullID = target.fullID();
-        const filteredEntries = source.filter(e => e.parent !== undefined && // not root element
+        const filteredItems = source.filter(e => e.parent !== undefined && // not root element
             e.parent !== target && // target is not the existing parent
             e !== target && // target is not the same (with multi-selection)
             !targetFullID.startsWith(e.fullID() + path.sep)); // target is not subfolder of element
         // change parents
-        for (const entry of filteredEntries) {
-            entry.parent.children.delete(entry.id);
-            entry.parent = target;
-            target.children.set(entry.id, entry);
-            // TODO merging two same-named folders
+        for (const item of filteredItems) {
+            item.parent.deleteChild(item.id, true);
+            item.parent = target;
+            target.children.set(item.id, item);
+            // TODO merging two same-named folders (recurse!)
         }
-        // TODO placeholder item in deleted folders
-        if (filteredEntries.length > 0) {
+        if (filteredItems.length > 0) {
             return this.saveChanges(); // will fire onDidChangeTreeData by editing document
         }
     }
