@@ -2,33 +2,66 @@ import * as vscode from 'vscode';
 
 import path = require('path');
 
-export type PathNameTableEntry = {
+type PathNameTableID = {
     fileName: string,
     meta?: { translatePathName?: boolean | null },
-    virtualFileName: string,
+    virtualFileName: string 
+}
+
+function compareFileName(a: PathNameTableID, b: PathNameTableID) {
+    // first by extension
+    const byExt = path.extname(a.fileName).localeCompare(path.extname(b.fileName));
+    if (byExt === 0) {
+        return a.fileName.localeCompare(b.fileName);    // filenames have to differ
+    }
+    return byExt;
+}
+
+type PathNameTableEntry = PathNameTableID & {
     virtualPath: string[],
 }
 
-class VirtualPath {
-    public readonly id: string;
+class PathNameTreeItem {
+    public children: Map<string, PathNameTreeItem> = new Map();
     static readonly ROOT = "root:";
+    public readonly id: string;
+    public readonly isFile: boolean;
+    public label: string;
 
-    constructor(public readonly isFile: boolean, public readonly pathParts: string[] = []) {
-        this.id = path.join(VirtualPath.ROOT, ...this.pathParts);
+    /** call with undefined parent to create root, call with undefined entry to create folder */
+    constructor(id: string, public parent?: PathNameTreeItem, public readonly entry?: PathNameTableID) {
+        this.label = id;                            // id used for UI label
+        this.id = parent ? id : PathNameTreeItem.ROOT;
+        this.isFile = (entry !== undefined);        // only files have a PathNameTableEntry
     }
-}
 
-export class PathNameTreeItem {
-    public children: Map<string, PathNameTreeItem>;
-    public parent?: PathNameTreeItem = undefined;
+    /** calculated using parent */
+    fullID(): string {
+        return path.join(this.parent?.fullID() ?? "", this.id);
+    }
+    
+    /** calculated using parent */
+    virtualPath(): string[] {
+        if (this.parent) {
+            return [...this.parent.virtualPath(), ...(this.isFile ? [] : [this.id])];
+        }
+        return [];
+    }
 
-    constructor(private entry: PathNameTableEntry | undefined, children: PathNameTreeItem[], public label: string, public virtualPath: VirtualPath) {
-        this.children = new Map(children.map(e => [e.virtualPath.id, e]));
+    /** calculated using parent */
+    public getTableEntries(): PathNameTableEntry | PathNameTableEntry[] {
+        if (this.isFile) {
+            return {...this.entry!, virtualPath: this.virtualPath()};
+        } else {
+            let files = this.files().map(e => (e.getTableEntries() as PathNameTableEntry));
+            let subfiles = [...this.folders().flatMap(e => e.getTableEntries())];
+            return [...files, ...subfiles];
+        }
     }
 
     getTreeItem() {
         let collapsible;
-        if (this.virtualPath.isFile) {
+        if (this.isFile) {
             collapsible = vscode.TreeItemCollapsibleState.None;
         } else {
             //expand folders containing only subfolders
@@ -40,7 +73,7 @@ export class PathNameTreeItem {
         }
 
         const item = new vscode.TreeItem(this.label, collapsible);
-        item.id = this.virtualPath.id;
+        item.id = this.fullID();
 
         // tooltip, uri command
         if (this.entry) {
@@ -56,7 +89,7 @@ export class PathNameTreeItem {
         }
 
         //icon
-        if (this.virtualPath.isFile) {
+        if (this.isFile) {
             if (this.entry?.meta?.translatePathName === true) {
                 item.iconPath = new vscode.ThemeIcon("book");
             } else {
@@ -68,11 +101,11 @@ export class PathNameTreeItem {
     }
 
     folders() {
-        return [...this.children.values()].filter(e => e.virtualPath.isFile === false);
+        return [...this.children.values()].filter(e => e.isFile === false);
     }
 
     files() {
-        return [...this.children.values()].filter(e => e.virtualPath.isFile === true);
+        return [...this.children.values()].filter(e => e.isFile === true);
     }
 
     static compareLabel(a : PathNameTreeItem, b : PathNameTreeItem) {
@@ -94,7 +127,7 @@ export class PathNameTableView
 	readonly dropMimeTypes = [PathNameTableView.treeMime];
 	readonly dragMimeTypes = [PathNameTableView.treeMime];
 
-    private root: PathNameTreeItem = new PathNameTreeItem(undefined, [], "Pathnametable not loaded", new VirtualPath(false));
+    private root: PathNameTreeItem = new PathNameTreeItem("Pathnametable not loaded");
 
     /** hash for known extensions */
     private static knownImageExtensions = { ".jpg":     undefined,
@@ -133,26 +166,22 @@ export class PathNameTableView
     
     /** creates tree by virtualPath */
     private createTree(json: PathNameTableEntry[], message: string) {
-        this.root = new PathNameTreeItem(undefined, [], message, new VirtualPath(false));
+        this.root = new PathNameTreeItem(message);
 
         for (const entry of json) {
             let parent = this.root;
             for (const folder of entry.virtualPath) {
-                const newPath = new VirtualPath(false, [...parent.virtualPath.pathParts, folder]);
-                let nextParent = parent.children.get(newPath.id);
+                let nextParent = parent.children.get(folder);
                 if (nextParent === undefined) {
-                    const newItem = new PathNameTreeItem(undefined, [], folder, newPath);
-                    newItem.parent = parent;
-                    parent.children.set(newPath.id, newItem);
+                    const newItem = new PathNameTreeItem(folder, parent, undefined);
+                    parent.children.set(newItem.id, newItem);
                     nextParent = newItem;
                 }
                 parent = nextParent;
             }
 
-            const newPath = new VirtualPath(true, [...entry.virtualPath, entry.virtualFileName]);
-            const newItem = new PathNameTreeItem(entry, [], entry.virtualFileName, newPath);
-            newItem.parent = parent;
-            parent.children.set(newPath.id, newItem);
+            const newItem = new PathNameTreeItem(entry.virtualFileName, parent, entry);
+            parent.children.set(newItem.id, newItem);
         }
 
         this._onDidChangeTreeData.fire();
@@ -182,26 +211,53 @@ export class PathNameTableView
         }
 
         // when dropped on a file, move to parent folder
-        if (target?.virtualPath.isFile) {
+        if (target?.isFile) {
             target = target.parent;
         }
         if (target === undefined) {
             return;
         }
         
-        const filteredEntries = source.filter(e =>  e.parent !== undefined &&                                   // not root element
-                                                    e.parent.virtualPath.id !== target!.virtualPath.id &&       // target is not the existing parent
-                                                    !target!.virtualPath.id.startsWith(e.virtualPath.id) );     // target is not the same or subfolder of element
-        const oldParents = filteredEntries.map(e => e.parent!);
+        // select which ones to handle
+        const targetFullID = target!.fullID();
+        const filteredEntries = source.filter(e =>  e.parent !== undefined &&                           // not root element
+                                                    e.parent !== target &&                              // target is not the existing parent
+                                                    e !== target &&                                     // target is not the same (with multi-selection)
+                                                    !targetFullID.startsWith(e.fullID() + path.sep));   // target is not subfolder of element
 
+        // change parents
         for (const entry of filteredEntries) {
-            const oldID = entry.virtualPath.id;
-            entry.virtualPath = new VirtualPath(entry.virtualPath.isFile, [...target.virtualPath.pathParts, entry.virtualPath.pathParts.at(-1)!]);
-
-            entry.parent!.children.delete(oldID);
+            entry.parent!.children.delete(entry.id);
             entry.parent = target;
-            target.children.set(entry.virtualPath.id, entry);
+            target.children.set(entry.id, entry);
+            // TODO merging two same-named folders
         }
-        this._onDidChangeTreeData.fire([...oldParents, target]);
+        // TODO placeholder item in deleted folders
+
+        if (filteredEntries.length > 0) {
+            return this.saveChanges();  // will fire onDidChangeTreeData by editing document
+        }
+    }
+
+    private async saveChanges() {
+        let tryagain;
+        do {
+            const success = await this.writeToEditor();
+            if (!success) {
+                tryagain = await vscode.window.showWarningMessage("Failed to save modifications to file", "Retry");
+            }
+        } while (tryagain !== undefined)
+    }
+
+    private async writeToEditor() {
+        const editor = vscode.window.activeTextEditor!;
+        const success = editor.edit(editBuilder => {
+            const fullRange = editor.document.validateRange(new vscode.Range(0, 0, editor.document.lineCount, 0));
+            let newData = this.root.getTableEntries() as PathNameTableEntry[];  // root is a folder
+            newData.sort(compareFileName);
+            const json = JSON.stringify(newData, undefined, 4);
+            editBuilder.replace(fullRange, json);
+        });
+        return success;
     }
 }
