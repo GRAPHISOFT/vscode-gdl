@@ -265,8 +265,8 @@ export class PathNameTableView
         const commands = [
             vscode.commands.registerCommand('GDL.PNTV.deleteEmptyFolders', () => this.deleteEmptyFolders()),
             vscode.commands.registerCommand('GDL.PNTV.moveSelectionTo', () => this.moveSelectionTo()),
-            vscode.commands.registerCommand('GDL.PNTV.expandAll', async (subtree?: PathNameTreeItem) => await this.expandAll(subtree)),
-            vscode.commands.registerCommand('GDL.PNTV.createSubPath', (item: PathNameTreeItem) => this.createSubPath(item)),
+            vscode.commands.registerCommand('GDL.PNTV.expandAll', async (subtree?: PathNameTreeItem) => this.expandAll(subtree)),
+            vscode.commands.registerCommand('GDL.PNTV.createSubPath', async (item: PathNameTreeItem) => this.createSubPath(item)),
             vscode.commands.registerCommand('GDL.PNTV.copyVirtualPath', async (item: PathNameTreeItem) => this.copyVirtualPath(item)),
             vscode.commands.registerCommand('GDL.PNTV.showInFile', (item: PathNameTreeItem) => this.showInFile(item)),
         ];
@@ -287,8 +287,25 @@ export class PathNameTableView
 
     }
 
-    createSubPath(item: PathNameTreeItem) {
-
+    async createSubPath(item: PathNameTreeItem) {
+        const atpath = path.join(...item.virtualPath());
+        const subpath = await vscode.window.showInputBox({  ignoreFocusOut: true,
+                                                            placeHolder: "some\\path or some/path",
+                                                            title: "Enter sub-path to create",
+                                                            prompt: `${atpath}${path.sep}...`});
+        if (subpath) {
+            //console.log(path.join(atpath, subpath));
+            let next = item;
+            for (const folder of subpath.replace(/[\\/]$/, "").split(/[\\/]/)) {    //remove trailing separator
+                if (next.children.has(folder)) {
+                    next = next.children.get(folder)!;
+                } else {
+                    next = next.addChild(folder);
+                }
+            }
+            await this.saveChanges();   //can't expand before save finishes
+            return this.expandAll(next);
+        }
     }
 
     moveSelectionTo() {
