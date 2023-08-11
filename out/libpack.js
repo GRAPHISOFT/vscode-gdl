@@ -13,7 +13,6 @@ function compareFileName(a, b) {
 }
 class PathNameTreeItem {
     _parent;
-    entry;
     static ROOT = "root:";
     static EMPTYFOLDERID = ":";
     static EMPTYFOLDER = {
@@ -23,15 +22,27 @@ class PathNameTreeItem {
     };
     children = new Map();
     id;
-    isFile;
+    isFile = false;
     label;
-    /** call with undefined parent to create root, call with undefined entry to create folder */
-    constructor(id, _parent, entry) {
+    entry;
+    /** call with string and undefined parent to create root, string to create folder, PathNameTableID to create file */
+    constructor(id, _parent) {
         this._parent = _parent;
-        this.entry = entry;
-        this.label = id; // id used for UI label
-        this.id = this.parent ? id : PathNameTreeItem.ROOT;
-        this.isFile = (entry !== undefined); // only files have a PathNameTableEntry
+        if (!this.parent) {
+            this.id = PathNameTreeItem.ROOT;
+            this.label = id;
+        }
+        else {
+            if (typeof id === "string") {
+                this.id = id;
+            }
+            else { // id is PathNameTableID
+                this.entry = id;
+                this.id = id.virtualFileName;
+                this.isFile = true;
+            }
+            this.label = this.id; // id used for UI label
+        }
     }
     set parent(parent) {
         if (this.parent === undefined) {
@@ -127,27 +138,52 @@ class PathNameTreeItem {
     files() {
         return [...this.children.values()].filter(e => e.isFile === true);
     }
-    /** add folder with string, file with PathNameTableID */
+    /** add folder with string, file with PathNameTableID, or existing item with PathNameTreeItem
+     *
+     *  rename virtualFileName if duplicate
+     *
+     *  re-root if existing item is used
+     *
+     *  return added PathNameTreeItem (new one if rename was necessary)
+     */
     addChild(id) {
-        let entry = undefined;
-        let key = undefined;
-        if (typeof id === "string") { // folder
-            key = id; // overwriting duplicate is not a problem
+        let item;
+        if (id instanceof PathNameTreeItem) { // existing entry
+            item = id;
+            item.parent = this;
         }
-        else { // file
-            entry = id;
-            while (this.children.has(entry.virtualFileName)) {
-                entry = { ...entry }; // copy object
-                entry.virtualFileName = `${entry.virtualFileName} duplicate`;
+        else {
+            item = new PathNameTreeItem(id, this);
+        }
+        if (item.isFile) {
+            while (this.children.has(item.id)) {
+                let newEntry = { ...item.entry }; // copy object
+                newEntry.virtualFileName = `${item.id} duplicate`;
+                item = new PathNameTreeItem(newEntry, this);
             }
-            key = entry.virtualFileName;
         }
-        const newItem = new PathNameTreeItem(key, this, entry);
-        this.children.set(newItem.id, newItem);
-        return newItem;
+        this.children.set(item.id, item); // overwriting duplicate folder should be handled outside
+        return item;
     }
     deleteChild(id) {
         this.children.delete(id);
+    }
+    /** recursively merge content from other distinct trees */
+    mergeChildren(items) {
+        for (const item of items) {
+            item.parent.deleteChild(item.id);
+            if (item.isFile) {
+                this.addChild(item); // TODO show info on renames
+            }
+            else {
+                if (this.children.has(item.id)) {
+                    this.children.get(item.id).mergeChildren([...item.children.values()]);
+                }
+                else {
+                    this.addChild(item);
+                }
+            }
+        }
     }
     static compareLabel(a, b) {
         return a.label.localeCompare(b.label);
@@ -260,13 +296,8 @@ class PathNameTableView {
             e.parent !== target && // target is not the existing parent
             e !== target && // target is not the same (with multi-selection)
             !targetFullID.startsWith(e.fullID() + path.sep)); // target is not subfolder of element
-        // change parents
-        for (const item of filteredItems) {
-            item.parent.deleteChild(item.id);
-            item.parent = target;
-            target.children.set(item.id, item);
-            // TODO merging two same-named folders (recurse!)
-        }
+        // move subtree
+        target.mergeChildren(filteredItems);
         if (filteredItems.length > 0) {
             return this.saveChanges();
         }
