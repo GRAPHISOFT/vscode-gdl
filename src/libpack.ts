@@ -22,9 +22,15 @@ type PathNameTableEntry = PathNameTableID & {
 }
 
 class PathNameTreeItem {
-    public children: Map<string, PathNameTreeItem> = new Map();
     static readonly ROOT = "root:";
-    static readonly PLACEHOLDER = ":";
+    static EMPTYFOLDERID = ":";
+    static EMPTYFOLDER = {
+        fileName: PathNameTreeItem.EMPTYFOLDERID,
+        meta: { description: "empty folder", translatePathName: false },
+        virtualFileName: PathNameTreeItem.EMPTYFOLDERID    
+    }
+
+    public children: Map<string, PathNameTreeItem> = new Map();
     public readonly id: string;
     public readonly isFile: boolean;
     public readonly label: string;
@@ -47,7 +53,6 @@ class PathNameTreeItem {
     public get parent() : PathNameTreeItem | undefined {
         return this._parent;
     }
-    
 
     /** calculated using parent */
     fullID(): string {
@@ -63,20 +68,27 @@ class PathNameTreeItem {
     }
 
     /** calculated using parent */
-    getTableEntries(): PathNameTableEntry | PathNameTableEntry[] {
+    getTableEntries(excludEmpty: boolean = false): PathNameTableEntry[] {
         if (this.isFile) {
-            return {...this.entry!, virtualPath: this.virtualPath()};
+            return [{...this.entry!, virtualPath: this.virtualPath()}];
         } else {
-            let files = this.files().map(e => (e.getTableEntries() as PathNameTableEntry));
-            let subfiles = [...this.folders().flatMap(e => e.getTableEntries())];
+            let files = [...this.files().flatMap(e => e.getTableEntries())];
+            if (this.children.size === 0 && !excludEmpty) {
+                files = [this.emptyFolder()];
+            }
+            let subfiles = [...this.folders().flatMap(e => e.getTableEntries(excludEmpty))];
             return [...files, ...subfiles];
         }
     }
 
+    private emptyFolder(): PathNameTableEntry {
+        return {    ...PathNameTreeItem.EMPTYFOLDER,
+                    virtualPath: this.virtualPath() };
+    }
+
     getTreeItem() {
         let collapsible;
-        const emptyFolder = !this.isFile && this.parent && this.children.size === 1 && this.children.has(PathNameTreeItem.PLACEHOLDER);
-        if (this.isFile || emptyFolder) {
+        if (this.isFile || this.children.size === 0) {
             collapsible = vscode.TreeItemCollapsibleState.None;
         } else {
             //expand folders containing only subfolders
@@ -110,7 +122,7 @@ class PathNameTreeItem {
             } else {
                 item.iconPath = vscode.ThemeIcon.File;
             }
-        } else if (emptyFolder) {
+        } else if (this.getTableEntries(true).length === 0) {   // empty folder
             item.iconPath = new vscode.ThemeIcon("folder", new vscode.ThemeColor("errorForeground"));
             item.label = item.label + " [empty]";
         } // don't show folder icon, horizontal positioning is counter-intuitive
@@ -118,8 +130,8 @@ class PathNameTreeItem {
         return item;
     }
 
-    folders() {
-        return [...this.children.values()].filter(e => e.isFile === false);
+    folders(excludeEmpty: boolean = false) {
+        return [...this.children.values()].filter(e => e.isFile === false && !(excludeEmpty && e.id === PathNameTreeItem.EMPTYFOLDERID));
     }
 
     files() {
@@ -129,19 +141,11 @@ class PathNameTreeItem {
     addChild(id: string, entry?: PathNameTableID): PathNameTreeItem {
         const newItem = new PathNameTreeItem(id, this, entry);
         this.children.set(newItem.id, newItem);
-        if (id !== PathNameTreeItem.PLACEHOLDER) {
-            this.deleteChild(PathNameTreeItem.PLACEHOLDER);
-        }
         return newItem;
     }
 
-    deleteChild(id: string, keepEmptyFolder: boolean = false) {
+    deleteChild(id: string) {
         this.children.delete(id);
-        if (keepEmptyFolder && this.children.size === 0 && !this.isFile) {
-            // keep empty folders with hidden placeholder file
-            this.addChild(PathNameTreeItem.PLACEHOLDER, {   fileName: PathNameTreeItem.PLACEHOLDER,
-                                                            virtualFileName: PathNameTreeItem.PLACEHOLDER});
-        }
     }
 
     static compareLabel(a : PathNameTreeItem, b : PathNameTreeItem) {
@@ -216,12 +220,14 @@ export class PathNameTableView
             for (const folder of entry.virtualPath) {
                 let nextParent = parent.children.get(folder);
                 if (nextParent === undefined) {
-                    nextParent = parent.addChild(folder, undefined);    // TODO keep empty folders in data without placeholder file, write & read from json
+                    nextParent = parent.addChild(folder, undefined);
                 }
                 parent = nextParent;
             }
 
-            parent.addChild(entry.virtualFileName, entry)
+            if (entry.fileName !== PathNameTreeItem.EMPTYFOLDERID) {
+                parent.addChild(entry.virtualFileName, entry);
+            }
         }
 
         this._onDidChangeTreeData.fire();
@@ -236,7 +242,7 @@ export class PathNameTableView
             return [this.root];
         }
         const sortedFolders = [...element.folders()].sort(PathNameTreeItem.compareLabel);
-        const sortedFiles = [...element.files().filter(e => e.id !== PathNameTreeItem.PLACEHOLDER)].sort(PathNameTreeItem.compareLabel);
+        const sortedFiles = [...element.files()].sort(PathNameTreeItem.compareLabel);
         return [...sortedFolders, ...sortedFiles];
     }
 
@@ -267,7 +273,7 @@ export class PathNameTableView
 
         // change parents
         for (const item of filteredItems) {
-            item.parent!.deleteChild(item.id, true);
+            item.parent!.deleteChild(item.id);
             item.parent = target;
             target.children.set(item.id, item);
             // TODO merging two same-named folders (recurse!)
@@ -292,8 +298,7 @@ export class PathNameTableView
         const editor = vscode.window.activeTextEditor!;
         const success = editor.edit(editBuilder => {
             const fullRange = editor.document.validateRange(new vscode.Range(0, 0, editor.document.lineCount, 0));
-            let newData = this.root.getTableEntries() as PathNameTableEntry[];  // root is a folder
-            newData.sort(compareFileName);
+            let newData = this.root.getTableEntries().sort(compareFileName);
             const json = JSON.stringify(newData, undefined, 4);
             editBuilder.replace(fullRange, json);
         });
