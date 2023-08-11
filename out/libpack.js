@@ -38,7 +38,7 @@ class PathNameTreeItem {
             }
             else { // id is PathNameTableID
                 this.entry = id;
-                this.id = id.virtualFileName;
+                this.id = id.virtualFileName.length > 0 ? id.virtualFileName : PathNameTreeItem.EMPTYFOLDERID;
                 this.isFile = true;
             }
             this.label = this.id; // id used for UI label
@@ -66,8 +66,15 @@ class PathNameTreeItem {
         }
         return [];
     }
+    *[Symbol.iterator]() {
+        yield this;
+        for (const child of this.children.values()) {
+            yield* child;
+        }
+    }
     /** calculated using parent */
     getTableEntries(excludEmpty = false) {
+        // TODO use iterator
         if (this.isFile) {
             return [{ ...this.entry, virtualPath: this.virtualPath() }];
         }
@@ -100,8 +107,9 @@ class PathNameTreeItem {
         }
         const item = new vscode.TreeItem(this.label, collapsible);
         item.id = this.fullID();
-        // tooltip, uri command
+        // context, tooltip, uri command
         if (this.isFile) { // file
+            item.contextValue = "file";
             item.tooltip = this.entry.fileName;
             if (this.entry.meta) {
                 item.tooltip += `\n\n${JSON.stringify(this.entry.meta)}`;
@@ -111,13 +119,19 @@ class PathNameTreeItem {
             //item.command = ...
         }
         else {
+            if (this.id === PathNameTreeItem.ROOT) {
+                item.contextValue = "root";
+            }
+            else {
+                item.contextValue = "folder";
+            }
             // count file types
             const entries = this.getTableEntries(true);
             const numberOfLibparts = entries.filter(e => path.extname(e.fileName) === ".gsm").length;
             const numberOfImages = entries.filter(e => path.extname(e.fileName) in PathNameTableView.knownImageExtensions).length;
             item.tooltip = `${entries.length} entries\n${numberOfLibparts} libparts\n${numberOfImages} images`;
         }
-        //icon
+        // icon
         if (this.isFile) {
             if (this.entry?.meta?.translatePathName === true) {
                 item.iconPath = new vscode.ThemeIcon("book");
@@ -205,15 +219,39 @@ class PathNameTableView {
     onDidChangeTreeData = this._onDidChangeTreeData.event;
     root = new PathNameTreeItem("Pathnametable not loaded");
     unsaved = false;
+    view;
     constructor(context) {
-        let view = vscode.window.createTreeView('PathNameTableView', { treeDataProvider: this, showCollapseAll: true, canSelectMany: true, dragAndDropController: this });
-        context.subscriptions.push(view);
-        // TODO actions
-        // sort
-        // expand all
-        // delete empty folders
-        // create folder
-        // move selection to folder
+        this.view = vscode.window.createTreeView('PathNameTableView', { treeDataProvider: this,
+            showCollapseAll: true,
+            canSelectMany: true,
+            dragAndDropController: this });
+        const commands = [
+            vscode.commands.registerCommand('GDL.PNTV.expandAll', async (subtree) => await this.expandAll(subtree)),
+            vscode.commands.registerCommand('GDL.PNTV.deleteEmptyFolders', () => this.deleteEmptyFolders()),
+            vscode.commands.registerCommand('GDL.PNTV.createSubPath', () => this.createSubPath()),
+            vscode.commands.registerCommand('GDL.PNTV.moveSelectionTo', () => this.moveSelectionTo()),
+            vscode.commands.registerCommand('GDL.PNTV.copyPath', () => this.copyPath()),
+            vscode.commands.registerCommand('GDL.PNTV.showInFile', () => this.showInFile()),
+        ];
+        context.subscriptions.push(this.view, ...commands);
+    }
+    async expandAll(subtree) {
+        for (const item of subtree ?? this.root) {
+            if (!item.isFile) {
+                await this.view.reveal(item, { select: false,
+                    expand: true });
+            }
+        }
+    }
+    deleteEmptyFolders() {
+    }
+    createSubPath() {
+    }
+    moveSelectionTo() {
+    }
+    copyPath() {
+    }
+    showInFile() {
     }
     /** reads JSON in active editor, then triggers a refresh of the UI */
     refresh() {
@@ -274,6 +312,9 @@ class PathNameTableView {
         const sortedFolders = [...element.folders()].sort(PathNameTreeItem.compareLabel);
         const sortedFiles = [...element.files()].sort(PathNameTreeItem.compareLabel);
         return [...sortedFolders, ...sortedFiles];
+    }
+    getParent(element) {
+        return element.parent;
     }
     handleDrag(source, dataTransfer, _token) {
         dataTransfer.set(PathNameTableView.treeMime, new vscode.DataTransferItem(source));
