@@ -90,7 +90,7 @@ class PathNameTreeItem {
         const item = new vscode.TreeItem(this.label, collapsible);
         item.id = this.fullID();
         // tooltip, uri command
-        if (this.entry) {
+        if (this.isFile) { // file
             item.tooltip = this.entry.fileName;
             if (this.entry.meta) {
                 item.tooltip += `\n\n${JSON.stringify(this.entry.meta)}`;
@@ -98,6 +98,13 @@ class PathNameTreeItem {
             //item.resourceUri = this.uri;
             //item.description = true;
             //item.command = ...
+        }
+        else {
+            // count file types
+            const entries = this.getTableEntries(true);
+            const numberOfLibparts = entries.filter(e => path.extname(e.fileName) === ".gsm").length;
+            const numberOfImages = entries.filter(e => path.extname(e.fileName) in PathNameTableView.knownImageExtensions).length;
+            item.tooltip = `${entries.length} entries\n${numberOfLibparts} libparts\n${numberOfImages} images`;
         }
         //icon
         if (this.isFile) {
@@ -108,9 +115,9 @@ class PathNameTreeItem {
                 item.iconPath = vscode.ThemeIcon.File;
             }
         }
-        else if (this.getTableEntries(true).length === 0) { // empty folder
+        else if (this.parent && this.getTableEntries(true).length === 0) { // empty folder
             item.iconPath = new vscode.ThemeIcon("folder", new vscode.ThemeColor("errorForeground"));
-            item.label = item.label + " [empty]";
+            item.description = "[empty]";
         } // don't show folder icon, horizontal positioning is counter-intuitive
         return item;
     }
@@ -120,8 +127,22 @@ class PathNameTreeItem {
     files() {
         return [...this.children.values()].filter(e => e.isFile === true);
     }
-    addChild(id, entry) {
-        const newItem = new PathNameTreeItem(id, this, entry);
+    /** add folder with string, file with PathNameTableID */
+    addChild(id) {
+        let entry = undefined;
+        let key = undefined;
+        if (typeof id === "string") { // folder
+            key = id; // overwriting duplicate is not a problem
+        }
+        else { // file
+            entry = id;
+            while (this.children.has(entry.virtualFileName)) {
+                entry = { ...entry }; // copy object
+                entry.virtualFileName = `${entry.virtualFileName} duplicate`;
+            }
+            key = entry.virtualFileName;
+        }
+        const newItem = new PathNameTreeItem(key, this, entry);
         this.children.set(newItem.id, newItem);
         return newItem;
     }
@@ -133,12 +154,6 @@ class PathNameTreeItem {
     }
 }
 class PathNameTableView {
-    _onDidChangeTreeData = new vscode.EventEmitter();
-    onDidChangeTreeData = this._onDidChangeTreeData.event;
-    static treeMime = 'application/vnd.code.tree.pathnametableview';
-    dropMimeTypes = [PathNameTableView.treeMime];
-    dragMimeTypes = [PathNameTableView.treeMime];
-    root = new PathNameTreeItem("Pathnametable not loaded");
     /** hash for known extensions */
     static knownImageExtensions = { ".jpg": undefined,
         ".jpeg": undefined,
@@ -147,6 +162,13 @@ class PathNameTableView {
         ".svg": undefined,
         ".gif": undefined,
         ".bmp": undefined };
+    static treeMime = 'application/vnd.code.tree.pathnametableview';
+    dropMimeTypes = [PathNameTableView.treeMime];
+    dragMimeTypes = [PathNameTableView.treeMime];
+    _onDidChangeTreeData = new vscode.EventEmitter();
+    onDidChangeTreeData = this._onDidChangeTreeData.event;
+    root = new PathNameTreeItem("Pathnametable not loaded");
+    unsaved = false;
     constructor(context) {
         let view = vscode.window.createTreeView('PathNameTableView', { treeDataProvider: this, showCollapseAll: true, canSelectMany: true, dragAndDropController: this });
         context.subscriptions.push(view);
@@ -162,12 +184,11 @@ class PathNameTableView {
         const filename = path.basename(vscode.window.activeTextEditor?.document.fileName ?? "");
         let json = [];
         let message;
+        this.unsaved = false;
         if (/^pathnametable.*?\.json$/i.test(filename)) {
             try {
                 json = JSON.parse(vscode.window.activeTextEditor.document.getText());
-                const numberOfLibparts = json.filter(e => path.extname(e.fileName) === ".gsm").length;
-                const numberOfImages = json.filter(e => path.extname(e.fileName) in PathNameTableView.knownImageExtensions).length;
-                message = `${filename}: ${json.length} entries, ${numberOfLibparts} libparts, ${numberOfImages} images`;
+                message = filename;
             }
             catch (e) {
                 message = "bad pathnametable JSON format";
@@ -186,18 +207,29 @@ class PathNameTableView {
             for (const folder of entry.virtualPath) {
                 let nextParent = parent.children.get(folder);
                 if (nextParent === undefined) {
-                    nextParent = parent.addChild(folder, undefined);
+                    nextParent = parent.addChild(folder);
                 }
                 parent = nextParent;
             }
             if (entry.fileName !== PathNameTreeItem.EMPTYFOLDERID) {
-                parent.addChild(entry.virtualFileName, entry);
+                const added = parent.addChild(entry);
+                if (added.entry.virtualFileName !== entry.virtualFileName) {
+                    this.unsaved = true;
+                    const virtualPath = path.join(...entry.virtualPath);
+                    vscode.window.showInformationMessage(`renamed duplicate virtual name ${entry.virtualFileName} at ${virtualPath}`);
+                }
             }
         }
         this._onDidChangeTreeData.fire();
     }
     getTreeItem(element) {
-        return element.getTreeItem();
+        let treeItem = element.getTreeItem();
+        // show if tree is unsaved
+        if (element === this.root && this.unsaved) {
+            treeItem.description = "[tree changes not shown in editor]";
+            treeItem.iconPath = new vscode.ThemeIcon("circle-filled");
+        }
+        return treeItem;
     }
     getChildren(element) {
         if (element === undefined) { // provide root element
@@ -236,9 +268,10 @@ class PathNameTableView {
             // TODO merging two same-named folders (recurse!)
         }
         if (filteredItems.length > 0) {
-            return this.saveChanges(); // will fire onDidChangeTreeData by editing document
+            return this.saveChanges();
         }
     }
+    /** will fire onDidChangeTreeData by editing document */
     async saveChanges() {
         let tryagain;
         do {
