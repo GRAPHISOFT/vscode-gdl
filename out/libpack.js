@@ -226,12 +226,12 @@ class PathNameTableView {
             canSelectMany: true,
             dragAndDropController: this });
         const commands = [
-            vscode.commands.registerCommand('GDL.PNTV.expandAll', async (subtree) => await this.expandAll(subtree)),
             vscode.commands.registerCommand('GDL.PNTV.deleteEmptyFolders', () => this.deleteEmptyFolders()),
-            vscode.commands.registerCommand('GDL.PNTV.createSubPath', () => this.createSubPath()),
             vscode.commands.registerCommand('GDL.PNTV.moveSelectionTo', () => this.moveSelectionTo()),
-            vscode.commands.registerCommand('GDL.PNTV.copyPath', () => this.copyPath()),
-            vscode.commands.registerCommand('GDL.PNTV.showInFile', () => this.showInFile()),
+            vscode.commands.registerCommand('GDL.PNTV.expandAll', async (subtree) => await this.expandAll(subtree)),
+            vscode.commands.registerCommand('GDL.PNTV.createSubPath', (item) => this.createSubPath(item)),
+            vscode.commands.registerCommand('GDL.PNTV.copyVirtualPath', async (item) => this.copyVirtualPath(item)),
+            vscode.commands.registerCommand('GDL.PNTV.showInFile', (item) => this.showInFile(item)),
         ];
         context.subscriptions.push(this.view, ...commands);
     }
@@ -245,13 +245,14 @@ class PathNameTableView {
     }
     deleteEmptyFolders() {
     }
-    createSubPath() {
+    createSubPath(item) {
     }
     moveSelectionTo() {
     }
-    copyPath() {
+    async copyVirtualPath(item) {
+        return vscode.env.clipboard.writeText(path.join(...item.virtualPath()));
     }
-    showInFile() {
+    showInFile(item) {
     }
     /** reads JSON in active editor, then triggers a refresh of the UI */
     refresh() {

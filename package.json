@@ -198,7 +198,7 @@
                     "when": "view == PathNameTableView"
                 },
                 {
-                    "command": "GDL.PNTV.copyPath",
+                    "command": "GDL.PNTV.copyVirtualPath",
                     "when": "view == PathNameTableView && viewItem != root"
                 },
                 {
@@ -296,7 +296,7 @@
             ],
             "view/item/context": [
                 {
-                    "command": "GDL.PNTV.copyPath",
+                    "command": "GDL.PNTV.copyVirtualPath",
                     "when": "view == PathNameTableView && viewItem != root",
                     "group": "inline@1"
                 },
@@ -443,8 +443,8 @@
                 "icon": "$(move)"
             },
             {
-                "command": "GDL.PNTV.copyPath",
-                "title": "Copy path to clipboard",
+                "command": "GDL.PNTV.copyVirtualPath",
+                "title": "Copy virtual path to clipboard",
                 "category": "PathNameTableView",
                 "icon": "$(pencil)"
             },

@@ -263,12 +263,12 @@ export class PathNameTableView
                                                                         dragAndDropController: this });
 
         const commands = [
-            vscode.commands.registerCommand('GDL.PNTV.expandAll', async (subtree?: PathNameTreeItem) => await this.expandAll(subtree)),
             vscode.commands.registerCommand('GDL.PNTV.deleteEmptyFolders', () => this.deleteEmptyFolders()),
-            vscode.commands.registerCommand('GDL.PNTV.createSubPath', () => this.createSubPath()),
             vscode.commands.registerCommand('GDL.PNTV.moveSelectionTo', () => this.moveSelectionTo()),
-            vscode.commands.registerCommand('GDL.PNTV.copyPath', () => this.copyPath()),
-            vscode.commands.registerCommand('GDL.PNTV.showInFile', () => this.showInFile()),
+            vscode.commands.registerCommand('GDL.PNTV.expandAll', async (subtree?: PathNameTreeItem) => await this.expandAll(subtree)),
+            vscode.commands.registerCommand('GDL.PNTV.createSubPath', (item: PathNameTreeItem) => this.createSubPath(item)),
+            vscode.commands.registerCommand('GDL.PNTV.copyVirtualPath', async (item: PathNameTreeItem) => this.copyVirtualPath(item)),
+            vscode.commands.registerCommand('GDL.PNTV.showInFile', (item: PathNameTreeItem) => this.showInFile(item)),
         ];
 
         context.subscriptions.push(this.view, ...commands);
@@ -287,7 +287,7 @@ export class PathNameTableView
 
     }
 
-    createSubPath() {
+    createSubPath(item: PathNameTreeItem) {
 
     }
 
@@ -295,11 +295,11 @@ export class PathNameTableView
 
     }
 
-    copyPath() {
-
+    async copyVirtualPath(item: PathNameTreeItem) {
+        return vscode.env.clipboard.writeText(path.join(...item.virtualPath()));
     }
 
-    showInFile() {
+    showInFile(item: PathNameTreeItem) {
 
     }
     
