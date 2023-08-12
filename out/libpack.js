@@ -93,20 +93,16 @@ class PathNameTreeItem {
             yield* child;
         }
     }
-    /** calculated using parent */
-    getTableEntries(excludEmpty = false) {
-        // TODO use iterator
-        if (this.isFile) {
-            return [{ ...this.entry, virtualPath: this.virtualPath() }];
-        }
-        else {
-            let files = [...this.files().flatMap(e => e.getTableEntries())];
-            if (this.children.size === 0 && !excludEmpty) {
-                files = [this.emptyFolder()];
+    getTableEntries(excludeEmpty = false) {
+        return [...this].flatMap(e => {
+            if (e.isFile) {
+                return [{ ...e.entry, virtualPath: e.virtualPath() }];
             }
-            let subfiles = [...this.folders().flatMap(e => e.getTableEntries(excludEmpty))];
-            return [...files, ...subfiles];
-        }
+            else if (e.children.size === 0 && !excludeEmpty) {
+                return [e.emptyFolder()];
+            }
+            return [];
+        });
     }
     emptyFolder() {
         return { ...PathNameTreeItem.EMPTYFOLDER,
