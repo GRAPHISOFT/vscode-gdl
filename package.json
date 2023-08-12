@@ -186,7 +186,7 @@
                     "when": "view == PathNameTableView"
                 },
                 {
-                    "command": "GDL.PNTV.deleteEmptyFolders",
+                    "command": "GDL.PNTV.checkContent",
                     "when": "view == PathNameTableView"
                 },
                 {
@@ -264,7 +264,7 @@
             ],
             "view/title": [
                 {
-                    "command": "GDL.PNTV.deleteEmptyFolders",
+                    "command": "GDL.PNTV.checkContent",
                     "when": "view == PathNameTableView",
                     "group": "navigation@1"
                 },
@@ -425,10 +425,10 @@
                 "icon": "$(expand-all)"
             },
             {
-                "command": "GDL.PNTV.deleteEmptyFolders",
-                "title": "Delete empty folders",
+                "command": "GDL.PNTV.checkContent",
+                "title": "Check content against filesystem",
                 "category": "PathNameTableView",
-                "icon": "$(trash)"
+                "icon": "$(check-all)"
             },
             {
                 "command": "GDL.PNTV.createSubPath",

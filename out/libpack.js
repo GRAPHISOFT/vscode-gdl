@@ -3,11 +3,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.PathNameTableView = void 0;
 const vscode = require("vscode");
 const path = require("path");
+const extension_1 = require("./extension");
 function compareFileName(a, b) {
     // first by extension
     const byExt = path.extname(a.fileName).localeCompare(path.extname(b.fileName));
     if (byExt === 0) {
         return a.fileName.localeCompare(b.fileName); // filenames have to differ
+        // TODO Essential AUT order changed!
     }
     return byExt;
 }
@@ -236,6 +238,7 @@ class PathNameTableView {
         overviewRulerLane: vscode.OverviewRulerLane.Center,
         overviewRulerColor: new vscode.ThemeColor("minimap.selectionOccurrenceHighlight")
     });
+    static VIEWID = "PathNameTableView";
     static treeMime = 'application/vnd.code.tree.pathnametableview';
     dropMimeTypes = [PathNameTableView.treeMime];
     dragMimeTypes = [PathNameTableView.treeMime];
@@ -245,12 +248,12 @@ class PathNameTableView {
     unsaved = false;
     view;
     constructor(context) {
-        this.view = vscode.window.createTreeView('PathNameTableView', { treeDataProvider: this,
+        this.view = vscode.window.createTreeView(PathNameTableView.VIEWID, { treeDataProvider: this,
             showCollapseAll: true,
             canSelectMany: true,
             dragAndDropController: this });
         const commands = [
-            vscode.commands.registerCommand('GDL.PNTV.deleteEmptyFolders', async () => this.saveChanges(true)),
+            vscode.commands.registerCommand('GDL.PNTV.checkContent', async () => this.checkContentWithProgress()),
             vscode.commands.registerCommand('GDL.PNTV.expandAll', async (subtree) => this.expandAll(subtree)),
             vscode.commands.registerCommand('GDL.PNTV.createSubPath', async (item) => this.createSubPath(item)),
             vscode.commands.registerCommand('GDL.PNTV.copyVirtualPath', async (item) => this.copyVirtualPath(item)),
@@ -258,6 +261,45 @@ class PathNameTableView {
             vscode.commands.registerCommand('GDL.PNTV.showInFile', async (item) => this.showInFile(item)),
         ];
         context.subscriptions.push(this.view, ...commands);
+    }
+    async checkContentWithProgress() {
+        return vscode.window.withProgress({ location: { viewId: PathNameTableView.VIEWID },
+            title: "Checking pathnametable..." }, async (p, t) => this.checkContent(p, t));
+    }
+    async checkContent(_progress, _token) {
+        // find package.info by stepping upwards
+        let searchPath = vscode.window.activeTextEditor.document.fileName;
+        let found;
+        do {
+            searchPath = path.join(searchPath, "..");
+            found = (0, extension_1.fileExists)(vscode.Uri.file(path.join(searchPath, "package.info")));
+        } while (path.join(searchPath, "..") !== searchPath && !(await found));
+        // use ./Source folder as source
+        if (!(await found)) {
+            vscode.window.showWarningMessage("Can't find \"package.info\", don't know where to look for source files.");
+        }
+        else {
+            // assume no duplicate names TODO check
+            const diskLibparts = new Map();
+            const tableLibparts = new Set(this.root.getTableEntries(true).map(e => {
+                // pathnametable contains binary filenames, source filenames are different
+                return e.fileName.replace(/\.gsm$/i, "")
+                    .replace(/\.tif$/i, ".svg");
+            }));
+            const unneededInTable = new Set(tableLibparts);
+            unneededInTable.delete("mappingDefinitions.json"); // TODO handle based on localizationdata.info
+            for await (const libpart of (0, extension_1.getLibparts)(vscode.Uri.file(searchPath))) {
+                const key = path.basename(libpart.fsPath);
+                diskLibparts.set(key, libpart);
+                unneededInTable.delete(key);
+            }
+            const missingFromTable = new Set(diskLibparts.keys());
+            for (const key of tableLibparts) {
+                missingFromTable.delete(key);
+            }
+            console.log({ unneeded: unneededInTable, missing: missingFromTable });
+        }
+        return this.saveChanges(true);
     }
     async expandAll(subtree) {
         for (const item of subtree ?? this.root) {

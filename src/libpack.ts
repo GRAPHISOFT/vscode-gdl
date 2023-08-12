@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 
 import path = require('path');
+import { fileExists, getLibparts } from './extension';
 
 type PathNameTableID = {
     fileName: string,
@@ -13,6 +14,7 @@ function compareFileName(a: PathNameTableID, b: PathNameTableID) {
     const byExt = path.extname(a.fileName).localeCompare(path.extname(b.fileName));
     if (byExt === 0) {
         return a.fileName.localeCompare(b.fileName);    // filenames have to differ
+        // TODO Essential AUT order changed!
     }
     return byExt;
 }
@@ -274,6 +276,7 @@ export class PathNameTableView
         overviewRulerColor: new vscode.ThemeColor("minimap.selectionOccurrenceHighlight")
     });
 
+    static readonly VIEWID = "PathNameTableView";
     static readonly treeMime = 'application/vnd.code.tree.pathnametableview';
 	readonly dropMimeTypes = [PathNameTableView.treeMime];
 	readonly dragMimeTypes = [PathNameTableView.treeMime];
@@ -286,13 +289,13 @@ export class PathNameTableView
     private view: vscode.TreeView<PathNameTreeItem>;
 
     constructor(context : vscode.ExtensionContext) {
-        this.view = vscode.window.createTreeView('PathNameTableView', { treeDataProvider: this,
-                                                                        showCollapseAll: true,
-                                                                        canSelectMany: true,
-                                                                        dragAndDropController: this });
+        this.view = vscode.window.createTreeView(PathNameTableView.VIEWID, { treeDataProvider: this,
+                                                                             showCollapseAll: true,
+                                                                             canSelectMany: true,
+                                                                             dragAndDropController: this });
 
         const commands = [
-            vscode.commands.registerCommand('GDL.PNTV.deleteEmptyFolders', async () => this.saveChanges(true)),
+            vscode.commands.registerCommand('GDL.PNTV.checkContent', async () => this.checkContentWithProgress()),
             vscode.commands.registerCommand('GDL.PNTV.expandAll', async (subtree?: PathNameTreeItem) => this.expandAll(subtree)),
             vscode.commands.registerCommand('GDL.PNTV.createSubPath', async (item: PathNameTreeItem) => this.createSubPath(item)),
             vscode.commands.registerCommand('GDL.PNTV.copyVirtualPath', async (item: PathNameTreeItem) => this.copyVirtualPath(item)),
@@ -301,6 +304,51 @@ export class PathNameTableView
         ];
 
         context.subscriptions.push(this.view, ...commands);
+    }
+
+    async checkContentWithProgress() {
+        return vscode.window.withProgress({ location: { viewId: PathNameTableView.VIEWID },
+                                            title: "Checking pathnametable..." },
+                                            async (p, t) => this.checkContent(p, t));
+    }
+
+    private async checkContent(_progress: vscode.Progress<{increment: number, message: string}>, _token: vscode.CancellationToken) {
+        // find package.info by stepping upwards
+        let searchPath = vscode.window.activeTextEditor!.document.fileName;
+        let found: Promise<boolean>;
+        do {
+            searchPath = path.join(searchPath, "..");
+            found = fileExists(vscode.Uri.file(path.join(searchPath, "package.info")));
+        } while (path.join(searchPath, "..") !== searchPath && !(await found))
+
+        // use ./Source folder as source
+        if (!(await found)) {
+            vscode.window.showWarningMessage("Can't find \"package.info\", don't know where to look for source files.");
+        } else {
+            // assume no duplicate names TODO check
+            const diskLibparts = new Map<string, vscode.Uri>();
+            const tableLibparts = new Set(this.root.getTableEntries(true).map(e => {
+                // pathnametable contains binary filenames, source filenames are different
+                return e.fileName.replace(/\.gsm$/i, "")
+                                    .replace(/\.tif$/i, ".svg");
+            }));
+
+            const unneededInTable = new Set(tableLibparts);
+            unneededInTable.delete("mappingDefinitions.json");  // TODO handle based on localizationdata.info
+            for await (const libpart of getLibparts(vscode.Uri.file(searchPath))) {
+                const key = path.basename(libpart.fsPath);
+                diskLibparts.set(key, libpart);
+                unneededInTable.delete(key);
+            }
+            const missingFromTable = new Set(diskLibparts.keys());
+            for (const key of tableLibparts) {
+                missingFromTable.delete(key);
+            }
+            
+            console.log({unneeded: unneededInTable, missing: missingFromTable});
+        }
+
+        return this.saveChanges(true);
     }
 
     async expandAll(subtree?: PathNameTreeItem) {

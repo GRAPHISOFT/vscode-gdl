@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.HSFNameOfScript = exports.fileScriptType = exports.HSFScriptType = exports.readFile = exports.fileExists = exports.hasLibPartData = exports.modeGDLHSF = exports.modeGDLXML = exports.modeGDL = exports.GDLExtension = exports.activate = void 0;
+exports.HSFNameOfScript = exports.fileScriptType = exports.HSFScriptType = exports.readFile = exports.fileExists = exports.getLibparts = exports.hasLibPartData = exports.modeGDLHSF = exports.modeGDLXML = exports.modeGDL = exports.GDLExtension = exports.activate = void 0;
 const vscode = require("vscode");
 const util_1 = require("util");
 const Parser = require("./parsexmlgdl");
@@ -970,6 +970,29 @@ async function hasLibPartData(uri) {
     }
 }
 exports.hasLibPartData = hasLibPartData;
+async function* getLibparts(uri) {
+    if (await hasLibPartData(uri)) {
+        // return folder name, don't go deeper
+        yield uri;
+    }
+    else {
+        const content = vscode.workspace.fs.readDirectory(uri);
+        for (const [name, type] of await content) {
+            const nextPath = vscode.Uri.joinPath(uri, name);
+            if (type & vscode.FileType.File) {
+                // return file name
+                if (name !== "IDEntryList.dbe" && !name.endsWith("_Interface.xml")) { // skip (TODO only at specific location)
+                    yield nextPath;
+                }
+            }
+            else {
+                // continue with contents of folder
+                yield* getLibparts(nextPath);
+            }
+        }
+    }
+}
+exports.getLibparts = getLibparts;
 async function IsLibpart(document) {
     if (modeGDLXML(document)) {
         // xml files opened as gdl-xml by extension
@@ -986,10 +1009,10 @@ async function IsLibpart(document) {
         return false;
     }
 }
-async function fileExists(uri) {
+async function fileExists(uri, type = vscode.FileType.File) {
     try {
         const stat = await vscode.workspace.fs.stat(uri);
-        return !(stat.type & vscode.FileType.Directory);
+        return ((stat.type & type) > 0);
     }
     catch {
         return false;

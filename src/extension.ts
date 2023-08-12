@@ -1165,6 +1165,27 @@ export async function hasLibPartData(uri? : vscode.Uri) : Promise<boolean> {
     }
 }
 
+export async function* getLibparts(uri : vscode.Uri) : AsyncIterableIterator<vscode.Uri> {
+    if (await hasLibPartData(uri)) {
+        // return folder name, don't go deeper
+        yield uri;
+    } else {
+        const content = vscode.workspace.fs.readDirectory(uri);
+        for (const [name, type] of await content) {
+            const nextPath = vscode.Uri.joinPath(uri, name);
+            if (type & vscode.FileType.File) {
+                // return file name
+                if (name !== "IDEntryList.dbe" && !name.endsWith("_Interface.xml")) {   // skip (TODO only at specific location)
+                    yield nextPath;
+                }
+            } else {
+                // continue with contents of folder
+                yield* getLibparts(nextPath);
+            }
+        }
+    }
+}
+
 async function IsLibpart(document? : vscode.TextDocument) : Promise<boolean> {
     if (modeGDLXML(document)) {
         // xml files opened as gdl-xml by extension
@@ -1180,10 +1201,10 @@ async function IsLibpart(document? : vscode.TextDocument) : Promise<boolean> {
     }
 }
 
-export async function fileExists(uri : vscode.Uri) : Promise<boolean> {
+export async function fileExists(uri : vscode.Uri, type : vscode.FileType = vscode.FileType.File) : Promise<boolean> {
     try {
         const stat = await vscode.workspace.fs.stat(uri);
-        return !(stat.type & vscode.FileType.Directory);
+        return ((stat.type & type) > 0);
     } catch {
         return false;
     }
