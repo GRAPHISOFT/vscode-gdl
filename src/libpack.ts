@@ -263,7 +263,7 @@ export class PathNameTableView
                                                                         dragAndDropController: this });
 
         const commands = [
-            vscode.commands.registerCommand('GDL.PNTV.deleteEmptyFolders', () => this.deleteEmptyFolders()),
+            vscode.commands.registerCommand('GDL.PNTV.deleteEmptyFolders', async () => this.saveChanges(true)),
             vscode.commands.registerCommand('GDL.PNTV.moveSelectionTo', () => this.moveSelectionTo()),
             vscode.commands.registerCommand('GDL.PNTV.expandAll', async (subtree?: PathNameTreeItem) => this.expandAll(subtree)),
             vscode.commands.registerCommand('GDL.PNTV.createSubPath', async (item: PathNameTreeItem) => this.createSubPath(item)),
@@ -281,10 +281,6 @@ export class PathNameTableView
                                                 expand: true});
             }
         }
-    }
-
-    deleteEmptyFolders() {
-
     }
 
     async createSubPath(item: PathNameTreeItem) {
@@ -427,21 +423,21 @@ export class PathNameTableView
     }
 
     /** will fire onDidChangeTreeData by editing document */
-    private async saveChanges() {
+    private async saveChanges(excludEmpty: boolean = false) {
         let tryagain;
         do {
-            const success = await this.writeToEditor();
+            const success = await this.writeToEditor(excludEmpty);
             if (!success) {
                 tryagain = await vscode.window.showWarningMessage("Failed to save modifications to file", "Retry");
             }
         } while (tryagain !== undefined)
     }
 
-    private async writeToEditor() {
+    private async writeToEditor(excludEmpty: boolean = false) {
         const editor = vscode.window.activeTextEditor!;
         const success = editor.edit(editBuilder => {
             const fullRange = editor.document.validateRange(new vscode.Range(0, 0, editor.document.lineCount, 0));
-            let newData = this.root.getTableEntries().sort(compareFileName);
+            let newData = this.root.getTableEntries(excludEmpty).sort(compareFileName);
             const json = JSON.stringify(newData, undefined, 4);
             editBuilder.replace(fullRange, json);
         });

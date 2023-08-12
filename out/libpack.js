@@ -226,7 +226,7 @@ class PathNameTableView {
             canSelectMany: true,
             dragAndDropController: this });
         const commands = [
-            vscode.commands.registerCommand('GDL.PNTV.deleteEmptyFolders', () => this.deleteEmptyFolders()),
+            vscode.commands.registerCommand('GDL.PNTV.deleteEmptyFolders', async () => this.saveChanges(true)),
             vscode.commands.registerCommand('GDL.PNTV.moveSelectionTo', () => this.moveSelectionTo()),
             vscode.commands.registerCommand('GDL.PNTV.expandAll', async (subtree) => this.expandAll(subtree)),
             vscode.commands.registerCommand('GDL.PNTV.createSubPath', async (item) => this.createSubPath(item)),
@@ -242,8 +242,6 @@ class PathNameTableView {
                     expand: true });
             }
         }
-    }
-    deleteEmptyFolders() {
     }
     async createSubPath(item) {
         const atpath = path.join(...item.virtualPath());
@@ -364,20 +362,20 @@ class PathNameTableView {
         }
     }
     /** will fire onDidChangeTreeData by editing document */
-    async saveChanges() {
+    async saveChanges(excludEmpty = false) {
         let tryagain;
         do {
-            const success = await this.writeToEditor();
+            const success = await this.writeToEditor(excludEmpty);
             if (!success) {
                 tryagain = await vscode.window.showWarningMessage("Failed to save modifications to file", "Retry");
             }
         } while (tryagain !== undefined);
     }
-    async writeToEditor() {
+    async writeToEditor(excludEmpty = false) {
         const editor = vscode.window.activeTextEditor;
         const success = editor.edit(editBuilder => {
             const fullRange = editor.document.validateRange(new vscode.Range(0, 0, editor.document.lineCount, 0));
-            let newData = this.root.getTableEntries().sort(compareFileName);
+            let newData = this.root.getTableEntries(excludEmpty).sort(compareFileName);
             const json = JSON.stringify(newData, undefined, 4);
             editBuilder.replace(fullRange, json);
         });
