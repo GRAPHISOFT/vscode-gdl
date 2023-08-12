@@ -3,6 +3,8 @@ import * as vscode from 'vscode';
 import path = require('path');
 import { fileExists, getLibparts } from './extension';
 
+type RegExpMatchArrayWithIndices = RegExpMatchArray & { indices: Array<[number, number]> };
+
 type PathNameTableID = {
     fileName: string,
     meta?: { translatePathName?: boolean | null },
@@ -63,10 +65,13 @@ class PathNameTreeItem
         }
     }
 
-    public set parent(parent: PathNameTreeItem) {
+    public set parent(parent: PathNameTreeItem | undefined) {
         if (this.isRoot) {
             throw new Error("root element can't be moved");
         } else {
+            if (parent === undefined) {
+                throw new RangeError("non-root elements must have a parent");
+            }
             this._parent = parent;
         }
     }
@@ -410,8 +415,11 @@ export class PathNameTableView
         if (matches.length === 0) {
             vscode.window.showWarningMessage(`"fileName": "${item.entry!.fileName}" not found in text`);
         } else {
-            const ranges = matches.map(e => new vscode.Range(   document.positionAt(e.indices![0][0]),
-                                                                document.positionAt(e.indices![0][1])));
+            const ranges = matches.map(e => {
+                const match = (e as RegExpMatchArrayWithIndices).indices![0];
+                return new vscode.Range(document.positionAt(match[0]),
+                                        document.positionAt(match[1]));
+            });
 
             // reveal first match
             editor.revealRange(ranges[0], vscode.TextEditorRevealType.InCenterIfOutsideViewport);

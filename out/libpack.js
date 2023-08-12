@@ -55,6 +55,9 @@ class PathNameTreeItem {
             throw new Error("root element can't be moved");
         }
         else {
+            if (parent === undefined) {
+                throw new RangeError("non-root elements must have a parent");
+            }
             this._parent = parent;
         }
     }
@@ -356,7 +359,10 @@ class PathNameTableView {
             vscode.window.showWarningMessage(`"fileName": "${item.entry.fileName}" not found in text`);
         }
         else {
-            const ranges = matches.map(e => new vscode.Range(document.positionAt(e.indices[0][0]), document.positionAt(e.indices[0][1])));
+            const ranges = matches.map(e => {
+                const match = e.indices[0];
+                return new vscode.Range(document.positionAt(match[0]), document.positionAt(match[1]));
+            });
             // reveal first match
             editor.revealRange(ranges[0], vscode.TextEditorRevealType.InCenterIfOutsideViewport);
             // highlight all matches
