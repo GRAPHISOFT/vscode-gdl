@@ -17,6 +17,10 @@ function compareFileName(a: PathNameTableID, b: PathNameTableID) {
     return byExt;
 }
 
+function escapeRegex(str: string) {
+    return str.replace(/[/\-\\^$*+?.()|[\]{}]/g, '\\$&');
+}
+
 type PathNameTableEntry = PathNameTableID & {
     virtualPath: string[],
 }
@@ -34,30 +38,31 @@ class PathNameTreeItem
     }
 
     public children: Map<string, PathNameTreeItem> = new Map();
-    public readonly id: string;
+    private _id: string = "";
     public readonly isFile: boolean = false;
-    public readonly label: string;
+    public readonly isRoot: boolean = false;
+    private _label: string = "";
     public readonly entry?: PathNameTableID;
 
     /** call with string and undefined parent to create root, string to create folder, PathNameTableID to create file */
     constructor(id: string | PathNameTableID, private _parent?: PathNameTreeItem) {
         if (!this.parent) {
-            this.id = PathNameTreeItem.ROOT;
             this.label = id as string; 
+            this._id = PathNameTreeItem.ROOT;
+            this.isRoot = true;
         } else {
             if (typeof id === "string") {
-                this.id = id;
+                this.label = id;
             } else {    // id is PathNameTableID
                 this.entry = id;
-                this.id = id.virtualFileName.length > 0 ? id.virtualFileName : PathNameTreeItem.EMPTYFOLDERID;
+                this.label = id.virtualFileName;
                 this.isFile = true;
             }
-            this.label = this.id;      // id used for UI label
         }
     }
 
     public set parent(parent: PathNameTreeItem) {
-        if (this.parent === undefined) {
+        if (this.isRoot) {
             throw new Error("root element can't be moved");
         } else {
             this._parent = parent;
@@ -68,6 +73,26 @@ class PathNameTreeItem
         return this._parent;
     }
 
+    /** based on label */
+    public get id() {
+        return this._id;
+    }
+
+    /** change label, name and ID */
+    public set label(label: string) {
+        this._label = label.length > 0 ? label : PathNameTreeItem.EMPTYFOLDERID;
+        if (!this.isRoot) {
+            this._id = this._label;     // id can be UI label as long as there are no duplicates
+            if (this.isFile) {
+                this.entry!.virtualFileName = this._label;
+            }
+        }
+    }
+
+    public get label() {
+        return this._label;
+    }
+
     /** calculated using parent */
     fullID(): string {
         return path.join(this.parent?.fullID() ?? "", this.id);
@@ -75,10 +100,10 @@ class PathNameTreeItem
     
     /** calculated using parent */
     virtualPath(): string[] {
-        if (this.parent) {
-            return [...this.parent.virtualPath(), ...(this.isFile ? [] : [this.id])];
+        if (this.isRoot) {
+            return [];
         }
-        return [];
+        return [...this.parent!.virtualPath(), ...(this.isFile ? [] : [this.label])];
     }
 
     *[Symbol.iterator](): IterableIterator<PathNameTreeItem> {
@@ -135,10 +160,9 @@ class PathNameTreeItem
             
 
             //item.resourceUri = this.uri;
-            //item.description = true;
             //item.command = ...
         } else {
-            if (this.id === PathNameTreeItem.ROOT) {
+            if (this.isRoot) {
                 item.contextValue = "root";
             } else {
                 item.contextValue = "folder";
@@ -159,7 +183,7 @@ class PathNameTreeItem
             } else {
                 item.iconPath = vscode.ThemeIcon.File;
             }
-        } else if (this.parent && this.getTableEntries(true).length === 0) {   // empty folder
+        } else if (!this.isRoot && this.getTableEntries(true).length === 0) {   // empty folder
             item.iconPath = new vscode.ThemeIcon("folder", new vscode.ThemeColor("errorForeground"));
             item.description = "[empty]";
         } // don't show folder icon, horizontal positioning is counter-intuitive
@@ -245,6 +269,15 @@ export class PathNameTableView
                                              ".gif":     undefined,
                                              ".bmp":     undefined }
 
+    private static readonly lineHighLight = vscode.window.createTextEditorDecorationType({
+        borderColor: new vscode.ThemeColor("editor.wordHighlightTextBorder"),
+        borderWidth: "1px",
+        borderStyle: "solid",
+        backgroundColor: new vscode.ThemeColor("editor.wordHighlightTextBackground"),
+        overviewRulerLane: vscode.OverviewRulerLane.Center,
+        overviewRulerColor: new vscode.ThemeColor("minimap.selectionOccurrenceHighlight")
+    });
+
     static readonly treeMime = 'application/vnd.code.tree.pathnametableview';
 	readonly dropMimeTypes = [PathNameTableView.treeMime];
 	readonly dragMimeTypes = [PathNameTableView.treeMime];
@@ -264,11 +297,11 @@ export class PathNameTableView
 
         const commands = [
             vscode.commands.registerCommand('GDL.PNTV.deleteEmptyFolders', async () => this.saveChanges(true)),
-            vscode.commands.registerCommand('GDL.PNTV.moveSelectionTo', () => this.moveSelectionTo()),
             vscode.commands.registerCommand('GDL.PNTV.expandAll', async (subtree?: PathNameTreeItem) => this.expandAll(subtree)),
             vscode.commands.registerCommand('GDL.PNTV.createSubPath', async (item: PathNameTreeItem) => this.createSubPath(item)),
             vscode.commands.registerCommand('GDL.PNTV.copyVirtualPath', async (item: PathNameTreeItem) => this.copyVirtualPath(item)),
-            vscode.commands.registerCommand('GDL.PNTV.showInFile', (item: PathNameTreeItem) => this.showInFile(item)),
+            vscode.commands.registerCommand('GDL.PNTV.rename', async (item: PathNameTreeItem) => this.rename(item)),
+            vscode.commands.registerCommand('GDL.PNTV.showInFile', async (item: PathNameTreeItem) => this.showInFile(item)),
         ];
 
         context.subscriptions.push(this.view, ...commands);
@@ -304,20 +337,56 @@ export class PathNameTableView
         }
     }
 
-    moveSelectionTo() {
-
-    }
-
     async copyVirtualPath(item: PathNameTreeItem) {
         return vscode.env.clipboard.writeText(path.join(...item.virtualPath()));
     }
 
-    showInFile(item: PathNameTreeItem) {
+    async rename(item: PathNameTreeItem) {
+        const input = await vscode.window.showInputBox({ignoreFocusOut: true,
+                                                        placeHolder: "new name",
+                                                        title: "Rename",
+                                                        prompt: item.id});
+        if (input) {
+            item.label = input;
+            return this.saveChanges();
+        }
+    }
+
+    async showInFile(item: PathNameTreeItem) {
+        // JSON.parse can't save the original text position, so we have to search, assuming there aren't duplicate keys
+        // search for original filename keys, these aren't changed
+        const escapedFilename = escapeRegex(item.entry!.fileName);
+        const findFileName = new RegExp(`(?<!\\\\)"fileName"\\s*:\\s*"${escapedFilename}"`, "igd");
+
+        const editor = vscode.window.activeTextEditor!;
+        const document = editor.document;
+        const text = document.getText();
+        const matches = [...text.matchAll(findFileName)];
+        
+        if (matches.length === 0) {
+            vscode.window.showWarningMessage(`"fileName": "${item.entry!.fileName}" not found in text`);
+        } else {
+            const ranges = matches.map(e => new vscode.Range(   document.positionAt(e.indices![0][0]),
+                                                                document.positionAt(e.indices![0][1])));
+
+            // reveal first match
+            editor.revealRange(ranges[0], vscode.TextEditorRevealType.InCenterIfOutsideViewport);
+            
+            // highlight all matches
+            editor.setDecorations(PathNameTableView.lineHighLight, ranges);
+            // remove highlights after cursor change
+            const onetime = vscode.window.onDidChangeTextEditorSelection((e) => {
+                if (e.textEditor === editor) {
+                    editor.setDecorations(PathNameTableView.lineHighLight, []);
+                    onetime.dispose();
+                }
+            });
+        }
 
     }
     
     /** reads JSON in active editor, then triggers a refresh of the UI */
-    refresh() {
+    refreshFromEditor() {
         const filename = path.basename(vscode.window.activeTextEditor?.document.fileName ?? "");
         let json: PathNameTableEntry[] = [];
         let message: string;
@@ -409,7 +478,7 @@ export class PathNameTableView
         
         // select which ones to handle
         const targetFullID = target!.fullID();
-        const filteredItems = source.filter(e =>    e.parent !== undefined &&                           // not root element
+        const filteredItems = source.filter(e =>    !e.isRoot &&                                        // not root element
                                                     e.parent !== target &&                              // target is not the existing parent
                                                     e !== target &&                                     // target is not the same (with multi-selection)
                                                     !targetFullID.startsWith(e.fullID() + path.sep));   // target is not subfolder of element

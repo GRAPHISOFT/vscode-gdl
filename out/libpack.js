@@ -11,6 +11,9 @@ function compareFileName(a, b) {
     }
     return byExt;
 }
+function escapeRegex(str) {
+    return str.replace(/[/\-\\^$*+?.()|[\]{}]/g, '\\$&');
+}
 class PathNameTreeItem {
     _parent;
     static ROOT = "root:";
@@ -21,31 +24,32 @@ class PathNameTreeItem {
         virtualFileName: PathNameTreeItem.EMPTYFOLDERID
     };
     children = new Map();
-    id;
+    _id = "";
     isFile = false;
-    label;
+    isRoot = false;
+    _label = "";
     entry;
     /** call with string and undefined parent to create root, string to create folder, PathNameTableID to create file */
     constructor(id, _parent) {
         this._parent = _parent;
         if (!this.parent) {
-            this.id = PathNameTreeItem.ROOT;
             this.label = id;
+            this._id = PathNameTreeItem.ROOT;
+            this.isRoot = true;
         }
         else {
             if (typeof id === "string") {
-                this.id = id;
+                this.label = id;
             }
             else { // id is PathNameTableID
                 this.entry = id;
-                this.id = id.virtualFileName.length > 0 ? id.virtualFileName : PathNameTreeItem.EMPTYFOLDERID;
+                this.label = id.virtualFileName;
                 this.isFile = true;
             }
-            this.label = this.id; // id used for UI label
         }
     }
     set parent(parent) {
-        if (this.parent === undefined) {
+        if (this.isRoot) {
             throw new Error("root element can't be moved");
         }
         else {
@@ -55,16 +59,33 @@ class PathNameTreeItem {
     get parent() {
         return this._parent;
     }
+    /** based on label */
+    get id() {
+        return this._id;
+    }
+    /** change label, name and ID */
+    set label(label) {
+        this._label = label.length > 0 ? label : PathNameTreeItem.EMPTYFOLDERID;
+        if (!this.isRoot) {
+            this._id = this._label; // id can be UI label as long as there are no duplicates
+            if (this.isFile) {
+                this.entry.virtualFileName = this._label;
+            }
+        }
+    }
+    get label() {
+        return this._label;
+    }
     /** calculated using parent */
     fullID() {
         return path.join(this.parent?.fullID() ?? "", this.id);
     }
     /** calculated using parent */
     virtualPath() {
-        if (this.parent) {
-            return [...this.parent.virtualPath(), ...(this.isFile ? [] : [this.id])];
+        if (this.isRoot) {
+            return [];
         }
-        return [];
+        return [...this.parent.virtualPath(), ...(this.isFile ? [] : [this.label])];
     }
     *[Symbol.iterator]() {
         yield this;
@@ -115,11 +136,10 @@ class PathNameTreeItem {
                 item.tooltip += `\n\n${JSON.stringify(this.entry.meta)}`;
             }
             //item.resourceUri = this.uri;
-            //item.description = true;
             //item.command = ...
         }
         else {
-            if (this.id === PathNameTreeItem.ROOT) {
+            if (this.isRoot) {
                 item.contextValue = "root";
             }
             else {
@@ -140,7 +160,7 @@ class PathNameTreeItem {
                 item.iconPath = vscode.ThemeIcon.File;
             }
         }
-        else if (this.parent && this.getTableEntries(true).length === 0) { // empty folder
+        else if (!this.isRoot && this.getTableEntries(true).length === 0) { // empty folder
             item.iconPath = new vscode.ThemeIcon("folder", new vscode.ThemeColor("errorForeground"));
             item.description = "[empty]";
         } // don't show folder icon, horizontal positioning is counter-intuitive
@@ -212,6 +232,14 @@ class PathNameTableView {
         ".svg": undefined,
         ".gif": undefined,
         ".bmp": undefined };
+    static lineHighLight = vscode.window.createTextEditorDecorationType({
+        borderColor: new vscode.ThemeColor("editor.wordHighlightTextBorder"),
+        borderWidth: "1px",
+        borderStyle: "solid",
+        backgroundColor: new vscode.ThemeColor("editor.wordHighlightTextBackground"),
+        overviewRulerLane: vscode.OverviewRulerLane.Center,
+        overviewRulerColor: new vscode.ThemeColor("minimap.selectionOccurrenceHighlight")
+    });
     static treeMime = 'application/vnd.code.tree.pathnametableview';
     dropMimeTypes = [PathNameTableView.treeMime];
     dragMimeTypes = [PathNameTableView.treeMime];
@@ -227,11 +255,11 @@ class PathNameTableView {
             dragAndDropController: this });
         const commands = [
             vscode.commands.registerCommand('GDL.PNTV.deleteEmptyFolders', async () => this.saveChanges(true)),
-            vscode.commands.registerCommand('GDL.PNTV.moveSelectionTo', () => this.moveSelectionTo()),
             vscode.commands.registerCommand('GDL.PNTV.expandAll', async (subtree) => this.expandAll(subtree)),
             vscode.commands.registerCommand('GDL.PNTV.createSubPath', async (item) => this.createSubPath(item)),
             vscode.commands.registerCommand('GDL.PNTV.copyVirtualPath', async (item) => this.copyVirtualPath(item)),
-            vscode.commands.registerCommand('GDL.PNTV.showInFile', (item) => this.showInFile(item)),
+            vscode.commands.registerCommand('GDL.PNTV.rename', async (item) => this.rename(item)),
+            vscode.commands.registerCommand('GDL.PNTV.showInFile', async (item) => this.showInFile(item)),
         ];
         context.subscriptions.push(this.view, ...commands);
     }
@@ -264,15 +292,48 @@ class PathNameTableView {
             return this.expandAll(next);
         }
     }
-    moveSelectionTo() {
-    }
     async copyVirtualPath(item) {
         return vscode.env.clipboard.writeText(path.join(...item.virtualPath()));
     }
-    showInFile(item) {
+    async rename(item) {
+        const input = await vscode.window.showInputBox({ ignoreFocusOut: true,
+            placeHolder: "new name",
+            title: "Rename",
+            prompt: item.id });
+        if (input) {
+            item.label = input;
+            return this.saveChanges();
+        }
+    }
+    async showInFile(item) {
+        // JSON.parse can't save the original text position, so we have to search, assuming there aren't duplicate keys
+        // search for original filename keys, these aren't changed
+        const escapedFilename = escapeRegex(item.entry.fileName);
+        const findFileName = new RegExp(`(?<!\\\\)"fileName"\\s*:\\s*"${escapedFilename}"`, "igd");
+        const editor = vscode.window.activeTextEditor;
+        const document = editor.document;
+        const text = document.getText();
+        const matches = [...text.matchAll(findFileName)];
+        if (matches.length === 0) {
+            vscode.window.showWarningMessage(`"fileName": "${item.entry.fileName}" not found in text`);
+        }
+        else {
+            const ranges = matches.map(e => new vscode.Range(document.positionAt(e.indices[0][0]), document.positionAt(e.indices[0][1])));
+            // reveal first match
+            editor.revealRange(ranges[0], vscode.TextEditorRevealType.InCenterIfOutsideViewport);
+            // highlight all matches
+            editor.setDecorations(PathNameTableView.lineHighLight, ranges);
+            // remove highlights after cursor change
+            const onetime = vscode.window.onDidChangeTextEditorSelection((e) => {
+                if (e.textEditor === editor) {
+                    editor.setDecorations(PathNameTableView.lineHighLight, []);
+                    onetime.dispose();
+                }
+            });
+        }
     }
     /** reads JSON in active editor, then triggers a refresh of the UI */
-    refresh() {
+    refreshFromEditor() {
         const filename = path.basename(vscode.window.activeTextEditor?.document.fileName ?? "");
         let json = [];
         let message;
@@ -351,7 +412,7 @@ class PathNameTableView {
         }
         // select which ones to handle
         const targetFullID = target.fullID();
-        const filteredItems = source.filter(e => e.parent !== undefined && // not root element
+        const filteredItems = source.filter(e => !e.isRoot && // not root element
             e.parent !== target && // target is not the existing parent
             e !== target && // target is not the same (with multi-selection)
             !targetFullID.startsWith(e.fullID() + path.sep)); // target is not subfolder of element

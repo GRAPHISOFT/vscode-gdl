@@ -246,7 +246,7 @@ class GDLExtension {
         if (modeGDLXML(this._editor?.document) && !(await IsLibpart(this._editor?.document))) {
             this.switchLang("xml");
         }
-        this.pathnametableView.refresh();
+        this.pathnametableView.refreshFromEditor();
         this.updateHsfLibpart();
         this.reparseDoc(this._editor?.document, 0);
     }
@@ -338,7 +338,7 @@ class GDLExtension {
     }
     onDocumentChanged(changeEvent) {
         //console.log("GDLExtension.onDocumentChanged", changeEvent.document.uri.toString());
-        this.pathnametableView.refresh();
+        this.pathnametableView.refreshFromEditor();
         this.updateHsfLibpart();
         this.reparseDoc(changeEvent.document); // with default timeout
     }
@@ -346,7 +346,7 @@ class GDLExtension {
         //console.log("GDLExtension.onDocumentOpened", document.uri.toString());
         // handle only top editor - other can be SCM virtual document / other document opened by extension
         if (vscode.window.activeTextEditor?.document.uri === document.uri) {
-            this.pathnametableView.refresh();
+            this.pathnametableView.refreshFromEditor();
             this.updateHsfLibpart();
             this.reparseDoc(document, 0);
         }

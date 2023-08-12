@@ -21,7 +21,7 @@
         "url": "https://github.com/GRAPHISOFT/vscode-gdl"
     },
     "engines": {
-        "vscode": "^1.66.0"
+        "vscode": "^1.81.1"
     },
     "categories": [
         "Programming Languages",
@@ -194,11 +194,11 @@
                     "when": "view == PathNameTableView && viewItem != file"
                 },
                 {
-                    "command": "GDL.PNTV.moveSelectionTo",
-                    "when": "view == PathNameTableView"
+                    "command": "GDL.PNTV.copyVirtualPath",
+                    "when": "view == PathNameTableView && viewItem != root"
                 },
                 {
-                    "command": "GDL.PNTV.copyVirtualPath",
+                    "command": "GDL.PNTV.rename",
                     "when": "view == PathNameTableView && viewItem != root"
                 },
                 {
@@ -264,19 +264,14 @@
             ],
             "view/title": [
                 {
-                    "command": "GDL.PNTV.moveSelectionTo",
+                    "command": "GDL.PNTV.deleteEmptyFolders",
                     "when": "view == PathNameTableView",
                     "group": "navigation@1"
                 },
                 {
-                    "command": "GDL.PNTV.deleteEmptyFolders",
-                    "when": "view == PathNameTableView",
-                    "group": "navigation@2"
-                },
-                {
                     "command": "GDL.PNTV.expandAll",
                     "when": "view == PathNameTableView",
-                    "group": "navigation@3"
+                    "group": "navigation@2"
                 },
                 {
                     "command": "GDL.gotoCursor",
@@ -301,19 +296,24 @@
                     "group": "inline@1"
                 },
                 {
+                    "command": "GDL.PNTV.rename",
+                    "when": "view == PathNameTableView && viewItem != root",
+                    "group": "inline@2"
+                },
+                {
                     "command": "GDL.PNTV.showInFile",
                     "when": "view == PathNameTableView && viewItem == file",
-                    "group": "inline@2"
+                    "group": "inline@3"
                 },
                 {
                     "command": "GDL.PNTV.createSubPath",
                     "when": "view == PathNameTableView && viewItem != file",
-                    "group": "inline@2"
+                    "group": "inline@3"
                 },
                 {
                     "command": "GDL.PNTV.expandAll",
                     "when": "view == PathNameTableView && viewItem != file",
-                    "group": "inline@3"
+                    "group": "inline@4"
                 },
                 {
                     "command": "GDL.selectScript",
@@ -437,14 +437,14 @@
                 "icon": "$(file-directory-create)"
             },
             {
-                "command": "GDL.PNTV.moveSelectionTo",
-                "title": "Move selection to...",
-                "category": "PathNameTableView",
-                "icon": "$(move)"
-            },
-            {
                 "command": "GDL.PNTV.copyVirtualPath",
                 "title": "Copy virtual path to clipboard",
+                "category": "PathNameTableView",
+                "icon": "$(output)"
+            },
+            {
+                "command": "GDL.PNTV.rename",
+                "title": "Rename",
                 "category": "PathNameTableView",
                 "icon": "$(pencil)"
             },
@@ -604,8 +604,8 @@
     "devDependencies": {
         "@types/glob": "^7.2.0",
         "@types/mocha": "^9.0.0",
-        "@types/node": "^14.16.0",
-        "@types/vscode": "1.66.0",
+        "@types/node": "^16.17.1",
+        "@types/vscode": "1.81.0",
         "@typescript-eslint/eslint-plugin": "^5.3.0",
         "@typescript-eslint/parser": "^5.3.0",
         "@vscode/test-electron": "^1.6.1",
