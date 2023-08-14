@@ -970,24 +970,32 @@ async function hasLibPartData(uri) {
     }
 }
 exports.hasLibPartData = hasLibPartData;
+function gsmUri(rooturi) {
+    const binaryFileName = `${path.basename(rooturi.fsPath)}.gsm`;
+    return { binaryFileName: binaryFileName, sourceUri: rooturi };
+}
+function fileUri(parenturi, filename) {
+    let sourceUri = vscode.Uri.joinPath(parenturi, filename);
+    const binaryFileName = filename.replace(/\.svg$/i, ".tif");
+    return { binaryFileName: binaryFileName, sourceUri: sourceUri };
+}
 async function* getLibparts(uri) {
     if (await hasLibPartData(uri)) {
-        // return folder name, don't go deeper
-        yield uri;
+        // return uri, don't go deeper
+        yield gsmUri(uri);
     }
     else {
         const content = vscode.workspace.fs.readDirectory(uri);
         for (const [name, type] of await content) {
-            const nextPath = vscode.Uri.joinPath(uri, name);
             if (type & vscode.FileType.File) {
-                // return file name
+                // return file uri
                 if (name !== "IDEntryList.dbe" && !name.endsWith("_Interface.xml")) { // skip (TODO only at specific location)
-                    yield nextPath;
+                    yield fileUri(uri, name);
                 }
             }
             else {
                 // continue with contents of folder
-                yield* getLibparts(nextPath);
+                yield* getLibparts(vscode.Uri.joinPath(uri, name));
             }
         }
     }

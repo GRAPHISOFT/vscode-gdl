@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 
 import path = require('path');
-import { fileExists, getLibparts } from './extension';
+import { LibpartUri, fileExists, getLibparts } from './extension';
 
 type RegExpMatchArrayWithIndices = RegExpMatchArray & { indices: Array<[number, number]> };
 
@@ -326,30 +326,42 @@ export class PathNameTableView
             found = fileExists(vscode.Uri.file(path.join(searchPath, "package.info")));
         } while (path.join(searchPath, "..") !== searchPath && !(await found))
 
-        // use ./Source folder as source
         if (!(await found)) {
             vscode.window.showWarningMessage("Can't find \"package.info\", don't know where to look for source files.");
+            // go on with saving changes to purge empty folders
         } else {
             // assume no duplicate names TODO check
-            const diskLibparts = new Map<string, vscode.Uri>();
-            const tableLibparts = new Set(this.root.getTableEntries(true).map(e => {
-                // pathnametable contains binary filenames, source filenames are different
-                return e.fileName.replace(/\.gsm$/i, "")
-                                    .replace(/\.tif$/i, ".svg");
-            }));
 
-            const unneededInTable = new Set(tableLibparts);
+            // collect differences
+            const diskLibparts = new Map<string, LibpartUri>();
+            const tableFiles = [...this.root].filter(e => e.isFile);
+            const tableLibparts = new Map<string, PathNameTreeItem>(tableFiles.map(e => [e.entry!.fileName, e]));
+
+            const unneededInTable = new Set(tableLibparts.keys());
             unneededInTable.delete("mappingDefinitions.json");  // TODO handle based on localizationdata.info
-            for await (const libpart of getLibparts(vscode.Uri.file(searchPath))) {
-                const key = path.basename(libpart.fsPath);
-                diskLibparts.set(key, libpart);
+            for await (const uri of getLibparts(vscode.Uri.file(searchPath))) {
+                const key = uri.binaryFileName;
+                diskLibparts.set(key, uri);
                 unneededInTable.delete(key);
             }
             const missingFromTable = new Set(diskLibparts.keys());
-            for (const key of tableLibparts) {
+            for (const key of tableLibparts.keys()) {
                 missingFromTable.delete(key);
             }
             
+            // change table tada
+            for (const key of unneededInTable) {
+                const remove = tableLibparts.get(key)!;
+                remove.parent!.deleteChild(remove.id);
+            }
+            for (const key of missingFromTable) {
+                const uri = diskLibparts.get(key)!;
+                const relPath = path.relative(searchPath, uri.sourceUri.fsPath);
+                this.addEntry({ fileName: uri.binaryFileName,
+                                meta: { translatePathName: null },
+                                virtualFileName: path.basename(key, path.extname(key)), // remove extension
+                                virtualPath: relPath.split(path.sep).slice(0, -1) })
+            }
             console.log({unneeded: unneededInTable, missing: missingFromTable});
         }
 
@@ -459,30 +471,31 @@ export class PathNameTableView
     }
     
     /** creates tree by virtualPath */
-    private createTree(json: PathNameTableEntry[], message: string) {
-        this.root = new PathNameTreeItem(message);
+    private createTree(json: PathNameTableEntry[], rootDescription: string) {
+        this.root = new PathNameTreeItem(rootDescription);
+        json.forEach(e => this.addEntry(e));
+        this._onDidChangeTreeData.fire();
+    }
 
-        for (const entry of json) {
-            let parent = this.root;
-            for (const folder of entry.virtualPath) {
-                let nextParent = parent.children.get(folder);
-                if (nextParent === undefined) {
-                    nextParent = parent.addChild(folder);
-                }
-                parent = nextParent;
+    /** adds an entry, creating folders as necessary */
+    private addEntry(entry: PathNameTableEntry) {
+        let parent = this.root;
+        for (const folder of entry.virtualPath) {
+            let nextParent = parent.children.get(folder);
+            if (nextParent === undefined) {
+                nextParent = parent.addChild(folder);
             }
-
-            if (entry.fileName !== PathNameTreeItem.EMPTYFOLDERID) {
-                const added = parent.addChild(entry);
-                if (added.entry!.virtualFileName !== entry.virtualFileName) {
-                    this.unsaved = true;
-                    const virtualPath = path.join(...entry.virtualPath);
-                    vscode.window.showInformationMessage(`renamed duplicate virtual name ${entry.virtualFileName} at ${virtualPath}`);
-                }
-            }
+            parent = nextParent;
         }
 
-        this._onDidChangeTreeData.fire();
+        if (entry.fileName !== PathNameTreeItem.EMPTYFOLDERID) {
+            const added = parent.addChild(entry);
+            if (added.entry!.virtualFileName !== entry.virtualFileName) {
+                this.unsaved = true;
+                const virtualPath = path.join(...entry.virtualPath);
+                vscode.window.showInformationMessage(`renamed duplicate virtual name ${entry.virtualFileName} at ${virtualPath}`);
+            }
+        }
     }
 
     getTreeItem(element: PathNameTreeItem): vscode.TreeItem | Thenable<vscode.TreeItem> {
