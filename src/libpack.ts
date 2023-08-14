@@ -11,12 +11,18 @@ type PathNameTableID = {
     virtualFileName: string 
 }
 
+/** compare strings without locale algorithms */
+function compareString(a: string, b: string): number {
+    return (a < b) ? -1 : (a > b ? 1 : 0);
+}
+
+/** compare lowercase, first by extension, then by filename */
 function compareFileName(a: PathNameTableID, b: PathNameTableID) {
-    // first by extension
-    const byExt = path.extname(a.fileName).localeCompare(path.extname(b.fileName));
+    const aCompare = a.fileName.toLocaleLowerCase();
+    const bCompare = b.fileName.toLocaleLowerCase();
+    const byExt = compareString(path.extname(aCompare), path.extname(bCompare));
     if (byExt === 0) {
-        return a.fileName.localeCompare(b.fileName);    // filenames have to differ
-        // TODO Essential AUT order changed!
+        return compareString(aCompare, bCompare);    // filenames have to differ
     }
     return byExt;
 }
@@ -263,7 +269,7 @@ export class PathNameTableView
     implements  vscode.TreeDataProvider<PathNameTreeItem>,
                 vscode.TreeDragAndDropController<PathNameTreeItem> {
 
-    /** hash for known extensions */
+    /** hash for known image extensions */
     static readonly knownImageExtensions = { ".jpg":     undefined,
                                              ".jpeg":    undefined,
                                              ".tif":     undefined,
@@ -362,7 +368,6 @@ export class PathNameTableView
                                 virtualFileName: path.basename(key, path.extname(key)), // remove extension
                                 virtualPath: relPath.split(path.sep).slice(0, -1) })
             }
-            console.log({unneeded: unneededInTable, missing: missingFromTable});
         }
 
         return this.saveChanges(true);

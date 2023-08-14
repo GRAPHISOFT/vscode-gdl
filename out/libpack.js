@@ -4,12 +4,17 @@ exports.PathNameTableView = void 0;
 const vscode = require("vscode");
 const path = require("path");
 const extension_1 = require("./extension");
+/** compare strings without locale algorithms */
+function compareString(a, b) {
+    return (a < b) ? -1 : (a > b ? 1 : 0);
+}
+/** compare lowercase, first by extension, then by filename */
 function compareFileName(a, b) {
-    // first by extension
-    const byExt = path.extname(a.fileName).localeCompare(path.extname(b.fileName));
+    const aCompare = a.fileName.toLocaleLowerCase();
+    const bCompare = b.fileName.toLocaleLowerCase();
+    const byExt = compareString(path.extname(aCompare), path.extname(bCompare));
     if (byExt === 0) {
-        return a.fileName.localeCompare(b.fileName); // filenames have to differ
-        // TODO Essential AUT order changed!
+        return compareString(aCompare, bCompare); // filenames have to differ
     }
     return byExt;
 }
@@ -225,7 +230,7 @@ class PathNameTreeItem {
     }
 }
 class PathNameTableView {
-    /** hash for known extensions */
+    /** hash for known image extensions */
     static knownImageExtensions = { ".jpg": undefined,
         ".jpeg": undefined,
         ".tif": undefined,
@@ -311,7 +316,6 @@ class PathNameTableView {
                     virtualFileName: path.basename(key, path.extname(key)),
                     virtualPath: relPath.split(path.sep).slice(0, -1) });
             }
-            console.log({ unneeded: unneededInTable, missing: missingFromTable });
         }
         return this.saveChanges(true);
     }
