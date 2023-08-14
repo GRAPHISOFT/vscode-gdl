@@ -587,6 +587,12 @@
                 "mac": "ctrl+alt+space",
                 "when": "editorLangId == gdl-hsf && isFileSystemResource && resourceExtname == .gdl && workbenchState != empty"
             }
+        ],
+        "jsonValidation": [
+            {
+                "fileMatch": "pathNameTable*.json",
+                "url": "./schemas/pathNameTable.json"
+            }
         ]
     },
     "icon": "images/icon.png",
