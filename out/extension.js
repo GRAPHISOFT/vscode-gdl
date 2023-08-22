@@ -1,10 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.HSFNameOfScript = exports.fileScriptType = exports.HSFScriptType = exports.readFile = exports.fileExists = exports.hasLibPartData = exports.modeGDLHSF = exports.modeGDLXML = exports.modeGDL = exports.GDLExtension = exports.activate = void 0;
+exports.HSFNameOfScript = exports.fileScriptType = exports.HSFScriptType = exports.readFile = exports.fileExists = exports.getLibparts = exports.hasLibPartData = exports.modeGDLHSF = exports.modeGDLXML = exports.modeGDL = exports.GDLExtension = exports.activate = void 0;
 const vscode = require("vscode");
 const util_1 = require("util");
 const Parser = require("./parsexmlgdl");
 const scriptView_1 = require("./scriptView");
+const libpack_1 = require("./libpack");
 const refguide_1 = require("./refguide");
 const parsehsf_1 = require("./parsehsf");
 const wssymbols_1 = require("./wssymbols");
@@ -20,22 +21,51 @@ async function activate(context) {
 }
 exports.activate = activate;
 class GDLExtension {
+    context;
+    // data
+    parseTimer;
+    parser;
+    _updateEnabled = false;
+    currentScript = Parser.ScriptType.ROOT;
+    hsflibpart;
+    wsSymbols;
+    callTree;
+    // user settings
+    refguidePath = "";
+    infoFromHSF = true;
+    // UI elements
+    _editor;
+    statusXMLposition;
+    statusHSF;
+    refguide;
+    outlineView;
+    pathnametableView;
+    // fired when finished parsing, multiple delays might occur before starting
+    _onDidParse = new vscode.EventEmitter();
+    onDidParse = this._onDidParse.event;
+    // UI style
+    static lineHighLight = vscode.window.createTextEditorDecorationType({
+        isWholeLine: true,
+        borderColor: new vscode.ThemeColor("editor.lineHighlightBorder"),
+        borderWidth: "2px",
+        borderStyle: "solid",
+        backgroundColor: new vscode.ThemeColor("editor.lineHighlightBackground")
+    });
+    static functionDecoration = vscode.window.createTextEditorDecorationType({
+        isWholeLine: true,
+        overviewRulerColor: '#cc3333',
+        overviewRulerLane: vscode.OverviewRulerLane.Right,
+    });
+    suggestHSF;
+    sectionDecorations = [];
     constructor(context) {
         this.context = context;
-        this._updateEnabled = false;
-        this.currentScript = Parser.ScriptType.ROOT;
-        // user settings
-        this.refguidePath = "";
-        this.infoFromHSF = true;
-        // fired when finished parsing, multiple delays might occur before starting
-        this._onDidParse = new vscode.EventEmitter();
-        this.onDidParse = this._onDidParse.event;
-        this.sectionDecorations = [];
         this.parser = new Parser.ParseXMLGDL(); // without text only initializes
         this.wsSymbols = new wssymbols_1.WSSymbols(context);
         this.callTree = new calltree_1.CallTree(context, this.wsSymbols);
         // GDLOutline view initialization
         this.outlineView = new scriptView_1.OutlineView(this);
+        this.pathnametableView = new libpack_1.PathNameTableView(context);
         context.subscriptions.push(vscode.window.registerTreeDataProvider('GDLOutline', this.outlineView));
         //status bar initialization - XML
         this.statusXMLposition = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 9999);
@@ -216,6 +246,7 @@ class GDLExtension {
         if (modeGDLXML(this._editor?.document) && !(await IsLibpart(this._editor?.document))) {
             this.switchLang("xml");
         }
+        this.pathnametableView.refreshFromEditor();
         this.updateHsfLibpart();
         this.reparseDoc(this._editor?.document, 0);
     }
@@ -258,6 +289,9 @@ class GDLExtension {
         }
         return changed;
     }
+    static paramDecoration = vscode.window.createTextEditorDecorationType({
+        fontWeight: "bold"
+    });
     async decorateParameters() {
         //console.log("GDLExtension.decorateParameters", this._editor?.document.fileName);
         const paramRanges = [];
@@ -304,6 +338,7 @@ class GDLExtension {
     }
     onDocumentChanged(changeEvent) {
         //console.log("GDLExtension.onDocumentChanged", changeEvent.document.uri.toString());
+        this.pathnametableView.refreshFromEditor();
         this.updateHsfLibpart();
         this.reparseDoc(changeEvent.document); // with default timeout
     }
@@ -311,6 +346,7 @@ class GDLExtension {
         //console.log("GDLExtension.onDocumentOpened", document.uri.toString());
         // handle only top editor - other can be SCM virtual document / other document opened by extension
         if (vscode.window.activeTextEditor?.document.uri === document.uri) {
+            this.pathnametableView.refreshFromEditor();
             this.updateHsfLibpart();
             this.reparseDoc(document, 0);
         }
@@ -852,6 +888,8 @@ class GDLExtension {
         }
         return definitions;
     }
+    static zero_range = new vscode.Range(0, 0, 0, 0);
+    static peek_range = new vscode.Range(0, 0, 10, 0);
     async macroLinks(callsymbol, document, cancel) {
         // find exactly where is the string (can have spaces, whitespace after call)
         let call_range = callsymbol.range(document);
@@ -907,24 +945,6 @@ class GDLExtension {
     }
 }
 exports.GDLExtension = GDLExtension;
-// UI style
-GDLExtension.lineHighLight = vscode.window.createTextEditorDecorationType({
-    isWholeLine: true,
-    borderColor: new vscode.ThemeColor("editor.lineHighlightBorder"),
-    borderWidth: "2px",
-    borderStyle: "solid",
-    backgroundColor: new vscode.ThemeColor("editor.lineHighlightBackground")
-});
-GDLExtension.functionDecoration = vscode.window.createTextEditorDecorationType({
-    isWholeLine: true,
-    overviewRulerColor: '#cc3333',
-    overviewRulerLane: vscode.OverviewRulerLane.Right,
-});
-GDLExtension.paramDecoration = vscode.window.createTextEditorDecorationType({
-    fontWeight: "bold"
-});
-GDLExtension.zero_range = new vscode.Range(0, 0, 0, 0);
-GDLExtension.peek_range = new vscode.Range(0, 0, 10, 0);
 function modeGDL(document) {
     // undefined document returns false
     // language ID 'gdl-hsf' / 'gdl-xml' returns true
@@ -950,6 +970,37 @@ async function hasLibPartData(uri) {
     }
 }
 exports.hasLibPartData = hasLibPartData;
+function gsmUri(rooturi) {
+    const binaryFileName = `${path.basename(rooturi.fsPath)}.gsm`;
+    return { binaryFileName: binaryFileName, sourceUri: rooturi };
+}
+function fileUri(parenturi, filename) {
+    let sourceUri = vscode.Uri.joinPath(parenturi, filename);
+    const binaryFileName = filename.replace(/\.svg$/i, ".tif");
+    return { binaryFileName: binaryFileName, sourceUri: sourceUri };
+}
+async function* getLibparts(uri) {
+    if (await hasLibPartData(uri)) {
+        // return uri, don't go deeper
+        yield gsmUri(uri);
+    }
+    else {
+        const content = vscode.workspace.fs.readDirectory(uri);
+        for (const [name, type] of await content) {
+            if (type & vscode.FileType.File) {
+                // return file uri
+                if (name !== "IDEntryList.dbe" && !name.endsWith("_Interface.xml")) { // skip (TODO only at specific location)
+                    yield fileUri(uri, name);
+                }
+            }
+            else {
+                // continue with contents of folder
+                yield* getLibparts(vscode.Uri.joinPath(uri, name));
+            }
+        }
+    }
+}
+exports.getLibparts = getLibparts;
 async function IsLibpart(document) {
     if (modeGDLXML(document)) {
         // xml files opened as gdl-xml by extension
@@ -966,10 +1017,10 @@ async function IsLibpart(document) {
         return false;
     }
 }
-async function fileExists(uri) {
+async function fileExists(uri, type = vscode.FileType.File) {
     try {
         const stat = await vscode.workspace.fs.stat(uri);
-        return !(stat.type & vscode.FileType.Directory);
+        return ((stat.type & type) > 0);
     }
     catch {
         return false;

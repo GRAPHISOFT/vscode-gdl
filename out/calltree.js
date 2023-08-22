@@ -6,10 +6,15 @@ const Parser = require("./parsexmlgdl");
 const extension_1 = require("./extension");
 const path = require("path");
 class CallTree {
+    wsSymbols;
+    // store already searched files' calls
+    callsCache = new Map();
+    static scriptTypeOfMode = new Map();
+    static scriptOfMode(mode) {
+        return CallTree.scriptTypeOfMode.get(mode) ?? Parser.ScriptType.ROOT;
+    }
     constructor(context, wsSymbols) {
         this.wsSymbols = wsSymbols;
-        // store already searched files' calls
-        this.callsCache = new Map();
         const watcher = vscode.workspace.createFileSystemWatcher("**/*.gdl", true); // don't watch new files
         watcher.onDidChange(e => this.invalidateCache(e));
         watcher.onDidDelete(e => this.invalidateCache(e));
@@ -17,9 +22,6 @@ class CallTree {
         for (const script of Parser.Scripts) {
             CallTree.scriptTypeOfMode.set(Parser.scriptAbbrev[script], script);
         }
-    }
-    static scriptOfMode(mode) {
-        return CallTree.scriptTypeOfMode.get(mode) ?? Parser.ScriptType.ROOT;
     }
     invalidateCache(changed) {
         // delete the given uri's data from the cache
@@ -70,6 +72,8 @@ class CallTree {
             return `- ${path.basename(uri.fsPath, ".gdl")} : ${range.start.line + 1}`;
         }
     }
+    static modeRegex = /(?<=^\[).*?(?= context\])/;
+    static modeRegexFull = /^\[.*? context\]/;
     static formatContext(mode) {
         return `[${Parser.scriptAbbrev[mode]} context]`;
     }
@@ -231,7 +235,4 @@ class CallTree {
     }
 }
 exports.CallTree = CallTree;
-CallTree.scriptTypeOfMode = new Map();
-CallTree.modeRegex = /(?<=^\[).*?(?= context\])/;
-CallTree.modeRegexFull = /^\[.*? context\]/;
 //# sourceMappingURL=calltree.js.map

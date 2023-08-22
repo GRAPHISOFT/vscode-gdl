@@ -6,10 +6,14 @@ const vscode = require("vscode");
 const extension_1 = require("./extension");
 const Parser = require("./parsexmlgdl");
 class LibpartInfo {
+    libpartdata_uri;
+    guid;
+    _root_uri;
+    _name;
+    scriptsCache = new Map();
     constructor(libpartdata_uri, guid) {
         this.libpartdata_uri = libpartdata_uri;
         this.guid = guid;
-        this.scriptsCache = new Map();
     }
     get name() {
         if (this._name === undefined) {
@@ -68,13 +72,13 @@ class LibpartInfo {
 }
 exports.LibpartInfo = LibpartInfo;
 class WSSymbols {
+    // folder contents indexed by root folder (for multi-root workspaces)
+    libparts = [];
+    unprocessed = true;
+    // fired when finished scanning workspace
+    _onDidCollect = new vscode.EventEmitter();
+    onDidCollect = this._onDidCollect.event;
     constructor(context) {
-        // folder contents indexed by root folder (for multi-root workspaces)
-        this.libparts = [];
-        this.unprocessed = true;
-        // fired when finished scanning workspace
-        this._onDidCollect = new vscode.EventEmitter();
-        this.onDidCollect = this._onDidCollect.event;
         context.subscriptions.push(vscode.workspace.onDidChangeWorkspaceFolders(async () => this.changeFolders()), vscode.workspace.onDidCreateFiles(async () => this.changeFolders()), vscode.workspace.onDidDeleteFiles(async () => this.changeFolders()), vscode.workspace.onDidRenameFiles(async () => this.changeFolders()));
     }
     async collectLibparts() {

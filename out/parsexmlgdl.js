@@ -56,27 +56,33 @@ function getRelatedScripts(scriptType) {
 exports.getRelatedScripts = getRelatedScripts;
 // general interface representing a thing we want to catch
 class GDLToken {
+    start;
+    end;
+    name;
+    static regex; // regex string needed to catch all
+    range(document) {
+        return new vscode.Range(document.positionAt(this.start), document.positionAt(this.end));
+    }
     constructor(start, end, name) {
         this.start = start;
         this.end = end;
         this.name = name;
     }
-    range(document) {
-        return new vscode.Range(document.positionAt(this.start), document.positionAt(this.end));
-    }
 }
 exports.GDLToken = GDLToken;
 // function definitions
 class GDLFunction extends GDLToken {
+    static regex = /(?<=^\s*?)(([0-9]+)|((["'`´“”’‘])([^"'`´“”’‘]+)\4))\s*:/mg;
     constructor(start, end, name) {
         //console.log("GDLFunction()", name);
         super(start, end, name);
     }
 }
 exports.GDLFunction = GDLFunction;
-GDLFunction.regex = /(?<=^\s*?)(([0-9]+)|((["'`´“”’‘])([^"'`´“”’‘]+)\4))\s*:/mg;
 // special comments
 class GDLComment extends GDLToken {
+    //public static readonly regex = /^\s*!\s*---\s*([^-]+?)---.*$/mig;		// ! --- name ---
+    static regex = /^(\s*!\s*=+)\r?\n\s*!\s*(.+?)\r?\n\1/mig; // ! ============
     // ! name
     // ! ============
     constructor(start, end, name) {
@@ -85,10 +91,10 @@ class GDLComment extends GDLToken {
     }
 }
 exports.GDLComment = GDLComment;
-//public static readonly regex = /^\s*!\s*---\s*([^-]+?)---.*$/mig;		// ! --- name ---
-GDLComment.regex = /^(\s*!\s*=+)\r?\n\s*!\s*(.+?)\r?\n\1/mig; // ! ============
 // called macros
 class GDLCalledMacro extends GDLToken {
+    static regex = /^\s*<MName><!\[CDATA\["([\D\d]*?)"\]\]><\/MName>/mig;
+    fromScripts;
     constructor(start, end, name, fromScripts) {
         //console.log("GDLCalledMacro()", content);
         super(start, end, name);
@@ -96,9 +102,16 @@ class GDLCalledMacro extends GDLToken {
     }
 }
 exports.GDLCalledMacro = GDLCalledMacro;
-GDLCalledMacro.regex = /^\s*<MName><!\[CDATA\["([\D\d]*?)"\]\]><\/MName>/mig;
 // macro calls
 class GDLMacroCall extends GDLToken {
+    static regex = /(?<!!.*)\bcall\s*"(.*?)"(\s*(,\r?\n\s*)?(parameters\s*all))?/mig;
+    // TODO LIBRARYGLOBALS?
+    all;
+    innerstart;
+    innerend;
+    namerange(document) {
+        return new vscode.Range(document.positionAt(this.innerstart), document.positionAt(this.innerend));
+    }
     constructor(start, end, match) {
         //console.log("GDLMacroCall()", content);
         super(start, end, match[1]);
@@ -106,22 +119,21 @@ class GDLMacroCall extends GDLToken {
         this.innerend = this.innerstart + match[1].length;
         this.all = (match.length >= 4 && match[4] !== undefined); // parameters all
     }
-    namerange(document) {
-        return new vscode.Range(document.positionAt(this.innerstart), document.positionAt(this.innerend));
-    }
 }
 exports.GDLMacroCall = GDLMacroCall;
-GDLMacroCall.regex = /(?<!!.*)\bcall\s*"(.*?)"(\s*(,\r?\n\s*)?(parameters\s*all))?/mig;
 // main GUID
 class GDLMainGUID extends GDLToken {
+    static regex = /^<Symbol.*?MainGUID="([-0-9A-Z]*)".*?>$/mig;
     constructor(start, end, guid) {
         super(start, end, guid);
     }
 }
 exports.GDLMainGUID = GDLMainGUID;
-GDLMainGUID.regex = /^<Symbol.*?MainGUID="([-0-9A-Z]*)".*?>$/mig;
 // migration table GUIDs
 class GDLMigrationGUID extends GDLToken {
+    static regex = /^\s*<(MigrationTableElement>)([\D\d]*?)<\/\1/mig;
+    version;
+    automigration;
     constructor(start, end, content) {
         //console.log("GDLMigrationGUID()", content);
         //defaults if not found
@@ -152,9 +164,15 @@ class GDLMigrationGUID extends GDLToken {
     }
 }
 exports.GDLMigrationGUID = GDLMigrationGUID;
-GDLMigrationGUID.regex = /^\s*<(MigrationTableElement>)([\D\d]*?)<\/\1/mig;
 // toplevel XML sections (script, migtable, etc...)
 class GDLXMLSection extends GDLToken {
+    innerstart;
+    innerend;
+    scriptType;
+    parser;
+    static regex = /^<((Script_([123]D|UI|VL|PR|[FB]WM))|ParamSection|MigrationTable|CalledMacros)[\D\d]*?<\/\1>/mg;
+    static newlineregex = /[\n\r]/;
+    multiline;
     constructor(start, end, innerstart, innerend, scriptType, // integer ID of tag
     parser, // needed for other elements' lists
     subtext) {
@@ -171,8 +189,6 @@ class GDLXMLSection extends GDLToken {
     }
 }
 exports.GDLXMLSection = GDLXMLSection;
-GDLXMLSection.regex = /^<((Script_([123]D|UI|VL|PR|[FB]WM))|ParamSection|MigrationTable|CalledMacros)[\D\d]*?<\/\1>/mg;
-GDLXMLSection.newlineregex = /[\n\r]/;
 // whole file
 class GDLFile extends GDLXMLSection {
     constructor(start, parser, text) {
@@ -186,6 +202,7 @@ class GDLFile extends GDLXMLSection {
 exports.GDLFile = GDLFile;
 // GDL scripts
 class GDLScript extends GDLXMLSection {
+    static innerregex = /(?<=^.*?<\!\[CDATA\[).*(?=\]\]>[\n\r]*<\/Script_)/s;
     constructor(start, scriptType, parser, text) {
         const match = GDLScript.innerregex.exec(text);
         let innerstart;
@@ -207,9 +224,9 @@ class GDLScript extends GDLXMLSection {
     }
 }
 exports.GDLScript = GDLScript;
-GDLScript.innerregex = /(?<=^.*?<\!\[CDATA\[).*(?=\]\]>[\n\r]*<\/Script_)/s;
 // non-script XML sections
 class GDLSection extends GDLXMLSection {
+    static innerregex = /(?<=<(ParamSection|MigrationTable|CalledMacros)[^>]*>[\n\r]+)(.*?)(?=<\/\1>)/sg;
     constructor(start, scriptType, parser, text) {
         const end = start + text.length;
         let subtext = text.substring(start, end + 1);
@@ -238,18 +255,23 @@ class GDLSection extends GDLXMLSection {
     }
 }
 exports.GDLSection = GDLSection;
-GDLSection.innerregex = /(?<=<(ParamSection|MigrationTable|CalledMacros)[^>]*>[\n\r]+)(.*?)(?=<\/\1>)/sg;
 // parent of GDLPict leafs
 class GDLPictParent extends GDLToken {
+    static regex = /./; // not used
+    numChildren;
     constructor(numChildren) {
         super(0, 0, exports.scriptName[ScriptType.GDLPICT]);
         this.numChildren = numChildren;
     }
 }
 exports.GDLPictParent = GDLPictParent;
-GDLPictParent.regex = /./; // not used
 // embedded GDLPict
 class GDLPict extends GDLToken {
+    static regex = /^\s*<GDLPict[\D\d]*?SubIdent="(\d*?)"[\D\d]*?path="(.*?\/([^\/]*))"[\D\d]*?\/>/mig;
+    id;
+    idString;
+    path;
+    file;
     constructor(start, end, match) {
         //console.log("GDLPict()", content);
         //defaults if not found
@@ -271,17 +293,17 @@ class GDLPict extends GDLToken {
     }
 }
 exports.GDLPict = GDLPict;
-GDLPict.regex = /^\s*<GDLPict[\D\d]*?SubIdent="(\d*?)"[\D\d]*?path="(.*?\/([^\/]*))"[\D\d]*?\/>/mig;
 class ParseXMLGDL {
+    sectionList = [];
+    functionList = [];
+    commentList = [];
+    macroCallList = [];
+    mainGUID;
+    GUIDList = [];
+    calledMacroList = [];
+    pictList = [];
     constructor(text, functions = true, comments = true, guids = true, calledmacros = true, picts = true) {
         //console.log("ParseXMLGDL()");
-        this.sectionList = [];
-        this.functionList = [];
-        this.commentList = [];
-        this.macroCallList = [];
-        this.GUIDList = [];
-        this.calledMacroList = [];
-        this.pictList = [];
         // this needs to be first to know script boundaries
         this.parseScripts(text);
         this.parseFunctions(functions ? text : undefined);

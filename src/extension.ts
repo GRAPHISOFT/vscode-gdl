@@ -3,6 +3,7 @@ import { TextDecoder } from 'util';
 
 import * as Parser from './parsexmlgdl';
 import { OutlineView } from './scriptView';
+import { PathNameTableView } from './libpack';
 import { RefGuide } from './refguide';
 import { HSFLibpart } from './parsehsf';
 import { WSSymbols } from './wssymbols';
@@ -54,6 +55,7 @@ export class GDLExtension
     private statusHSF : vscode.StatusBarItem;
     private refguide? : RefGuide;
     public outlineView : OutlineView;
+    public pathnametableView : PathNameTableView;
 
 	// fired when finished parsing, multiple delays might occur before starting
 	private _onDidParse: vscode.EventEmitter<null> = new vscode.EventEmitter<null>();
@@ -84,6 +86,7 @@ export class GDLExtension
 
         // GDLOutline view initialization
         this.outlineView = new OutlineView(this);
+        this.pathnametableView = new PathNameTableView(context);
         context.subscriptions.push(vscode.window.registerTreeDataProvider('GDLOutline', this.outlineView));
 
         //status bar initialization - XML
@@ -309,6 +312,7 @@ export class GDLExtension
             this.switchLang("xml");
         }
 
+        this.pathnametableView.refreshFromEditor();
         this.updateHsfLibpart();
         this.reparseDoc(this._editor?.document, 0);
     }
@@ -410,15 +414,17 @@ export class GDLExtension
 
     private onDocumentChanged(changeEvent: vscode.TextDocumentChangeEvent) {
         //console.log("GDLExtension.onDocumentChanged", changeEvent.document.uri.toString());
+        this.pathnametableView.refreshFromEditor();
         this.updateHsfLibpart();
         this.reparseDoc(changeEvent.document);  // with default timeout
     }
-
+    
     private onDocumentOpened(document: vscode.TextDocument) {
         //console.log("GDLExtension.onDocumentOpened", document.uri.toString());
         
         // handle only top editor - other can be SCM virtual document / other document opened by extension
         if (vscode.window.activeTextEditor?.document.uri === document.uri) {
+            this.pathnametableView.refreshFromEditor();
             this.updateHsfLibpart();
             this.reparseDoc(document, 0);
         }
@@ -1159,6 +1165,45 @@ export async function hasLibPartData(uri? : vscode.Uri) : Promise<boolean> {
     }
 }
 
+/** create source libpart uri and binary filename */
+export type LibpartUri = {
+    readonly binaryFileName : string,
+    readonly sourceUri: vscode.Uri
+};
+
+function gsmUri(rooturi: vscode.Uri) : LibpartUri {
+    const binaryFileName = `${path.basename(rooturi.fsPath)}.gsm`;
+
+    return { binaryFileName: binaryFileName, sourceUri: rooturi };
+}
+
+function fileUri(parenturi: vscode.Uri, filename: string) : LibpartUri {
+    let sourceUri = vscode.Uri.joinPath(parenturi, filename);
+    const binaryFileName = filename.replace(/\.svg$/i, ".tif");
+
+    return { binaryFileName: binaryFileName, sourceUri: sourceUri };
+}
+
+export async function* getLibparts(uri : vscode.Uri) : AsyncIterableIterator<LibpartUri> {
+    if (await hasLibPartData(uri)) {
+        // return uri, don't go deeper
+        yield gsmUri(uri);
+    } else {
+        const content = vscode.workspace.fs.readDirectory(uri);
+        for (const [name, type] of await content) {
+            if (type & vscode.FileType.File) {
+                // return file uri
+                if (name !== "IDEntryList.dbe" && !name.endsWith("_Interface.xml")) {   // skip (TODO only at specific location)
+                    yield fileUri(uri, name);
+                }
+            } else {
+                // continue with contents of folder
+                yield* getLibparts(vscode.Uri.joinPath(uri, name));
+            }
+        }
+    }
+}
+
 async function IsLibpart(document? : vscode.TextDocument) : Promise<boolean> {
     if (modeGDLXML(document)) {
         // xml files opened as gdl-xml by extension
@@ -1174,10 +1219,10 @@ async function IsLibpart(document? : vscode.TextDocument) : Promise<boolean> {
     }
 }
 
-export async function fileExists(uri : vscode.Uri) : Promise<boolean> {
+export async function fileExists(uri : vscode.Uri, type : vscode.FileType = vscode.FileType.File) : Promise<boolean> {
     try {
         const stat = await vscode.workspace.fs.stat(uri);
-        return !(stat.type & vscode.FileType.Directory);
+        return ((stat.type & type) > 0);
     } catch {
         return false;
     }

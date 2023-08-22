@@ -2,7 +2,7 @@
     "name": "gdl",
     "displayName": "GDL",
     "description": "Development environment for Archicad 25 GDL language (XML and HSF source code): syntax coloring, snippets, code outline, quick reference.",
-    "version": "1.27.0-dev.3",
+    "version": "1.27.0-dev.4",
     "publisher": "Graphisoft",
     "author": "Péter Baksa",
     "contributors": [
@@ -21,7 +21,7 @@
         "url": "https://github.com/GRAPHISOFT/vscode-gdl"
     },
     "engines": {
-        "vscode": "^1.66.0"
+        "vscode": "^1.81.1"
     },
     "categories": [
         "Programming Languages",
@@ -157,8 +157,21 @@
                 "path": "./themes/GDL_dark_theme.json"
             }
         ],
+        "viewsContainers": {
+            "activitybar": [
+                {
+                    "id": "gdl-views",
+                    "title": "Library explorer",
+                    "icon": "$(symbol-misc)"
+                }
+            ]
+        },      
         "views": {
-            "explorer": [
+            "gdl-views": [
+                {
+                    "id": "PathNameTableView",
+                    "name": "PathNameTable outline"
+                },
                 {
                     "id": "GDLOutline",
                     "when": "GDLOutlineEnabled",
@@ -168,6 +181,30 @@
         },
         "menus": {
             "commandPalette": [
+                {
+                    "command": "GDL.PNTV.expandAll",
+                    "when": "view == PathNameTableView"
+                },
+                {
+                    "command": "GDL.PNTV.checkContent",
+                    "when": "view == PathNameTableView"
+                },
+                {
+                    "command": "GDL.PNTV.createSubPath",
+                    "when": "view == PathNameTableView && viewItem != file"
+                },
+                {
+                    "command": "GDL.PNTV.copyVirtualPath",
+                    "when": "view == PathNameTableView && viewItem != root"
+                },
+                {
+                    "command": "GDL.PNTV.rename",
+                    "when": "view == PathNameTableView && viewItem != root"
+                },
+                {
+                    "command": "GDL.PNTV.showInFile",
+                    "when": "view == PathNameTableView && viewItem == file"
+                },
                 {
                     "command": "GDL.insertPict",
                     "when": "view == GDLOutline && viewItem == gdlpict"
@@ -227,6 +264,16 @@
             ],
             "view/title": [
                 {
+                    "command": "GDL.PNTV.checkContent",
+                    "when": "view == PathNameTableView",
+                    "group": "navigation@1"
+                },
+                {
+                    "command": "GDL.PNTV.expandAll",
+                    "when": "view == PathNameTableView",
+                    "group": "navigation@2"
+                },
+                {
                     "command": "GDL.gotoCursor",
                     "when": "view == GDLOutline",
                     "group": "navigation"
@@ -243,6 +290,31 @@
                 }
             ],
             "view/item/context": [
+                {
+                    "command": "GDL.PNTV.copyVirtualPath",
+                    "when": "view == PathNameTableView && viewItem != root",
+                    "group": "inline@1"
+                },
+                {
+                    "command": "GDL.PNTV.rename",
+                    "when": "view == PathNameTableView && viewItem != root",
+                    "group": "inline@2"
+                },
+                {
+                    "command": "GDL.PNTV.showInFile",
+                    "when": "view == PathNameTableView && viewItem == file",
+                    "group": "inline@3"
+                },
+                {
+                    "command": "GDL.PNTV.createSubPath",
+                    "when": "view == PathNameTableView && viewItem != file",
+                    "group": "inline@3"
+                },
+                {
+                    "command": "GDL.PNTV.expandAll",
+                    "when": "view == PathNameTableView && viewItem != file",
+                    "group": "inline@4"
+                },
                 {
                     "command": "GDL.selectScript",
                     "when": "view == GDLOutline && viewItem == script",
@@ -346,6 +418,42 @@
             ]
         },
         "commands": [
+            {
+                "command": "GDL.PNTV.expandAll",
+                "title": "Expand all",
+                "category": "PathNameTableView",
+                "icon": "$(expand-all)"
+            },
+            {
+                "command": "GDL.PNTV.checkContent",
+                "title": "Check content against filesystem",
+                "category": "PathNameTableView",
+                "icon": "$(check-all)"
+            },
+            {
+                "command": "GDL.PNTV.createSubPath",
+                "title": "Create sub-path...",
+                "category": "PathNameTableView",
+                "icon": "$(file-directory-create)"
+            },
+            {
+                "command": "GDL.PNTV.copyVirtualPath",
+                "title": "Copy virtual path to clipboard",
+                "category": "PathNameTableView",
+                "icon": "$(output)"
+            },
+            {
+                "command": "GDL.PNTV.rename",
+                "title": "Rename",
+                "category": "PathNameTableView",
+                "icon": "$(pencil)"
+            },
+            {
+                "command": "GDL.PNTV.showInFile",
+                "title": "Show in file",
+                "category": "PathNameTableView",
+                "icon": "$(arrow-small-right)"
+            },
             {
                 "command": "GDLOutline.toggleSpecComments",
                 "title": "Toggle special comments on/off",
@@ -479,6 +587,12 @@
                 "mac": "ctrl+alt+space",
                 "when": "editorLangId == gdl-hsf && isFileSystemResource && resourceExtname == .gdl && workbenchState != empty"
             }
+        ],
+        "jsonValidation": [
+            {
+                "fileMatch": "pathNameTable*.json",
+                "url": "./schemas/pathNameTable.json"
+            }
         ]
     },
     "icon": "images/icon.png",
@@ -496,12 +610,12 @@
     "devDependencies": {
         "@types/glob": "^7.2.0",
         "@types/mocha": "^9.0.0",
-        "@types/node": "^14.16.0",
-        "@types/vscode": "1.66.0",
+        "@types/node": "^16.17.1",
+        "@types/vscode": "1.81.0",
         "@typescript-eslint/eslint-plugin": "^5.3.0",
         "@typescript-eslint/parser": "^5.3.0",
         "@vscode/test-electron": "^1.6.1",
-        "@vscode/vsce": "^2.15.0",
+        "@vscode/vsce": "^2.20.1",
         "eslint": "^8.1.0",
         "glob": "^7.2.0",
         "mocha": "^9.1.3",

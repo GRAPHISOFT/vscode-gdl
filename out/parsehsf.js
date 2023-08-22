@@ -7,9 +7,12 @@ const paramlistparser_1 = require("./paramlistparser");
 const constparser_1 = require("./constparser");
 const wssymbols_1 = require("./wssymbols");
 class HSFLibpart {
+    _paramlist = new paramlistparser_1.ParamList();
+    get paramlist() { return this._paramlist; }
+    _constants = new Map();
+    processing;
+    info;
     constructor(rootFolder, currentScript) {
-        this._paramlist = new paramlistparser_1.ParamList();
-        this._constants = new Map();
         this.info = new wssymbols_1.LibpartInfo(vscode.Uri.joinPath(rootFolder, "libpartdata.xml"), "");
         this.processing = Promise.allSettled([
             this.constants(Parser.ScriptType.D),
@@ -18,7 +21,6 @@ class HSFLibpart {
         ]);
         //TODO register paramlist observer
     }
-    get paramlist() { return this._paramlist; }
     async refresh(script) {
         this._constants.delete(script);
         await this.constants(script);
