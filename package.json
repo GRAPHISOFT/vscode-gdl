@@ -2,7 +2,7 @@
     "name": "gdl",
     "displayName": "GDL",
     "description": "Development environment for Archicad 25 GDL language (XML and HSF source code): syntax coloring, snippets, code outline, quick reference.",
-    "version": "1.27.0-dev.3",
+    "version": "1.27.0-dev.5",
     "publisher": "Graphisoft",
     "author": "Péter Baksa",
     "contributors": [
