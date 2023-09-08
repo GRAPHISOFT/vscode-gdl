@@ -1389,16 +1389,16 @@
       "body": "for ${01:variable} = ${02:initialValue} to ${03:endValue} step ${04:stepValue}\n\t$5\nnext ${01:variable}\n$0"
     },
     "\"do-while\" statement": {
-      "prefix": "do",
-      "body": "do ${01:statement1}\n\t${02:statement2}\n\t${03:...}\n\t${04:statementn}\nwhile ${05:condition}"
+      "prefix": "do while",
+      "body": "do\n\t${01:statement1}\n\t${02:statement2}\n\t${03:...}\n\t${04:statementn}\nwhile ${05:condition}"
     },
-    "\"while-endwhile\" statement": {
-      "prefix": "while",
+    "\"while-do-endwhile\" statement": {
+      "prefix": "while do",
       "body": "while ${01:condition} do\n\t${02:statement1}\n\t${03:statement2}\n\t${04:...}\n\t${05:statementn}\nendwhile"
     },
     "\"repeat-until\" statement": {
       "prefix": "repeat",
-      "body": "repeat ${01:statement1}\n\t${02:statement2}\n\t${03:...}\n\t${04:statementn}\nuntil ${05:condition}"
+      "body": "repeat\n\t${01:statement1}\n\t${02:statement2}\n\t${03:...}\n\t${04:statementn}\nuntil ${05:condition}"
     },
     "\"if-then\" statement": {
       "prefix": "if-then",
@@ -1431,6 +1431,18 @@
     "\"breakpoint\" statement": {
       "prefix": "breakpoint",
       "body": "breakpoint ${01:expression}"
+    },
+    "do": {
+      "prefix": "do",
+      "body": "do\n\t"
+    },
+    "else": {
+      "prefix": "else",
+      "body": "else\n\t"
+    },
+    "then": {
+      "prefix": "then",
+      "body": "then\n\t"
     },
     "\"put\" command": {
       "prefix": "put",
