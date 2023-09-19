@@ -4636,6 +4636,10 @@
       "prefix": "request (\"TEXTBLOCK_INFO",
       "body": "n = REQUEST (\"TEXTBLOCK_INFO\", ${01:textblock_name}, ${02:width}, ${03:height})"
     },
+    "request (\"MEP_ROUTE_ATTRIBUTES\")": {
+      "prefix": "request (\"MEP_ROUTE_ATTRIBUTES",
+      "body": "n = REQUEST (\"MEP_ROUTE_ATTRIBUTES\", ${01:InputAttributes}, ${02:MEPRouteAttributes})"
+    },
     "request (\"Material_info\")": {
       "prefix": "request (\"Material_info",
       "body": "n = REQUEST{2} (\"Material_info\", ${01:name_or_index}, ${02:param_name}, ${03:value_or_values})"
