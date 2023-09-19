@@ -1269,6 +1269,7 @@
 									INTERNAL_ID |
 									(MODEL|LAYOUT)_(LENGTH|TEXT_SIZE)_UNIT |
 									MATERIAL_INFO |
+									MEP_ROUTE_ATTRIBUTES |
 									Model_size |
 									NAME_OF_((BUILDING_)?MATERIAL|FILL|LINE_TYPE|LISTED|MACRO|MAIN|PLAN|PROFILE|PROGRAM|STYLE) |
 									Pen_of_RGB\s+[01](\.\d+)?\s+[01](\.\d+)?\s+[01](\.\d+)?\s? |
@@ -1346,7 +1347,10 @@
 					<dict>
 						<key>match</key>
 						<string>(?x)(?&lt;=["“”])Builtin\.
-								(	General_(
+								(	Design_Option_(
+										(Set_)?Name |
+										ID) |
+									General_(
 										Area |
 										Height |
 										Width |
