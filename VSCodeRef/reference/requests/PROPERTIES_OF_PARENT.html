@@ -5,7 +5,7 @@
                     
                         <p>
                             Returns the properties of the parent object. All properties are returned in one array with the following form: ID, type, group, name.
-                            Can be used only in labels. <span class="italic">Expression returns 0 and contains dummy return values (emtpy string or 0) if used in parameter script, causing additional warning.</span>
+                            Can be used only in labels. <span class="italic">Expression returns 0 and contains dummy return values (empty string or 0) if used in parameter script, causing additional warning.</span>
 
                             </p><pre class="programlisting">
 Core property:      [id,    "", "",                   PropertyName]
@@ -26,7 +26,7 @@ Profile parameter:  [guid,  "", "Profile Parameters", ParameterName]</pre><p>
                             <span class="italic">Compatibility: the request is introduced in Archicad 20. The property type options and the Classification property type are introduced in Archicad 21, the Profile parameter property type is introduced in Archicad 22.</span>
                         </p>
                     
-                    <div class="example"><a id="id606580"/><p class="title"><b>Example:
+                    <div class="example"><a id="id610223"/><p class="title"><b>Example:
 </b></p><div class="example-contents"><pre class="programlisting">DIM parentProperties[]
 n = REQUEST ("PROPERTIES_OF_PARENT", "", parentProperties)
 ! parentProperties =   [Id1, TypeName1, GroupName1, PropertyName1,
@@ -36,6 +36,6 @@ n = REQUEST ("PROPERTIES_OF_PARENT", "", parentProperties)
                 <hr/><a href="002.015.html#PROPERTIES_OF_PARENT_gdlrequest">Related in Miscellaneous</a><p>
                 <span class="bold"><strong>GDL Reference Guide</strong></span>
             </p><p>
-                <span class="trademark">Copyright</span><sup>©</sup> 2022 by Graphisoft, all rights reserved.
+                <span class="trademark">Copyright</span><sup>©</sup> 2023 by Graphisoft, all rights reserved.
                 Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
             </p></body></html>

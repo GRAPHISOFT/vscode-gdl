@@ -4,7 +4,7 @@
                     <pre class="programlisting">n = REQUEST("PROFILE_COMPONENTS", name_or_index, nComponents,
             compType1, compType2, ..., compTypen)</pre>
                     
-                        <p>Returns the number (<code class="literal">nComponents</code>) and component types (<code class="literal">compTypen</code>) of the profile identified by name or index. <span class="italic">Expression returns 0 and contains dummy return values (emtpy string or 0) if used in parameter script, causing additional warning.</span>
+                        <p>Returns the number (<code class="literal">nComponents</code>) and component types (<code class="literal">compTypen</code>) of the profile identified by name or index. <span class="italic">Expression returns 0 and contains dummy return values (empty string or 0) if used in parameter script, causing additional warning.</span>
                         </p>
                         <div style="margin-left: 1em">
                             <div style="text-indent: -1em"><code><b>compTypei: </b></code>Possible values of profile component types:</div>
@@ -16,13 +16,13 @@
                                 <span class="italic">Compatibility: introduced in Archicad 21.</span>
                         </p>
                     
-                    <div class="example"><a id="id605916"/><p class="title"><b>Example:
+                    <div class="example"><a id="id609531"/><p class="title"><b>Example:
 </b></p><div class="example-contents"><pre class="programlisting">_nComponents = 0
 dim _componentTypes[]
 n = REQUEST ("PROFILE_COMPONENTS", myProfileIdx, _nComponents, _componentTypes</pre></div></div>
                 <hr/><a href="002.015.html#PROFILE_COMPONENTS_gdlrequest">Related in Miscellaneous</a><p>
                 <span class="bold"><strong>GDL Reference Guide</strong></span>
             </p><p>
-                <span class="trademark">Copyright</span><sup>©</sup> 2022 by Graphisoft, all rights reserved.
+                <span class="trademark">Copyright</span><sup>©</sup> 2023 by Graphisoft, all rights reserved.
                 Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
             </p></body></html>
