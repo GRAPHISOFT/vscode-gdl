@@ -163,7 +163,7 @@ export class GDLExtension
             //console.log("reparseDoc resolved");
             this.parser = result;
             this._onDidParse.fire(null);
-            this.updateUI();
+            this.updateUI(document);
         });
     }
 
@@ -252,7 +252,7 @@ export class GDLExtension
         this.sectionDecorations[Parser.ScriptType.GDLPICT] = vscode.window.createTextEditorDecorationType({});
     }
 
-    private updateUI() {
+    private updateUI(document : vscode.TextDocument | undefined) {
 
         // status bar
         this.updateCurrentScript();
@@ -282,6 +282,8 @@ export class GDLExtension
 		
         // parameter decorations
         this.decorateParameters();  // start async operation
+
+        this.decorateVariables(document);  // start async operation
     }
     
     private async parse(document : vscode.TextDocument | undefined, delay : number) : PromiseParse {
@@ -355,6 +357,26 @@ export class GDLExtension
     private static paramDecoration : vscode.TextEditorDecorationType = vscode.window.createTextEditorDecorationType({
         fontWeight: "bold"
     });
+    private static vardefDecoration : vscode.TextEditorDecorationType = vscode.window.createTextEditorDecorationType({
+        backgroundColor: "#e3e7de33",
+        isWholeLine: true
+    });
+
+    private async decorateVariables(document : vscode.TextDocument | undefined) {
+        let vardefRanges : vscode.Range[] = [];
+        if (this.hsflibpart && document) {
+            await this.hsflibpart.processing;
+            let scriptType = HSFScriptType(document.uri)!;
+            const line_has_init = [...await this.hsflibpart.vardefs(scriptType)];
+            vardefRanges = line_has_init.map((has_init, line) => (has_init ? line : -1))
+                                        .filter(line => (line >= 0))
+                                        .map(line => document.lineAt(line).range);
+        }
+
+        if (this._editor) {
+            this._editor.setDecorations(GDLExtension.vardefDecoration, vardefRanges);
+        }
+    }
 
     private async decorateParameters() {
         //console.log("GDLExtension.decorateParameters", this._editor?.document.fileName);

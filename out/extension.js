@@ -82,7 +82,7 @@ class GDLExtension {
             //console.log("reparseDoc resolved");
             this.parser = result;
             this._onDidParse.fire(null);
-            this.updateUI();
+            this.updateUI(document);
         });
     }
     initUIDecorations() {
@@ -169,7 +169,7 @@ class GDLExtension {
         });
         this.sectionDecorations[Parser.ScriptType.GDLPICT] = vscode.window.createTextEditorDecorationType({});
     }
-    updateUI() {
+    updateUI(document) {
         // status bar
         this.updateCurrentScript();
         this.updateStatusHSF();
@@ -194,6 +194,7 @@ class GDLExtension {
             tokens: this.parser.getAllFunctions() });
         // parameter decorations
         this.decorateParameters(); // start async operation
+        this.decorateVariables(document); // start async operation
     }
     async parse(document, delay) {
         //console.log("GDLExtension parse");
@@ -257,6 +258,20 @@ class GDLExtension {
             }
         }
         return changed;
+    }
+    async decorateVariables(document) {
+        let vardefRanges = [];
+        if (this.hsflibpart && document) {
+            await this.hsflibpart.processing;
+            let scriptType = HSFScriptType(document.uri);
+            const line_has_init = [...await this.hsflibpart.vardefs(scriptType)];
+            vardefRanges = line_has_init.map((has_init, line) => (has_init ? line : -1))
+                .filter(line => (line >= 0))
+                .map(line => document.lineAt(line).range);
+        }
+        if (this._editor) {
+            this._editor.setDecorations(GDLExtension.vardefDecoration, vardefRanges);
+        }
     }
     async decorateParameters() {
         //console.log("GDLExtension.decorateParameters", this._editor?.document.fileName);
@@ -922,6 +937,10 @@ GDLExtension.functionDecoration = vscode.window.createTextEditorDecorationType({
 });
 GDLExtension.paramDecoration = vscode.window.createTextEditorDecorationType({
     fontWeight: "bold"
+});
+GDLExtension.vardefDecoration = vscode.window.createTextEditorDecorationType({
+    backgroundColor: "#e3e7de33",
+    isWholeLine: true
 });
 GDLExtension.zero_range = new vscode.Range(0, 0, 0, 0);
 GDLExtension.peek_range = new vscode.Range(0, 0, 10, 0);
