@@ -62,8 +62,6 @@ __hotspot__ or __hotspot2__ - length edit hotspot triplet
 * Automatic indentation on typing
   * Increase after lines with block-opening keywords (for, if, while, group, subroutine...)
   * Decrease after block-closing keywords (next, else, endif, endwhile, endgroup, return...)
-  * Increase after first command continuation with , or \ (prevoius line ends without , or \ and this line ends with it)
-  * Decrease after end of command (previous line ends with , or \ and this line ends without it)
   * Line ending comments are handled, comment-only lines and difficult syntax with : or multiline strings are not
 
 # Script outline view
@@ -167,6 +165,10 @@ Some valid syntaxes won't be highlighted, and some invalid syntaxes will be high
 1. Press Ctrl-S to apply changes to the user settings
 
 # Release Notes
+
+## 1.27.0
+* Reference guide 27
+* Snippet fixes (keywords at end of line)
 
 ## 1.26.2
 * Intellisense reads constants from edited file too, besides master script

@@ -1,0 +1,1158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><title>New GDL Features in Archicad 27 – GDL Reference Guide</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="index.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/><link rel="StyleSheet" href="dtree.css" type="text/css"/><script type="text/javascript" src="dtree.js">
+					 //Fake content to keep the end script tag 
+				</script></head><body onload="followLink(document.location.href);" onhashchange="followLink(document.location.href);" class="chapter"><div class="hoveringtoc"><script type="text/javascript">
+			//&lt;![CDATA[
+			GDLManualTOC = new dTree('GDLManualTOC');
+			GDLManualTOC.config.useIcons = false;
+			GDLManualTOC.add(0, -1, "GDL Reference Guide", "index.html","GDL Reference Guide");
+			
+			GDLManualTOC.add(1, 0, "General Overview", "002.004.html", "General Overview");
+			
+			GDLManualTOC.add(101, 1, "Starting Out", "002.004.html#StartingOut_section", "Starting Out");
+			
+			GDLManualTOC.add(102, 1, "Scripting", "002.004.html#Scripting_section", "Scripting");
+			
+			GDLManualTOC.add(103, 1, "3D Generation", "002.004.html#id504173", "3D Generation");
+			
+			GDLManualTOC.add(2, 0, "GDL Syntax", "002.005.html", "GDL Syntax");
+			
+			GDLManualTOC.add(201, 2, "Rules of GDL Syntax", "002.005.html#RulesofGDLSyntax_section", "Rules of GDL Syntax");
+			
+			GDLManualTOC.add(202, 2, "Statements", "002.005.html#Statements_section", "Statements");
+			
+			GDLManualTOC.add(203, 2, "Line", "002.005.html#Line_section", "Line");
+			
+			GDLManualTOC.add(204, 2, "Label", "002.005.html#Label_section", "Label");
+			
+			GDLManualTOC.add(205, 2, "Characters", "002.005.html#Characters_section", "Characters");
+			
+			GDLManualTOC.add(206, 2, "Strings", "002.005.html#Strings_section", "Strings");
+			
+			GDLManualTOC.add(207, 2, "Identifiers", "002.005.html#Identifiers_section", "Identifiers");
+			
+			GDLManualTOC.add(208, 2, "Variables", "002.005.html#Variables_section", "Variables");
+			
+			GDLManualTOC.add(209, 2, "Parameters", "002.005.html#Parameters_section", "Parameters");
+			
+			GDLManualTOC.add(210, 2, "Simple Types", "002.005.html#SimpleTypes_section", "Simple Types");
+			
+			GDLManualTOC.add(211, 2, "Derived Types", "002.005.html#DerivedTypes_section", "Derived Types");
+			
+			GDLManualTOC.add(212, 2, "Structured Types", "002.005.html#StructuredTypes_section", "Structured Types");
+			
+			GDLManualTOC.add(213, 2, "Conventions used in this book", "002.005.html#Conventionsusedinthisbook_section", "Conventions used in this book");
+			
+			GDLManualTOC.add(3, 0, "Coordinate Transformations", "002.006.html", "Coordinate Transformations");
+			
+			GDLManualTOC.add(301, 3, "2D Transformations", "002.006.html#id495732", "2D Transformations");
+			
+			GDLManualTOC.add(302, 3, "3D Transformations", "002.006.html#id495998", "3D Transformations");
+			
+			GDLManualTOC.add(303, 3, "Managing the Transformation Stack", "002.006.html#ManagingtheTransformationStack_section", "Managing the Transformation Stack");
+			
+			GDLManualTOC.add(4, 0, "3D Shapes", "002.007.html", "3D Shapes");
+			
+			GDLManualTOC.add(401, 4, "Basic Shapes", "002.007.html#BasicShapes_section", "Basic Shapes");
+			
+			GDLManualTOC.add(402, 4, "Planar Shapes in 3D", "002.007.html#PlanarShapesin3D_section", "Planar Shapes in 3D");
+			
+			GDLManualTOC.add(403, 4, "Shapes Generated from Polylines", "002.007.html#ShapesGeneratedfromPolylines_section", "Shapes Generated from Polylines");
+			
+			GDLManualTOC.add(404, 4, "Elements for Visualization", "002.007.html#ElementsforVisualization_section", "Elements for Visualization");
+			
+			GDLManualTOC.add(405, 4, "3D Text Elements", "002.007.html#id523160", "3D Text Elements");
+			
+			GDLManualTOC.add(406, 4, "Primitive Elements", "002.007.html#PrimitiveElements_section", "Primitive Elements");
+			
+			GDLManualTOC.add(407, 4, "NURBS Primitive Elements", "002.007.html#NurbsPrimitiveElements_section", "NURBS Primitive Elements");
+			
+			GDLManualTOC.add(40701, 407, "NURBS Face trimming", "002.007.html#NurbsFaceTrim_section", "NURBS Face trimming");
+			
+			GDLManualTOC.add(40702, 407, "NURBS Geometry Commands", "002.007.html#NurbsGeometryCommand_section", "NURBS Geometry Commands");
+			
+			GDLManualTOC.add(40703, 407, "NURBS Topology Commands", "002.007.html#NurbsTopologyCommand_section", "NURBS Topology Commands");
+			
+			GDLManualTOC.add(408, 4, "Point Clouds", "002.007.html#PointClouds_section", "Point Clouds");
+			
+			GDLManualTOC.add(409, 4, "Cutting in 3D", "002.007.html#Cuttingin3D_section", "Cutting in 3D");
+			
+			GDLManualTOC.add(410, 4, "Solid Geometry Commands", "002.007.html#SolidGeometryCommand_section", "Solid Geometry Commands");
+			
+			GDLManualTOC.add(411, 4, "Binary 3D", "002.007.html#Binary3D_section", "Binary 3D");
+			
+			GDLManualTOC.add(5, 0, "2D Shapes", "002.008.html", "2D Shapes");
+			
+			GDLManualTOC.add(501, 5, "Drawing Elements", "002.008.html#DrawingElements_section", "Drawing Elements");
+			
+			GDLManualTOC.add(502, 5, "Text Element", "002.008.html#TextElement_section", "Text Element");
+			
+			GDLManualTOC.add(503, 5, "Binary 2D", "002.008.html#Binary2D_section", "Binary 2D");
+			
+			GDLManualTOC.add(504, 5, "3D Projections in 2D", "002.008.html#id533055", "3D Projections in 2D");
+			
+			GDLManualTOC.add(505, 5, "Drawings in the List", "002.008.html#DrawingsintheList_section", "Drawings in the List");
+			
+			GDLManualTOC.add(6, 0, "Graphical Editing Using Hotspots", "002.009.html", "Graphical Editing Using Hotspots");
+			
+			GDLManualTOC.add(7, 0, "Status Codes", "002.010.html", "Status Codes");
+			
+			GDLManualTOC.add(701, 7, "Status Code Syntax", "002.010.html#StatusCodeSyntax_section", "Status Code Syntax");
+			
+			GDLManualTOC.add(702, 7, "Additional Status Codes", "002.010.html#AdditionalStatusCodes_section", "Additional Status Codes");
+			
+			GDLManualTOC.add(70201, 702, "Previous part of the polyline: current position and tangent is defined", "002.010.html#id538165", "Previous part of the polyline: current position and tangent is defined");
+			
+			GDLManualTOC.add(70202, 702, "Segment by absolute endpoint", "002.010.html#id538141", "Segment by absolute endpoint");
+			
+			GDLManualTOC.add(70203, 702, "Segment by relative endpoint", "002.010.html#id538146", "Segment by relative endpoint");
+			
+			GDLManualTOC.add(70204, 702, "Segment by length and direction", "002.010.html#id538172", "Segment by length and direction");
+			
+			GDLManualTOC.add(70205, 702, "Tangential segment by length", "002.010.html#id538183", "Tangential segment by length");
+			
+			GDLManualTOC.add(70206, 702, "Set start point", "002.010.html#id538199", "Set start point");
+			
+			GDLManualTOC.add(70207, 702, "Close polyline", "002.010.html#id538208", "Close polyline");
+			
+			GDLManualTOC.add(70208, 702, "Set tangent", "002.010.html#id538236", "Set tangent");
+			
+			GDLManualTOC.add(70209, 702, "Set centerpoint", "002.010.html#id538226", "Set centerpoint");
+			
+			GDLManualTOC.add(70210, 702, "Tangential arc to endpoint", "002.010.html#id538249", "Tangential arc to endpoint");
+			
+			GDLManualTOC.add(70211, 702, "Tangential arc by radius and angle", "002.010.html#id538280", "Tangential arc by radius and angle");
+			
+			GDLManualTOC.add(70212, 702, "Arc using centerpoint and point on the final radius", "002.010.html#id538278", "Arc using centerpoint and point on the final radius");
+			
+			GDLManualTOC.add(70213, 702, "Arc using centerpoint and angle", "002.010.html#id538313", "Arc using centerpoint and angle");
+			
+			GDLManualTOC.add(70214, 702, "Full circle using centerpoint and radius", "002.010.html#id538309", "Full circle using centerpoint and radius");
+			
+			GDLManualTOC.add(8, 0, "Attributes", "002.011.html", "Attributes");
+			
+			GDLManualTOC.add(801, 8, "Directives", "002.011.html#Directives_section", "Directives");
+			
+			GDLManualTOC.add(80101, 801, "Directives for 3D and 2D Scripts", "002.011.html#Directivesfor3Dand2DScripts_section", "Directives for 3D and 2D Scripts");
+			
+			GDLManualTOC.add(80102, 801, "Directives Used in 3D Scripts Only", "002.011.html#DirectivesUsedin3DScriptsOnly_section", "Directives Used in 3D Scripts Only");
+			
+			GDLManualTOC.add(80103, 801, "Directives Used in 2D Scripts Only", "002.011.html#DirectivesUsedin2DScriptsOnly_section", "Directives Used in 2D Scripts Only");
+			
+			GDLManualTOC.add(802, 8, "Inline Attribute Definition", "002.011.html#InlineAttributeDefinition_section", "Inline Attribute Definition");
+			
+			GDLManualTOC.add(80201, 802, "Materials", "002.011.html#Materials_section", "Materials");
+			
+			GDLManualTOC.add(80202, 802, "Fills", "002.011.html#Fills_section", "Fills");
+			
+			GDLManualTOC.add(80203, 802, "Line Types", "002.011.html#LineTypes_section", "Line Types");
+			
+			GDLManualTOC.add(80204, 802, "Text Styles and Text Blocks", "002.011.html#TextStylesandTextBlocks_section", "Text Styles and Text Blocks");
+			
+			GDLManualTOC.add(80205, 802, "Additional Data", "002.011.html#AdditionalData_section", "Additional Data");
+			
+			GDLManualTOC.add(803, 8, "External file dependence", "002.011.html#Externalfiledependence_section", "External file dependence");
+			
+			GDLManualTOC.add(9, 0, "Non-Geometric Scripts", "002.012.html", "Non-Geometric Scripts");
+			
+			GDLManualTOC.add(901, 9, "The Properties Script", "002.012.html#ThePropertiesScript_section", "The Properties Script");
+			
+			GDLManualTOC.add(902, 9, "The Parameter Script", "002.012.html#TheParameterScript_section", "The Parameter Script");
+			
+			GDLManualTOC.add(903, 9, "The User Interface Script", "002.012.html#TheUserInterfaceScript_section", "The User Interface Script");
+			
+			GDLManualTOC.add(904, 9, "The Forward Migration Script", "002.012.html#TheForwardMigrationScript_section", "The Forward Migration Script");
+			
+			GDLManualTOC.add(905, 9, "The Backward Migration Script", "002.012.html#TheBackwardMigrationScript_section", "The Backward Migration Script");
+			
+			GDLManualTOC.add(10, 0, "Expressions and Functions", "002.013.html", "Expressions and Functions");
+			
+			GDLManualTOC.add(1001, 10, "Expressions", "002.013.html#Expressions_section", "Expressions");
+			
+			GDLManualTOC.add(1002, 10, "Operators", "002.013.html#Operators_section", "Operators");
+			
+			GDLManualTOC.add(100201, 1002, "Arithmetical Operators", "002.013.html#ArithmeticalOperators_section", "Arithmetical Operators");
+			
+			GDLManualTOC.add(100202, 1002, "Relational Operators", "002.013.html#RelationalOperators_section", "Relational Operators");
+			
+			GDLManualTOC.add(100203, 1002, "Boolean Operators", "002.013.html#BooleanOperators_section", "Boolean Operators");
+			
+			GDLManualTOC.add(1003, 10, "Functions", "002.013.html#Functions_section", "Functions");
+			
+			GDLManualTOC.add(100301, 1003, "Arithmetical Functions", "002.013.html#ArithmeticalFunction_section", "Arithmetical Functions");
+			
+			GDLManualTOC.add(100302, 1003, "Circular Functions", "002.013.html#CircularFunctions_section", "Circular Functions");
+			
+			GDLManualTOC.add(100303, 1003, "Transcendental Functions", "002.013.html#TranscendentalFunctions_section", "Transcendental Functions");
+			
+			GDLManualTOC.add(100304, 1003, "Boolean Functions", "002.013.html#BooleanFunctions_section", "Boolean Functions");
+			
+			GDLManualTOC.add(100305, 1003, "Statistical Functions", "002.013.html#StatisticalFunctions_section", "Statistical Functions");
+			
+			GDLManualTOC.add(100306, 1003, "Bit Functions", "002.013.html#BitFunctions_section", "Bit Functions");
+			
+			GDLManualTOC.add(100307, 1003, "Special Functions", "002.013.html#SpecialFunctions_section", "Special Functions");
+			
+			GDLManualTOC.add(100308, 1003, "String Functions", "002.013.html#StringFunctions_section", "String Functions");
+			
+			GDLManualTOC.add(11, 0, "Control Statements", "002.014.html", "Control Statements");
+			
+			GDLManualTOC.add(1101, 11, "Flow Control Statements", "002.014.html#FlowControlStatements_section", "Flow Control Statements");
+			
+			GDLManualTOC.add(1102, 11, "Parameter Buffer Manipulation", "002.014.html#ParameterBufferManipulation_section", "Parameter Buffer Manipulation");
+			
+			GDLManualTOC.add(1103, 11, "Macro Objects", "002.014.html#MacroObjects_section", "Macro Objects");
+			
+			GDLManualTOC.add(1104, 11, "Output in an Alert Box or Report Window", "002.014.html#OutputinanAlertBox_section", "Output in an Alert Box or Report Window");
+			
+			GDLManualTOC.add(1105, 11, "File Operations", "002.014.html#FileOperations_section", "File Operations");
+			
+			GDLManualTOC.add(1106, 11, "Using Deterministic Add-Ons", "002.014.html#UsingDeterministicAdd-Ons_section", "Using Deterministic Add-Ons");
+			
+			GDLManualTOC.add(12, 0, "Miscellaneous", "002.015.html", "Miscellaneous");
+			
+			GDLManualTOC.add(1201, 12, "Global Variables", "002.015.html#GlobalVariables_section", "Global Variables");
+			
+			GDLManualTOC.add(120101, 1201, "Script compatibility", "002.015.html#GlobalParamScriptCompatibility_section", "Script compatibility");
+			
+			GDLManualTOC.add(120102, 1201, "General environment information", "002.015.html#Generalenvironmentinformation_section", "General environment information");
+			
+			GDLManualTOC.add(120103, 1201, "Story information", "002.015.html#Storyinformation_section", "Story information");
+			
+			GDLManualTOC.add(120104, 1201, "Fly-through information", "002.015.html#Fly-throughinformation_section", "Fly-through information");
+			
+			GDLManualTOC.add(120105, 1201, "General element parameters", "002.015.html#Generalelementparameters_section", "General element parameters");
+			
+			GDLManualTOC.add(120106, 1201, "Object, Lamp, Door, Window, Wall End, Skylight parameters", "002.015.html#id555480", "Object, Lamp, Door, Window, Wall End, Skylight parameters");
+			
+			GDLManualTOC.add(120107, 1201, "Object, Lamp, Door, Window, Wall End, Skylight, MEP routing parameters", "002.015.html#id559566", "Object, Lamp, Door, Window, Wall End, Skylight, MEP routing parameters");
+			
+			GDLManualTOC.add(120108, 1201, "Object, Lamp, Door, Window, Wall End, Skylight, Curtain Wall Accessory parameters - available for listing and labels only", "002.015.html#id559686", "Object, Lamp, Door, Window, Wall End, Skylight, Curtain Wall Accessory parameters - available for listing and labels only");
+			
+			GDLManualTOC.add(120109, 1201, "Object, Lamp, Curtain Wall Accessory parameters - available for listing and labels only", "002.015.html#id559744", "Object, Lamp, Curtain Wall Accessory parameters - available for listing and labels only");
+			
+			GDLManualTOC.add(120110, 1201, "Object parameters", "002.015.html#id559730", "Object parameters");
+			
+			GDLManualTOC.add(120111, 1201, "Opening parameters - available for listing and labels only", "002.015.html#id559762", "Opening parameters - available for listing and labels only");
+			
+			GDLManualTOC.add(120112, 1201, "Opening symbol parameters", "002.015.html#id559954", "Opening symbol parameters");
+			
+			GDLManualTOC.add(120113, 1201, "Window, Door and Wall End parameters", "002.015.html#id560170", "Window, Door and Wall End parameters");
+			
+			GDLManualTOC.add(120114, 1201, "Window, Door parameters - available for listing and labels only", "002.015.html#id560400", "Window, Door parameters - available for listing and labels only");
+			
+			GDLManualTOC.add(120115, 1201, "Lamp parameters - available for listing and labels only", "002.015.html#id560522", "Lamp parameters - available for listing and labels only");
+			
+			GDLManualTOC.add(120116, 1201, "Marker parameters (Detail, Worksheet and Change Markers)", "002.015.html#id560589", "Marker parameters (Detail, Worksheet and Change Markers)");
+			
+			GDLManualTOC.add(120117, 1201, "Label parameters", "002.015.html#id560650", "Label parameters");
+			
+			GDLManualTOC.add(120118, 1201, "Wall parameters - available for Doors/Windows, listing and labels", "002.015.html#WallGlobals_section", "Wall parameters - available for Doors/Windows, listing and labels");
+			
+			GDLManualTOC.add(120119, 1201, "Wall parameters - available for listing and labels only", "002.015.html#id561498", "Wall parameters - available for listing and labels only");
+			
+			GDLManualTOC.add(120120, 1201, "Column parameters - available for listing and labels only", "002.015.html#ColumnGlobals_section", "Column parameters - available for listing and labels only");
+			
+			GDLManualTOC.add(120121, 1201, "Beam parameters - available for listing and labels only", "002.015.html#BeamGlobals_section", "Beam parameters - available for listing and labels only");
+			
+			GDLManualTOC.add(120122, 1201, "Slab parameters - available for listing and labels only", "002.015.html#SlabGlobals_section", "Slab parameters - available for listing and labels only");
+			
+			GDLManualTOC.add(120123, 1201, "Stair component parameters", "002.015.html#StairGlobals_section", "Stair component parameters");
+			
+			GDLManualTOC.add(12012301, 120123, "General stair variables - available for listing and labels", "002.015.html#StairGlobalsGeneral_section", "General stair variables - available for listing and labels");
+			
+			GDLManualTOC.add(12012302, 120123, "General tread variables - available for listing and labels", "002.015.html#TreadGlobalsGeneral_section", "General tread variables - available for listing and labels");
+			
+			GDLManualTOC.add(12012303, 120123, "General riser variables - available for listing and labels", "002.015.html#RiserGlobalsGeneral_section", "General riser variables - available for listing and labels");
+			
+			GDLManualTOC.add(12012304, 120123, "Stair structure variables - available for listing and labels", "002.015.html#StairStructureGlobalsGeneral_section", "Stair structure variables - available for listing and labels");
+			
+			GDLManualTOC.add(12012305, 120123, "Stair Model View Options variables", "002.015.html#StairGlobalsMVO_section", "Stair Model View Options variables");
+			
+			GDLManualTOC.add(12012306, 120123, "Stair 2D variables - available for floor plan representation only", "002.015.html#Stair2DGlobals_section", "Stair 2D variables - available for floor plan representation only");
+			
+			GDLManualTOC.add(1201230601, 12012306, "Stair grid variables", "002.015.html#Stair2DGridGlobals_section", "Stair grid variables");
+			
+			GDLManualTOC.add(1201230602, 12012306, "Stair walking line symbol variables", "002.015.html#Stair2DWalklineGlobals_section", "Stair walking line symbol variables");
+			
+			GDLManualTOC.add(1201230603, 12012306, "Stair break mark symbol variables", "002.015.html#Stair2DBreakmarkGlobals_section", "Stair break mark symbol variables");
+			
+			GDLManualTOC.add(1201230604, 12012306, "Rise and Run description variables", "002.015.html#Stair2DRiseRunDescGlobals_section", "Rise and Run description variables");
+			
+			GDLManualTOC.add(1201230605, 12012306, "Stair draining 2D variables", "002.015.html#Stair2DDrainExtGlobals_section", "Stair draining 2D variables");
+			
+			GDLManualTOC.add(1201230606, 12012306, "Stair structure 2D variables - Beam Structures", "002.015.html#StairStructure2DGlobalsGeneral_section", "Stair structure 2D variables - Beam Structures");
+			
+			GDLManualTOC.add(1201230607, 12012306, "Stair structure 2D variables - Monolithic Structure", "002.015.html#StairStructure2DGlobalsMonolith_section", "Stair structure 2D variables - Monolithic Structure");
+			
+			GDLManualTOC.add(1201230608, 12012306, "General 2D related variables", "002.015.html#Stair2DGeneralGlobals_section", "General 2D related variables");
+			
+			GDLManualTOC.add(12012307, 120123, "Stair 3D variables - available for 3D representation (and connecting viewpoints) only", "002.015.html#Stair3DGlobals_section", "Stair 3D variables - available for 3D representation (and connecting viewpoints) only");
+			
+			GDLManualTOC.add(1201230701, 12012307, "Stair riser 3D variables", "002.015.html#Stair3DRiserGlobals_section", "Stair riser 3D variables");
+			
+			GDLManualTOC.add(1201230702, 12012307, "Stair tread 2D-3D variables", "002.015.html#Stair3DTreadGlobals_section", "Stair tread 2D-3D variables");
+			
+			GDLManualTOC.add(1201230703, 12012307, "Stair structure variables", "002.015.html#StairStructureGlobals_section", "Stair structure variables");
+			
+			GDLManualTOC.add(120124, 1201, "Railing component parameters", "002.015.html#RailingGlobals_section", "Railing component parameters");
+			
+			GDLManualTOC.add(12012401, 120124, "General railing variables - available for listing and labels", "002.015.html#RailingGlobalsGeneral_section", "General railing variables - available for listing and labels");
+			
+			GDLManualTOC.add(12012402, 120124, "Railing 3D variables", "002.015.html#Railing3DGlobalsGeneral_section", "Railing 3D variables");
+			
+			GDLManualTOC.add(12012403, 120124, "Railing 2D variables", "002.015.html#Railing2DGlobalsGeneral_section", "Railing 2D variables");
+			
+			GDLManualTOC.add(120125, 1201, "Roof parameters - available for skylights, listing and labels", "002.015.html#RoofGlobals_section", "Roof parameters - available for skylights, listing and labels");
+			
+			GDLManualTOC.add(120126, 1201, "Roof parameters - available for listing and labels only", "002.015.html#id580346", "Roof parameters - available for listing and labels only");
+			
+			GDLManualTOC.add(120127, 1201, "Fill parameters - available for listing and labels only", "002.015.html#FillGlobals_section", "Fill parameters - available for listing and labels only");
+			
+			GDLManualTOC.add(120128, 1201, "Mesh parameters - available for listing and labels only", "002.015.html#MeshGlobals_section", "Mesh parameters - available for listing and labels only");
+			
+			GDLManualTOC.add(120129, 1201, "Curtain Wall component parameters", "002.015.html#CWComponentGlobals_section", "Curtain Wall component parameters");
+			
+			GDLManualTOC.add(120130, 1201, "Curtain Wall parameters - available for listing and labels only", "002.015.html#id581365", "Curtain Wall parameters - available for listing and labels only");
+			
+			GDLManualTOC.add(120131, 1201, "Curtain Wall Frame parameters", "002.015.html#CWFrameGlobals_section", "Curtain Wall Frame parameters");
+			
+			GDLManualTOC.add(12013101, 120131, "General Curtain Wall Frame variables - available for listing and labels only", "002.015.html#CWFrameGlobalsGeneral_section", "General Curtain Wall Frame variables - available for listing and labels only");
+			
+			GDLManualTOC.add(12013102, 120131, "Curtain Wall Frame 3D variables", "002.015.html#CWFrame3DGlobals_section", "Curtain Wall Frame 3D variables");
+			
+			GDLManualTOC.add(120132, 1201, "Curtain Wall Panel variables", "002.015.html#id585074", "Curtain Wall Panel variables");
+			
+			GDLManualTOC.add(120133, 1201, "Curtain Wall Panel parameters - available for listing and labels only", "002.015.html#id585161", "Curtain Wall Panel parameters - available for listing and labels only");
+			
+			GDLManualTOC.add(120134, 1201, "Curtain Wall Junction parameters - available for listing and labels only", "002.015.html#id585281", "Curtain Wall Junction parameters - available for listing and labels only");
+			
+			GDLManualTOC.add(120135, 1201, "Curtain Wall Accessory parameters - available for listing and labels only", "002.015.html#id585295", "Curtain Wall Accessory parameters - available for listing and labels only");
+			
+			GDLManualTOC.add(120136, 1201, "Migration parameters - available for migration scripts only", "002.015.html#id585329", "Migration parameters - available for migration scripts only");
+			
+			GDLManualTOC.add(120137, 1201, "Skylight parameters - available for listing and labels only", "002.015.html#id585334", "Skylight parameters - available for listing and labels only");
+			
+			GDLManualTOC.add(120138, 1201, "Common Parameters for Shells and Roofs - available for listing and labels only", "002.015.html#ShellGlobals_section", "Common Parameters for Shells and Roofs - available for listing and labels only");
+			
+			GDLManualTOC.add(120139, 1201, "Parameters for Morphs - available for listing and labels only", "002.015.html#MorphGlobals_section", "Parameters for Morphs - available for listing and labels only");
+			
+			GDLManualTOC.add(120140, 1201, "Free users’ globals", "002.015.html#id586298", "Free users’ globals");
+			
+			GDLManualTOC.add(120141, 1201, "Example usage of global variables", "002.015.html#id586458", "Example usage of global variables");
+			
+			GDLManualTOC.add(120142, 1201, "Deprecated Global Variables", "002.015.html#DeprecatedGlobals_section", "Deprecated Global Variables");
+			
+			GDLManualTOC.add(12014201, 120142, "Deprecated Beam/Column Global Variables - available for listing and labels only", "002.015.html#DeprecatedBeamColumnGlobals_section", "Deprecated Beam/Column Global Variables - available for listing and labels only");
+			
+			GDLManualTOC.add(12014202, 120142, "Deprecated Label Global Variables", "002.015.html#DeprecatedLabelGlobals_section", "Deprecated Label Global Variables");
+			
+			GDLManualTOC.add(12014203, 120142, "Deprecated Curtain Wall Global Variables - available for listing and labels only", "002.015.html#DeprecatedCWGlobals_section", "Deprecated Curtain Wall Global Variables - available for listing and labels only");
+			
+			GDLManualTOC.add(12014204, 120142, "Old Global Variables", "002.015.html#id588390", "Old Global Variables");
+			
+			GDLManualTOC.add(1202, 12, "Fix named optional parameters", "002.015.html#FixNameParameters_section", "Fix named optional parameters");
+			
+			GDLManualTOC.add(120201, 1202, "Parameters set by Archicad", "002.015.html#ACSetParameters_section", "Parameters set by Archicad");
+			
+			GDLManualTOC.add(12020101, 120201, "Parameters for D/W attributes (available for Door, Window, Label, Listing)", "002.015.html#DWAttributeParameters_section", "Parameters for D/W attributes (available for Door, Window, Label, Listing)");
+			
+			GDLManualTOC.add(1202010101, 12020101, "Floor plan display", "002.015.html#DWFloorPlanDisplay_section", "Floor plan display");
+			
+			GDLManualTOC.add(1202010102, 12020101, "Direction", "002.015.html#DWDirection_section", "Direction");
+			
+			GDLManualTOC.add(1202010103, 12020101, "Polygonal wall data", "002.015.html#PolyWallData_section", "Polygonal wall data");
+			
+			GDLManualTOC.add(1202010104, 12020101, "Hole position", "002.015.html#DWHolePosition_section", "Hole position");
+			
+			GDLManualTOC.add(1202010105, 12020101, "Anchor data", "002.015.html#DWAnchorData_section", "Anchor data");
+			
+			GDLManualTOC.add(12020102, 120201, "Parameters for WALL attributes (available for Door, Window, Label, Listing)", "002.015.html#WallAttributeParameters_section", "Parameters for WALL attributes (available for Door, Window, Label, Listing)");
+			
+			GDLManualTOC.add(1202010201, 12020102, "Floor plan display", "002.015.html#WallFloorPlanDisplay_section", "Floor plan display");
+			
+			GDLManualTOC.add(1202010202, 12020102, "Geometric data", "002.015.html#WallGeometric_section", "Geometric data");
+			
+			GDLManualTOC.add(12020103, 120201, "Parameters for COLUMN attributes (available for Label, Listing)", "002.015.html#ColumnAttributeParameters_section", "Parameters for COLUMN attributes (available for Label, Listing)");
+			
+			GDLManualTOC.add(1202010301, 12020103, "Floor plan display", "002.015.html#ColumnFloorPlanDisplay_section", "Floor plan display");
+			
+			GDLManualTOC.add(1202010302, 12020103, "Geometric data", "002.015.html#ColumnGeometric_section", "Geometric data");
+			
+			GDLManualTOC.add(12020104, 120201, "Parameters for BEAM attributes (available for Label, Listing)", "002.015.html#BeamAttributeParameters_section", "Parameters for BEAM attributes (available for Label, Listing)");
+			
+			GDLManualTOC.add(1202010401, 12020104, "Floor plan display", "002.015.html#BeamFloorPlanDisplay_section", "Floor plan display");
+			
+			GDLManualTOC.add(1202010402, 12020104, "Geometric data", "002.015.html#BeamGeometric_section", "Geometric data");
+			
+			GDLManualTOC.add(12020105, 120201, "Parameters for ROOF attributes (available for Label, Listing)", "002.015.html#RoofAttributeParameters_section", "Parameters for ROOF attributes (available for Label, Listing)");
+			
+			GDLManualTOC.add(1202010501, 12020105, "Floor plan display", "002.015.html#RoofFloorPlanDisplay_section", "Floor plan display");
+			
+			GDLManualTOC.add(12020106, 120201, "Door/Window Marker attributes", "002.015.html#DWMArkerAttributeParameters_section", "Door/Window Marker attributes");
+			
+			GDLManualTOC.add(12020107, 120201, "Detail/Worksheet Marker attributes", "002.015.html#DetailMArkerAttributes_section", "Detail/Worksheet Marker attributes");
+			
+			GDLManualTOC.add(12020108, 120201, "Drawing Title attributes", "002.015.html#DrawingTitleAttributes_section", "Drawing Title attributes");
+			
+			GDLManualTOC.add(12020109, 120201, "General running context", "002.015.html#GeneralRunningContext_section", "General running context");
+			
+			GDLManualTOC.add(12020110, 120201, "Room parameters (available for Zone Stamps)", "002.015.html#RoomParametersForZones_section", "Room parameters (available for Zone Stamps)");
+			
+			GDLManualTOC.add(12020111, 120201, "Stair related parameters", "002.015.html#StairACSet_section", "Stair related parameters");
+			
+			GDLManualTOC.add(1202011101, 12020111, "Flight / Landing Side Supported subtypes", "002.015.html#StairStringerACSet_section", "Flight / Landing Side Supported subtypes");
+			
+			GDLManualTOC.add(1202011102, 12020111, "Riser Component subtype", "002.015.html#RiserComponentACSet_section", "Riser Component subtype");
+			
+			GDLManualTOC.add(1202011103, 12020111, "Stair 2D Component subtypes", "002.015.html#Stair2DACSet_section", "Stair 2D Component subtypes");
+			
+			GDLManualTOC.add(120202, 1202, "Parameters set/read by Archicad", "002.015.html#ACSetReadParameters_section", "Parameters set/read by Archicad");
+			
+			GDLManualTOC.add(12020201, 120202, "Stair related parameters", "002.015.html#StairACSetRead_section", "Stair related parameters");
+			
+			GDLManualTOC.add(1202020101, 12020201, "Structure subtype", "002.015.html#StairStructureACSetRead_section", "Structure subtype");
+			
+			GDLManualTOC.add(120203, 1202, "Parameters read by Archicad", "002.015.html#ACReadParameters_section", "Parameters read by Archicad");
+			
+			GDLManualTOC.add(12020301, 120203, "Objects on Floor Plan", "002.015.html#ObjectOnFloorPlan_section", "Objects on Floor Plan");
+			
+			GDLManualTOC.add(1202030101, 12020301, "Floor plan cutting of planar elements (i.e. skylight object, roof accessory objects)", "002.015.html#FloorPlanCutting_section", "Floor plan cutting of planar elements (i.e. skylight object, roof accessory objects)");
+			
+			GDLManualTOC.add(12020302, 120203, "Door/Window objects", "002.015.html#DWObjects_section", "Door/Window objects");
+			
+			GDLManualTOC.add(12020303, 120203, "Custom Component Template", "002.015.html#CustomComponentTemp_section", "Custom Component Template");
+			
+			GDLManualTOC.add(12020304, 120203, "Stair related parameters", "002.015.html#StairFixNamedParams_section", "Stair related parameters");
+			
+			GDLManualTOC.add(1202030401, 12020304, "Structure subtype", "002.015.html#StairStructureACRead_section", "Structure subtype");
+			
+			GDLManualTOC.add(1202030402, 12020304, "Flight / Landing Under Supported subtype", "002.015.html#StairFlightUnderSupportACRead_section", "Flight / Landing Under Supported subtype");
+			
+			GDLManualTOC.add(1202030403, 12020304, "Flight Under Supported Cantilever / Landing Cantilever Supported subtypes", "002.015.html#StairCantileveredACRead_section", "Flight Under Supported Cantilever / Landing Cantilever Supported subtypes");
+			
+			GDLManualTOC.add(12020305, 120203, "Railing related parameters", "002.015.html#RailingFixNamedParams_section", "Railing related parameters");
+			
+			GDLManualTOC.add(1202030501, 12020305, "Railing Panel Component subtype", "002.015.html#RailingPanelNamedParams_section", "Railing Panel Component subtype");
+			
+			GDLManualTOC.add(1202030502, 12020305, "Railing Rail Component subtype", "002.015.html#RailingRailNamedParams_section", "Railing Rail Component subtype");
+			
+			GDLManualTOC.add(1202030503, 12020305, "Railing Post Component subtype", "002.015.html#RailingPostNamedParams_section", "Railing Post Component subtype");
+			
+			GDLManualTOC.add(1202030504, 12020305, "Railing End Component subtype", "002.015.html#RailingEndNamedParams_section", "Railing End Component subtype");
+			
+			GDLManualTOC.add(120204, 1202, "Parameters for Curtain Wall", "002.015.html#CurtainWallParameters_section", "Parameters for Curtain Wall");
+			
+			GDLManualTOC.add(12020401, 120204, "Curtain Wall Parameters set and read by Archicad", "002.015.html#ACSetAndReadCWParameters_section", "Curtain Wall Parameters set and read by Archicad");
+			
+			GDLManualTOC.add(1202040101, 12020401, "Curtain Wall Frame parameters", "002.015.html#CurtainWallFrameSetAndRead_section", "Curtain Wall Frame parameters");
+			
+			GDLManualTOC.add(12020402, 120204, "Curtain Wall Parameters set by Archicad", "002.015.html#ACSetCWParameters_section", "Curtain Wall Parameters set by Archicad");
+			
+			GDLManualTOC.add(1202040201, 12020402, "Curtain Wall Frame parameters", "002.015.html#CurtainWallFrameSet_section", "Curtain Wall Frame parameters");
+			
+			GDLManualTOC.add(1202040202, 12020402, "Curtain Wall Panel parameters", "002.015.html#CurtainWallPanelSet_section", "Curtain Wall Panel parameters");
+			
+			GDLManualTOC.add(1202040203, 12020402, "Curtain Wall Junction parameters", "002.015.html#CurtainWallJunctionSet_section", "Curtain Wall Junction parameters");
+			
+			GDLManualTOC.add(1202040204, 12020402, "Curtain Wall Accessory parameters", "002.015.html#CurtainWallAccessorySet_section", "Curtain Wall Accessory parameters");
+			
+			GDLManualTOC.add(1202040205, 12020402, "Curtain Wall Frame Deprecated parameters", "002.015.html#CurtainWallFrameDepreceatedSet_section", "Curtain Wall Frame Deprecated parameters");
+			
+			GDLManualTOC.add(12020403, 120204, "Curtain Wall Parameters read by Archicad", "002.015.html#ACReadCWParameters_section", "Curtain Wall Parameters read by Archicad");
+			
+			GDLManualTOC.add(1202040301, 12020403, "Curtain Wall Panel and Frame parameters", "002.015.html#CWPanelandFrameRead_section", "Curtain Wall Panel and Frame parameters");
+			
+			GDLManualTOC.add(1202040302, 12020403, "Curtain Wall Frame parameters", "002.015.html#CWFrameRead_section", "Curtain Wall Frame parameters");
+			
+			GDLManualTOC.add(1202040303, 12020403, "Curtain wall panel parameters", "002.015.html#CWPanelRead_section", "Curtain wall panel parameters");
+			
+			GDLManualTOC.add(120205, 1202, "Parameters for add-ons", "002.015.html#AddOnParameters_section", "Parameters for add-ons");
+			
+			GDLManualTOC.add(12020501, 120205, "Parameters of Skylight add-on", "002.015.html#SkylightAddOnParameters_section", "Parameters of Skylight add-on");
+			
+			GDLManualTOC.add(1202050101, 12020501, "Hole edge cut manipulation", "002.015.html#HoleEdgeCutManipulation_section", "Hole edge cut manipulation");
+			
+			GDLManualTOC.add(12020502, 120205, "Parameters of Corner Window add-on", "002.015.html#CornerWindowAddOnParameters_section", "Parameters of Corner Window add-on");
+			
+			GDLManualTOC.add(1202050201, 12020502, "Basic parameters of Corner Window objects", "002.015.html#CornerWindowBasicParameters_section", "Basic parameters of Corner Window objects");
+			
+			GDLManualTOC.add(1202050202, 12020502, "Wall skins data parameters of Corner Window objects (available from Archicad 12)", "002.015.html#CornerWindowWallSkinParameters_section", "Wall skins data parameters of Corner Window objects (available from Archicad 12)");
+			
+			GDLManualTOC.add(12020503, 120205, "Parameters of IFC add-on", "002.015.html#IFCAddOnParameters_section", "Parameters of IFC add-on");
+			
+			GDLManualTOC.add(1202050301, 12020503, "Common basic parameters of Door and Window objects", "002.015.html#IFCCommonBasicParameters_section", "Common basic parameters of Door and Window objects");
+			
+			GDLManualTOC.add(1202050302, 12020503, "Basic parameters of Door objects", "002.015.html#IFCDoorBasicParameters_section", "Basic parameters of Door objects");
+			
+			GDLManualTOC.add(1202050303, 12020503, "Basic parameters of Window objects", "002.015.html#IFCWindowBasicParameters_section", "Basic parameters of Window objects");
+			
+			GDLManualTOC.add(1202050304, 12020503, "Basic parameters of Transport Elements", "002.015.html#IFCTransportBasicParameters_section", "Basic parameters of Transport Elements");
+			
+			GDLManualTOC.add(1202050305, 12020503, "Basic parameters of Lift objects", "002.015.html#IFCLiftBasicParameters_section", "Basic parameters of Lift objects");
+			
+			GDLManualTOC.add(1202050306, 12020503, "Basic parameters of Stair objects", "002.015.html#IFCStairsBasicParameters_section", "Basic parameters of Stair objects");
+			
+			GDLManualTOC.add(1202050307, 12020503, "Basic parameters of MEP elements", "002.015.html#IFCMEPBasicParameters_section", "Basic parameters of MEP elements");
+			
+			GDLManualTOC.add(120206, 1202, "Parameters for Text Handling", "002.015.html#TextHandlingACParameters_section", "Parameters for Text Handling");
+			
+			GDLManualTOC.add(120207, 1202, "Parameters for Labels", "002.015.html#LabelACParameters_section", "Parameters for Labels");
+			
+			GDLManualTOC.add(12020701, 120207, "Parameters set or read by Archicad", "002.015.html#LabelACParamsSetRead_section", "Parameters set or read by Archicad");
+			
+			GDLManualTOC.add(12020702, 120207, "Parameters read by Archicad", "002.015.html#LabelACParamsRead_section", "Parameters read by Archicad");
+			
+			GDLManualTOC.add(120208, 1202, "Deprecated parameters", "002.015.html#DeprecatedACParameters_section", "Deprecated parameters");
+			
+			GDLManualTOC.add(12020801, 120208, "Deprecated Beam/Column parameters - available for listing and labels only", "002.015.html#DeprecatedBeamColumnParameters_section", "Deprecated Beam/Column parameters - available for listing and labels only");
+			
+			GDLManualTOC.add(12020802, 120208, "Deprecated Zone Stamp parameters", "002.015.html#DeprecatedParametersForZones_section", "Deprecated Zone Stamp parameters");
+			
+			GDLManualTOC.add(12020803, 120208, "Deprecated IFC add-on parameters", "002.015.html#DeprecatedParametersIFCAddOn_section", "Deprecated IFC add-on parameters");
+			
+			GDLManualTOC.add(1203, 12, "REQUEST Options", "002.015.html#REQUESTOptions_section", "REQUEST Options");
+			
+			GDLManualTOC.add(120301, 1203, "Request Parameter Script Compatibility", "002.015.html#REQUESTCompatibility_section", "Request Parameter Script Compatibility");
+			
+			GDLManualTOC.add(120302, 1203, "Execution context requests", "002.015.html#ExecutionContextREQUEST_section", "Execution context requests");
+			
+			GDLManualTOC.add(120303, 1203, "Run environment requests", "002.015.html#RunEnvironmentREQUEST_section", "Run environment requests");
+			
+			GDLManualTOC.add(120304, 1203, "Associated library part requests", "002.015.html#AssocLpREQUEST_section", "Associated library part requests");
+			
+			GDLManualTOC.add(120305, 1203, "Story requests", "002.015.html#StoryREQUEST_section", "Story requests");
+			
+			GDLManualTOC.add(120306, 1203, "Zone requests", "002.015.html#ZoneREQUEST_section", "Zone requests");
+			
+			GDLManualTOC.add(120307, 1203, "MEP route requests", "002.015.html#MEPRouteREQUEST_section", "MEP route requests");
+			
+			GDLManualTOC.add(120308, 1203, "Dimension formatting requests", "002.015.html#DimensionFormattingREQUEST_section", "Dimension formatting requests");
+			
+			GDLManualTOC.add(120309, 1203, "Working unit formatting requests", "002.015.html#WorkingUnitFormattingREQUEST_section", "Working unit formatting requests");
+			
+			GDLManualTOC.add(120310, 1203, "View Option requests", "002.015.html#ViewOptionREQUEST_section", "View Option requests");
+			
+			GDLManualTOC.add(120311, 1203, "Attribute requests", "002.015.html#AttributeREQUEST_section", "Attribute requests");
+			
+			GDLManualTOC.add(120312, 1203, "Profile requests", "002.015.html#ProfileREQUEST_section", "Profile requests");
+			
+			GDLManualTOC.add(120313, 1203, "Property object requests", "002.015.html#PropertyObjectREQUEST_section", "Property object requests");
+			
+			GDLManualTOC.add(120314, 1203, "Property requests", "002.015.html#PropertyREQUEST_section", "Property requests");
+			
+			GDLManualTOC.add(120315, 1203, "Extension requests", "002.015.html#ExtensionREQUEST_section", "Extension requests");
+			
+			GDLManualTOC.add(120316, 1203, "Deprecated requests", "002.015.html#DeprecatedREQUEST_section", "Deprecated requests");
+			
+			GDLManualTOC.add(1204, 12, "Application Query Options", "002.015.html#APPQUERYOptions_section", "Application Query Options");
+			
+			GDLManualTOC.add(120401, 1204, "Document feature", "002.015.html#id612150", "Document feature");
+			
+			GDLManualTOC.add(12040101, 120401, "View direction", "002.015.html#id612179", "View direction");
+			
+			GDLManualTOC.add(120402, 1204, "MEP System", "002.015.html#id612215", "MEP System");
+			
+			GDLManualTOC.add(12040201, 120402, "Get MEP Systems", "002.015.html#APPQUERY_MEPSYSTEM_section", "Get MEP Systems");
+			
+			GDLManualTOC.add(12040202, 120402, "Get Domain", "002.015.html#id612270", "Get Domain");
+			
+			GDLManualTOC.add(12040203, 120402, "Get Contour Pen", "002.015.html#id612351", "Get Contour Pen");
+			
+			GDLManualTOC.add(12040204, 120402, "Get Fill Pen", "002.015.html#id612381", "Get Fill Pen");
+			
+			GDLManualTOC.add(12040205, 120402, "Get Background Pen", "002.015.html#id612420", "Get Background Pen");
+			
+			GDLManualTOC.add(12040206, 120402, "Get Fill Type", "002.015.html#id612456", "Get Fill Type");
+			
+			GDLManualTOC.add(12040207, 120402, "Get Center Line Type", "002.015.html#id612486", "Get Center Line Type");
+			
+			GDLManualTOC.add(12040208, 120402, "Get Center Line Pen", "002.015.html#id612521", "Get Center Line Pen");
+			
+			GDLManualTOC.add(12040209, 120402, "Get System Material", "002.015.html#id612570", "Get System Material");
+			
+			GDLManualTOC.add(12040210, 120402, "Get Insulation Material", "002.015.html#id612605", "Get Insulation Material");
+			
+			GDLManualTOC.add(120403, 1204, "MEP Modeler", "002.015.html#id612660", "MEP Modeler");
+			
+			GDLManualTOC.add(12040301, 120403, "Is Available", "002.015.html#id612657", "Is Available");
+			
+			GDLManualTOC.add(120404, 1204, "MEP Connection Type", "002.015.html#id612677", "MEP Connection Type");
+			
+			GDLManualTOC.add(12040401, 120404, "Get Connection Types", "002.015.html#id612671", "Get Connection Types");
+			
+			GDLManualTOC.add(12040402, 120404, "Get Connection Type Style", "002.015.html#id612716", "Get Connection Type Style");
+			
+			GDLManualTOC.add(120405, 1204, "MEP Flexible Segment", "002.015.html#id612765", "MEP Flexible Segment");
+			
+			GDLManualTOC.add(12040501, 120405, "Start Sectioning", "002.015.html#id612798", "Start Sectioning");
+			
+			GDLManualTOC.add(12040502, 120405, "Add Control Point", "002.015.html#id612797", "Add Control Point");
+			
+			GDLManualTOC.add(12040503, 120405, "Add Direction and Width Vector", "002.015.html#id612893", "Add Direction and Width Vector");
+			
+			GDLManualTOC.add(12040504, 120405, "End Sectioning", "002.015.html#id612959", "End Sectioning");
+			
+			GDLManualTOC.add(120406, 1204, "MEP Bend", "002.015.html#id613032", "MEP Bend");
+			
+			GDLManualTOC.add(12040601, 120406, "Start Sectioning", "002.015.html#id613019", "Start Sectioning");
+			
+			GDLManualTOC.add(120407, 1204, "Parameter Script", "002.015.html#id613094", "Parameter Script");
+			
+			GDLManualTOC.add(12040701, 120407, "First Occasion in Progress", "002.015.html#id613126", "First Occasion in Progress");
+			
+			GDLManualTOC.add(120408, 1204, "Core &amp; IFC Properties", "002.015.html#id613160", "Core &amp; IFC Properties");
+			
+			GDLManualTOC.add(12040801, 120408, "Get Parameter Folder Names", "002.015.html#GetParameterFolderNames_section", "Get Parameter Folder Names");
+			
+			GDLManualTOC.add(12040802, 120408, "Get Parameter Names", "002.015.html#GetParameterNames_section", "Get Parameter Names");
+			
+			GDLManualTOC.add(12040803, 120408, "Get Parameter", "002.015.html#id613275", "Get Parameter");
+			
+			GDLManualTOC.add(120409, 1204, "Library manager", "002.015.html#id613290", "Library manager");
+			
+			GDLManualTOC.add(12040901, 120409, "Ies files", "002.015.html#id613292", "Ies files");
+			
+			GDLManualTOC.add(12040902, 120409, "User image files", "002.015.html#id613329", "User image files");
+			
+			GDLManualTOC.add(1205, 12, "Basic Technical Standards", "002.015.html#BasicTechnicalStandards_section", "Basic Technical Standards");
+			
+			GDLManualTOC.add(120501, 1205, "Introduction", "002.015.html#BTSIntroduction_section", "Introduction");
+			
+			GDLManualTOC.add(120502, 1205, "Library part format", "002.015.html#BTSLibPartFormat_section", "Library part format");
+			
+			GDLManualTOC.add(12050201, 120502, "File extension", "002.015.html#id613392", "File extension");
+			
+			GDLManualTOC.add(12050202, 120502, "Identification", "002.015.html#id613364", "Identification");
+			
+			GDLManualTOC.add(120503, 1205, "General scripting issues", "002.015.html#BTSGeneralScripting_section", "General scripting issues");
+			
+			GDLManualTOC.add(12050301, 120503, "GDL warnings", "002.015.html#GDLWarningSection", "GDL warnings");
+			
+			GDLManualTOC.add(12050302, 120503, "Hotspot and Hotline IDs", "002.015.html#id613684", "Hotspot and Hotline IDs");
+			
+			GDLManualTOC.add(1205030201, 12050302, "Purpose of hotspot/hotline/hotarc identification", "002.015.html#id613674", "Purpose of hotspot/hotline/hotarc identification");
+			
+			GDLManualTOC.add(1205030202, 12050302, "Problem of old-school hotspots/hotlines", "002.015.html#id613692", "Problem of old-school hotspots/hotlines");
+			
+			GDLManualTOC.add(12050303, 120503, "Editable hotspots", "002.015.html#id613714", "Editable hotspots");
+			
+			GDLManualTOC.add(1205030301, 12050303, "Editable hotspot example - Shoe / Shoe-rack", "002.015.html#id613727", "Editable hotspot example - Shoe / Shoe-rack");
+			
+			GDLManualTOC.add(12050304, 120503, "GDL execution contexts", "002.015.html#GDLExecutionContext_section", "GDL execution contexts");
+			
+			GDLManualTOC.add(12050305, 120503, "Communicating values with Archicad", "002.015.html#id613973", "Communicating values with Archicad");
+			
+			GDLManualTOC.add(1205030501, 12050305, "Information flow from Archicad", "002.015.html#id613962", "Information flow from Archicad");
+			
+			GDLManualTOC.add(1205030502, 12050305, "Global variables", "002.015.html#id613972", "Global variables");
+			
+			GDLManualTOC.add(1205030503, 12050305, "Fix named optional parameters", "002.015.html#id613976", "Fix named optional parameters");
+			
+			GDLManualTOC.add(1205030504, 12050305, "Requests and Application Queries", "002.015.html#id611753", "Requests and Application Queries");
+			
+			GDLManualTOC.add(1205030505, 12050305, "Information coming from the library part", "002.015.html#id611784", "Information coming from the library part");
+			
+			GDLManualTOC.add(12050306, 120503, "Model View Options, Library Global", "002.015.html#id611819", "Model View Options, Library Global");
+			
+			GDLManualTOC.add(1205030601, 12050306, "Internal Model View Options", "002.015.html#id611795", "Internal Model View Options");
+			
+			GDLManualTOC.add(1205030602, 12050306, "Library Global View Options", "002.015.html#id611834", "Library Global View Options");
+			
+			GDLManualTOC.add(120504, 1205, "Script type specific issues", "002.015.html#BTSSpecificScriptingIssues_section", "Script type specific issues");
+			
+			GDLManualTOC.add(12050401, 120504, "2D script", "002.015.html#id616355", "2D script");
+			
+			GDLManualTOC.add(1205040101, 12050401, "Execution context", "002.015.html#id616363", "Execution context");
+			
+			GDLManualTOC.add(1205040102, 12050401, "Defining line and fill properties", "002.015.html#id616399", "Defining line and fill properties");
+			
+			GDLManualTOC.add(12050402, 120504, "3D script", "002.015.html#id616450", "3D script");
+			
+			GDLManualTOC.add(1205040201, 12050402, "Execution context", "002.015.html#id616435", "Execution context");
+			
+			GDLManualTOC.add(1205040202, 12050402, "General recommendation", "002.015.html#id616476", "General recommendation");
+			
+			GDLManualTOC.add(1205040203, 12050402, "Texture mapping", "002.015.html#id616526", "Texture mapping");
+			
+			GDLManualTOC.add(1205040204, 12050402, "Picture elements", "002.015.html#id616802", "Picture elements");
+			
+			GDLManualTOC.add(1205040205, 12050402, "Group operations", "002.015.html#id616848", "Group operations");
+			
+			GDLManualTOC.add(12050403, 120504, "Parameter script", "002.015.html#ParamScriptTechSection", "Parameter script");
+			
+			GDLManualTOC.add(1205040301, 12050403, "Execution context", "002.015.html#id616914", "Execution context");
+			
+			GDLManualTOC.add(1205040302, 12050403, "General recommendation", "002.015.html#id616981", "General recommendation");
+			
+			GDLManualTOC.add(1205040303, 12050403, "Setting limits for array parameters", "002.015.html#id616994", "Setting limits for array parameters");
+			
+			GDLManualTOC.add(12050404, 120504, "User Interface script", "002.015.html#id617030", "User Interface script");
+			
+			GDLManualTOC.add(1205040401, 12050404, "Execution context", "002.015.html#id617034", "Execution context");
+			
+			GDLManualTOC.add(1205040402, 12050404, "General recommendation", "002.015.html#id617033", "General recommendation");
+			
+			GDLManualTOC.add(1205040403, 12050404, "Thumbnail control pictures", "002.015.html#id617038", "Thumbnail control pictures");
+			
+			GDLManualTOC.add(1205040404, 12050404, "Tab page handling", "002.015.html#id617125", "Tab page handling");
+			
+			GDLManualTOC.add(1205040405, 12050404, "Thumbnail controls with dynamic items", "002.015.html#id617155", "Thumbnail controls with dynamic items");
+			
+			GDLManualTOC.add(1205040406, 12050404, "Transparent UI pictures", "002.015.html#id617190", "Transparent UI pictures");
+			
+			GDLManualTOC.add(1205040407, 12050404, "Font sizes on the UI", "002.015.html#id617298", "Font sizes on the UI");
+			
+			GDLManualTOC.add(12050405, 120504, "Forward Migration script", "002.015.html#ForwardMigration_section", "Forward Migration script");
+			
+			GDLManualTOC.add(1205040501, 12050405, "Execution context", "002.015.html#id617329", "Execution context");
+			
+			GDLManualTOC.add(1205040502, 12050405, "General recommendation", "002.015.html#FWMTemplate_section", "General recommendation");
+			
+			GDLManualTOC.add(12050406, 120504, "Backward Migration script", "002.015.html#BackwardMigration_section", "Backward Migration script");
+			
+			GDLManualTOC.add(1205040601, 12050406, "Execution context", "002.015.html#id617353", "Execution context");
+			
+			GDLManualTOC.add(1205040602, 12050406, "General recommendation", "002.015.html#BWMTemplate_section", "General recommendation");
+			
+			GDLManualTOC.add(12050407, 120504, "Migration table", "002.015.html#MigrationTable_section", "Migration table");
+			
+			GDLManualTOC.add(120505, 1205, "Writing macros", "002.015.html#id617441", "Writing macros");
+			
+			GDLManualTOC.add(12050501, 120505, "Macro return parameters", "002.015.html#id617423", "Macro return parameters");
+			
+			GDLManualTOC.add(12050502, 120505, "Advanced parameters all", "002.015.html#id617462", "Advanced parameters all");
+			
+			GDLManualTOC.add(12050503, 120505, "Macro call example", "002.015.html#id617496", "Macro call example");
+			
+			GDLManualTOC.add(120506, 1205, "Background Conversion Issues", "002.015.html#MultithreadOptionsIssues", "Background Conversion Issues");
+			
+			GDLManualTOC.add(120507, 1205, "Windows-Macintosh compatibility", "002.015.html#id617666", "Windows-Macintosh compatibility");
+			
+			GDLManualTOC.add(12050701, 120507, "Changing platform with binary libraries", "002.015.html#id617688", "Changing platform with binary libraries");
+			
+			GDLManualTOC.add(12050702, 120507, "Images and HDPI support in GDL", "002.015.html#GDLImageHDPIOptions", "Images and HDPI support in GDL");
+			
+			GDLManualTOC.add(1206, 12, "Coding Standards", "002.015.html#CodingStandards_section", "Coding Standards");
+			
+			GDLManualTOC.add(120601, 1206, "Introduction", "002.015.html#CSIntroduction_section", "Introduction");
+			
+			GDLManualTOC.add(120602, 1206, "General", "002.015.html#CS_General_section", "General");
+			
+			GDLManualTOC.add(12060201, 120602, "Macro functionality", "002.015.html#id617770", "Macro functionality");
+			
+			GDLManualTOC.add(12060202, 120602, "Numeric types - precision", "002.015.html#id617806", "Numeric types - precision");
+			
+			GDLManualTOC.add(12060203, 120602, "Comparing int and float values", "002.015.html#id617917", "Comparing int and float values");
+			
+			GDLManualTOC.add(12060204, 120602, "Mixed-type arrays", "002.015.html#id617971", "Mixed-type arrays");
+			
+			GDLManualTOC.add(12060205, 120602, "Do not use strings for controlling functionality", "002.015.html#id617988", "Do not use strings for controlling functionality");
+			
+			GDLManualTOC.add(12060206, 120602, "Decimal separators in functions", "002.015.html#id618022", "Decimal separators in functions");
+			
+			GDLManualTOC.add(12060207, 120602, "Condition grouping", "002.015.html#id618007", "Condition grouping");
+			
+			GDLManualTOC.add(12060208, 120602, "Connected parameters", "002.015.html#id618067", "Connected parameters");
+			
+			GDLManualTOC.add(12060209, 120602, "Keep parameters unchanged", "002.015.html#id618055", "Keep parameters unchanged");
+			
+			GDLManualTOC.add(12060210, 120602, "Do not make unnecessary copies", "002.015.html#id618110", "Do not make unnecessary copies");
+			
+			GDLManualTOC.add(12060211, 120602, "Do not re-use variables for different purposes", "002.015.html#id618095", "Do not re-use variables for different purposes");
+			
+			GDLManualTOC.add(12060212, 120602, "Clean up code after functionality changes", "002.015.html#id618079", "Clean up code after functionality changes");
+			
+			GDLManualTOC.add(12060213, 120602, "Do not use deprecated GDL", "002.015.html#id618092", "Do not use deprecated GDL");
+			
+			GDLManualTOC.add(12060214, 120602, "Bittest or array", "002.015.html#id618085", "Bittest or array");
+			
+			GDLManualTOC.add(12060215, 120602, "Trigonometry functions", "002.015.html#id618116", "Trigonometry functions");
+			
+			GDLManualTOC.add(12060216, 120602, "Speed Relations", "002.015.html#id618181", "Speed Relations");
+			
+			GDLManualTOC.add(1206021601, 12060216, "Slow GDL code due to high polygonal count", "002.015.html#id618174", "Slow GDL code due to high polygonal count");
+			
+			GDLManualTOC.add(1206021602, 12060216, "Slow PDF due to GDL-defined vectorial fills", "002.015.html#id618254", "Slow PDF due to GDL-defined vectorial fills");
+			
+			GDLManualTOC.add(1206021603, 12060216, "Slow GDL code due to slow and superfluous script running", "002.015.html#id618238", "Slow GDL code due to slow and superfluous script running");
+			
+			GDLManualTOC.add(120603, 1206, "Script-related", "002.015.html#CS_ScriptRelated_section", "Script-related");
+			
+			GDLManualTOC.add(12060301, 120603, "Master script", "002.015.html#id618358", "Master script");
+			
+			GDLManualTOC.add(1206030101, 12060301, "Master script is not a script context", "002.015.html#id618356", "Master script is not a script context");
+			
+			GDLManualTOC.add(1206030102, 12060301, "Subroutines in master script", "002.015.html#id618398", "Subroutines in master script");
+			
+			GDLManualTOC.add(12060302, 120603, "2D/3D scripts", "002.015.html#id618380", "2D/3D scripts");
+			
+			GDLManualTOC.add(1206030201, 12060302, "Fragments/binary model", "002.015.html#id618395", "Fragments/binary model");
+			
+			GDLManualTOC.add(1206030202, 12060302, "Hotspot IDs", "002.015.html#id616247", "Hotspot IDs");
+			
+			GDLManualTOC.add(1206030203, 12060302, "Undo transformations early", "002.015.html#id616234", "Undo transformations early");
+			
+			GDLManualTOC.add(12060303, 120603, "3D script", "002.015.html#id616282", "3D script");
+			
+			GDLManualTOC.add(1206030301, 12060303, "Wrap texture using transformation and coor{3}", "002.015.html#id616276", "Wrap texture using transformation and coor{3}");
+			
+			GDLManualTOC.add(1206030302, 12060303, "Wrap texture often", "002.015.html#id616309", "Wrap texture often");
+			
+			GDLManualTOC.add(1206030303, 12060303, "Close bodies between different materials", "002.015.html#id616319", "Close bodies between different materials");
+			
+			GDLManualTOC.add(12060304, 120603, "Parameter script", "002.015.html#id619483", "Parameter script");
+			
+			GDLManualTOC.add(1206030401, 12060304, "Hide the old parameter list", "002.015.html#id619534", "Hide the old parameter list");
+			
+			GDLManualTOC.add(1206030402, 12060304, "Run only once", "002.015.html#id619539", "Run only once");
+			
+			GDLManualTOC.add(1.20603040201e+011, 1206030402, "Parameter changes are not immediate", "002.015.html#id619525", "Parameter changes are not immediate");
+			
+			GDLManualTOC.add(1.20603040202e+011, 1206030402, "Setting parameters", "002.015.html#id619572", "Setting parameters");
+			
+			GDLManualTOC.add(1.20603040203e+011, 1206030402, "Defining parameter restrictions", "002.015.html#id619575", "Defining parameter restrictions");
+			
+			GDLManualTOC.add(1.20603040204e+011, 1206030402, "Range open intervals", "002.015.html#id619609", "Range open intervals");
+			
+			GDLManualTOC.add(1.20603040205e+011, 1206030402, "Try to group commands in this order", "002.015.html#id619605", "Try to group commands in this order");
+			
+			GDLManualTOC.add(1206030403, 12060304, "Define all ranges", "002.015.html#id619673", "Define all ranges");
+			
+			GDLManualTOC.add(1206030404, 12060304, "Parameter name string comparison ", "002.015.html#id619679", "Parameter name string comparison ");
+			
+			GDLManualTOC.add(1206030405, 12060304, "Font type names", "002.015.html#id619693", "Font type names");
+			
+			GDLManualTOC.add(12060305, 120603, "UI script", "002.015.html#id619735", "UI script");
+			
+			GDLManualTOC.add(1206030501, 12060305, "Hierarchical tabpage IDs", "002.015.html#id619749", "Hierarchical tabpage IDs");
+			
+			GDLManualTOC.add(1206030502, 12060305, "Tabpages as subroutines", "002.015.html#id619743", "Tabpages as subroutines");
+			
+			GDLManualTOC.add(1206030503, 12060305, "Use relative coordinates", "002.015.html#id619787", "Use relative coordinates");
+			
+			GDLManualTOC.add(1206030504, 12060305, "Outfields", "002.015.html#id619771", "Outfields");
+			
+			GDLManualTOC.add(1206030505, 12060305, "Infields", "002.015.html#id619774", "Infields");
+			
+			GDLManualTOC.add(1206030506, 12060305, "Baseline alignment", "002.015.html#id619800", "Baseline alignment");
+			
+			GDLManualTOC.add(1206030507, 12060305, "Using images", "002.015.html#id619818", "Using images");
+			
+			GDLManualTOC.add(12060306, 120603, "Migration scripts", "002.015.html#id619859", "Migration scripts");
+			
+			GDLManualTOC.add(1207, 12, "GDL Style Guide", "002.015.html#GDLStyleGuide_section", "GDL Style Guide");
+			
+			GDLManualTOC.add(120701, 1207, "Introduction", "002.015.html#GDLStyleGuideIntro_section", "Introduction");
+			
+			GDLManualTOC.add(120702, 1207, "Naming Conventions", "002.015.html#GDLStyleGuideNaming_section", "Naming Conventions");
+			
+			GDLManualTOC.add(12070201, 120702, "General", "002.015.html#id619831", "General");
+			
+			GDLManualTOC.add(12070202, 120702, "Identifiers (parameters, variables)", "002.015.html#id619887", "Identifiers (parameters, variables)");
+			
+			GDLManualTOC.add(1207020201, 12070202, "Variables", "002.015.html#id620143", "Variables");
+			
+			GDLManualTOC.add(1207020202, 12070202, "Constants", "002.015.html#id620164", "Constants");
+			
+			GDLManualTOC.add(1207020203, 12070202, "String literals", "002.015.html#id620211", "String literals");
+			
+			GDLManualTOC.add(1207020204, 12070202, "Arrays", "002.015.html#id620229", "Arrays");
+			
+			GDLManualTOC.add(1207020205, 12070202, "Dictionaries", "002.015.html#id620286", "Dictionaries");
+			
+			GDLManualTOC.add(1207020206, 12070202, "Parameters", "002.015.html#id620352", "Parameters");
+			
+			GDLManualTOC.add(1207020207, 12070202, "Subtype parameters", "002.015.html#id620395", "Subtype parameters");
+			
+			GDLManualTOC.add(12070203, 120702, "String identifiers", "002.015.html#id620436", "String identifiers");
+			
+			GDLManualTOC.add(1207020301, 12070203, "Subroutine and group names", "002.015.html#id620455", "Subroutine and group names");
+			
+			GDLManualTOC.add(1207020302, 12070203, "Library parts, subtypes, images, misc. filenames, attributes", "002.015.html#id620470", "Library parts, subtypes, images, misc. filenames, attributes");
+			
+			GDLManualTOC.add(1207020303, 12070203, "Macros", "002.015.html#id620488", "Macros");
+			
+			GDLManualTOC.add(1207020304, 12070203, "HSF folder structure", "002.015.html#id620530", "HSF folder structure");
+			
+			GDLManualTOC.add(1207020305, 12070203, "Parameter meanings", "002.015.html#id620542", "Parameter meanings");
+			
+			GDLManualTOC.add(12070204, 120702, "Keywords", "002.015.html#id620572", "Keywords");
+			
+			GDLManualTOC.add(120703, 1207, "Expressions", "002.015.html#GDLStyleGuideExpressions_section", "Expressions");
+			
+			GDLManualTOC.add(120704, 1207, "Flow control statements", "002.015.html#GDLStyleGuideControlFlow_section", "Flow control statements");
+			
+			GDLManualTOC.add(120705, 1207, "Subroutines", "002.015.html#GDLStyleGuideSubroutines_section", "Subroutines");
+			
+			GDLManualTOC.add(120706, 1207, "Macro calls", "002.015.html#GDLStyleGuideMacrocalls_section", "Macro calls");
+			
+			GDLManualTOC.add(120707, 1207, "Comments", "002.015.html#GDLStyleGuideComments_section", "Comments");
+			
+			GDLManualTOC.add(12070701, 120707, "Script/subroutine header", "002.015.html#id621111", "Script/subroutine header");
+			
+			GDLManualTOC.add(12070702, 120707, "Dictionaries", "002.015.html#id621149", "Dictionaries");
+			
+			GDLManualTOC.add(12070703, 120707, "Code blocks", "002.015.html#id621145", "Code blocks");
+			
+			GDLManualTOC.add(120708, 1207, "Scripts", "002.015.html#GDLStyleGuideScriptStructure_section", "Scripts");
+			
+			GDLManualTOC.add(12070801, 120708, "Layout", "002.015.html#id621190", "Layout");
+			
+			GDLManualTOC.add(12070802, 120708, "Structure", "002.015.html#id621227", "Structure");
+			
+			GDLManualTOC.add(1208, 12, "Doors and Windows", "002.015.html#DoorsandWindows_section", "Doors and Windows");
+			
+			GDLManualTOC.add(120801, 1208, "General Guidelines", "002.015.html#id621322", "General Guidelines");
+			
+			GDLManualTOC.add(120802, 1208, "Positioning", "002.015.html#id621400", "Positioning");
+			
+			GDLManualTOC.add(120803, 1208, "Creation of Door/Window Library Parts", "002.015.html#id619375", "Creation of Door/Window Library Parts");
+			
+			GDLManualTOC.add(12080301, 120803, "Rectangular Doors/Windows in Straight Walls", "002.015.html#id619453", "Rectangular Doors/Windows in Straight Walls");
+			
+			GDLManualTOC.add(12080302, 120803, "3D Related Challenges", "002.015.html#id619481", "3D Related Challenges");
+			
+			GDLManualTOC.add(1208030201, 12080302, "Non-Rectangular Doors/Windows in Straight Walls", "002.015.html#id619450", "Non-Rectangular Doors/Windows in Straight Walls");
+			
+			GDLManualTOC.add(1208030202, 12080302, "Rectangular Doors/Windows in Curved Walls", "002.015.html#id623294", "Rectangular Doors/Windows in Curved Walls");
+			
+			GDLManualTOC.add(1208030203, 12080302, "Non-Rectangular Doors/Windows in Curved Walls", "002.015.html#id623334", "Non-Rectangular Doors/Windows in Curved Walls");
+			
+			GDLManualTOC.add(12080303, 120803, "2D Related Challenges", "002.015.html#id623374", "2D Related Challenges");
+			
+			GDLManualTOC.add(1208030301, 12080303, "Cutting custom wall opening", "002.015.html#id623372", "Cutting custom wall opening");
+			
+			GDLManualTOC.add(1208030302, 12080303, "Extending the wall polygon", "002.015.html#id623521", "Extending the wall polygon");
+			
+			GDLManualTOC.add(1209, 12, "GDL Created from the Floor Plan", "002.015.html#GDLCreatedfromtheFloorPlan_section", "GDL Created from the Floor Plan");
+			
+			GDLManualTOC.add(1210, 12, "Keywords", "002.015.html#Keywords_section", "Keywords");
+			
+			GDLManualTOC.add(121001, 1210, "Common Keywords", "002.015.html#id623680", "Common Keywords");
+			
+			GDLManualTOC.add(121002, 1210, "Reserved Keywords", "002.015.html#id623700", "Reserved Keywords");
+			
+			GDLManualTOC.add(121003, 1210, "3D Use Only", "002.015.html#id623704", "3D Use Only");
+			
+			GDLManualTOC.add(121004, 1210, "2D Use Only", "002.015.html#id623684", "2D Use Only");
+			
+			GDLManualTOC.add(121005, 1210, "2D and 3D Use", "002.015.html#id623726", "2D and 3D Use");
+			
+			GDLManualTOC.add(121006, 1210, "Non-Geometric Scripts", "002.015.html#id623711", "Non-Geometric Scripts");
+			
+			GDLManualTOC.add(12100601, 121006, "Properties Script", "002.015.html#id623712", "Properties Script");
+			
+			GDLManualTOC.add(12100602, 121006, "Parameter Script", "002.015.html#id623737", "Parameter Script");
+			
+			GDLManualTOC.add(12100603, 121006, "Interface Script", "002.015.html#id623742", "Interface Script");
+			
+			GDLManualTOC.add(12100604, 121006, "Forward and Backward Migration Scripts", "002.015.html#id623723", "Forward and Backward Migration Scripts");
+			
+			GDLManualTOC.add(1211, 12, "GDL Data I/O Add-On", "002.015.html#GDLDataIOAdd-On_section", "GDL Data I/O Add-On");
+			
+			GDLManualTOC.add(121101, 1211, "Description of Database", "002.015.html#id623761", "Description of Database");
+			
+			GDLManualTOC.add(121102, 1211, "Opening a Database", "002.015.html#id623746", "Opening a Database");
+			
+			GDLManualTOC.add(121103, 1211, "Reading Values from Database", "002.015.html#id623886", "Reading Values from Database");
+			
+			GDLManualTOC.add(121104, 1211, "Writing Values into Database", "002.015.html#id623932", "Writing Values into Database");
+			
+			GDLManualTOC.add(121105, 1211, "Closing Database", "002.015.html#id623944", "Closing Database");
+			
+			GDLManualTOC.add(1212, 12, "GDL Datetime Add-On", "002.015.html#GDLDatetimeAdd-On_section", "GDL Datetime Add-On");
+			
+			GDLManualTOC.add(121201, 1212, "Opening Channel", "002.015.html#GDLDatetimeAdd-OnOpen_section", "Opening Channel");
+			
+			GDLManualTOC.add(121202, 1212, "Reading Information", "002.015.html#id624223", "Reading Information");
+			
+			GDLManualTOC.add(121203, 1212, "Closing Channel", "002.015.html#id624240", "Closing Channel");
+			
+			GDLManualTOC.add(1213, 12, "GDL File Manager I/O Add-On", "002.015.html#GDLFileManagerIOAdd-On-section", "GDL File Manager I/O Add-On");
+			
+			GDLManualTOC.add(121301, 1213, "Specifying Folder", "002.015.html#id624276", "Specifying Folder");
+			
+			GDLManualTOC.add(121302, 1213, "Getting File/Folder Name", "002.015.html#id624347", "Getting File/Folder Name");
+			
+			GDLManualTOC.add(121303, 1213, "Finishing Folder Scanning", "002.015.html#id624388", "Finishing Folder Scanning");
+			
+			GDLManualTOC.add(1214, 12, "GDL Text I/O Add-On", "002.015.html#GDLTextIOAdd-On_section", "GDL Text I/O Add-On");
+			
+			GDLManualTOC.add(121401, 1214, "Opening File", "002.015.html#id624421", "Opening File");
+			
+			GDLManualTOC.add(121402, 1214, "Reading Values", "002.015.html#id624516", "Reading Values");
+			
+			GDLManualTOC.add(121403, 1214, "Writing Values", "002.015.html#id624593", "Writing Values");
+			
+			GDLManualTOC.add(121404, 1214, "Closing File", "002.015.html#id624641", "Closing File");
+			
+			GDLManualTOC.add(1215, 12, "Property GDL Add-On", "002.015.html#PropertyGDLAdd-On_section", "Property GDL Add-On");
+			
+			GDLManualTOC.add(121501, 1215, "Open property database", "002.015.html#id624690", "Open property database");
+			
+			GDLManualTOC.add(121502, 1215, "Close property database", "002.015.html#id624766", "Close property database");
+			
+			GDLManualTOC.add(121503, 1215, "Input to property database", "002.015.html#id624754", "Input to property database");
+			
+			GDLManualTOC.add(121504, 1215, "Output to property database", "002.015.html#id624961", "Output to property database");
+			
+			GDLManualTOC.add(1216, 12, "GDL XML Extension", "002.015.html#GDLXMLExtension_section", "GDL XML Extension");
+			
+			GDLManualTOC.add(121601, 1216, "Opening an XML Document", "002.015.html#OpeninganXMLDocument_section", "Opening an XML Document");
+			
+			GDLManualTOC.add(121602, 1216, "Reading an XML Document", "002.015.html#id627036", "Reading an XML Document");
+			
+			GDLManualTOC.add(121603, 1216, "Modifying an XML Document", "002.015.html#id627407", "Modifying an XML Document");
+			
+			GDLManualTOC.add(1217, 12, "Polygon Operations Extension", "002.015.html#PolygonOperationsExtension_section", "Polygon Operations Extension");
+			
+			GDLManualTOC.add(121701, 1217, "Opening a channel", "002.015.html#id627923", "Opening a channel");
+			
+			GDLManualTOC.add(121702, 1217, "Container management", "002.015.html#id627979", "Container management");
+			
+			GDLManualTOC.add(12170201, 121702, "CreateContainer", "002.015.html#PolygonOperationsExtension_CreateContainer_section", "CreateContainer");
+			
+			GDLManualTOC.add(12170202, 121702, "DeleteContainer", "002.015.html#PolygonOperationsExtension_DeleteContainer_section", "DeleteContainer");
+			
+			GDLManualTOC.add(12170203, 121702, "EmptyContainer", "002.015.html#PolygonOperationsExtension_EmptyContainer_section", "EmptyContainer");
+			
+			GDLManualTOC.add(12170204, 121702, "SetSourceContainer", "002.015.html#PolygonOperationsExtension_SetSourceContainer_section", "SetSourceContainer");
+			
+			GDLManualTOC.add(12170205, 121702, "SetDestinationContainer", "002.015.html#PolygonOperationsExtension_SetDestinationContainer_section", "SetDestinationContainer");
+			
+			GDLManualTOC.add(121703, 1217, "Polygon / polyline management", "002.015.html#id628006", "Polygon / polyline management");
+			
+			GDLManualTOC.add(12170301, 121703, "Array", "002.015.html#id628056", "Array");
+			
+			GDLManualTOC.add(12170302, 121703, "Dictionary", "002.015.html#PolygonOperationsExtension_PolyManagementDict_section", "Dictionary");
+			
+			GDLManualTOC.add(12170303, 121703, "Store", "002.015.html#PolygonOperationsExtension_Store_section", "Store");
+			
+			GDLManualTOC.add(12170304, 121703, "StorePolyline", "002.015.html#PolygonOperationsExtension_StorePolyline_section", "StorePolyline");
+			
+			GDLManualTOC.add(12170305, 121703, "StoreDictPolygon", "002.015.html#PolygonOperationsExtension_StoreDictPolygon_section", "StoreDictPolygon");
+			
+			GDLManualTOC.add(12170306, 121703, "StoreDictPolyline", "002.015.html#PolygonOperationsExtension_StoreDictPolyline_section", "StoreDictPolyline");
+			
+			GDLManualTOC.add(12170307, 121703, "Dispose", "002.015.html#PolygonOperationsExtension_Dispose_section", "Dispose");
+			
+			GDLManualTOC.add(121704, 1217, "Polygon / polyline operation settings", "002.015.html#id628459", "Polygon / polyline operation settings");
+			
+			GDLManualTOC.add(12170401, 121704, "HalfPlaneParams", "002.015.html#PolygonOperationsExtension_HalfPlaneParams_section", "HalfPlaneParams");
+			
+			GDLManualTOC.add(12170402, 121704, "OffsetParams", "002.015.html#PolygonOperationsExtension_OffsetParams_section", "OffsetParams");
+			
+			GDLManualTOC.add(12170403, 121704, "MultipleEdgeOffsetParams", "002.015.html#PolygonOperationsExtension_MultipleEdgeOffsetParams_section", "MultipleEdgeOffsetParams");
+			
+			GDLManualTOC.add(12170404, 121704, "PolylineOffsetVectors", "002.015.html#PolygonOperationsExtension_PolylineOffsetVectors_section", "PolylineOffsetVectors");
+			
+			GDLManualTOC.add(121705, 1217, "Polygon / polyline operations", "002.015.html#id628641", "Polygon / polyline operations");
+			
+			GDLManualTOC.add(12170501, 121705, "+ - /", "002.015.html#PolygonOperationsExtension_OP_section", "+ - /");
+			
+			GDLManualTOC.add(12170502, 121705, "ClipPolyline", "002.015.html#PolygonOperationsExtension_ClipPolyline_section", "ClipPolyline");
+			
+			GDLManualTOC.add(12170503, 121705, "CopyPolygon", "002.015.html#PolygonOperationsExtension_CopyPolygon_section", "CopyPolygon");
+			
+			GDLManualTOC.add(12170504, 121705, "Regularize", "002.015.html#PolygonOperationsExtension_Regularize_section", "Regularize");
+			
+			GDLManualTOC.add(12170505, 121705, "PolyCut", "002.015.html#PolygonOperationsExtension_PolyCut_section", "PolyCut");
+			
+			GDLManualTOC.add(12170506, 121705, "OffsetEdge", "002.015.html#PolygonOperationsExtension_OffsetEdge_section", "OffsetEdge");
+			
+			GDLManualTOC.add(12170507, 121705, "OffsetMultipleEdges", "002.015.html#PolygonOperationsExtension_OffsetMultipleEdges_section", "OffsetMultipleEdges");
+			
+			GDLManualTOC.add(12170508, 121705, "OffsetPolyline", "002.015.html#PolygonOperationsExtension_OffsetPolyline_section", "OffsetPolyline");
+			
+			GDLManualTOC.add(12170509, 121705, "OffsetPolylineWithVectors", "002.015.html#PolygonOperationsExtension_OffsetPolylineWithVectors_section", "OffsetPolylineWithVectors");
+			
+			GDLManualTOC.add(12170510, 121705, "ResizeContour", "002.015.html#PolygonOperationsExtension_ResizeContour_section", "ResizeContour");
+			
+			GDLManualTOC.add(12170511, 121705, "CentreOfGravity", "002.015.html#PolygonOperationsExtension_CentreOfGravity_section", "CentreOfGravity");
+			
+			GDLManualTOC.add(121706, 1217, "Get resulting polygons / polylines", "002.015.html#id628913", "Get resulting polygons / polylines");
+			
+			GDLManualTOC.add(12170601, 121706, "Array", "002.015.html#id628917", "Array");
+			
+			GDLManualTOC.add(1217060101, 12170601, "GetSourcePolygons, GetSourcePolylines", "002.015.html#PolygonOperationsExtension_GetSourcePolygons_section", "GetSourcePolygons, GetSourcePolylines");
+			
+			GDLManualTOC.add(1217060102, 12170601, "GetDestinationPolygons, GetDestinationPolylines", "002.015.html#PolygonOperationsExtension_GetDestinationPolygons_section", "GetDestinationPolygons, GetDestinationPolylines");
+			
+			GDLManualTOC.add(1217060103, 12170601, "GetVertices, GetPolylineVertices", "002.015.html#PolygonOperationsExtension_GetVertices_section", "GetVertices, GetPolylineVertices");
+			
+			GDLManualTOC.add(1217060104, 12170601, "GetContourEnds", "002.015.html#PolygonOperationsExtension_GetContourEnds_section", "GetContourEnds");
+			
+			GDLManualTOC.add(1217060105, 12170601, "GetInhEdgeInfos, GetPolylineInhEdgeInfos", "002.015.html#PolygonOperationsExtension_GetInhEdgeInfos_section", "GetInhEdgeInfos, GetPolylineInhEdgeInfos");
+			
+			GDLManualTOC.add(12170602, 121706, "Dictionary", "002.015.html#id628989", "Dictionary");
+			
+			GDLManualTOC.add(1217060201, 12170602, "GetSourceDictPolygon, GetSourceDictPolyline", "002.015.html#PolygonOperationsExtension_GetSourceDictPolygon_section", "GetSourceDictPolygon, GetSourceDictPolyline");
+			
+			GDLManualTOC.add(1217060202, 12170602, "GetDestinationDictPolygon, GetDestinationDictPolyline", "002.015.html#PolygonOperationsExtension_GetDestinationDictPolygon_section", "GetDestinationDictPolygon, GetDestinationDictPolyline");
+			
+			GDLManualTOC.add(121707, 1217, "Closing channel", "002.015.html#id629035", "Closing channel");
+			
+			GDLManualTOC.add(1218, 12, "Autotext Guide", "002.015.html#id629029", "Autotext Guide");
+			
+			GDLManualTOC.add(121801, 1218, "Project info keywords", "002.015.html#id629086", "Project info keywords");
+			
+			GDLManualTOC.add(121802, 1218, "General", "002.015.html#id632389", "General");
+			
+			GDLManualTOC.add(121803, 1218, "Layout autotexts", "002.015.html#id632416", "Layout autotexts");
+			
+			GDLManualTOC.add(121804, 1218, "Drawing autotexts", "002.015.html#id632467", "Drawing autotexts");
+			
+			GDLManualTOC.add(121805, 1218, "Reference type autotexts", "002.015.html#id632495", "Reference type autotexts");
+			
+			GDLManualTOC.add(121806, 1218, "Marker type autotexts", "002.015.html#id632600", "Marker type autotexts");
+			
+			GDLManualTOC.add(121807, 1218, "Change related autotexts", "002.015.html#id632617", "Change related autotexts");
+			
+			GDLManualTOC.add(121808, 1218, "Layout revision related autotexts", "002.015.html#id632667", "Layout revision related autotexts");
+			
+			GDLManualTOC.add(1219, 12, "Built-in Property Guide", "002.015.html#builtin_propertyids_section", "Built-in Property Guide");
+			
+			GDLManualTOC.add(121901, 1219, "Element-related built-in property IDs", "002.015.html#id632775", "Element-related built-in property IDs");
+			
+			GDLManualTOC.add(121902, 1219, "Component-related built-in property IDs", "002.015.html#id633429", "Component-related built-in property IDs");
+			
+			GDLManualTOC.add(13, 0, "New GDL Features in Archicad 27", "002.016.html", "New GDL Features in Archicad 27");
+			
+			GDLManualTOC.add(1301, 13, "New MEP tools", "002.016.html#id633517", "New MEP tools");
+			
+			GDLManualTOC.add(1302, 13, "New built-in properties", "002.016.html#id633531", "New built-in properties");
+			
+			GDLManualTOC.add(14, 0, "Index", "002.017.html", "Index");
+			
+			GDLManualTOC.add(1401, 14, "Syntax Listing of GDL Commands", "002.017.html#SyntaxListing_section", "Syntax Listing of GDL Commands");
+			
+			GDLManualTOC.add(1402, 14, "Listing of global variables and fix-named parameters", "002.017.html#GlobalListing_section", "Listing of global variables and fix-named parameters");
+			
+			GDLManualTOC.add(1403, 14, "Listing of REQUESTs", "002.017.html#RequestListing_section", "Listing of REQUESTs");
+			
+			document.write(GDLManualTOC);
+			
+			function followLink(url)
+			{
+				var filename = url.substring(url.lastIndexOf('/') + 1, url.length);
+				GDLManualTOC.openTo(filename, true);
+			}
+			//]]&gt;
+		</script></div><table><tr><td style="width:33%" align="left"><a href="002.015.html">&lt;&lt; Miscellaneous</a></td><td style="width:33%" align="center"><a href="index.html">Back to the main page</a></td><td style="width:33%" align="right"><a href="002.017.html">Index &gt;&gt;</a></td></tr></table><hr/><div class="titlepage"><div><div><h2 class="title"><a id="id633514"/>Chapter 13. New GDL Features in Archicad 27</h2></div></div></div><p>
+            This section contains a fly-through of the new GDL features in Archicad 27.
+        </p><div class="section"><div class="titlepage"><div><div><h2 class="title"><a id="id633517"/>New MEP tools</h2></div></div></div><p>
+                Some of the MEP tools got united under MEP Routing tools. 
+                Duct Routing, Pipe Routing, Cable Carrier Routing each have a straight, elbow and transition subelement, with some common attribute settings.
+                These are returned by <a class="xref" href="reference/requests/MEP_ROUTE_ATTRIBUTES.html">the "MEP_ROUTE_ATTRIBUTES" REQUEST</a>.
+                Corresponding <a class="link" href="002.015.html#APPQUERY_MEPSYSTEM_section" title="Get MEP Systems">"MEPSYSTEM" APPLICATION_QUERYs</a> can be used only with non-routing MEP tools' elements.
+            </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title"><a id="id633531"/>New built-in properties</h2></div></div></div><p>
+                Design option-related <a class="link" href="002.015.html#builtin_propertyids_section" title="Built-in Property Guide">built-in properties</a> are available with a fixed name for GDL:
+                </p><div class="itemizedlist"><ul class="itemizedlist"><li class="listitem"><p>Builtin.Design_Option_Name</p></li><li class="listitem"><p>Builtin.Design_Option_ID</p></li><li class="listitem"><p>Builtin.Design_Option_Set_Name</p></li></ul></div><p>
+            </p></div><hr/><p>
+                <span class="bold"><strong>GDL Reference Guide</strong></span>
+            </p><p>
+                <span class="trademark">Copyright</span><sup>©</sup> 2023 by Graphisoft, all rights reserved.
+                Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+            </p></body></html>
