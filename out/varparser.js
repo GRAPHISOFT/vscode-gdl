@@ -9,12 +9,17 @@ class Variables {
     addfromtext(code) {
         if (code !== undefined) {
             /*
-                mark lines continuing an expression / list
-                    ,   ! comment
-                    \   ! comment
-                skipping lines with whitespace / comment only (assuming no multiline strings)
-                    check only lines which are not after a marked line
+            mark lines continuing an expression / list
+                ,   ! comment
+                \   ! comment
+            skipping lines with whitespace / comment only (assuming no multiline strings)
+                check only lines which are not after a marked line
 
+            variable definitions:
+                ... =
+                dict ...
+                dim ...
+                TODO handle multiline dim, dict, handle returned_parameters, requests, appquerys...
             */
             const lines = code.split(/\r?\n/);
             const is_continued = lines.map(line => line.search(/[,\\](?=\s*(!.*)?$)/i) >= 0);
