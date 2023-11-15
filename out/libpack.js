@@ -300,10 +300,13 @@ class PathNameTableView {
             return packagePath;
         }
     }
+    static warnPackageInfoNotFound() {
+        vscode.window.showWarningMessage("Can't find \"package.info\", don't know where to look for source files.");
+    }
     async checkContent(_progress, _token) {
         const packagePath = await this.getPackagePath();
         if (packagePath === undefined) {
-            vscode.window.showWarningMessage("Can't find \"package.info\", don't know where to look for source files.");
+            PathNameTableView.warnPackageInfoNotFound();
             // go on with saving changes to purge empty folders
         }
         else {
@@ -417,10 +420,14 @@ class PathNameTableView {
             //const findFile = path.basename(item.entry.fileName, path.extname(item.entry.fileName)).toLocaleLowerCase();
             const findFile = item.entry.fileName.toLocaleLowerCase();
             const packagePath = await this.getPackagePath();
-            if (packagePath === undefined)
+            if (packagePath === undefined) {
+                PathNameTableView.warnPackageInfoNotFound();
                 return;
+            }
+            let found = false;
             for await (const uri of (0, extension_1.getLibparts)(vscode.Uri.file(packagePath))) {
                 if (uri.binaryFileName.toLocaleLowerCase() === findFile) {
+                    found = true;
                     if (PathNameTableView.typeByExtension(item.entry.fileName) === 1 /* SCRIPT */) {
                         vscode.commands.executeCommand('vscode.open', vscode.Uri.joinPath(uri.sourceUri, "libpartdata.xml"));
                     }
@@ -428,6 +435,10 @@ class PathNameTableView {
                         vscode.commands.executeCommand('vscode.open', uri.sourceUri);
                     }
                 }
+            }
+            if (!found) {
+                const baseName = path.basename(item.entry.fileName, path.extname(item.entry.fileName));
+                vscode.window.showWarningMessage(`"${baseName}" not found in folder "${packagePath}"`);
             }
         }
     }
