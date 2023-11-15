@@ -692,6 +692,7 @@ UI_LINK
 "LINEAR_DIMENSION"
 "MATCHING_PROPERTIES"
 "MATERIAL_INFO"
+"MEP_ROUTE_ATTRIBUTES"
 "MODEL_LENGTH_UNIT"
 "MODEL_TEXT_SIZE_UNIT"
 "NAME_OF_BUILDING_MATERIAL"
@@ -743,6 +744,9 @@ UI_LINK
 "ZONE_RELATIONS_OF_OWNER"
 
 ! built-in properties
+"Builtin.Design_Option_Name"
+"Builtin.Design_Option_ID"
+"Builtin.Design_Option_Set_Name"
 "Builtin.General_Area"
 "Builtin.General_Height"
 "Builtin.General_NetVolume"
