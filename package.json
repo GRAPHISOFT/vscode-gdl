@@ -2,7 +2,7 @@
     "name": "gdl",
     "displayName": "GDL",
     "description": "Development environment for Archicad 25 GDL language (XML and HSF source code): syntax coloring, snippets, code outline, quick reference.",
-    "version": "1.27.0-dev.1",
+    "version": "1.27.1-dev.3",
     "publisher": "Graphisoft",
     "author": "Péter Baksa",
     "contributors": [
@@ -206,6 +206,10 @@
                     "when": "view == PathNameTableView && viewItem == file"
                 },
                 {
+                    "command": "GDL.PNTV.openFile",
+                    "when": "view == PathNameTableView && viewItem == file"
+                },
+                {
                     "command": "GDL.insertPict",
                     "when": "view == GDLOutline && viewItem == gdlpict"
                 },
@@ -309,6 +313,11 @@
                     "command": "GDL.PNTV.createSubPath",
                     "when": "view == PathNameTableView && viewItem != file",
                     "group": "inline@3"
+                },
+                {
+                    "command": "GDL.PNTV.openFile",
+                    "when": "view == PathNameTableView && viewItem == file",
+                    "group": "inline@4"
                 },
                 {
                     "command": "GDL.PNTV.expandAll",
@@ -453,6 +462,12 @@
                 "title": "Show in file",
                 "category": "PathNameTableView",
                 "icon": "$(arrow-small-right)"
+            },
+            {
+                "command": "GDL.PNTV.openFile",
+                "title": "Open file in editor",
+                "category": "PathNameTableView",
+                "icon": "$(file)"
             },
             {
                 "command": "GDLOutline.toggleSpecComments",

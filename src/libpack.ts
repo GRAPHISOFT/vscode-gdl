@@ -179,8 +179,9 @@ class PathNameTreeItem
 
             // count file types
             const entries = this.getTableEntries(true);
-            const numberOfLibparts = entries.filter(e => path.extname(e.fileName) === ".gsm").length;
-            const numberOfImages = entries.filter(e => path.extname(e.fileName) in PathNameTableView.knownImageExtensions).length;
+            const fileTypes = entries.map(e => PathNameTableView.typeByExtension(e.fileName));
+            const numberOfLibparts = fileTypes.reduce((count, e) => (e === LibpartType.SCRIPT) ? count + 1 : count, 0);
+            const numberOfImages = fileTypes.reduce((count, e) => (e === LibpartType.IMAGE) ? count + 1 : count, 0);
 
             item.tooltip = `${entries.length} entries\n${numberOfLibparts} libparts\n${numberOfImages} images`;
         }
@@ -265,18 +266,20 @@ class PathNameTreeItem
 
 type ChangeEvent = PathNameTreeItem | PathNameTreeItem[] | undefined | null | void;
 
+export const enum LibpartType { OTHER = 0, SCRIPT, IMAGE }
+
 export class PathNameTableView
     implements  vscode.TreeDataProvider<PathNameTreeItem>,
                 vscode.TreeDragAndDropController<PathNameTreeItem> {
 
     /** hash for known image extensions */
-    static readonly knownImageExtensions = { ".jpg":     undefined,
-                                             ".jpeg":    undefined,
-                                             ".tif":     undefined,
-                                             ".tiff":    undefined,
-                                             ".svg":     undefined,
-                                             ".gif":     undefined,
-                                             ".bmp":     undefined }
+    private static readonly knownImageExtensions = { ".jpg":     undefined,
+                                                     ".jpeg":    undefined,
+                                                     ".tif":     undefined,
+                                                     ".tiff":    undefined,
+                                                     ".svg":     undefined,
+                                                     ".gif":     undefined,
+                                                     ".bmp":     undefined }
 
     private static readonly lineHighLight = vscode.window.createTextEditorDecorationType({
         borderColor: new vscode.ThemeColor("editor.wordHighlightTextBorder"),
@@ -286,6 +289,13 @@ export class PathNameTableView
         overviewRulerLane: vscode.OverviewRulerLane.Center,
         overviewRulerColor: new vscode.ThemeColor("minimap.selectionOccurrenceHighlight")
     });
+
+    static typeByExtension(fileName: string) {
+        const ext = path.extname(fileName).toLowerCase();
+        if (ext === ".gsm") return LibpartType.SCRIPT;
+        if (ext in PathNameTableView.knownImageExtensions) return LibpartType.IMAGE;
+        return LibpartType.OTHER;
+    }
 
     static readonly VIEWID = "PathNameTableView";
     static readonly treeMime = 'application/vnd.code.tree.pathnametableview';
@@ -312,6 +322,7 @@ export class PathNameTableView
             vscode.commands.registerCommand('GDL.PNTV.copyVirtualPath', async (item: PathNameTreeItem) => this.copyVirtualPath(item)),
             vscode.commands.registerCommand('GDL.PNTV.rename', async (item: PathNameTreeItem) => this.rename(item)),
             vscode.commands.registerCommand('GDL.PNTV.showInFile', async (item: PathNameTreeItem) => this.showInFile(item)),
+            vscode.commands.registerCommand('GDL.PNTV.openFile', async (item: PathNameTreeItem) => this.openFile(item)),
         ];
 
         context.subscriptions.push(this.view, ...commands);
@@ -323,16 +334,26 @@ export class PathNameTableView
                                             async (p, t) => this.checkContent(p, t));
     }
 
-    private async checkContent(_progress: vscode.Progress<{increment: number, message: string}>, _token: vscode.CancellationToken) {
+    /** return path of package.info of currently edited document */
+    private async getPackagePath() {
         // find package.info by stepping upwards
-        let searchPath = vscode.window.activeTextEditor!.document.fileName;
+        let packagePath = vscode.window.activeTextEditor!.document.fileName;
         let found: Promise<boolean>;
         do {
-            searchPath = path.join(searchPath, "..");
-            found = fileExists(vscode.Uri.file(path.join(searchPath, "package.info")));
-        } while (path.join(searchPath, "..") !== searchPath && !(await found))
+            packagePath = path.join(packagePath, "..");
+            found = fileExists(vscode.Uri.file(path.join(packagePath, "package.info")));
+        } while (path.join(packagePath, "..") !== packagePath && !(await found))
 
         if (!(await found)) {
+            return undefined;
+        } else {
+            return packagePath;
+        }
+    }
+
+    private async checkContent(_progress: vscode.Progress<{increment: number, message: string}>, _token: vscode.CancellationToken) {
+        const packagePath = await this.getPackagePath();
+        if (packagePath === undefined) {
             vscode.window.showWarningMessage("Can't find \"package.info\", don't know where to look for source files.");
             // go on with saving changes to purge empty folders
         } else {
@@ -345,7 +366,7 @@ export class PathNameTableView
 
             const unneededInTable = new Set(tableLibparts.keys());
             unneededInTable.delete("mappingDefinitions.json");  // TODO handle based on localizationdata.info
-            for await (const uri of getLibparts(vscode.Uri.file(searchPath))) {
+            for await (const uri of getLibparts(vscode.Uri.file(packagePath))) {
                 const key = uri.binaryFileName;
                 diskLibparts.set(key, uri);
                 unneededInTable.delete(key);
@@ -362,7 +383,7 @@ export class PathNameTableView
             }
             for (const key of missingFromTable) {
                 const uri = diskLibparts.get(key)!;
-                const relPath = path.relative(searchPath, uri.sourceUri.fsPath);
+                const relPath = path.relative(packagePath, uri.sourceUri.fsPath);
                 this.addEntry({ fileName: uri.binaryFileName,
                                 meta: { translatePathName: null },
                                 virtualFileName: path.basename(key, path.extname(key)), // remove extension
@@ -452,6 +473,27 @@ export class PathNameTableView
             });
         }
 
+    }
+
+    /** open selected file assuming filename is correct */
+    async openFile(item: PathNameTreeItem) {
+        if (item.entry !== undefined) {
+            //const findFile = path.basename(item.entry.fileName, path.extname(item.entry.fileName)).toLocaleLowerCase();
+            const findFile = item.entry.fileName.toLocaleLowerCase();
+            const packagePath = await this.getPackagePath();
+            if (packagePath === undefined) return;
+
+            for await (const uri of getLibparts(vscode.Uri.file(packagePath))) {
+                if (uri.binaryFileName.toLocaleLowerCase() === findFile) {
+                    if (PathNameTableView.typeByExtension(item.entry.fileName) === LibpartType.SCRIPT) {
+                        vscode.commands.executeCommand('vscode.open',
+                                                        vscode.Uri.joinPath(uri.sourceUri, "libpartdata.xml"));
+                    } else {
+                        vscode.commands.executeCommand('vscode.open', uri.sourceUri);
+                    }
+                }
+            }
+        }
     }
     
     /** reads JSON in active editor, then triggers a refresh of the UI */
