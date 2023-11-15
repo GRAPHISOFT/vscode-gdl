@@ -2,7 +2,7 @@
     "name": "gdl",
     "displayName": "GDL",
     "description": "Development environment for Archicad 27 GDL language (XML and HSF source code): syntax coloring, snippets, code outline, quick reference.",
-    "version": "1.27.1",
+    "version": "1.27.1-dev.2",
     "publisher": "Graphisoft",
     "author": "Péter Baksa",
     "contributors": [
@@ -602,7 +602,7 @@
     },
     "scripts": {
         "vscode:prepublish": "npm run compile",
-        "vscode:package": "vsce package",
+        "vscode:package": "npm install -g @vscode/vsce && vsce package",
         "compile": "tsc -p ./",
         "watch": "tsc -watch -p ./",
         "test": "npm run compile && node ./node_modules/vscode/bin/test"
