@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../../"/><title>MEP_ROUTE_ATTRIBUTES</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlrequest"><h3 id="MEP_ROUTE_ATTRIBUTES_gdlrequest" style="font-family: monospace">MEP_ROUTE_ATTRIBUTES</h3>
+                    <pre class="programlisting">n = REQUEST("MEP_ROUTE_ATTRIBUTES", InputAttributes, MEPRouteAttributes)</pre>
+                    
+                        <p>
+                            Returns attributes specific to the MEP routing tool. Can be used only in MEP routing. <span class="italic">Expression returns 0 and contains dummy return values (empty dictionary) if used in parameter script, causing additional warning.</span>
+                        </p>
+                        <p>
+                            <span class="italic">Compatibility: introduced in Archicad 27.</span>
+                        </p>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>InputAttributes: </b></code>(dictionary) should be an empty, predefined dictionary.</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>MEPRouteAttributes: </b></code>(dictionary) containing the following keys:</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>.symbolFill.type: </b></code>(integer) fill type index of symbol fill</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>.symbolFill.pen: </b></code>(integer) fill pen index of symbol fill</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>.symbolFill.bgPen: </b></code>(integer) fill background pen index of symbol fill</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>.centerLine.bShow: </b></code>(boolean) centerline visibility setting</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>.centerLine.linetype: </b></code>(integer) line type index of centerline</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>.centerLine.pen: </b></code>(integer) pen index of centerline</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>.insulation.surface: </b></code>(integer) surface index of insulation</div>
+                        </div>
+                        <p>
+                            <span class="italic">See also <a class="link" href="reference/SYMB_VIEW_PEN.html">SYMB_VIEW_PEN</a> and <a class="link" href="reference/SYMB_MAT.html">SYMB_MAT</a> global variables for more attributes.</span>
+                        </p>
+                    
+                    <div class="example"><a id="id607586"/><p class="title"><b>Example:
+</b></p><div class="example-contents"><pre class="programlisting">DICT InputAttributes, MEPRouteAttributes
+n = REQUEST ("MEP_ROUTE_ATTRIBUTES", InputAttributes, MEPRouteAttributes)</pre></div></div>
+                <hr/><a href="002.015.html#MEP_ROUTE_ATTRIBUTES_gdlrequest">Related in Miscellaneous</a><p>
+                <span class="bold"><strong>GDL Reference Guide</strong></span>
+            </p><p>
+                <span class="trademark">Copyright</span><sup>©</sup> 2023 by Graphisoft, all rights reserved.
+                Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+            </p></body></html>
