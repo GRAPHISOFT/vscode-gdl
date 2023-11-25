@@ -7,35 +7,22 @@ import { Variables } from './varparser';
 import { LibpartInfo } from './wssymbols';
 
 export class HSFLibpart {
-    private readonly _paramlist: ParamList = new ParamList();
-    get paramlist() : ParamList { return this._paramlist; }
+    private _paramlist: ParamList | undefined;
 
     private readonly _constants = new Map<Parser.ScriptType, Constants>();
     private readonly _variables = new Map<Parser.ScriptType, Variables>();
 
-    readonly processing : Promise<PromiseSettledResult<void>[]>;
     public readonly info : LibpartInfo;
 
-    constructor(rootFolder : vscode.Uri, currentScript : Parser.ScriptType) {
+    constructor(rootFolder : vscode.Uri) {
         this.info = new LibpartInfo(vscode.Uri.joinPath(rootFolder, "libpartdata.xml"), ""); 
-
-        this.processing = Promise.allSettled([  // parallel execution
-            this.constants(Parser.ScriptType.D) as unknown as Promise<void>,
-            this.constants(currentScript) as unknown as Promise<void>,
-            this.vardefs(currentScript) as unknown as Promise<void>,
-            this.read_paramlist()
-        ]);
-
-        //TODO register paramlist observer
     }
+
 
     public async refresh(script: Parser.ScriptType) {
         this._constants.delete(script);
-        await this.constants(script);
-    }
-
-    private async read_paramlist() {
-        await this._paramlist.addfrom(this.info.root_uri);
+        this._variables.delete(script);
+        //TODO register paramlist observer
     }
 
     public async constants(script: Parser.ScriptType) : Promise<Constants> {
@@ -62,5 +49,13 @@ export class HSFLibpart {
             this._variables.set(script, variables);
         }
         return variables;
+    }
+
+    public async paramlist() : Promise<ParamList> {
+        if (this._paramlist === undefined) {
+            this._paramlist = new ParamList();
+            await this._paramlist.addfrom(this.info.root_uri);
+        }
+        return this._paramlist;
     }
 }

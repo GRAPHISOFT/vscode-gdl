@@ -322,7 +322,7 @@ export class GDLExtension
             const script = HSFScriptType(this._editor!.document.uri)!;
             if (rootFolder) {
                 //start async operations
-                this.hsflibpart = new HSFLibpart(rootFolder, script);
+                this.hsflibpart = new HSFLibpart(rootFolder);
             } else {
                 this.hsflibpart?.refresh(script);
             }
@@ -358,19 +358,16 @@ export class GDLExtension
         fontWeight: "bold"
     });
     private static vardefDecoration : vscode.TextEditorDecorationType = vscode.window.createTextEditorDecorationType({
-        backgroundColor: "#e3e7de33",
-        isWholeLine: true
+        backgroundColor: "#e3e7de77",
+        isWholeLine: false
     });
 
     private async decorateVariables(document : vscode.TextDocument | undefined) {
         let vardefRanges : vscode.Range[] = [];
         if (this.hsflibpart && document) {
-            await this.hsflibpart.processing;
             let scriptType = HSFScriptType(document.uri)!;
             const line_has_init = [...await this.hsflibpart.vardefs(scriptType)];
-            vardefRanges = line_has_init.map((has_init, line) => (has_init ? line : -1))
-                                        .filter(line => (line >= 0))
-                                        .map(line => document.lineAt(line).range);
+            vardefRanges = line_has_init.map(line => new vscode.Range(line.start, line.start.translate(0, line.text.length)));
         }
 
         if (this._editor) {
@@ -383,12 +380,11 @@ export class GDLExtension
         const paramRanges : vscode.Range[] = [];
 
         if (this.hsflibpart) {
-            await this.hsflibpart.processing;
             // editor and settings might change during processing
             if (this._editor && this.infoFromHSF) {
                 const text = this._editor.document.getText();
                 if (text) {
-                    for (const p of this.hsflibpart.paramlist) {
+                    for (const p of await this.hsflibpart.paramlist()) {
                         //TODO store regexs?
                         const find = new RegExp("\\b" + p.nameCS + "\\b", "ig");
                         let current : RegExpExecArray | null;
@@ -852,8 +848,9 @@ export class GDLExtension
         // implemented only for hsf libparts
         if (this.hsflibpart && this.infoFromHSF) {
             const word = document.getText(document.getWordRangeAtPosition(position));
+            const paramlist = await this.hsflibpart.paramlist();
 
-            const p = this.hsflibpart.paramlist.get(word);
+            const p = paramlist.get(word);
             if (p) {
                 return new vscode.Hover([
                     new vscode.MarkdownString("**\"" + p.desc + "\"** `" + p.nameCS + "`" +
@@ -875,7 +872,7 @@ export class GDLExtension
         if (this.hsflibpart) {
             const completions = new vscode.CompletionList();
 
-            for (const p of this.hsflibpart.paramlist) {
+            for (const p of await this.hsflibpart.paramlist()) {
                 const padding = " ".repeat(34 - p.nameCS.length); // max. parameter name length is 32 chars
                 const completion = new vscode.CompletionItem(p.nameCS + padding + p.type + p.getDimensionString(), vscode.CompletionItemKind.Field);
                 completion.insertText = p.nameCS;

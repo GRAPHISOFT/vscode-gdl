@@ -1,11 +1,44 @@
 import * as vscode from 'vscode';
 
+class SubLine {
+    public readonly is_continued: boolean;
+    public readonly is_empty: boolean;
+    
+    constructor(public text: string, public start: vscode.Position) {
+        this.is_continued = (text.search(/[,\\](?=\s*$)/i) >= 0);
+        this.is_empty = (text.search(/^\s*$/i) >= 0);
+    }
+    
+    /** create sublines guaranteed to contain no more than one statement, and comments removed */
+    static fromText(line: string, linenumber: number) : SubLine[] {
+        const splitlines = line.replace(/"[^"]+"/g, m => "_".repeat(m.length)) // change strings to dummy variable, removing ! and : characters (assuming no multiline strings)
+                               .replace(/'[^']+'/g, m => "_".repeat(m.length))
+                               .replace(/`[^`]+`/g, m => "_".repeat(m.length))
+                               .replace(/“[^“]+“/g, m => "_".repeat(m.length))
+                               .replace(/”[^”]+”/g, m => "_".repeat(m.length))
+                               .replace(/´[^´]+´/g, m => "_".repeat(m.length))
+                               .replace(/’[^’]+’/g, m => "_".repeat(m.length))
+                               .replace(/‘[^‘]+‘/g, m => "_".repeat(m.length))
+                               .replace(/!.*$/g, "")   // remove everything after first !
+                               .split(":");
+
+        let start = 0;
+        return splitlines.map(subline => {
+            const sl = new SubLine(line.substring(start, start + subline.length), new vscode.Position(linenumber, start))
+            start += subline.length + 1;
+            return sl;
+        });
+    }
+}
+
 export class Variables {
-    private has_init: boolean[] = [];
+    private init_ranges: SubLine[] = [];
 
     addfromtext(code: string | undefined) {
         if (code !== undefined) {
             /*
+            split lines at : not preceded by comment TODO store position offset
+
             mark lines continuing an expression / list
                 ,   ! comment
                 \   ! comment
@@ -20,23 +53,15 @@ export class Variables {
             */
 
             const lines = code.split(/\r?\n/);
-            const is_continued = lines.map(line => line.search(/[,\\](?=\s*(!.*)?$)/i) >= 0);
-            const is_empty = lines.map(line => line.search(/^\s*(!.*)?$/i) >= 0);
-            this.has_init = lines.map(() => false);    // init array with same size
-            
-            let i = 0;
+            const sublines = lines.flatMap(SubLine.fromText);
+
             let prevline_finished = true;
-            while (i < lines.length) {
-                if (!is_empty[i]) {
-                    let line_finished = !is_continued[i];
-                    if (prevline_finished) {
-                        this.has_init[i] = (lines[i].search(/^\s*([_~a-z][_~0-9a-z]*\s*=|dim|dict)\s*./i) >= 0);
-                    }
-                    // proceed
-                    prevline_finished = line_finished;
-                }
-                i++;
-            }            
+            this.init_ranges = sublines.filter(subline => {
+                if (subline.is_empty) return false;
+                const hasinit = prevline_finished && (subline.text.search(/^\s*([_~a-z][_~0-9a-z]*\s*=|dim|dict)\s*./i) >= 0);
+                prevline_finished = !subline.is_continued;
+                return hasinit;
+            });
         }
     }
 
@@ -46,6 +71,6 @@ export class Variables {
     }
 
     [Symbol.iterator]() {
-        return this.has_init.values();
+        return this.init_ranges.values();
     }
 }
