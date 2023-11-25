@@ -862,6 +862,28 @@ class GDLExtension {
                     targetUri: s.document.uri }));
             }
         }
+        else {
+            // try to find word in variable definitions
+            const wordRange = document.getWordRangeAtPosition(position, /\b[_~a-z][_~0-9a-z]*\b/i);
+            const word = document.getText(wordRange);
+            const srciptTypes = new Set([Parser.ScriptType.D, HSFScriptType(document.uri)]);
+            const vardefs = [];
+            for (const scriptType of srciptTypes) {
+                vardefs.push(...await this.hsflibpart.vardefs(scriptType));
+            }
+            const assignmentRegex = new RegExp(`^\\s*${word}\\s*=`, "i");
+            const matches = vardefs.filter(subline => {
+                // TODO only good for variable assignments, not dims, dicts
+                const match = subline.text.match(assignmentRegex);
+                if (match && match.length > 0)
+                    return true;
+                return false;
+            });
+            definitions = matches.map(s => ({ originSelectionRange: wordRange,
+                targetRange: new vscode.Range(s.start, s.start.translate(0, s.text.length)),
+                targetSelectionRange: new vscode.Range(s.start, s.start.translate(0, s.text.indexOf("="))),
+                targetUri: document.uri })); // TODO master script
+        }
         return definitions;
     }
     async macroLinks(callsymbol, document, cancel) {

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Variables = void 0;
+exports.Variables = exports.SubLine = void 0;
 const vscode = require("vscode");
 class SubLine {
     constructor(text, start) {
@@ -29,6 +29,7 @@ class SubLine {
         });
     }
 }
+exports.SubLine = SubLine;
 class Variables {
     constructor() {
         this.init_ranges = [];
@@ -36,14 +37,6 @@ class Variables {
     addfromtext(code) {
         if (code !== undefined) {
             /*
-            split lines at : not preceded by comment TODO store position offset
-
-            mark lines continuing an expression / list
-                ,   ! comment
-                \   ! comment
-            skipping lines with whitespace / comment only (assuming no multiline strings)
-                check only lines which are not after a marked line
-
             variable definitions:
                 ... =
                 dict ...
@@ -51,7 +44,12 @@ class Variables {
                 TODO handle multiline dim, dict, handle returned_parameters, requests, appquerys...
             */
             const lines = code.split(/\r?\n/);
+            // remove comments and split lines at : (assuming no multiline strings)
             const sublines = lines.flatMap(SubLine.fromText);
+            // skip lines with whitespace (assuming no multiline strings)
+            // check only lines which are not after a statement continuation
+            //     ,
+            //     \
             let prevline_finished = true;
             this.init_ranges = sublines.filter(subline => {
                 if (subline.is_empty)

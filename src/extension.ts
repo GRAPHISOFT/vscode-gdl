@@ -11,6 +11,7 @@ import { Constants } from './constparser';
 
 import path = require('path');
 import { Jumps, Jump } from './jumpparser';
+import { SubLine } from './varparser';
 
 export async function activate(context: vscode.ExtensionContext) {
     //console.log("extension.activate");
@@ -1074,12 +1075,34 @@ export class GDLExtension
                             
                 definitions = functionSymbols
                     .filter(s => (label.target === s.symbol.name ||                                        // number
-                                label.target === s.symbol.name.substring(1, s.symbol.name.length - 1)))  // "name"
-                    .map(s => ({ originSelectionRange:  label.range,
+                                  label.target === s.symbol.name.substring(1, s.symbol.name.length - 1)))  // "name"
+                    .map(s => ({originSelectionRange:  label.range,
                                 targetRange:           s.symbol.range,
                                 targetSelectionRange:  s.symbol.selectionRange,
                                 targetUri:             s.document.uri }));
             }
+        } else {
+            // try to find word in variable definitions
+            const wordRange = document.getWordRangeAtPosition(position, /\b[_~a-z][_~0-9a-z]*\b/i);
+            const word = document.getText(wordRange);
+            const srciptTypes = new Set([Parser.ScriptType.D, HSFScriptType(document.uri)!]);
+            const vardefs : SubLine[] = [];
+            for (const scriptType of srciptTypes) {
+                vardefs.push(...await this.hsflibpart!.vardefs(scriptType));
+            }
+
+            const assignmentRegex = new RegExp(`^\\s*${word}\\s*=`, "i");
+            const matches = vardefs.filter(subline => {
+                // TODO only good for variable assignments, not dims, dicts
+                const match = subline.text.match(assignmentRegex);
+                if (match && match.length > 0) return true;
+                return false;
+            });
+            definitions = matches.map(s => ({originSelectionRange:  wordRange,
+                                            targetRange:            new vscode.Range(s.start, s.start.translate(0, s.text.length)),
+                                            targetSelectionRange:   new vscode.Range(s.start, s.start.translate(0, s.text.indexOf("="))),
+                                            targetUri:              document.uri }));    // TODO master script
+
         }
 
         return definitions;

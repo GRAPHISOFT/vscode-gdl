@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 
-class SubLine {
+export class SubLine {
     public readonly is_continued: boolean;
     public readonly is_empty: boolean;
     
@@ -37,14 +37,6 @@ export class Variables {
     addfromtext(code: string | undefined) {
         if (code !== undefined) {
             /*
-            split lines at : not preceded by comment TODO store position offset
-
-            mark lines continuing an expression / list
-                ,   ! comment
-                \   ! comment
-            skipping lines with whitespace / comment only (assuming no multiline strings)
-                check only lines which are not after a marked line
-
             variable definitions:
                 ... = 
                 dict ...
@@ -53,7 +45,14 @@ export class Variables {
             */
 
             const lines = code.split(/\r?\n/);
+
+            // remove comments and split lines at : (assuming no multiline strings)
             const sublines = lines.flatMap(SubLine.fromText);
+
+            // skip lines with whitespace (assuming no multiline strings)
+            // check only lines which are not after a statement continuation
+            //     ,
+            //     \
 
             let prevline_finished = true;
             this.init_ranges = sublines.filter(subline => {
