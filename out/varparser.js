@@ -19,7 +19,7 @@ class SubLine {
             .replace(/´[^´]+´/g, m => "_".repeat(m.length))
             .replace(/’[^’]+’/g, m => "_".repeat(m.length))
             .replace(/‘[^‘]+‘/g, m => "_".repeat(m.length))
-            .replace(/!.*$/g, "") // remove everything after first !
+            .replace(/!.*$/g, m => " ".repeat(m.length)) // remove everything after first !
             .split(":");
         let start = 0;
         return splitlines.map(subline => {
@@ -42,6 +42,7 @@ class Variables {
                 dict ...
                 dim ...
                 TODO handle multiline dim, dict, handle returned_parameters, requests, appquerys...
+                TODO var[...] =
             */
             const lines = code.split(/\r?\n/);
             // remove comments and split lines at : (assuming no multiline strings)

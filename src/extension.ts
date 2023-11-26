@@ -11,7 +11,7 @@ import { Constants } from './constparser';
 
 import path = require('path');
 import { Jumps, Jump } from './jumpparser';
-import { SubLine } from './varparser';
+import { Variables } from './varparser';
 
 export async function activate(context: vscode.ExtensionContext) {
     //console.log("extension.activate");
@@ -1085,23 +1085,34 @@ export class GDLExtension
             // try to find word in variable definitions
             const wordRange = document.getWordRangeAtPosition(position, /\b[_~a-z][_~0-9a-z]*\b/i);
             const word = document.getText(wordRange);
-            const srciptTypes = new Set([Parser.ScriptType.D, HSFScriptType(document.uri)!]);
-            const vardefs : SubLine[] = [];
-            for (const scriptType of srciptTypes) {
-                vardefs.push(...await this.hsflibpart!.vardefs(scriptType));
-            }
 
+            // add script uri to variable definitions (this and master script)
+            const scriptVars : Map<vscode.Uri, Variables> = new Map();
+            const scriptType = HSFScriptType(document.uri)!
+            scriptVars.set(document.uri, await this.hsflibpart!.vardefs(scriptType));
+            if (scriptType !== Parser.ScriptType.D) {
+                const masterscriptUri = await this.hsflibpart!.info.scriptUri(Parser.ScriptType.D);
+                if (masterscriptUri) {
+                    scriptVars.set(masterscriptUri, await this.hsflibpart!.vardefs(Parser.ScriptType.D));
+                }
+            }
             const assignmentRegex = new RegExp(`^\\s*${word}\\s*=`, "i");
-            const matches = vardefs.filter(subline => {
-                // TODO only good for variable assignments, not dims, dicts
-                const match = subline.text.match(assignmentRegex);
-                if (match && match.length > 0) return true;
-                return false;
+            const vardefs = [...scriptVars.keys()].flatMap(uri => {
+                const matches = [...scriptVars.get(uri)!].filter(subline => {
+                    // TODO only good for variable assignments, not dims, dicts
+                    const match = subline.text.match(assignmentRegex);
+                    if (match && match.length > 0) return true;
+                    return false;
+                });
+                return matches.map(subline => ({subline: subline, uri: uri}));
             });
-            definitions = matches.map(s => ({originSelectionRange:  wordRange,
-                                            targetRange:            new vscode.Range(s.start, s.start.translate(0, s.text.length)),
-                                            targetSelectionRange:   new vscode.Range(s.start, s.start.translate(0, s.text.indexOf("="))),
-                                            targetUri:              document.uri }));    // TODO master script
+
+            definitions = vardefs.map(vardef => ({  originSelectionRange:   wordRange,
+                                                    targetRange:            new vscode.Range(vardef.subline.start,
+                                                                                             vardef.subline.start.translate(0, vardef.subline.text.length)),
+                                                    targetSelectionRange:   new vscode.Range(vardef.subline.start,
+                                                                                             vardef.subline.start.translate(0, vardef.subline.text.indexOf("="))),
+                                                    targetUri:              vardef.uri }));
 
         }
 
