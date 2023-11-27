@@ -141,6 +141,7 @@ export class ParamList implements Iterable<Parameter> {
     async addfrom(rootfolder : vscode.Uri) {
         const paramlistfile = vscode.Uri.joinPath(rootfolder, "paramlist.xml");
         const paramlist = await vscode.workspace.openTextDocument(paramlistfile);
+        this.parameters.clear();
 
         if (paramlist) {
             const parameters_ = paramlist.getText().match(/^\t\t<(.*?) Name=.*?>((.|[\n\r])*?)^\t\t<\/\1>/mg);

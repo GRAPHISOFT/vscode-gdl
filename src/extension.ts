@@ -12,6 +12,7 @@ import { Constants } from './constparser';
 
 import path = require('path');
 import { Jumps, Jump } from './jumpparser';
+import { Variables } from './varparser';
 
 export async function activate(context: vscode.ExtensionContext) {
     //console.log("extension.activate");
@@ -326,7 +327,7 @@ export class GDLExtension
             const script = HSFScriptType(this._editor!.document.uri)!;
             if (rootFolder) {
                 //start async operations
-                this.hsflibpart = new HSFLibpart(rootFolder, script);
+                this.hsflibpart = new HSFLibpart(rootFolder);
             } else {
                 this.hsflibpart?.refresh(script);
             }
@@ -367,12 +368,11 @@ export class GDLExtension
         const paramRanges : vscode.Range[] = [];
 
         if (this.hsflibpart) {
-            await this.hsflibpart.processing;
             // editor and settings might change during processing
             if (this._editor && this.infoFromHSF) {
                 const text = this._editor.document.getText();
                 if (text) {
-                    for (const p of this.hsflibpart.paramlist) {
+                    for (const p of await this.hsflibpart.paramlist()) {
                         //TODO store regexs?
                         const find = new RegExp("\\b" + p.nameCS + "\\b", "ig");
                         let current : RegExpExecArray | null;
@@ -937,8 +937,9 @@ export class GDLExtension
         // implemented only for hsf libparts
         if (this.hsflibpart && this.infoFromHSF) {
             const word = document.getText(document.getWordRangeAtPosition(position));
+            const paramlist = await this.hsflibpart.paramlist();
 
-            const p = this.hsflibpart.paramlist.get(word);
+            const p = paramlist.get(word);
             if (p) {
                 return new vscode.Hover([
                     new vscode.MarkdownString("**\"" + p.desc + "\"** `" + p.nameCS + "`" +
@@ -960,7 +961,7 @@ export class GDLExtension
         if (this.hsflibpart) {
             const completions = new vscode.CompletionList();
 
-            for (const p of this.hsflibpart.paramlist) {
+            for (const p of await this.hsflibpart.paramlist()) {
                 const padding = " ".repeat(34 - p.nameCS.length); // max. parameter name length is 32 chars
                 const completion = new vscode.CompletionItem(p.nameCS + padding + p.type + p.getDimensionString(), vscode.CompletionItemKind.Field);
                 completion.insertText = p.nameCS;
@@ -1162,12 +1163,45 @@ export class GDLExtension
                             
                 definitions = functionSymbols
                     .filter(s => (label.target === s.symbol.name ||                                        // number
-                                label.target === s.symbol.name.substring(1, s.symbol.name.length - 1)))  // "name"
-                    .map(s => ({ originSelectionRange:  label.range,
+                                  label.target === s.symbol.name.substring(1, s.symbol.name.length - 1)))  // "name"
+                    .map(s => ({originSelectionRange:  label.range,
                                 targetRange:           s.symbol.range,
                                 targetSelectionRange:  s.symbol.selectionRange,
                                 targetUri:             s.document.uri }));
             }
+        } else {
+            // try to find word in variable definitions
+            const wordRange = document.getWordRangeAtPosition(position, /\b[_~a-z][_~0-9a-z]*\b/i);
+            const word = document.getText(wordRange);
+
+            // add script uri to variable definitions (this and master script)
+            const scriptVars : Map<vscode.Uri, Variables> = new Map();
+            const scriptType = HSFScriptType(document.uri)!
+            scriptVars.set(document.uri, await this.hsflibpart!.vardefs(scriptType));
+            if (scriptType !== Parser.ScriptType.D) {
+                const masterscriptUri = await this.hsflibpart!.info.scriptUri(Parser.ScriptType.D);
+                if (masterscriptUri) {
+                    scriptVars.set(masterscriptUri, await this.hsflibpart!.vardefs(Parser.ScriptType.D));
+                }
+            }
+            const assignmentRegex = new RegExp(`^\\s*${word}\\s*(\\[[^=]*\\])?\\s*=`, "i"); // TODO varparser should do this
+            const vardefs = [...scriptVars.keys()].flatMap(uri => {
+                const matches = [...scriptVars.get(uri)!].filter(subline => {
+                    // TODO only good for variable assignments, not dims, dicts
+                    const match = subline.text.match(assignmentRegex);
+                    if (match && match.length > 0) return true;
+                    return false;
+                });
+                return matches.map(subline => ({subline: subline, uri: uri}));
+            });
+
+            definitions = vardefs.map(vardef => ({  originSelectionRange:   wordRange,
+                                                    targetRange:            new vscode.Range(vardef.subline.start,
+                                                                                             vardef.subline.start.translate(0, vardef.subline.text.length)),
+                                                    targetSelectionRange:   new vscode.Range(vardef.subline.start,
+                                                                                             vardef.subline.start.translate(0, vardef.subline.text.indexOf("="))),
+                                                    targetUri:              vardef.uri }));
+
         }
 
         return definitions;
