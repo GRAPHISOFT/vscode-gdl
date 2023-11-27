@@ -153,8 +153,9 @@ class PathNameTreeItem {
             }
             // count file types
             const entries = this.getTableEntries(true);
-            const numberOfLibparts = entries.filter(e => path.extname(e.fileName) === ".gsm").length;
-            const numberOfImages = entries.filter(e => path.extname(e.fileName) in PathNameTableView.knownImageExtensions).length;
+            const fileTypes = entries.map(e => PathNameTableView.typeByExtension(e.fileName));
+            const numberOfLibparts = fileTypes.reduce((count, e) => (e === 1 /* SCRIPT */) ? count + 1 : count, 0);
+            const numberOfImages = fileTypes.reduce((count, e) => (e === 2 /* IMAGE */) ? count + 1 : count, 0);
             item.tooltip = `${entries.length} entries\n${numberOfLibparts} libparts\n${numberOfImages} images`;
         }
         // icon
@@ -246,6 +247,14 @@ class PathNameTableView {
         overviewRulerLane: vscode.OverviewRulerLane.Center,
         overviewRulerColor: new vscode.ThemeColor("minimap.selectionOccurrenceHighlight")
     });
+    static typeByExtension(fileName) {
+        const ext = path.extname(fileName).toLowerCase();
+        if (ext === ".gsm")
+            return 1 /* SCRIPT */;
+        if (ext in PathNameTableView.knownImageExtensions)
+            return 2 /* IMAGE */;
+        return 0 /* OTHER */;
+    }
     static VIEWID = "PathNameTableView";
     static treeMime = 'application/vnd.code.tree.pathnametableview';
     dropMimeTypes = [PathNameTableView.treeMime];
@@ -267,6 +276,7 @@ class PathNameTableView {
             vscode.commands.registerCommand('GDL.PNTV.copyVirtualPath', async (item) => this.copyVirtualPath(item)),
             vscode.commands.registerCommand('GDL.PNTV.rename', async (item) => this.rename(item)),
             vscode.commands.registerCommand('GDL.PNTV.showInFile', async (item) => this.showInFile(item)),
+            vscode.commands.registerCommand('GDL.PNTV.openFile', async (item) => this.openFile(item)),
         ];
         context.subscriptions.push(this.view, ...commands);
     }
@@ -274,16 +284,29 @@ class PathNameTableView {
         return vscode.window.withProgress({ location: { viewId: PathNameTableView.VIEWID },
             title: "Checking pathnametable..." }, async (p, t) => this.checkContent(p, t));
     }
-    async checkContent(_progress, _token) {
+    /** return path of package.info of currently edited document */
+    async getPackagePath() {
         // find package.info by stepping upwards
-        let searchPath = vscode.window.activeTextEditor.document.fileName;
+        let packagePath = vscode.window.activeTextEditor.document.fileName;
         let found;
         do {
-            searchPath = path.join(searchPath, "..");
-            found = (0, extension_1.fileExists)(vscode.Uri.file(path.join(searchPath, "package.info")));
-        } while (path.join(searchPath, "..") !== searchPath && !(await found));
+            packagePath = path.join(packagePath, "..");
+            found = (0, extension_1.fileExists)(vscode.Uri.file(path.join(packagePath, "package.info")));
+        } while (path.join(packagePath, "..") !== packagePath && !(await found));
         if (!(await found)) {
-            vscode.window.showWarningMessage("Can't find \"package.info\", don't know where to look for source files.");
+            return undefined;
+        }
+        else {
+            return packagePath;
+        }
+    }
+    static warnPackageInfoNotFound() {
+        vscode.window.showWarningMessage("Can't find \"package.info\", don't know where to look for source files.");
+    }
+    async checkContent(_progress, _token) {
+        const packagePath = await this.getPackagePath();
+        if (packagePath === undefined) {
+            PathNameTableView.warnPackageInfoNotFound();
             // go on with saving changes to purge empty folders
         }
         else {
@@ -294,7 +317,7 @@ class PathNameTableView {
             const tableLibparts = new Map(tableFiles.map(e => [e.entry.fileName, e]));
             const unneededInTable = new Set(tableLibparts.keys());
             unneededInTable.delete("mappingDefinitions.json"); // TODO handle based on localizationdata.info
-            for await (const uri of (0, extension_1.getLibparts)(vscode.Uri.file(searchPath))) {
+            for await (const uri of (0, extension_1.getLibparts)(vscode.Uri.file(packagePath))) {
                 const key = uri.binaryFileName;
                 diskLibparts.set(key, uri);
                 unneededInTable.delete(key);
@@ -310,7 +333,7 @@ class PathNameTableView {
             }
             for (const key of missingFromTable) {
                 const uri = diskLibparts.get(key);
-                const relPath = path.relative(searchPath, uri.sourceUri.fsPath);
+                const relPath = path.relative(packagePath, uri.sourceUri.fsPath);
                 this.addEntry({ fileName: uri.binaryFileName,
                     meta: { translatePathName: null },
                     virtualFileName: path.basename(key, path.extname(key)),
@@ -389,6 +412,34 @@ class PathNameTableView {
                     onetime.dispose();
                 }
             });
+        }
+    }
+    /** open selected file assuming filename is correct */
+    async openFile(item) {
+        if (item.entry !== undefined) {
+            //const findFile = path.basename(item.entry.fileName, path.extname(item.entry.fileName)).toLocaleLowerCase();
+            const findFile = item.entry.fileName.toLocaleLowerCase();
+            const packagePath = await this.getPackagePath();
+            if (packagePath === undefined) {
+                PathNameTableView.warnPackageInfoNotFound();
+                return;
+            }
+            let found = false;
+            for await (const uri of (0, extension_1.getLibparts)(vscode.Uri.file(packagePath))) {
+                if (uri.binaryFileName.toLocaleLowerCase() === findFile) {
+                    found = true;
+                    if (PathNameTableView.typeByExtension(item.entry.fileName) === 1 /* SCRIPT */) {
+                        vscode.commands.executeCommand('vscode.open', vscode.Uri.joinPath(uri.sourceUri, "libpartdata.xml"));
+                    }
+                    else {
+                        vscode.commands.executeCommand('vscode.open', uri.sourceUri);
+                    }
+                }
+            }
+            if (!found) {
+                const baseName = path.basename(item.entry.fileName, path.extname(item.entry.fileName));
+                vscode.window.showWarningMessage(`"${baseName}" not found in folder "${packagePath}"`);
+            }
         }
     }
     /** reads JSON in active editor, then triggers a refresh of the UI */
