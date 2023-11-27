@@ -1096,7 +1096,7 @@ export class GDLExtension
                     scriptVars.set(masterscriptUri, await this.hsflibpart!.vardefs(Parser.ScriptType.D));
                 }
             }
-            const assignmentRegex = new RegExp(`^\\s*${word}\\s*=`, "i");
+            const assignmentRegex = new RegExp(`^\\s*${word}\\s*(\\[[^=]*\\])?\\s*=`, "i"); // TODO varparser should do this
             const vardefs = [...scriptVars.keys()].flatMap(uri => {
                 const matches = [...scriptVars.get(uri)!].filter(subline => {
                     // TODO only good for variable assignments, not dims, dicts
