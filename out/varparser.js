@@ -20,6 +20,7 @@ class SubLine {
             .replace(/’[^’]+’/g, m => "_".repeat(m.length))
             .replace(/‘[^‘]+‘/g, m => "_".repeat(m.length))
             .replace(/!.*$/g, m => " ".repeat(m.length)) // remove everything after first !
+            .replace(/\b(then|else)\b/g, m => ":".repeat(m.length)) // split at then/else
             .split(":");
         let start = 0;
         return splitlines.map(subline => {
