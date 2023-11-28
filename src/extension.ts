@@ -1228,13 +1228,16 @@ export class GDLExtension
                 return matches.map(subline => ({subline: subline, uri: uri}));
             });
 
-            definitions = vardefs.map(vardef => ({  originSelectionRange:   wordRange,
-                                                    targetRange:            new vscode.Range(vardef.subline.start,
-                                                                                             vardef.subline.start.translate(0, vardef.subline.text.length)),
-                                                    targetSelectionRange:   new vscode.Range(vardef.subline.start,
-                                                                                             vardef.subline.start.translate(0, vardef.subline.text.indexOf("="))),
-                                                    targetUri:              vardef.uri }));
-
+            definitions = vardefs.map(vardef => {
+                const targetRange = new vscode.Range(vardef.subline.start,
+                                                     vardef.subline.start.translate(0, vardef.subline.text.length));
+                const selectionRange = new vscode.Range(vardef.subline.start.translate(0, vardef.subline.text.indexOf("=") + 1),
+                                                        targetRange.end);
+                return {originSelectionRange:   wordRange,
+                        targetRange:            targetRange,
+                        targetSelectionRange:   selectionRange,
+                        targetUri:              vardef.uri };
+            });
         }
 
         return definitions;
