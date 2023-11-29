@@ -4,6 +4,9 @@ import * as vscode from 'vscode';
 import { fileExists, readFile } from './extension';
 import * as Parser from './parsexmlgdl';
 
+type ScriptUriOrNullPair = [Parser.ScriptType, vscode.Uri | null];
+type ScriptUriPair = [Parser.ScriptType, vscode.Uri];
+
 export class LibpartInfo {
     private _root_uri : vscode.Uri | undefined;
     private _name : string | undefined;
@@ -64,9 +67,10 @@ export class LibpartInfo {
         }
     }
 
+    /** return map of existing script types and uris (unsaved files not included) */
     async allScripts() {
-        // return array of uris for each script, null if doesn't exist on disk
-        return Parser.Scripts.map(async (script) => await this.scriptUri(script));
+        const uris : Array<ScriptUriOrNullPair> = await Promise.all(Parser.Scripts.map(async script => [script, await this.scriptUri(script)]));
+        return new Map(uris.filter((e) : e is ScriptUriPair => e[1] !== null));
     }
 }
 

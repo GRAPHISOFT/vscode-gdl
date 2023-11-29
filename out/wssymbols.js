@@ -61,9 +61,10 @@ class LibpartInfo {
             return result;
         }
     }
+    /** return map of existing script types and uris (unsaved files not included) */
     async allScripts() {
-        // return array of uris for each script, null if doesn't exist on disk
-        return Parser.Scripts.map(async (script) => await this.scriptUri(script));
+        const uris = await Promise.all(Parser.Scripts.map(async (script) => [script, await this.scriptUri(script)]));
+        return new Map(uris.filter((e) => e[1] !== null));
     }
 }
 exports.LibpartInfo = LibpartInfo;
