@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Variables = exports.SubLine = void 0;
+exports.Variables = void 0;
 const vscode = require("vscode");
 class SubLine {
     text;
@@ -10,10 +10,10 @@ class SubLine {
     constructor(text, start) {
         this.text = text;
         this.start = start;
-        this.is_continued = (text.search(/[,\\](?=\s*$)/i) >= 0);
-        this.is_empty = (text.search(/^\s*$/i) >= 0);
+        this.is_continued = (text.search(/[,\\](?=\s*(!.*)?$)/i) >= 0);
+        this.is_empty = (text.search(/^\s*(!.*)?$/i) >= 0);
     }
-    /** create sublines guaranteed to contain no more than one statement, and comments removed */
+    /** create sublines guaranteed to contain no more than one statement */
     static fromText(line, linenumber) {
         const splitlines = line.replace(/"[^"]+"/g, m => "_".repeat(m.length)) // change strings to dummy variable, removing ! and : characters (assuming no multiline strings)
             .replace(/'[^']+'/g, m => "_".repeat(m.length))
@@ -34,18 +34,14 @@ class SubLine {
         });
     }
 }
-exports.SubLine = SubLine;
 class Variables {
-    init_ranges = [];
+    vardefs = new Map(); // array ordered on line numbers
     addfromtext(code) {
         if (code !== undefined) {
-            /*
-            variable definitions:
+            /*  variable definitions:
                 ... =
                 ...[...] =      assuming no = inside []
-                dict ...
-                dim ...
-                TODO handle multiline dim, dict, handle returned_parameters, requests, appquerys...
+                TODO handle dim, dict, returned_parameters, requests, appquerys...
             */
             const lines = code.split(/\r?\n/);
             // remove comments and split lines at : (assuming no multiline strings)
@@ -55,21 +51,40 @@ class Variables {
             //     ,
             //     \
             let prevline_finished = true;
-            this.init_ranges = sublines.filter(subline => {
+            const vardefs = sublines.map(subline => {
                 if (subline.is_empty)
-                    return false;
-                const hasinit = prevline_finished && (subline.text.search(/^\s*([_~a-z][_~0-9a-z]*\s*(\[[^=]*\])?\s*=|dim|dict)\s*./i) >= 0);
+                    return undefined; // prevline_finished unchanged
+                let result;
+                if (prevline_finished) {
+                    const match = subline.text.match(/^\s*([_~a-z][_~0-9a-z]*)\s*(\[[^=]*\])?\s*=\s*./id);
+                    if ((match?.index ?? -1) >= 0) {
+                        const variable = match[1];
+                        const varstart = match.indices[1][0];
+                        result = [variable, { subline: subline,
+                                varstart: varstart,
+                                defstart: match[0].length - 1 }];
+                    }
+                }
                 prevline_finished = !subline.is_continued;
-                return hasinit;
-            });
+                return result;
+            }).filter((e) => e !== undefined);
+            for (const [variable, vardef] of vardefs) {
+                if (!this.vardefs.has(variable)) {
+                    this.vardefs.set(variable, new Array());
+                }
+                this.vardefs.get(variable).push(vardef);
+            }
         }
     }
     async addfromfile(scriptUri) {
         const document = await vscode.workspace.openTextDocument(scriptUri);
         this.addfromtext(document.getText());
     }
+    get(variable) {
+        return this.vardefs.get(variable) ?? [];
+    }
     [Symbol.iterator]() {
-        return this.init_ranges.values();
+        return this.vardefs.keys();
     }
 }
 exports.Variables = Variables;

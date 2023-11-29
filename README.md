@@ -54,6 +54,7 @@ __hotspot__ or __hotspot2__ - length edit hotspot triplet
   * IntelliSense lists constants (ALL_CAPS) with their initialized values
   * IntelliSense lists parameters with their description, type, flags and default value. This list can be filtered by parameter type too.
   * Follow macro and subroutine calls with Ctrl-click
+  * Show variable assignments with Ctrl-click
 * Go to definitions/references, find all references of subroutines in same libpart (Ctrl-click or F12, Shift-F12, Shift-Alt-F12)
 * Show Call Hierarchy (Shift-Alt-H), Peek Call Hierarchy
   * Incoming or outgoing macro calls are shown, respecting the execution context of the edited scipt. Eg. all scripts are searched outgoing from a master script, but only master and 2d scripts are searched outgoing from a 2d script.

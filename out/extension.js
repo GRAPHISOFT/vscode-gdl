@@ -977,13 +977,11 @@ class GDLExtension {
             }
             else { // subroutine call
                 let functionSymbols = [];
-                for await (const scriptUri of await this.hsflibpart.info.allScripts()) {
-                    if (scriptUri) {
-                        const otherdoc = await vscode.workspace.openTextDocument(scriptUri);
-                        const otherscript = new Parser.ParseXMLGDL(otherdoc.getText(), true, false, false, false, false);
-                        functionSymbols = functionSymbols.concat(GDLExtension.mapFunctionSymbols(otherscript, Parser.ScriptType.ROOT, otherdoc)
-                            .map(s => { return { symbol: s, document: otherdoc }; }));
-                    }
+                for (const [_scriptType, scriptUri] of await this.hsflibpart.info.allScripts()) {
+                    const otherdoc = await vscode.workspace.openTextDocument(scriptUri);
+                    const otherscript = new Parser.ParseXMLGDL(otherdoc.getText(), true, false, false, false, false);
+                    functionSymbols = functionSymbols.concat(GDLExtension.mapFunctionSymbols(otherscript, Parser.ScriptType.ROOT, otherdoc)
+                        .map(s => { return { symbol: s, document: otherdoc }; }));
                 }
                 definitions = functionSymbols
                     .filter(s => (label.target === s.symbol.name || // number
@@ -998,37 +996,29 @@ class GDLExtension {
             // try to find word in variable definitions
             const wordRange = document.getWordRangeAtPosition(position, /\b[_~a-z][_~0-9a-z]*\b/i);
             const word = document.getText(wordRange);
-            // add script uri to variable definitions (this and master script)
-            const scriptVars = new Map();
-            const scriptType = HSFScriptType(document.uri);
-            scriptVars.set(document.uri, await this.hsflibpart.vardefs(scriptType));
-            if (scriptType !== Parser.ScriptType.D) {
-                const masterscriptUri = await this.hsflibpart.info.scriptUri(Parser.ScriptType.D);
-                if (masterscriptUri) {
-                    scriptVars.set(masterscriptUri, await this.hsflibpart.vardefs(Parser.ScriptType.D));
-                }
-            }
-            const assignmentRegex = new RegExp(`^\\s*${word}\\s*(\\[[^=]*\\])?\\s*=`, "i"); // TODO varparser should do this
-            const vardefs = [...scriptVars.keys()].flatMap(uri => {
-                const matches = [...scriptVars.get(uri)].filter(subline => {
-                    // TODO only good for variable assignments, not dims, dicts
-                    const match = subline.text.match(assignmentRegex);
-                    if (match && match.length > 0)
-                        return true;
-                    return false;
-                });
-                return matches.map(subline => ({ subline: subline, uri: uri }));
+            const allVariableDefinitions = await this.getRelevantVariableDefinitions();
+            const definitionsForWord = [...allVariableDefinitions.keys()].flatMap(uri => {
+                const scriptDefinitionsForWord = allVariableDefinitions.get(uri).get(word);
+                return scriptDefinitionsForWord.map(vardef => ({ uri: uri, vardef: vardef }));
             });
-            definitions = vardefs.map(vardef => {
+            definitions = definitionsForWord.map(({ uri, vardef }) => {
                 const targetRange = new vscode.Range(vardef.subline.start, vardef.subline.start.translate(0, vardef.subline.text.length));
-                const selectionRange = new vscode.Range(vardef.subline.start.translate(0, vardef.subline.text.indexOf("=") + 1), targetRange.end);
+                const selectionRange = new vscode.Range(vardef.subline.start.translate(0, vardef.defstart), targetRange.end);
                 return { originSelectionRange: wordRange,
                     targetRange: targetRange,
                     targetSelectionRange: selectionRange,
-                    targetUri: vardef.uri };
+                    targetUri: uri };
             });
         }
         return definitions;
+    }
+    /** return variable definitions from libpart */
+    async getRelevantVariableDefinitions() {
+        const result = new Map();
+        for (const [scriptType, scriptUri] of await this.hsflibpart.info.allScripts()) {
+            result.set(scriptUri, await this.hsflibpart.vardefs(scriptType));
+        }
+        return result;
     }
     static zero_range = new vscode.Range(0, 0, 0, 0);
     static peek_range = new vscode.Range(0, 0, 10, 0);
@@ -1074,13 +1064,11 @@ class GDLExtension {
         if (label !== undefined) {
             const target = (label instanceof vscode.DocumentSymbol) ? label.name : label.target;
             //const target = ("command" in label) ? label.target : label.name;
-            for await (const scriptUri of await this.hsflibpart.info.allScripts()) {
-                if (scriptUri) {
-                    const searchDocument = await vscode.workspace.openTextDocument(scriptUri);
-                    const jumps = new jumpparser_1.Jumps(searchDocument.getText());
-                    references = references.concat(jumps.jumps.filter(j => j.target === target)
-                        .map(j => new vscode.Location(searchDocument.uri, j.range)));
-                }
+            for (const [_scriptType, scriptUri] of await this.hsflibpart.info.allScripts()) {
+                const searchDocument = await vscode.workspace.openTextDocument(scriptUri);
+                const jumps = new jumpparser_1.Jumps(searchDocument.getText());
+                references = references.concat(jumps.jumps.filter(j => j.target === target)
+                    .map(j => new vscode.Location(searchDocument.uri, j.range)));
             }
         }
         return references;

@@ -74,9 +74,10 @@ class LibpartInfo {
             return result;
         }
     }
-    /** return array of uris for each script, null if doesn't exist on disk */
+    /** return map of existing script types and uris (unsaved files not included) */
     async allScripts() {
-        return Parser.Scripts.map(async (script) => await this.scriptUri(script));
+        const uris = await Promise.all(Parser.Scripts.map(async (script) => [script, await this.scriptUri(script)]));
+        return new Map(uris.filter((e) => e[1] !== null));
     }
     /** return names and uris of files in images folder */
     async allImages() {
