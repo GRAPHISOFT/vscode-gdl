@@ -72,8 +72,8 @@ export class OutlineView
         if (this.specComments && this.extension.parser.getCommentList(scriptType) !== undefined) {
             children.push(...this.extension.parser.getCommentList(scriptType));
         }
-        if (this.macroCalls && this.extension.parser.getMacroCallList(scriptType) !== undefined) {
-            children.push(...this.extension.parser.getMacroCallList(scriptType));
+        if (this.macroCalls && this.extension.parser.getLibpartReferenceList(scriptType) !== undefined) {
+            children.push(...this.extension.parser.getLibpartReferenceList(scriptType).filter(reference => reference instanceof Parser.GDLMacroCall));
         }
 
         // sort by position

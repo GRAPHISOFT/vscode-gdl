@@ -750,10 +750,22 @@ class GDLExtension {
     }
     mapCallSymbols(scriptType) {
         //console.log("GDLExtension.mapCallSymbols");
-        return this.parser.getMacroCallList(scriptType).map((m) => {
-            const range = m.range(this.editor.document);
-            return new vscode.DocumentSymbol("call " + m.name, m.all ? " \u00a0parameters ALL" : "", vscode.SymbolKind.Object, range, range);
+        return this.parser.getLibpartReferenceList(scriptType).
+            filter((reference) => reference instanceof Parser.GDLMacroCall).
+            map((reference) => {
+            const range = reference.range(this.editor.document);
+            const detail = GDLExtension.libpartReferenceDetail(reference);
+            return new vscode.DocumentSymbol(`${reference.keyword()} ${reference.name}`, detail, vscode.SymbolKind.Object, range, range);
         }, this);
+    }
+    static libpartReferenceDetail(reference) {
+        if (reference instanceof Parser.GDLMacroCall) {
+            return reference.all ? "  parameters ALL" : "";
+        }
+        else if (reference instanceof Parser.GDLLibrayGlobalCall) {
+            return `  ${reference.global}`;
+        }
+        return "";
     }
     async parseFinished(cancel) {
         return new Promise((resolve, reject) => {
@@ -801,11 +813,11 @@ class GDLExtension {
     }
     async provideDefinition(document, position, cancel) {
         let definitions = [];
-        const label = this.isMacroCall(document, position) // Parser.GDLMacroCall
+        const label = this.isLibpartReference(document, position) // Parser.GDLLibpartReference
             ?? this.isSubroutineDefinition(position) // vscode.DocumentSymbol
             ?? this.isSubroutineCall(document, position); // Jump
-        if (label instanceof Parser.GDLMacroCall) {
-            const link = await this.macroLinks(label, document, cancel);
+        if (label instanceof Parser.GDLLibpartReference) {
+            const link = await this.libpartLinks(label, document, cancel);
             if (link !== undefined) {
                 // if there are multiple results, select target by matching workspace folder
                 if (link.length > 1) {
@@ -852,7 +864,7 @@ class GDLExtension {
         }
         return definitions;
     }
-    async macroLinks(callsymbol, document, cancel) {
+    async libpartLinks(callsymbol, document, cancel) {
         // find exactly where is the string (can have spaces, whitespace after call)
         let call_range = callsymbol.range(document);
         const name_offset = document.getText(call_range).indexOf(callsymbol.name, 6); // start search after call "
@@ -872,8 +884,8 @@ class GDLExtension {
             targetUri: t.location.uri
         }));
     }
-    isMacroCall(document, position) {
-        return this.parser.getMacroCallList(Parser.ScriptType.ROOT)
+    isLibpartReference(document, position) {
+        return this.parser.getLibpartReferenceList(Parser.ScriptType.ROOT)
             .find(m => m.range(document).contains(position));
     }
     isSubroutineDefinition(position) {
