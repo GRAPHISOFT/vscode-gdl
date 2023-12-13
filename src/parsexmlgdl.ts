@@ -89,27 +89,57 @@ export class GDLCalledMacro extends GDLToken {
 	}
 }
 
-// macro calls
-export class GDLMacroCall extends GDLToken {
-	public static readonly regex = /(?<!!.*)\bcall\s*"(.*?)"(\s*(,\r?\n\s*)?(parameters\s*all))?/mig;
+// reference to other libpart
+export abstract class GDLLibpartReference extends GDLToken {
+	public abstract keyword() : string;
 
-	// TODO LIBRARYGLOBALS?
-
-	public readonly all : boolean;
 	private readonly innerstart : number;
 	private readonly innerend : number;
+
+	constructor(start : number, end : number, match : RegExpExecArray, calledIndex: number, calledOffset: number) {
+		const called = match[calledIndex];		// name of referenced libpart
+		super(start, end, called);
+		this.innerstart = start + calledOffset + match[0].substring(calledOffset).search(called);
+		this.innerend = this.innerstart + called.length;
+	}
 
 	public namerange(document : vscode.TextDocument) {
 		return new vscode.Range(document.positionAt(this.innerstart),
 								document.positionAt(this.innerend));
 	}
+}
+
+// macro calls
+export class GDLMacroCall extends GDLLibpartReference {
+	public static readonly regex = /(?<!!.*)\bcall\s*"(.*?)"(\s*(,\r?\n\s*)?(parameters\s*all))?/mig;
+
+	public readonly all : boolean;
+
+	public keyword() {
+		return "call";
+	}
 
 	constructor(start : number, end : number, match : RegExpExecArray) {
 		//console.log("GDLMacroCall()", content);
-		super(start, end, match[1]);
-		this.innerstart = start + 6 + match[0].substring(6).search(match[1]);
-		this.innerend = this.innerstart + match[1].length;
+		super(start, end, match, 1, 6);
 		this.all = (match.length >= 4 && match[4] !== undefined);	// parameters all
+	}
+}
+
+// library globals
+export class GDLLibrayGlobalCall extends GDLLibpartReference {
+	public static readonly regex = /(?<!!.*)\blibraryglobal\s*\(\s*"(.*?)"\s*,\s*"(.*?)"/mig;
+
+	public readonly global : string;
+
+	public keyword() {
+		return "libraryglobal";
+	}
+
+	constructor(start : number, end : number, match : RegExpExecArray) {
+		//console.log("GDLLibrayGlobalCall()", content);
+		super(start, end, match, 1, 16);
+		this.global = match[2];			// libraryglobal parameter
 	}
 }
 
@@ -316,7 +346,7 @@ export class ParseXMLGDL {
 	private sectionList : (GDLXMLSection | undefined)[] = [];
 	private functionList : GDLFunction[][] = [];
 	private commentList : GDLComment[][] = [];
-	private macroCallList : GDLMacroCall[][] = [];
+	private libpartReferenceList : GDLLibpartReference[][] = [];
 	private mainGUID? : GDLMainGUID;
 	private GUIDList : GDLMigrationGUID[] = [];
 	private calledMacroList : GDLCalledMacro[] = [];
@@ -336,7 +366,7 @@ export class ParseXMLGDL {
 		this.parseFunctions(functions ? text : undefined);
 		this.parseComments(comments ? text : undefined);
 		this.parseGUIDs(guids ? text : undefined);
-		this.parseCalledMacros(calledmacros ? text : undefined);
+		this.parseLibpartReferences(calledmacros ? text : undefined);
 		this.parsePicts(picts ? text : undefined);
 	}
 	
@@ -365,8 +395,8 @@ export class ParseXMLGDL {
 		return this.calledMacroList;
 	}
 
-	public getMacroCallList(scriptType : ScriptType) : GDLMacroCall[] {
-		return this.macroCallList[scriptType];
+	public getLibpartReferenceList(scriptType : ScriptType) : GDLLibpartReference[] {
+		return this.libpartReferenceList[scriptType];
 	}
 
 	public getPictList() : GDLPict[] {
@@ -486,37 +516,38 @@ export class ParseXMLGDL {
 		}
 	}
 
-	private parseCalledMacros(text? : string) {
+	private parseLibpartReferences(text? : string) {
 		//console.log("ParseXMLGDL.parseCalledMacros");
 		let match : RegExpExecArray | null;
-		this.macroCallList = [];
+		this.libpartReferenceList = [];
 		this.calledMacroList = [];
 
 		for (let i = ScriptType.ROOT; i <= ScriptType.BWM; i++) {
-			this.macroCallList.push([]);
+			this.libpartReferenceList.push([]);
 		}
 
 		interface MapMacro { [name: string] : boolean[]; }
 		const macroCallListMap : MapMacro = {};
 
 		if (text) {
-			// parse macro calls
-			while (match = GDLMacroCall.regex.exec(text)) {
-				if (match.length > 0) {
-					const start = match.index;
-					const end = match.index + match[0].length + 1;
-					const scriptType = this.scriptOfPos(start);
-					const macroCall = new GDLMacroCall(	start,
-														end,
-														match);
-
-					this.macroCallList[scriptType].push(macroCall);
-					// temporary map used for adding info to GDLCalledMacro later
-					if (macroCallListMap[macroCall.name] === undefined) {
-						macroCallListMap[macroCall.name] = new Array<boolean>();
-					}
-					macroCallListMap[macroCall.name][scriptType] = true;
+			// parse libpart references
+			const calls = Array.from(text.matchAll(GDLMacroCall.regex), match => match as RegExpExecArray)
+								.map(match => new GDLMacroCall(	match.index,
+																match.index + match[0].length + 1,
+																match));
+			const globals = Array.from(text.matchAll(GDLLibrayGlobalCall.regex), match => match as RegExpExecArray)
+								.map(match => new GDLLibrayGlobalCall(	match.index,
+																		match.index + match[0].length + 1,
+																		match));
+			
+			for (const reference of [...calls, ...globals]) {
+				const scriptType = this.scriptOfPos(reference.start);
+				this.libpartReferenceList[scriptType].push(reference);
+				// temporary map used for adding info to GDLCalledMacro later
+				if (macroCallListMap[reference.name] === undefined) {
+					macroCallListMap[reference.name] = new Array<boolean>();
 				}
+				macroCallListMap[reference.name][scriptType] = true;			
 			}
 
 			// parse CalledMacros section

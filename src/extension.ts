@@ -1084,15 +1084,27 @@ export class GDLExtension
 
     private mapCallSymbols(scriptType : Parser.ScriptType) {
         //console.log("GDLExtension.mapCallSymbols");
-        return this.parser.getMacroCallList(scriptType).map((m : Parser.GDLMacroCall) => {
-            const range = m.range(this.editor!.document);
-            return new vscode.DocumentSymbol(
-                "call " + m.name,
-                m.all ? " \u00a0parameters ALL" : "",
-                vscode.SymbolKind.Object,
-                range,
-                range);
-        }, this);
+        return this.parser.getLibpartReferenceList(scriptType).
+            filter((reference) : reference is Parser.GDLMacroCall => reference instanceof Parser.GDLMacroCall).
+            map((reference : Parser.GDLLibpartReference) => {
+                const range = reference.range(this.editor!.document);
+                const detail = GDLExtension.libpartReferenceDetail(reference);
+                return new vscode.DocumentSymbol(
+                    `${reference.keyword()} ${reference.name}`,
+                    detail,
+                    vscode.SymbolKind.Object,
+                    range,
+                    range);
+            }, this);
+    }
+
+    static libpartReferenceDetail(reference : Parser.GDLLibpartReference) {
+        if (reference instanceof Parser.GDLMacroCall) {
+            return reference.all ? "  parameters ALL" : "";
+        } else if (reference instanceof Parser.GDLLibrayGlobalCall) {
+            return `  ${reference.global}`;
+        }
+        return "";
     }
 
     private async parseFinished(cancel : vscode.CancellationToken) {
@@ -1150,12 +1162,12 @@ export class GDLExtension
     async provideDefinition(document: vscode.TextDocument, position: vscode.Position, cancel: vscode.CancellationToken): Promise<vscode.LocationLink[]> {
         let definitions : vscode.LocationLink[] = [];
 
-        const label = this.isMacroCall(document, position)            // Parser.GDLMacroCall
+        const label = this.isLibpartReference(document, position)     // Parser.GDLLibpartReference
                       ?? this.isSubroutineDefinition(position)        // vscode.DocumentSymbol
                       ?? this.isSubroutineCall(document, position);   // Jump
 
-        if (label instanceof Parser.GDLMacroCall) {
-            const link = await this.macroLinks(label, document, cancel); 
+        if (label instanceof Parser.GDLLibpartReference) {
+            const link = await this.libpartLinks(label, document, cancel); 
             if (link !== undefined) {
                 // if there are multiple results, select target by matching workspace folder
                 if (link.length > 1) {
@@ -1238,7 +1250,7 @@ export class GDLExtension
     static readonly zero_range = new vscode.Range(0, 0, 0, 0);
     static readonly peek_range = new vscode.Range(0, 0, 10, 0);
 
-    private async macroLinks(callsymbol: Parser.GDLMacroCall, document: vscode.TextDocument, cancel: vscode.CancellationToken) : Promise<vscode.LocationLink[] | undefined> {
+    private async libpartLinks(callsymbol: Parser.GDLLibpartReference, document: vscode.TextDocument, cancel: vscode.CancellationToken) : Promise<vscode.LocationLink[] | undefined> {
 
         // find exactly where is the string (can have spaces, whitespace after call)
         let call_range = callsymbol.range(document);
@@ -1260,8 +1272,8 @@ export class GDLExtension
                 targetUri:             t.location.uri}));
     }
 
-    private isMacroCall(document: vscode.TextDocument, position: vscode.Position) {
-        return  this.parser.getMacroCallList(Parser.ScriptType.ROOT)
+    private isLibpartReference(document: vscode.TextDocument, position: vscode.Position) {
+        return  this.parser.getLibpartReferenceList(Parser.ScriptType.ROOT)
                            .find(m => m.range(document).contains(position));
     }
 

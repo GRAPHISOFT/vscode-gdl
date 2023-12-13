@@ -53,7 +53,7 @@ __hotspot__ or __hotspot2__ - length edit hotspot triplet
   * Show parameters with bold font (can be toggled on/off with Ctrl-Alt-Space)
   * IntelliSense lists constants (ALL_CAPS) with their initialized values
   * IntelliSense lists parameters with their description, type, flags and default value. This list can be filtered by parameter type too.
-  * Follow macro and subroutine calls with Ctrl-click
+  * Follow libraryglobal, macro and subroutine calls with Ctrl-click
   * Show variable assignments with Ctrl-click
 * Go to definitions/references, find all references of subroutines in same libpart (Ctrl-click or F12, Shift-F12, Shift-Alt-F12)
 * Show Call Hierarchy (Shift-Alt-H), Peek Call Hierarchy
@@ -172,6 +172,7 @@ Some valid syntaxes won't be highlighted, and some invalid syntaxes will be high
 * drag&drop image files into GDL code, adding them to libpartdata.xml too
 * show variable assignments with Ctrl-click
 * parameter list bugfix: handle separator too
+* Show/Peek Call Hierarchy, Goto/Peek Definition and Ctrl-click follows LIBRARYGLOBAL calls
 
 ## 1.27.0
 * Reference guide 27
