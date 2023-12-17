@@ -835,29 +835,26 @@ export class GDLExtension
         const urllist = (await dataTransfer.get("text/uri-list")?.asString());
         const urls = urllist?.split(/[\r\n]+/) ?? [];
         const allowedextensions = new Map([[".svg",  "image/svg+xml"],
+                                           // bmp not allowed
                                            [".png",  "image/png"    ],
                                            [".jpg",  "image/jpeg"   ],
                                            [".jpeg", "image/jpeg"   ],
                                            [".gif",  "image/gif"    ],
                                            [".tif",  "image/tiff"   ],
                                            [".tiff", "image/tiff"   ]]);
+        const allowedMimes = new Set(allowedextensions.values());
+        // handle only files with known extension (no urls) 
         const dropped_files = urls.map(str => vscode.Uri.parse(str))
-                                  .filter(uri => allowedextensions.has(path.extname(uri.fsPath)))
+                                  .filter(uri => uri.scheme === "file" && allowedextensions.has(path.extname(uri.fsPath)))
                                   .map(uri => ({ mime: allowedextensions.get(path.extname(uri.fsPath))!,
                                                  uri: uri }));
 
         // direct image drops
-        const dropped_images = Array.from(dataTransfer).filter(d => (d[0] === "image/png" ||
-                                                                     d[0] === "image/svg+xml" ||
-                                                                     d[0] === "image/jpeg" ||
-                                                                     d[0] === "image/gif" ||
-                                                                     d[0] === "image/tiff"))
+        const dropped_images = Array.from(dataTransfer).filter(d => allowedMimes.has(d[0]))
                                                         .map(d => ({ mime: d[0], item: d[1], file: d[1].asFile()}))
                                                         .filter((d) : d is {mime: string,
                                                                             item: vscode.DataTransferItem,
                                                                             file: vscode.DataTransferFile} => d.file !== undefined);
-
-        // TODO external image (don't add to libpartdata) if file is in current workspace (name  / size match?)
 
         if (dropped_images.length + dropped_files.length === 0) {
             return undefined;
@@ -869,7 +866,7 @@ export class GDLExtension
 
         const libpartinfo = this.hsflibpart!.info;
         let insert = await libpartinfo.embedded_image_insertposition();
-        const existing_images = await libpartinfo.allImages();
+        const existing_embedded = await libpartinfo.allImages();
 
         for (const image of [...dropped_images, ...dropped_files]) {
             let fname : string;
@@ -878,13 +875,15 @@ export class GDLExtension
                 fname = image.uri.fsPath;
                 content = await vscode.workspace.fs.readFile(image.uri);
             } else {
-                fname = image.file.uri!.fsPath; // can be undefined only in web-based vscode
+                // full path is only available if dropped from file system
+                // dropping from browser results in virtual file without uri
+                fname = image.file.uri?.fsPath ?? image.file.name;
                 content = image.file;
             }
-
+            
             const fname_noext = path.basename(fname, path.extname(fname));
             const fname_nopath = path.basename(fname);
-            console.log(`${image.mime} ${fname}`);
+            //console.log(`${image.mime} ${fname}`);
 
             const existing_ref = await libpartinfo.imageIndex(fname_nopath);
 
@@ -906,10 +905,10 @@ export class GDLExtension
             //      needsConfirmation: false });
 
             // copy file
-            if (existing_images.has(fname_nopath)) {
+            if (existing_embedded.has(fname_nopath)) {
                 // overwrite if not dropped from current object's images
-                if (fname !== existing_images.get(fname_nopath)!.fsPath) {
-                    edit.additionalEdit.createFile(existing_images.get(fname_nopath)!,
+                if (fname !== existing_embedded.get(fname_nopath)?.fsPath) {
+                    edit.additionalEdit.createFile(existing_embedded.get(fname_nopath)!,
                                                     {   overwrite: true,
                                                         contents: content
                                                     },
