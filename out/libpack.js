@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.PathNameTableView = void 0;
+exports.PathNameTableView = exports.allPackages = void 0;
 const vscode = require("vscode");
 const path = require("path");
 const extension_1 = require("./extension");
@@ -20,6 +20,62 @@ function compareFileName(a, b) {
 }
 function escapeRegex(str) {
     return str.replace(/[/\-\\^$*+?.()|[\]{}]/g, '\\$&');
+}
+/** return all package.infos in workspace */
+async function allPackages() {
+    const infos = await vscode.workspace.findFiles("**/package.info");
+    const packageInfos = infos.map(async (info) => await PackageInfo.read(info));
+    return (await Promise.allSettled(packageInfos)) // TODO write function for it, report rejected promises
+        .flatMap(result => result.status === "fulfilled" ? result.value : undefined)
+        .filter((e) => e !== undefined);
+}
+exports.allPackages = allPackages;
+// TODO parse all libpartdata->localizationinfo
+// create localization-pathnametable pairs
+// merge all pathnametables for selected localization
+class PackageInfo {
+    packageInfo;
+    packageName;
+    locDataUri;
+    static async read(packageInfoUri) {
+        const info = await (0, extension_1.readFile)(packageInfoUri, true);
+        const packageTag = /(?<=^\s*<Package\s+).*?(?=>)/mi;
+        const displayNameAttrib = /(?<=\bdisplayName\s*=\s*").*?(?=")/i;
+        const locInfo = /(?<=^\s*<LocDataPath>).*?(?=<\/LocDataPath>)/mi;
+        const packageAttribs = info?.match(packageTag)?.[0];
+        const packageName = packageAttribs?.match(displayNameAttrib)?.[0];
+        const locDataPath = info?.match(locInfo)?.[0];
+        const locDataUri = vscode.Uri.joinPath(packageInfoUri, "..", locDataPath ?? "");
+        const locData = await (0, extension_1.readFile)(locDataUri);
+        if (packageAttribs === undefined ||
+            packageName === undefined ||
+            locDataPath === undefined ||
+            locData === undefined) {
+            return Promise.reject();
+        }
+        return new PackageInfo(packageInfoUri, packageName, locDataUri, locData);
+    }
+    /** locale -> pathNameTable map.
+     *  Contains only entries with both sides filled but file existence is not checked.
+     */
+    _pathNameTableLocalizations;
+    constructor(packageInfo, packageName, locDataUri, localizationData) {
+        this.packageInfo = packageInfo;
+        this.packageName = packageName;
+        this.locDataUri = locDataUri;
+        const pathnametableTag = /(?<=^\s*<PathNameTable\s+).*?(?=\/>)/mig;
+        const languageAttrib = /(?<=\blanguage\s*=\s*").*?(?=")/i;
+        const pathAttrib = /(?<=\bpath\s*=\s*").*?(?=")/i;
+        const pathNameTableTags = [...localizationData.matchAll(pathnametableTag)];
+        this._pathNameTableLocalizations = new Map(pathNameTableTags.map(tag => {
+            const language = tag[0].match(languageAttrib)?.[0];
+            const path = tag[0].match(pathAttrib)?.[0];
+            if (language === undefined || path === undefined) {
+                return undefined;
+            }
+            return [language, vscode.Uri.joinPath(locDataUri, "..", path ?? "")];
+        }).filter((e) => e !== undefined));
+    }
 }
 class PathNameTreeItem {
     _parent;
@@ -231,14 +287,6 @@ class PathNameTreeItem {
     }
 }
 class PathNameTableView {
-    /** hash for known image extensions */
-    static knownImageExtensions = { ".jpg": undefined,
-        ".jpeg": undefined,
-        ".tif": undefined,
-        ".tiff": undefined,
-        ".svg": undefined,
-        ".gif": undefined,
-        ".bmp": undefined };
     static lineHighLight = vscode.window.createTextEditorDecorationType({
         borderColor: new vscode.ThemeColor("editor.wordHighlightTextBorder"),
         borderWidth: "1px",
@@ -251,7 +299,7 @@ class PathNameTableView {
         const ext = path.extname(fileName).toLowerCase();
         if (ext === ".gsm")
             return 1 /* SCRIPT */;
-        if (ext in PathNameTableView.knownImageExtensions)
+        if (extension_1.GDLExtension.allowedImageTypes.has(ext))
             return 2 /* IMAGE */;
         return 0 /* OTHER */;
     }

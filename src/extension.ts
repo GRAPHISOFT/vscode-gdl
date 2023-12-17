@@ -3,7 +3,7 @@ import { TextDecoder } from 'util';
 
 import * as Parser from './parsexmlgdl';
 import { OutlineView } from './scriptView';
-import { PathNameTableView } from './libpack';
+import { PathNameTableView, allPackages } from './libpack';
 import { RefGuide } from './refguide';
 import { HSFLibpart } from './parsehsf';
 import { WSSymbols } from './wssymbols';
@@ -74,6 +74,17 @@ export class GDLExtension
         overviewRulerColor: '#cc3333',
         overviewRulerLane: vscode.OverviewRulerLane.Right,
     });
+
+    /** hash for allowed image extensions */
+    static readonly allowedImageTypes = new Map([[".svg"  , "image/svg+xml"],
+                                                 [".bmp"  , "image/bmp"    ],
+                                                 [".png"  , "image/png"    ],
+                                                 [".jpg"  , "image/jpeg"   ],
+                                                 [".jpeg" , "image/jpeg"   ],
+                                                 [".gif"  , "image/gif"    ],
+                                                 [".tif"  , "image/tiff"   ],
+                                                 [".tiff" , "image/tiff"   ]]);
+    static readonly allowedImageMimes = new Set(GDLExtension.allowedImageTypes.values());
 
     private suggestHSF : vscode.Disposable | undefined;
 
@@ -150,6 +161,10 @@ export class GDLExtension
         await this.onConfigChanged();   // wait for configuration
         this.onActiveEditorChanged();   // start async operation
         this.wsSymbols.changeFolders(); // handles waiting for result on its own
+
+        // TODO this is just a demo
+        const packages = await allPackages();
+        console.log(packages.map(p => p.packageName));
     }
 
     get updateEnabled() : boolean { return this._updateEnabled; }

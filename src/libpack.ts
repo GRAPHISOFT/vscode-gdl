@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 
 import path = require('path');
-import { LibpartUri, fileExists, getLibparts } from './extension';
+import { GDLExtension, LibpartUri, fileExists, getLibparts, readFile } from './extension';
 
 type RegExpMatchArrayWithIndices = RegExpMatchArray & { indices: Array<[number, number]> };
 
@@ -30,6 +30,71 @@ function compareFileName(a: PathNameTableID, b: PathNameTableID) {
 function escapeRegex(str: string) {
     return str.replace(/[/\-\\^$*+?.()|[\]{}]/g, '\\$&');
 }
+
+/** return all package.infos in workspace */
+export async function allPackages(): Promise<PackageInfo[]> {
+    const infos = await vscode.workspace.findFiles("**/package.info");
+    const packageInfos = infos.map(async info => await PackageInfo.read(info));
+    return (await Promise.allSettled(packageInfos)) // TODO write function for it, report rejected promises
+        .flatMap(result => result.status === "fulfilled" ? result.value : undefined)
+        .filter((e) : e is PackageInfo => e !== undefined);
+}
+
+// TODO parse all libpartdata->localizationinfo
+// create localization-pathnametable pairs
+// merge all pathnametables for selected localization
+class PackageInfo {
+    static async read(packageInfoUri: vscode.Uri): Promise<PackageInfo> {
+        const info = await readFile(packageInfoUri, true);
+
+        const packageTag = /(?<=^\s*<Package\s+).*?(?=>)/mi;
+        const displayNameAttrib = /(?<=\bdisplayName\s*=\s*").*?(?=")/i;
+        const locInfo = /(?<=^\s*<LocDataPath>).*?(?=<\/LocDataPath>)/mi;
+
+        const packageAttribs = info?.match(packageTag)?.[0];
+        const packageName = packageAttribs?.match(displayNameAttrib)?.[0];
+        const locDataPath = info?.match(locInfo)?.[0];
+
+        const locDataUri = vscode.Uri.joinPath(packageInfoUri, "..", locDataPath ?? "")
+        const locData = await readFile(locDataUri);
+
+        if (packageAttribs === undefined ||
+            packageName === undefined ||
+            locDataPath === undefined ||
+            locData === undefined) {
+            return Promise.reject();
+        }
+
+        return new PackageInfo(packageInfoUri, packageName, locDataUri, locData);
+        
+    }
+
+    /** locale -> pathNameTable map.
+     *  Contains only entries with both sides filled but file existence is not checked.
+     */
+    public readonly _pathNameTableLocalizations: Map<string, vscode.Uri>;
+
+    constructor(public readonly packageInfo: vscode.Uri,
+                public readonly packageName: string,
+                public readonly locDataUri: vscode.Uri,
+                localizationData: string) {
+
+        const pathnametableTag = /(?<=^\s*<PathNameTable\s+).*?(?=\/>)/mig;
+        const languageAttrib = /(?<=\blanguage\s*=\s*").*?(?=")/i;
+        const pathAttrib = /(?<=\bpath\s*=\s*").*?(?=")/i;
+        
+        const pathNameTableTags = [...localizationData.matchAll(pathnametableTag)];
+        this._pathNameTableLocalizations = new Map(pathNameTableTags.map(tag => {
+            const language = tag[0].match(languageAttrib)?.[0];
+            const path = tag[0].match(pathAttrib)?.[0];
+            if (language === undefined || path === undefined) {
+                return undefined;
+            }
+            return [language, vscode.Uri.joinPath(locDataUri, "..", path ?? "")];
+        }).filter((e) : e is [string, vscode.Uri] => e !== undefined));
+    }
+}
+
 
 type PathNameTableEntry = PathNameTableID & {
     virtualPath: string[],
@@ -272,15 +337,6 @@ export class PathNameTableView
     implements  vscode.TreeDataProvider<PathNameTreeItem>,
                 vscode.TreeDragAndDropController<PathNameTreeItem> {
 
-    /** hash for known image extensions */
-    private static readonly knownImageExtensions = { ".jpg":     undefined,
-                                                     ".jpeg":    undefined,
-                                                     ".tif":     undefined,
-                                                     ".tiff":    undefined,
-                                                     ".svg":     undefined,
-                                                     ".gif":     undefined,
-                                                     ".bmp":     undefined }
-
     private static readonly lineHighLight = vscode.window.createTextEditorDecorationType({
         borderColor: new vscode.ThemeColor("editor.wordHighlightTextBorder"),
         borderWidth: "1px",
@@ -293,7 +349,7 @@ export class PathNameTableView
     static typeByExtension(fileName: string) {
         const ext = path.extname(fileName).toLowerCase();
         if (ext === ".gsm") return LibpartType.SCRIPT;
-        if (ext in PathNameTableView.knownImageExtensions) return LibpartType.IMAGE;
+        if (GDLExtension.allowedImageTypes.has(ext)) return LibpartType.IMAGE;
         return LibpartType.OTHER;
     }
 

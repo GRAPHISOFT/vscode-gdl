@@ -56,6 +56,16 @@ class GDLExtension {
         overviewRulerColor: '#cc3333',
         overviewRulerLane: vscode.OverviewRulerLane.Right,
     });
+    /** hash for allowed image extensions */
+    static allowedImageTypes = new Map([[".svg", "image/svg+xml"],
+        [".bmp", "image/bmp"],
+        [".png", "image/png"],
+        [".jpg", "image/jpeg"],
+        [".jpeg", "image/jpeg"],
+        [".gif", "image/gif"],
+        [".tif", "image/tiff"],
+        [".tiff", "image/tiff"]]);
+    static allowedImageMimes = new Set(GDLExtension.allowedImageTypes.values());
     suggestHSF;
     sectionDecorations = [];
     constructor(context) {
@@ -100,6 +110,9 @@ class GDLExtension {
         await this.onConfigChanged(); // wait for configuration
         this.onActiveEditorChanged(); // start async operation
         this.wsSymbols.changeFolders(); // handles waiting for result on its own
+        // TODO this is just a demo
+        const packages = await (0, libpack_1.allPackages)();
+        console.log(packages.map(p => p.packageName));
     }
     get updateEnabled() { return this._updateEnabled; }
     get editor() { return this._editor; }
