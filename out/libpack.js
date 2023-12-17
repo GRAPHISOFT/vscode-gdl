@@ -231,14 +231,6 @@ class PathNameTreeItem {
     }
 }
 class PathNameTableView {
-    /** hash for known image extensions */
-    static knownImageExtensions = { ".jpg": undefined,
-        ".jpeg": undefined,
-        ".tif": undefined,
-        ".tiff": undefined,
-        ".svg": undefined,
-        ".gif": undefined,
-        ".bmp": undefined };
     static lineHighLight = vscode.window.createTextEditorDecorationType({
         borderColor: new vscode.ThemeColor("editor.wordHighlightTextBorder"),
         borderWidth: "1px",
@@ -251,7 +243,7 @@ class PathNameTableView {
         const ext = path.extname(fileName).toLowerCase();
         if (ext === ".gsm")
             return 1 /* SCRIPT */;
-        if (ext in PathNameTableView.knownImageExtensions)
+        if (extension_1.GDLExtension.allowedImageTypes.has(ext))
             return 2 /* IMAGE */;
         return 0 /* OTHER */;
     }

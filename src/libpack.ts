@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 
 import path = require('path');
-import { LibpartUri, fileExists, getLibparts } from './extension';
+import { GDLExtension, LibpartUri, fileExists, getLibparts } from './extension';
 
 type RegExpMatchArrayWithIndices = RegExpMatchArray & { indices: Array<[number, number]> };
 
@@ -272,15 +272,6 @@ export class PathNameTableView
     implements  vscode.TreeDataProvider<PathNameTreeItem>,
                 vscode.TreeDragAndDropController<PathNameTreeItem> {
 
-    /** hash for known image extensions */
-    private static readonly knownImageExtensions = { ".jpg":     undefined,
-                                                     ".jpeg":    undefined,
-                                                     ".tif":     undefined,
-                                                     ".tiff":    undefined,
-                                                     ".svg":     undefined,
-                                                     ".gif":     undefined,
-                                                     ".bmp":     undefined }
-
     private static readonly lineHighLight = vscode.window.createTextEditorDecorationType({
         borderColor: new vscode.ThemeColor("editor.wordHighlightTextBorder"),
         borderWidth: "1px",
@@ -293,7 +284,7 @@ export class PathNameTableView
     static typeByExtension(fileName: string) {
         const ext = path.extname(fileName).toLowerCase();
         if (ext === ".gsm") return LibpartType.SCRIPT;
-        if (ext in PathNameTableView.knownImageExtensions) return LibpartType.IMAGE;
+        if (GDLExtension.allowedImageTypes.has(ext)) return LibpartType.IMAGE;
         return LibpartType.OTHER;
     }
 

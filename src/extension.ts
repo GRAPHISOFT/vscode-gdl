@@ -77,6 +77,17 @@ export class GDLExtension
         overviewRulerLane: vscode.OverviewRulerLane.Right,
     });
 
+    /** hash for allowed image extensions */
+    static readonly allowedImageTypes = new Map([[".svg"  , "image/svg+xml"],
+                                                 [".bmp"  , "image/bmp"    ],
+                                                 [".png"  , "image/png"    ],
+                                                 [".jpg"  , "image/jpeg"   ],
+                                                 [".jpeg" , "image/jpeg"   ],
+                                                 [".gif"  , "image/gif"    ],
+                                                 [".tif"  , "image/tiff"   ],
+                                                 [".tiff" , "image/tiff"   ]]);
+    static readonly allowedImageMimes = new Set(GDLExtension.allowedImageTypes.values());
+
     private suggestHSF : vscode.Disposable | undefined;
 
     private readonly sectionDecorations : vscode.TextEditorDecorationType[] = [];
@@ -840,23 +851,16 @@ export class GDLExtension
         // mime-type 'text/uri-list' contains a list of uris separated by new lines
         const urllist = (await dataTransfer.get("text/uri-list")?.asString());
         const urls = urllist?.split(/[\r\n]+/) ?? [];
-        const allowedextensions = new Map([[".svg",  "image/svg+xml"],
-                                           // bmp not allowed
-                                           [".png",  "image/png"    ],
-                                           [".jpg",  "image/jpeg"   ],
-                                           [".jpeg", "image/jpeg"   ],
-                                           [".gif",  "image/gif"    ],
-                                           [".tif",  "image/tiff"   ],
-                                           [".tiff", "image/tiff"   ]]);
-        const allowedMimes = new Set(allowedextensions.values());
+
+        
         // handle only files with known extension (no urls) 
         const dropped_files = urls.map(str => vscode.Uri.parse(str))
-                                  .filter(uri => uri.scheme === "file" && allowedextensions.has(path.extname(uri.fsPath)))
-                                  .map(uri => ({ mime: allowedextensions.get(path.extname(uri.fsPath))!,
+                                  .filter(uri => uri.scheme === "file" && GDLExtension.allowedImageTypes.has(path.extname(uri.fsPath)))
+                                  .map(uri => ({ mime: GDLExtension.allowedImageTypes.get(path.extname(uri.fsPath))!,
                                                  uri: uri }));
 
         // direct image drops
-        const dropped_images = Array.from(dataTransfer).filter(d => allowedMimes.has(d[0]))
+        const dropped_images = Array.from(dataTransfer).filter(d => GDLExtension.allowedImageMimes.has(d[0]))
                                                         .map(d => ({ mime: d[0], item: d[1], file: d[1].asFile()}))
                                                         .filter((d) : d is {mime: string,
                                                                             item: vscode.DataTransferItem,
