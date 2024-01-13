@@ -102,7 +102,7 @@ class LibpartInfo {
     async embedded_image_insertposition() {
         const libpartdata_doc = await vscode.workspace.openTextDocument(this.libpartdata_uri);
         const libpartdata = libpartdata_doc.getText();
-        let greatestIndex = -1;
+        let greatestIndex = 0;
         let lastPosition = -1;
         // find greatest index and last image position
         this.imagesCache = new Map();

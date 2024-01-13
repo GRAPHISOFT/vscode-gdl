@@ -847,47 +847,67 @@ export class GDLExtension
 
     async provideDocumentDropEdits(_document: vscode.TextDocument, _position: vscode.Position, dataTransfer: vscode.DataTransfer, _cancel: vscode.CancellationToken): Promise<vscode.DocumentDropEdit | undefined> {
 
-        // filename drops
-        // mime-type 'text/uri-list' contains a list of uris separated by new lines
-        const urllist = (await dataTransfer.get("text/uri-list")?.asString());
-        const urls = urllist?.split(/[\r\n]+/) ?? [];
+        /*
+        contents of dataTransfer.get("<mime>")[][1]
+        dropped from windows explorer:
+            text/uri-list       list of file:// uris
+            <mimetype>          DataTransferItems containing DataTransferFile with uri of original file
+        dropped from browser:
+            text/uri-list       http:// uri
+            text/plain          http:// uri
+            text/html           html code containing img
+            <mimetype>          DataTransferItems containing DataTransferFile
+                                    Firefox: always bmp, with uri of temp file
+                                    Edge: original file format, no uri
+        dropped from vscode explorer:
+            text/uri-list       list of file:// uris
+            text/plain          list of paths
+        */
 
-        
-        // handle only files with known extension (no urls) 
-        const dropped_files = urls.map(str => vscode.Uri.parse(str))
-                                  .filter(uri => uri.scheme === "file" && GDLExtension.allowedImageTypes.has(path.extname(uri.fsPath)))
-                                  .map(uri => ({ mime: GDLExtension.allowedImageTypes.get(path.extname(uri.fsPath))!,
-                                                 uri: uri }));
+        type DroppedImage = { mime: string, item: vscode.DataTransferItem, file: vscode.DataTransferFile };
+        type DroppedUri = { mime: string, uri: vscode.Uri };
+
 
         // direct image drops
-        const dropped_images = Array.from(dataTransfer).filter(d => GDLExtension.allowedImageMimes.has(d[0]))
-                                                        .map(d => ({ mime: d[0], item: d[1], file: d[1].asFile()}))
-                                                        .filter((d) : d is {mime: string,
-                                                                            item: vscode.DataTransferItem,
-                                                                            file: vscode.DataTransferFile} => d.file !== undefined);
+        let droppedData: DroppedImage[] | DroppedUri[];
+        droppedData = Array.from(dataTransfer).filter(d => GDLExtension.allowedImageMimes.has(d[0]))
+                                              .map(d => ({ mime: d[0], item: d[1], file: d[1].asFile()}))
+                                              .filter((d) : d is { mime: string,
+                                                                   item: vscode.DataTransferItem,
+                                                                   file: vscode.DataTransferFile } => d.file !== undefined);
 
-        if (dropped_images.length + dropped_files.length === 0) {
+        // use text/uri-list only if there were no attached known mimetype
+        if (droppedData.length === 0) {
+            // text/uri-list contains a list of uris separated by new lines
+            const urllist = (await dataTransfer.get("text/uri-list")?.asString());
+            const urls = urllist?.split(/[\r\n]+/) ?? [];
+            // handle only file:// with known extension (no urls) 
+            droppedData = urls.map(str => vscode.Uri.parse(str))
+                            .filter(uri => uri.scheme === "file" && GDLExtension.allowedImageTypes.has(path.extname(uri.fsPath)))
+                            .map(uri => ({ mime: GDLExtension.allowedImageTypes.get(path.extname(uri.fsPath))!,
+                                           uri: uri }));
+        }
+
+        if (droppedData.length === 0) {
+            // nothing useable found
             return undefined;
         }
     
-        let edit = new vscode.DocumentDropEdit("");
-
         // add images as embedded pictures
+        let edit = new vscode.DocumentDropEdit("");
 
         const libpartinfo = this.hsflibpart!.info;
         let insert = await libpartinfo.embedded_image_insertposition();
         const existing_embedded = await libpartinfo.allImages();
 
-        for (const image of [...dropped_images, ...dropped_files]) {
+        for (const image of droppedData) {
             let fname : string;
             let content : Uint8Array | vscode.DataTransferFile;
-            if ("uri" in image) {
+            if ("uri" in image) {   // DroppedUri
                 fname = image.uri.fsPath;
                 content = await vscode.workspace.fs.readFile(image.uri);
-            } else {
-                // full path is only available if dropped from file system
-                // dropping from browser results in virtual file without uri
-                fname = image.file.uri?.fsPath ?? image.file.name;
+            } else {                // DroppedImage
+                fname = image.file.name;
                 content = image.file;
             }
             
@@ -902,7 +922,7 @@ export class GDLExtension
             }
 
             // add index reference and comment in gdl code
-            const ref_index = existing_ref ?? insert.index; // reference existing index in libpartdata, new otherwise
+            const ref_index = existing_ref ?? insert.index++; // reference existing index in libpartdata, new otherwise
             edit.insertText += `${ref_index}\t! ${ref_index}: ${fname_noext}\n`;
 
             //bad UX for insertion as additionalEdit only
@@ -953,16 +973,12 @@ export class GDLExtension
                     insertFlag = "0";
                 }
 
-                const imgref = `\t<GDLPict MIME="${insertMime}" Name="${fname_nopath}" SectVersion="19" SectionFlags="${insertFlag}" SubIdent="${insert.index}"/>\n`;
+                const imgref = `\t<GDLPict MIME="${insertMime}" Name="${fname_nopath}" SectVersion="19" SectionFlags="${insertFlag}" SubIdent="${ref_index}"/>\n`;
                 edit.additionalEdit.insert(libpartinfo.libpartdata_uri, insert.position, imgref,
                                             {   label: "Add image(s)",
                                                 description: "as embedded picture(s)",
                                                 iconPath: new vscode.ThemeIcon("settings-edit"),
                                                 needsConfirmation: false });
-
-                // next insert position and index
-                insert.position = insert.position.translate(1);
-                insert.index++;
             }
         }
 
