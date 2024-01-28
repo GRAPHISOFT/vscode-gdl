@@ -3,7 +3,7 @@ import { TextDecoder } from 'util';
 
 import * as Parser from './parsexmlgdl';
 import { OutlineView } from './scriptView';
-import { PathNameTableView, allPackages } from './libpack';
+import { PathNameTableView } from './libpack';
 import { RefGuide } from './refguide';
 import { HSFLibpart } from './parsehsf';
 import { WSSymbols } from './wssymbols';
