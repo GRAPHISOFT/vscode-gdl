@@ -111,8 +111,8 @@ class GDLExtension {
         this.onActiveEditorChanged(); // start async operation
         this.wsSymbols.changeFolders(); // handles waiting for result on its own
         // TODO this is just a demo
-        const packages = await (0, libpack_1.allPackages)();
-        console.log(packages.map(p => p.packageName));
+        // const packages = await allPackages();
+        // console.log(packages.map(p => p.packageName));
     }
     get updateEnabled() { return this._updateEnabled; }
     get editor() { return this._editor; }

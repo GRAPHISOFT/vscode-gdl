@@ -166,8 +166,8 @@ export class GDLExtension
         this.wsSymbols.changeFolders(); // handles waiting for result on its own
 
         // TODO this is just a demo
-        const packages = await allPackages();
-        console.log(packages.map(p => p.packageName));
+        // const packages = await allPackages();
+        // console.log(packages.map(p => p.packageName));
     }
 
     get updateEnabled() : boolean { return this._updateEnabled; }
