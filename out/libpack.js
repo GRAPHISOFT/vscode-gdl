@@ -253,7 +253,7 @@ class PathNameTreeItem {
             item = new PathNameTreeItem(id, this);
         }
         if (item.isFile) {
-            while (this.children.has(item.id)) {
+            while (this.children.has(item.id)) { // TODO this checks direct children only
                 let newEntry = { ...item.entry }; // copy object
                 newEntry.virtualFileName = `${item.id} duplicate`;
                 item = new PathNameTreeItem(newEntry, this);
@@ -424,13 +424,31 @@ class PathNameTableView {
     }
     async rename(item) {
         const input = await vscode.window.showInputBox({ ignoreFocusOut: true,
-            placeHolder: "new name",
+            value: item.label,
+            valueSelection: [item.label.length, item.label.length],
+            validateInput: value => this.validateRename(value, item),
             title: "Rename",
-            prompt: item.id });
+            prompt: `New virtual name of "${item.id}"` });
         if (input) {
             item.label = input;
             return this.saveChanges();
         }
+    }
+    validateRename(value, item) {
+        const labelLC = value.toLocaleLowerCase();
+        const check = item.isFile ? this.root : item.parent.children.values();
+        const all = [...check].flatMap(e => e).filter(e => e.fullID() !== item.fullID() && e.isFile === item.isFile);
+        const duplicates = all.filter(e => e.label.toLocaleLowerCase() === labelLC);
+        if (duplicates.length > 0) {
+            if (item.isFile) {
+                return `Virtual filename already exists for "${duplicates[0].entry.fileName}" at "${duplicates[0].virtualPath().join("/")}"`;
+            }
+            else {
+                return { message: `Virtual foldername already exists at "${duplicates[0].virtualPath().join("/")}", content will be merged`,
+                    severity: vscode.InputBoxValidationSeverity.Info };
+            }
+        }
+        return undefined; // value is valid
     }
     async showInFile(item) {
         // JSON.parse can't save the original text position, so we have to search, assuming there aren't duplicate keys
