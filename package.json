@@ -595,6 +595,24 @@
                 "key": "ctrl+alt+space",
                 "mac": "ctrl+alt+space",
                 "when": "editorLangId == gdl-hsf && isFileSystemResource && resourceExtname == .gdl && workbenchState != empty"
+            },
+            {
+                "command": "GDL.PNTV.copyVirtualPath",
+                "key": "ctrl+c",
+                "mac": "cmd+c",
+                "when": "focusedView == 'PathNameTableView'"
+            },
+            {
+                "command": "GDL.PNTV.openFile",
+                "key": "ctrl+enter",
+                "mac": "cmd+enter",
+                "when": "focusedView == 'PathNameTableView'"
+            },
+            {
+                "command": "GDL.PNTV.rename",
+                "key": "f2",
+                "mac": "f2",
+                "when": "focusedView == 'PathNameTableView'"
             }
         ],
         "jsonValidation": [

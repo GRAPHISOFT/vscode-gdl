@@ -420,18 +420,37 @@ class PathNameTableView {
             return this.expandAll(next);
         }
     }
-    async copyVirtualPath(item) {
-        return vscode.env.clipboard.writeText(path.join(...item.virtualPath()));
+    /** return all selected items if input is undefined, exclude root item */
+    getSelection(clickeditem) {
+        if (clickeditem === undefined) {
+            // called from keyboard shortcut
+            if (this.view.selection.length === 0) {
+                return [];
+            }
+            return this.view.selection.filter(e => !e.isRoot);
+        }
+        return clickeditem.isRoot ? [] : [clickeditem];
     }
-    async rename(item) {
-        const input = await vscode.window.showInputBox({ ignoreFocusOut: true,
-            value: item.label,
-            valueSelection: [item.label.length, item.label.length],
-            validateInput: value => this.validateRename(value, item),
-            title: "Rename",
-            prompt: `New virtual name of "${item.id}"` });
-        if (input) {
-            item.label = input;
+    async copyVirtualPath(clickeditem) {
+        const items = this.getSelection(clickeditem);
+        const virtualpaths = items.map(item => path.join(...item.virtualPath()));
+        return vscode.env.clipboard.writeText(virtualpaths.join("\n"));
+    }
+    async rename(clickeditem) {
+        let changed = false;
+        for (const item of this.getSelection(clickeditem)) {
+            const input = await vscode.window.showInputBox({ ignoreFocusOut: true,
+                value: item.label,
+                valueSelection: [item.label.length, item.label.length],
+                validateInput: (value) => this.validateRename(value, item),
+                title: "Rename",
+                prompt: `New virtual name of "${item.id}"` });
+            if (input) {
+                item.label = input;
+                changed = true;
+            }
+        }
+        if (changed) {
             return this.saveChanges();
         }
     }
@@ -482,8 +501,8 @@ class PathNameTableView {
         }
     }
     /** open selected file assuming filename is correct */
-    async openFile(item) {
-        if (item.entry !== undefined) {
+    async openFile(clickeditem) {
+        for (const item of this.getSelection(clickeditem).filter(e => e.isFile)) {
             //const findFile = path.basename(item.entry.fileName, path.extname(item.entry.fileName)).toLocaleLowerCase();
             const findFile = item.entry.fileName.toLocaleLowerCase();
             const packagePath = await this.getPackagePath();

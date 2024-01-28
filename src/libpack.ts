@@ -375,10 +375,10 @@ export class PathNameTableView
             vscode.commands.registerCommand('GDL.PNTV.checkContent', async () => this.checkContentWithProgress()),
             vscode.commands.registerCommand('GDL.PNTV.expandAll', async (subtree?: PathNameTreeItem) => this.expandAll(subtree)),
             vscode.commands.registerCommand('GDL.PNTV.createSubPath', async (item: PathNameTreeItem) => this.createSubPath(item)),
-            vscode.commands.registerCommand('GDL.PNTV.copyVirtualPath', async (item: PathNameTreeItem) => this.copyVirtualPath(item)),
-            vscode.commands.registerCommand('GDL.PNTV.rename', async (item: PathNameTreeItem) => this.rename(item)),
+            vscode.commands.registerCommand('GDL.PNTV.copyVirtualPath', async (item?: PathNameTreeItem) => this.copyVirtualPath(item)),
+            vscode.commands.registerCommand('GDL.PNTV.rename', async (item?: PathNameTreeItem) => this.rename(item)),
             vscode.commands.registerCommand('GDL.PNTV.showInFile', async (item: PathNameTreeItem) => this.showInFile(item)),
-            vscode.commands.registerCommand('GDL.PNTV.openFile', async (item: PathNameTreeItem) => this.openFile(item)),
+            vscode.commands.registerCommand('GDL.PNTV.openFile', async (item?: PathNameTreeItem) => this.openFile(item)),
         ];
 
         context.subscriptions.push(this.view, ...commands);
@@ -484,19 +484,41 @@ export class PathNameTableView
         }
     }
 
-    async copyVirtualPath(item: PathNameTreeItem) {
-        return vscode.env.clipboard.writeText(path.join(...item.virtualPath()));
+    /** return all selected items if input is undefined, exclude root item */
+    private getSelection(clickeditem?: PathNameTreeItem): PathNameTreeItem[] {
+        if (clickeditem === undefined) {
+            // called from keyboard shortcut
+            if (this.view.selection.length === 0) {
+                return [];
+            }
+            return this.view.selection.filter(e => !e.isRoot);
+        } 
+        
+        return clickeditem.isRoot ? [] : [clickeditem];
+    }
+    
+    async copyVirtualPath(clickeditem?: PathNameTreeItem) {
+        const items = this.getSelection(clickeditem);
+        const virtualpaths = items.map(item => path.join(...item.virtualPath()));
+        return vscode.env.clipboard.writeText(virtualpaths.join("\n"));
     }
 
-    async rename(item: PathNameTreeItem) {
-        const input = await vscode.window.showInputBox({ignoreFocusOut: true,
-                                                        value: item.label,
-                                                        valueSelection: [item.label.length, item.label.length],
-                                                        validateInput: value => this.validateRename(value, item),
-                                                        title: "Rename",
-                                                        prompt: `New virtual name of "${item.id}"`});
-        if (input) {
-            item.label = input;
+    async rename(clickeditem?: PathNameTreeItem) {
+        let changed = false;
+        for (const item of this.getSelection(clickeditem)) {
+            const input = await vscode.window.showInputBox({ignoreFocusOut: true,
+                                                            value: item.label,
+                                                            valueSelection: [item.label.length, item.label.length],
+                                                            validateInput: (value) => this.validateRename(value, item!),
+                                                            title: "Rename",
+                                                            prompt: `New virtual name of "${item.id}"`});
+            if (input) {
+                item.label = input;
+                changed = true;
+            }
+        }
+
+        if (changed) {
             return this.saveChanges();
         }
     }
@@ -554,10 +576,10 @@ export class PathNameTableView
     }
 
     /** open selected file assuming filename is correct */
-    async openFile(item: PathNameTreeItem) {
-        if (item.entry !== undefined) {
+    async openFile(clickeditem?: PathNameTreeItem) {
+        for (const item of this.getSelection(clickeditem).filter(e => e.isFile)) {
             //const findFile = path.basename(item.entry.fileName, path.extname(item.entry.fileName)).toLocaleLowerCase();
-            const findFile = item.entry.fileName.toLocaleLowerCase();
+            const findFile = item.entry!.fileName.toLocaleLowerCase();
             const packagePath = await this.getPackagePath();
             if (packagePath === undefined) {
                 PathNameTableView.warnPackageInfoNotFound();
@@ -568,7 +590,7 @@ export class PathNameTableView
             for await (const uri of getLibparts(vscode.Uri.file(packagePath))) {
                 if (uri.binaryFileName.toLocaleLowerCase() === findFile) {
                     found = true;
-                    if (PathNameTableView.typeByExtension(item.entry.fileName) === LibpartType.SCRIPT) {
+                    if (PathNameTableView.typeByExtension(item.entry!.fileName) === LibpartType.SCRIPT) {
                         vscode.commands.executeCommand('vscode.open',
                                                         vscode.Uri.joinPath(uri.sourceUri, "libpartdata.xml"));
                     } else {
@@ -578,7 +600,7 @@ export class PathNameTableView
             }
 
             if (!found) {
-                const baseName = path.basename(item.entry.fileName, path.extname(item.entry.fileName));
+                const baseName = path.basename(item.entry!.fileName, path.extname(item.entry!.fileName));
                 vscode.window.showWarningMessage(`"${baseName}" not found in folder "${packagePath}"`);
             }
         }
