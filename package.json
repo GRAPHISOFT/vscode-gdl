@@ -305,11 +305,6 @@
                     "group": "inline@2"
                 },
                 {
-                    "command": "GDL.PNTV.showInFile",
-                    "when": "view == PathNameTableView && viewItem == file",
-                    "group": "inline@3"
-                },
-                {
                     "command": "GDL.PNTV.createSubPath",
                     "when": "view == PathNameTableView && viewItem != file",
                     "group": "inline@3"
@@ -460,8 +455,7 @@
             {
                 "command": "GDL.PNTV.showInFile",
                 "title": "Show in file",
-                "category": "PathNameTableView",
-                "icon": "$(arrow-small-right)"
+                "category": "PathNameTableView"
             },
             {
                 "command": "GDL.PNTV.openFile",

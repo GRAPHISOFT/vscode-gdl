@@ -190,15 +190,16 @@ class PathNameTreeItem {
         }
         const item = new vscode.TreeItem(this.label, collapsible);
         item.id = this.fullID();
-        // context, tooltip, uri command
+        // context, tooltip, command
         if (this.isFile) { // file
             item.contextValue = "file";
             item.tooltip = this.entry.fileName;
             if (this.entry.meta) {
                 item.tooltip += `\n\n${JSON.stringify(this.entry.meta)}`;
             }
-            //item.resourceUri = this.uri;
-            //item.command = ...
+            item.command = { command: "GDL.PNTV.showInFile",
+                arguments: [this],
+                title: "" };
         }
         else {
             if (this.isRoot) {
