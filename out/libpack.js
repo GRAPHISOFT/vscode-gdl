@@ -595,8 +595,20 @@ class PathNameTableView {
             e.parent !== target && // target is not the existing parent
             e !== target && // target is not the same (with multi-selection)
             !targetFullID.startsWith(e.fullID() + path.sep)); // target is not subfolder of element
+        const oldparents = filteredItems.map(e => e.parent).filter((e) => e !== undefined);
         // move subtree
         target.mergeChildren(filteredItems);
+        // delete emptied folders recursively
+        let checkparents = [...new Set(oldparents)]; // remove duplicates
+        while (checkparents.length > 0) {
+            const item = checkparents.pop();
+            if (item.children.size === 0) {
+                if (item.parent) {
+                    checkparents.push(item.parent);
+                    item.parent.deleteChild(item.id);
+                }
+            }
+        }
         if (filteredItems.length > 0) {
             return this.saveChanges();
         }
