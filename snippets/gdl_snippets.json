@@ -4676,6 +4676,10 @@
       "prefix": "request (\"Configuration_number",
       "body": "n = REQUEST (\"Configuration_number\", \"\", ${01:stConfigurationNumber})"
     },
+    "request (\"GSID_INFO\")": {
+      "prefix": "request (\"GSID_INFO",
+      "body": "n = REQUEST (\"GSID_INFO\", \"\", ${01:userId}, ${02:organizationIds})"
+    },
     "request (extension_name)": {
       "prefix": "request (extension_name",
       "body": "n = REQUEST (${01:extension_name}, ${02:parameter_string}, ${03:variable1}, ${04:variable2}, ${05:...})"
