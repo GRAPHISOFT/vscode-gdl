@@ -166,6 +166,11 @@ Some valid syntaxes won't be highlighted, and some invalid syntaxes will be high
 
 # Release Notes
 
+## 1.27.1
+* new GSID_INFO request
+* bugfix: parameter list wasn't processed after \<Separator>
+* GDL-XML language is auto-detected by \<Symbol> root tag in file
+
 ## 1.27.0
 * Reference guide 27
 * Snippet fixes (keywords at end of line)
