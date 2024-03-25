@@ -1106,11 +1106,11 @@
     },
     "\"ui_pict_radiobutton\" command": {
       "prefix": "ui_pict_radiobutton",
-      "body": "ui_pict_radiobutton ${01:name}, ${02:value}, ${03:picture_reference}, ${04:x}, ${05:y}, ${06:width}, ${07:height}, ${08:borderFlag}"
+      "body": "ui_pict_radiobutton ${01:name}, ${02:value}, ${03:text}, ${04:picture_reference}, ${05:x}, ${06:y}, ${07:width}, ${08:height}"
     },
     "\"ui_pict_radiobutton{2}\" command": {
       "prefix": "ui_pict_radiobutton{2}",
-      "body": "ui_pict_radiobutton{2} \"${01:name}\", ${02:value}, ${03:picture_reference}, ${04:x}, ${05:y}, ${06:width}, ${07:height}, ${08:borderFlag}"
+      "body": "ui_pict_radiobutton{2} \"${01:name}\", ${02:value}, ${03:text}, ${04:picture_reference}, ${05:x}, ${06:y}, ${07:width}, ${08:height}"
     },
     "\"ui_listfield\" command": {
       "prefix": "ui_listfield",
