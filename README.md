@@ -167,12 +167,16 @@ Some valid syntaxes won't be highlighted, and some invalid syntaxes will be high
 
 # Release Notes
 
-## 1.27.1
+## 1.27.2
 * pathNameTable tree view (move, rename, open, check against source)
 * drag&drop image files into GDL code, adding them to libpartdata.xml too
 * show variable assignments with Ctrl-click
-* parameter list bugfix: handle separator too
 * Show/Peek Call Hierarchy, Goto/Peek Definition and Ctrl-click follows LIBRARYGLOBAL calls
+
+## 1.27.1
+* new GSID_INFO request
+* bugfix: parameter list wasn't processed after \<Separator>
+* GDL-XML language is auto-detected by \<Symbol> root tag in file
 
 ## 1.27.0
 * Reference guide 27
