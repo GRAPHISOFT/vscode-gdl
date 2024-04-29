@@ -1106,11 +1106,11 @@
     },
     "\"ui_pict_radiobutton\" command": {
       "prefix": "ui_pict_radiobutton",
-      "body": "ui_pict_radiobutton ${01:name}, ${02:value}, ${03:picture_reference}, ${04:x}, ${05:y}, ${06:width}, ${07:height}, ${08:borderFlag}"
+      "body": "ui_pict_radiobutton ${01:name}, ${02:value}, ${03:text}, ${04:picture_reference}, ${05:x}, ${06:y}, ${07:width}, ${08:height}"
     },
     "\"ui_pict_radiobutton{2}\" command": {
       "prefix": "ui_pict_radiobutton{2}",
-      "body": "ui_pict_radiobutton{2} \"${01:name}\", ${02:value}, ${03:picture_reference}, ${04:x}, ${05:y}, ${06:width}, ${07:height}, ${08:borderFlag}"
+      "body": "ui_pict_radiobutton{2} \"${01:name}\", ${02:value}, ${03:text}, ${04:picture_reference}, ${05:x}, ${06:y}, ${07:width}, ${08:height}"
     },
     "\"ui_listfield\" command": {
       "prefix": "ui_listfield",
@@ -4675,6 +4675,10 @@
     "request (\"Configuration_number\")": {
       "prefix": "request (\"Configuration_number",
       "body": "n = REQUEST (\"Configuration_number\", \"\", ${01:stConfigurationNumber})"
+    },
+    "request (\"GSID_INFO\")": {
+      "prefix": "request (\"GSID_INFO",
+      "body": "n = REQUEST (\"GSID_INFO\", \"\", ${01:userId}, ${02:organizationIds})"
     },
     "request (extension_name)": {
       "prefix": "request (extension_name",

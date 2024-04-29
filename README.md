@@ -6,7 +6,7 @@ Development environment for Archicad 27 GDL language (XML, HSF and GDL source co
 
 [You can get the extension from the marketplace.](https://marketplace.visualstudio.com/items?itemName=GRAPHISOFT.gdl)
 
-.xml files will be automatically detected as GDL-XML, .gdl files as GDL-HSF language.
+.xml files with \<Symbol> root tag will be automatically detected as GDL-XML, .gdl files as GDL-HSF language.
   * To switch between XML and GDL-XML syntax coloring, use context menu commands: "Switch language to GDL-XML" or "Switch language to XML"
   * Change unknown file types to GDL-XML or GDL-HSF by using the context menu.
   * Or just use VS Code's language selector, in the lower right of the status bar.
@@ -165,6 +165,11 @@ Some valid syntaxes won't be highlighted, and some invalid syntaxes will be high
 1. Press Ctrl-S to apply changes to the user settings
 
 # Release Notes
+
+## 1.27.1
+* new GSID_INFO request
+* bugfix: parameter list wasn't processed after \<Separator>
+* GDL-XML language is auto-detected by \<Symbol> root tag in file
 
 ## 1.27.0
 * Reference guide 27

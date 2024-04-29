@@ -31,59 +31,51 @@ export class Parameter {
 
             this.fix = (content.match(/<Fix\/>/) !== null);
             
-            let flags = content.match(/(?<=<ParFlg_).*?(?=\/>)/g);
-            if (flags === null) {
-                flags = [];
-            }
+            let flags = content.match(/(?<=<ParFlg_).*?(?=\/>)/g) ?? [] as string[];
             this.child  = (flags.indexOf("Child") !== -1);
             this.bold   = (flags.indexOf("BoldName") !== -1);
             this.hidden = (flags.indexOf("Hidden") !== -1);
             
-            if (this.type === "Title") {
-                this.defaultvalue = "";
+            const defaultvalue_ = content.match(/<(Value|ArrayValues)(.*?)>((.|[\n\r])*?)(?=<\/\1>)/m)
+                                    ?? ["", "", ""];   // Value tag isn't present for Title and Separator
+            const isArray = (defaultvalue_[1] === "ArrayValues");
+            const attribs = defaultvalue_[2];
+            const value = defaultvalue_[3];
+
+            const meaning_ = attribs.match(/Meaning="(.*?)"/);
+            if (meaning_) {
+                this.meaning = meaning_[1];
+            }
+
+            if (!isArray && this.type !== "Dictionary") {    // simple type
+                if (this.type === "String") {
+                    const value_ = value.match(/<!\[CDATA\[(".*?")\]\]>/);
+                    if (value_) {
+                        this.defaultvalue = value_[1];
+                    } else {
+                        this.defaultvalue = "";
+                    }
+                } else {
+                    this.defaultvalue = value;
+                }
                 this.vardim1 = 0;
                 this.vardim2 = 0;
-            } else {
-                const defaultvalue_ = content.match(/<(Value|ArrayValues)(.*?)>((.|[\n\r])*?)(?=<\/\1>)/m);
-                const isArray = (defaultvalue_![1] === "ArrayValues");
-                const attribs = defaultvalue_![2];
-                const value = defaultvalue_![3];
 
-                const meaning_ = attribs.match(/Meaning="(.*?)"/);
-                if (meaning_) {
-                    this.meaning = meaning_[1];
-                }
+            } else {  // array or dict
+                
+                this.defaultvalue = value.replace(/^\s*[\n\r]*/, "").replace(/^\t\t\t\t/gm, "");
 
-                if (!isArray && this.type !== "Dictionary") {    // simple type
-                    if (this.type === "String") {
-                        const value_ = value.match(/<!\[CDATA\[(".*?")\]\]>/);
-                        if (value_) {
-                            this.defaultvalue = value_[1];
-                        } else {
-                            this.defaultvalue = "";
-                        }
-                    } else {
-                        this.defaultvalue = value;
-                    }
+                const dim1_ = attribs.match(/FirstDimension="(\d+)"/);
+                const dim2_ = attribs.match(/SecondDimension="(\d+)"/);
+                if (dim1_) {
+                    this.vardim1 = parseInt(dim1_[1], 10);
+                } else {
                     this.vardim1 = 0;
+                }
+                if (dim2_) {
+                    this.vardim2 = parseInt(dim2_[1], 10);
+                } else {
                     this.vardim2 = 0;
-
-                } else {  // array or dict
-                    
-                    this.defaultvalue = value.replace(/^\s*[\n\r]*/, "").replace(/^\t\t\t\t/gm, "");
-
-                    const dim1_ = attribs.match(/FirstDimension="(\d+)"/);
-                    const dim2_ = attribs.match(/SecondDimension="(\d+)"/);
-                    if (dim1_) {
-                        this.vardim1 = parseInt(dim1_[1], 10);
-                    } else {
-                        this.vardim1 = 0;
-                    }
-                    if (dim2_) {
-                        this.vardim2 = parseInt(dim2_[1], 10);
-                    } else {
-                        this.vardim2 = 0;
-                    }
                 }
             }
         } else {
@@ -121,7 +113,7 @@ export class Parameter {
     }
 
     public getDefaultString() : string {
-        if (this.type !== "Title") {
+        if (this.type !== "Title" && this.type !== "Separator") {
             let defaultvalue : string; 
             if (this.type === "Dictionary" || this.vardim1 || this.vardim2) {
                 defaultvalue =  this.getDimensionString() +

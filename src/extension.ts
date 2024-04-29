@@ -1161,11 +1161,9 @@ export async function hasLibPartData(uri? : vscode.Uri) : Promise<boolean> {
 
 async function IsLibpart(document? : vscode.TextDocument) : Promise<boolean> {
     if (modeGDLXML(document)) {
-        // xml files opened as gdl-xml by extension
-        // if libpartdata.xml exists in same folder, this is pure xml
-        // TODO check xml root tag instead
-        // if an xml file is not saved yet, it is a libpart by languageID
-        return !(await hasLibPartData(vscode.Uri.joinPath(document!.uri, "..")));
+        // check xml root tag
+        const gdlXML = /^[\n\r\s]*(<\?xml\s.*?\?>[\n\r\s]*)?<Symbol\s/mi;
+        return gdlXML.test(document!.getText());
     } else if (modeGDLHSF(document))  {
         // gdl files of libparts should have a libpartdata.xml at parent folder
         return await hasLibPartData(vscode.Uri.joinPath(document!.uri, "../.."));
