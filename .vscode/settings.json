@@ -9,5 +9,10 @@
     // Turn off tsc task auto detection since we have the necessary tasks as npm scripts
     "typescript.tsc.autoDetect": "off",
     "typescript.tsdk": "node_modules\\typescript\\lib",
-    "cmake.configureOnOpen": false
+    "cmake.configureOnOpen": false,
+    "workbench.colorCustomizations": {
+        "activityBar.background": "#2B301F",
+        "titleBar.activeBackground": "#3C432B",
+        "titleBar.activeForeground": "#F9FAF8"
+    }
 }

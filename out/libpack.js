@@ -30,9 +30,7 @@ async function allPackages() {
         .filter((e) => e !== undefined);
 }
 exports.allPackages = allPackages;
-// TODO parse all libpartdata->localizationinfo
-// create localization-pathnametable pairs
-// merge all pathnametables for selected localization
+// TODO merge all pathnametables for selected localization
 class PackageInfo {
     packageInfo;
     packageName;
@@ -55,26 +53,56 @@ class PackageInfo {
         }
         return new PackageInfo(packageInfoUri, packageName, locDataUri, locData);
     }
-    /** locale -> pathNameTable map.
-     *  Contains only entries with both sides filled but file existence is not checked.
+    /** locale -> LanguageFiles map.
+     *  Contains entries of package.info->LocDataPath but file existence is not checked.
      */
-    _pathNameTableLocalizations;
+    localization = new Map();
+    mappingDefinitions = undefined;
     constructor(packageInfo, packageName, locDataUri, localizationData) {
         this.packageInfo = packageInfo;
         this.packageName = packageName;
         this.locDataUri = locDataUri;
+        const mappingDefinitionsTag = /(?<=^\s*<MappingDefinitions>).*?(?=<\/MappingDefinitions>)/mig;
         const pathnametableTag = /(?<=^\s*<PathNameTable\s+).*?(?=\/>)/mig;
+        const dictionaryTag = /(?<=^\s*<Dictionary\s+).*?(?=\/>)/mig;
         const languageAttrib = /(?<=\blanguage\s*=\s*").*?(?=")/i;
         const pathAttrib = /(?<=\bpath\s*=\s*").*?(?=")/i;
-        const pathNameTableTags = [...localizationData.matchAll(pathnametableTag)];
-        this._pathNameTableLocalizations = new Map(pathNameTableTags.map(tag => {
+        const typeAttrib = /(?<=\btype\s*=\s*")(fileName|folderName|symbolStrings)(?=")/i;
+        const mappingDefinitions = localizationData.match(mappingDefinitionsTag); // should contain at most one
+        if (mappingDefinitions !== null) {
+            const mappingDefinitions_path = path.join(packageInfo.fsPath, "..", mappingDefinitions[0]);
+            this.mappingDefinitions = vscode.Uri.file(mappingDefinitions_path);
+        }
+        for (const tag of [...localizationData.matchAll(pathnametableTag)]) {
             const language = tag[0].match(languageAttrib)?.[0];
             const path = tag[0].match(pathAttrib)?.[0];
-            if (language === undefined || path === undefined) {
-                return undefined;
+            if (language !== undefined && path !== undefined) {
+                const uri = vscode.Uri.joinPath(locDataUri, "..", path ?? "");
+                this.localization.set(language, { pathNameTable: uri });
             }
-            return [language, vscode.Uri.joinPath(locDataUri, "..", path ?? "")];
-        }).filter((e) => e !== undefined));
+        }
+        for (const tag of [...localizationData.matchAll(dictionaryTag)]) {
+            const language = tag[0].match(languageAttrib)?.[0];
+            const path = tag[0].match(pathAttrib)?.[0];
+            const type = tag[0].match(typeAttrib)?.[0];
+            if (language !== undefined && path !== undefined && type !== undefined) {
+                const uri = vscode.Uri.joinPath(locDataUri, "..", path ?? "");
+                let dictionary = this.localization.get(language);
+                if (dictionary === undefined) {
+                    dictionary = {};
+                    this.localization.set(language, dictionary);
+                }
+                if (type === "fileName") {
+                    dictionary.fileDictionary = uri;
+                }
+                else if (type === "folderName") {
+                    dictionary.folderDictionary = uri;
+                }
+                else if (type === "symbolStrings") {
+                    dictionary.scriptDictionary = uri;
+                }
+            }
+        }
     }
 }
 class PathNameTreeItem {
@@ -352,6 +380,10 @@ class PathNameTableView {
     static warnPackageInfoNotFound() {
         vscode.window.showWarningMessage("Can't find \"package.info\", don't know where to look for source files.");
     }
+    /** check that pathnametable entries match the files in source
+     *
+     *  localization files are checked against data in package.info
+     */
     async checkContent(_progress, _token) {
         const packagePath = await this.getPackagePath();
         if (packagePath === undefined) {
@@ -361,27 +393,48 @@ class PathNameTableView {
         else {
             // assume no duplicate names TODO check
             // collect differences
-            const diskLibparts = new Map();
+            const referredLibparts = new Map();
             const tableFiles = [...this.root].filter(e => e.isFile);
             const tableLibparts = new Map(tableFiles.map(e => [e.entry.fileName, e]));
+            const packageinfo_uri = vscode.Uri.file(path.join(packagePath, "package.info"));
+            const packageinfo = await PackageInfo.read(packageinfo_uri);
+            // files in table
             const unneededInTable = new Set(tableLibparts.keys());
-            unneededInTable.delete("mappingDefinitions.json"); // TODO handle based on localizationdata.info
-            for await (const uri of (0, extension_1.getLibparts)(vscode.Uri.file(packagePath))) {
+            // add source files
+            const source_path = path.join(packagePath, "Source");
+            for await (const uri of (0, extension_1.getLibparts)(vscode.Uri.file(source_path))) {
                 const key = uri.binaryFileName;
-                diskLibparts.set(key, uri);
+                referredLibparts.set(key, uri);
                 unneededInTable.delete(key);
             }
-            const missingFromTable = new Set(diskLibparts.keys());
+            // add localization files
+            let loc_uris = [packageinfo.packageInfo,
+                packageinfo.locDataUri,
+                packageinfo.mappingDefinitions,
+                ...[...packageinfo.localization.values()].flatMap(loc => [loc.pathNameTable,
+                    loc.fileDictionary,
+                    loc.folderDictionary,
+                    loc.scriptDictionary])
+            ];
+            for (const uri of loc_uris) {
+                if (uri !== undefined) {
+                    const key = path.basename(uri.fsPath);
+                    referredLibparts.set(key, { binaryFileName: key, sourceUri: uri });
+                    unneededInTable.delete(key);
+                }
+            }
+            // keep not found entries
+            const missingFromTable = new Set(referredLibparts.keys());
             for (const key of tableLibparts.keys()) {
                 missingFromTable.delete(key);
             }
-            // change table tada
+            // change table data
             for (const key of unneededInTable) {
                 const remove = tableLibparts.get(key);
                 remove.parent.deleteChild(remove.id);
             }
             for (const key of missingFromTable) {
-                const uri = diskLibparts.get(key);
+                const uri = referredLibparts.get(key);
                 const relPath = path.relative(packagePath, uri.sourceUri.fsPath);
                 this.addEntry({ fileName: uri.binaryFileName,
                     meta: { translatePathName: null },
