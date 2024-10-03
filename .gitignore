@@ -105,6 +105,7 @@ dist
 
 # vscode config
 .vscode/
+.vscode/settings.json
 
 # packaged extension
 *.vsix

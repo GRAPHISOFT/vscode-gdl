@@ -6,10 +6,16 @@ const vscode = require("vscode");
 const extension_1 = require("./extension");
 const Parser = require("./parsexmlgdl");
 class LibpartInfo {
+    libpartdata_uri;
+    guid;
+    _root_uri;
+    _images_uri;
+    _name;
+    scriptsCache = new Map();
+    imagesCache;
     constructor(libpartdata_uri, guid) {
         this.libpartdata_uri = libpartdata_uri;
         this.guid = guid;
-        this.scriptsCache = new Map();
     }
     get name() {
         if (this._name === undefined) {
@@ -23,10 +29,17 @@ class LibpartInfo {
         }
         return this._root_uri;
     }
+    get images_uri() {
+        if (this._images_uri === undefined) {
+            this._images_uri = vscode.Uri.joinPath(this.root_uri, "images");
+        }
+        return this._images_uri;
+    }
+    /** check whether has file relative to root_uri
+     *  optionally offering masterscript as fallback
+     *  then offering libpartdata.xml as fallback
+     */
     async relative_withFallback(relative, masterscript) {
-        // check whether has file relative to root_uri
-        // optionally offering masterscript as fallback
-        // then offering libpartdata.xml as fallback
         let target = vscode.Uri.joinPath(this.root_uri, relative);
         if ((await (0, extension_1.fileExists)(target))) {
             return target;
@@ -61,20 +74,77 @@ class LibpartInfo {
             return result;
         }
     }
+    /** return map of existing script types and uris (unsaved files not included) */
     async allScripts() {
-        // return array of uris for each script, null if doesn't exist on disk
-        return Parser.Scripts.map(async (script) => await this.scriptUri(script));
+        const uris = await Promise.all(Parser.Scripts.map(async (script) => [script, await this.scriptUri(script)]));
+        return new Map(uris.filter((e) => e[1] !== null));
+    }
+    /** return names and uris of files in images folder */
+    async allImages() {
+        try {
+            const entries = await vscode.workspace.fs.readDirectory(this.images_uri);
+            const imagenames = entries.filter(e => e[1] !== vscode.FileType.Directory)
+                .map(e => e[0]);
+            return new Map(imagenames.map(e => [e, vscode.Uri.joinPath(this.images_uri, e)]));
+        }
+        catch {
+            return new Map();
+        }
+    }
+    async imageIndex(name) {
+        if (this.imagesCache === undefined) {
+            // enumerate images in libpartdata - creates this.imagesCache
+            await this.embedded_image_insertposition();
+        }
+        return this.imagesCache.get(name);
+    }
+    /**  returns position and picture index where new embedded images can be added */
+    async embedded_image_insertposition() {
+        const libpartdata_doc = await vscode.workspace.openTextDocument(this.libpartdata_uri);
+        const libpartdata = libpartdata_doc.getText();
+        let greatestIndex = 0;
+        let lastPosition = -1;
+        // find greatest index and last image position
+        this.imagesCache = new Map();
+        for (const match of libpartdata.matchAll(/<GDLPict\s(.*?\s*SubIdent\s*=\s*"(\d+)".*?)\/>/migd)) {
+            const index = parseInt(match[2]);
+            greatestIndex = Math.max(greatestIndex, index);
+            lastPosition = Math.max(lastPosition, match.indices[0][1]);
+            // get name and store in cache with index
+            const namematch = match[1].match(/\sName\s*=\s*"(.*?)"/i);
+            if (namematch) {
+                this.imagesCache.set(namematch[1], index);
+            }
+        }
+        // determine insert position
+        let insertPosition;
+        if (lastPosition == -1) {
+            // no images yet, insert before end of LibpartData
+            const found = libpartdata.search(/<\/LibpartData>/mig);
+            if (found !== -1) {
+                insertPosition = libpartdata_doc.positionAt(found);
+            }
+            else {
+                // no LibpartData, insert at end
+                insertPosition = libpartdata_doc.positionAt(libpartdata.length - 1);
+            }
+        }
+        else {
+            // insert after last GDLPict
+            insertPosition = libpartdata_doc.positionAt(lastPosition + 1);
+        }
+        return { position: insertPosition, index: greatestIndex + 1 };
     }
 }
 exports.LibpartInfo = LibpartInfo;
 class WSSymbols {
+    // folder contents indexed by root folder (for multi-root workspaces)
+    libparts = [];
+    unprocessed = true;
+    // fired when finished scanning workspace
+    _onDidCollect = new vscode.EventEmitter();
+    onDidCollect = this._onDidCollect.event;
     constructor(context) {
-        // folder contents indexed by root folder (for multi-root workspaces)
-        this.libparts = [];
-        this.unprocessed = true;
-        // fired when finished scanning workspace
-        this._onDidCollect = new vscode.EventEmitter();
-        this.onDidCollect = this._onDidCollect.event;
         context.subscriptions.push(vscode.workspace.onDidChangeWorkspaceFolders(async () => this.changeFolders()), vscode.workspace.onDidCreateFiles(async () => this.changeFolders()), vscode.workspace.onDidDeleteFiles(async () => this.changeFolders()), vscode.workspace.onDidRenameFiles(async () => this.changeFolders()));
     }
     async collectLibparts() {
