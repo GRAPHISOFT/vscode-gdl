@@ -4636,6 +4636,18 @@
       "prefix": "request (\"TEXTBLOCK_INFO",
       "body": "n = REQUEST (\"TEXTBLOCK_INFO\", ${01:textblock_name}, ${02:width}, ${03:height})"
     },
+    "request (\"KEYNOTE_FOLDER_TREE\")": {
+      "prefix": "request (\"KEYNOTE_FOLDER_TREE",
+      "body": "n = REQUEST (\"KEYNOTE_FOLDER_TREE\", ${01:keynoteFolderTreeInput}, ${02:keynoteFolderTreeOutput})"
+    },
+    "request (\"KEYNOTE_INFO\")": {
+      "prefix": "request (\"KEYNOTE_INFO",
+      "body": "n = REQUEST (\"KEYNOTE_INFO\", ${01:keynoteInfoInput}, ${02:keynoteInfoOutput})"
+    },
+    "request (\"MEP_PIPE_FLEXIBLE_SEGMENT_GEOMETRY\")": {
+      "prefix": "request (\"MEP_PIPE_FLEXIBLE_SEGMENT_GEOMETRY",
+      "body": "n = REQUEST (\"MEP_PIPE_FLEXIBLE_SEGMENT_GEOMETRY\", ${01:InputParameters}, ${02:FlexibleSegmentGeometry})"
+    },
     "request (\"MEP_ROUTE_ATTRIBUTES\")": {
       "prefix": "request (\"MEP_ROUTE_ATTRIBUTES",
       "body": "n = REQUEST (\"MEP_ROUTE_ATTRIBUTES\", ${01:InputAttributes}, ${02:MEPRouteAttributes})"

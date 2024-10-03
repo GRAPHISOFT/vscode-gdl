@@ -7,7 +7,7 @@
                             Returns attributes specific to the MEP routing tool. Can be used only in MEP routing. <span class="italic">Expression returns 0 and contains dummy return values (empty dictionary) if used in parameter script, causing additional warning.</span>
                         </p>
                         <p>
-                            <span class="italic">Compatibility: introduced in Archicad 27.</span>
+                            <span class="italic">Compatibility: introduced in Archicad 27. The floorPlanAndSection and overheadLine parameters were introduced in Archicad 28.</span>
                         </p>
                         <div style="margin-left: 1em">
                             <div style="text-indent: -1em"><code><b>InputAttributes: </b></code>(dictionary) should be an empty, predefined dictionary.</div>
@@ -36,16 +36,31 @@
                         <div style="margin-left: 1em">
                             <div style="text-indent: -1em"><code><b>.insulation.surface: </b></code>(integer) surface index of insulation</div>
                         </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>.floorPlanAndSection.cutPlanePosition: </b></code>(integer) cut plane position value: 1 - At Upper Display Limit, 2 - By View Settings</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>.floorPlanAndSection.floorPlanDisplay: </b></code>(integer) floor plan display value: 1 - Projected, 2 - Projected with Overhead, 3 - Symbolic</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>.floorPlanAndSection.showProjection: </b></code>(integer) show projection value: 1 - To Floor Plan Range, 2 - To Absolute Display Limit, 3 - Entire Element</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>.overheadLine.linetype: </b></code>(integer) line type index of overhead line</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>.overheadLine.pen: </b></code>(integer) pen index of overhead line</div>
+                        </div>
                         <p>
                             <span class="italic">See also <a class="link" href="reference/SYMB_VIEW_PEN.html">SYMB_VIEW_PEN</a> and <a class="link" href="reference/SYMB_MAT.html">SYMB_MAT</a> global variables for more attributes.</span>
                         </p>
                     
-                    <div class="example"><a id="id611121"/><p class="title"><b>Example:
+                    <div class="example"><a id="id609170"/><p class="title"><b>Example:
 </b></p><div class="example-contents"><pre class="programlisting">DICT InputAttributes, MEPRouteAttributes
 n = REQUEST ("MEP_ROUTE_ATTRIBUTES", InputAttributes, MEPRouteAttributes)</pre></div></div>
                 <hr/><a href="002.015.html#MEP_ROUTE_ATTRIBUTES_gdlrequest">Related in Miscellaneous</a><p>
                 <span class="bold"><strong>GDL Reference Guide</strong></span>
             </p><p>
-                <span class="trademark">Copyright</span><sup>©</sup> 2023 by Graphisoft, all rights reserved.
+                <span class="trademark">Copyright</span><sup>©</sup> 2024 by Graphisoft, all rights reserved.
                 Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
             </p></body></html>

@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../../"/><title>KEYNOTE_INFO</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlrequest"><h3 id="KEYNOTE_INFO_gdlrequest" style="font-family: monospace">KEYNOTE_INFO</h3>
+                    <pre class="programlisting">n = REQUEST("KEYNOTE_INFO", keynoteInfoInput, keynoteInfoOutput)</pre>
+                    
+                        <p>
+                            Returns requested information about Keynotes as defined by the input parameter.
+                            Can be used only in 2D Scripts of Keynote Legends placed on layouts. <span class="italic">Expression returns 0 and contains dummy return values (empty dictionary) if used in other situations, triggering a warning.</span>
+                        </p>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>keynoteInfoInput: </b></code>(dictionary) defines the parameters for collecting Keynote information.</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>keynoteInfoInput.source: </b></code>(string) keyword defining the source of the requested Keynotes. This key is optional. If it does not exist, the request collects the visible Keynotes. Possible values:
+                            </div>
+                            <div><code>"ALLKEYNOTES"</code></div>
+                            <div><code>"VISIBLEKEYNOTES"</code></div>
+                        </div>
+                        <div style="margin-left: 1em">
+							<div style="text-indent: -1em"><code><b>keynoteInfoInput.filterToFolders: </b></code>(array) contains a dictionary for each folder. It may contain at most one element. This key is optional. If it does not exist, the request collects Keynote folders and items in all folders of the source.</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>keynoteInfoInput.filterToFolders[n].folderId: </b></code>(string) id of the folder to filter to, as returned by <a class="xref" href="reference/requests/KEYNOTE_FOLDER_TREE.html"><code>KEYNOTE_FOLDER_TREE</code></a></div>
+                        </div>
+                        <div style="margin-left: 1em">
+							<div style="text-indent: -1em"><code><b>keynoteInfoInput.dataTypeToGet: </b></code>(dictionary) defines the data type of the keynote items and folders which the request should return.</div>
+                        </div>
+                        <div style="margin-left: 1em">
+							<div style="text-indent: -1em"><code><b>keynoteInfoInput.dataTypeToGet.folderKey: </b></code>(boolean) defines if Keynote folder keys are required.</div>
+                        </div>
+                        <div style="margin-left: 1em">
+							<div style="text-indent: -1em"><code><b>keynoteInfoInput.dataTypeToGet.folderTitle: </b></code>(boolean) defines if Keynote folder titles are required.</div>
+                        </div>
+                        <div style="margin-left: 1em">
+							<div style="text-indent: -1em"><code><b>keynoteInfoInput.dataTypeToGet.folderReference: </b></code>(boolean) defines if Keynote folder references are required.</div>
+                        </div>
+                        <div style="margin-left: 1em">
+							<div style="text-indent: -1em"><code><b>keynoteInfoInput.dataTypeToGet.itemKey: </b></code>(boolean) defines if Keynote item keys are required.</div>
+                        </div>
+                        <div style="margin-left: 1em">
+							<div style="text-indent: -1em"><code><b>keynoteInfoInput.dataTypeToGet.itemTitle: </b></code>(boolean) defines if Keynote item titles are required.</div>
+                        </div>
+                        <div style="margin-left: 1em">
+							<div style="text-indent: -1em"><code><b>keynoteInfoInput.dataTypeToGet.itemDescription: </b></code>(boolean) defines if Keynote item descriptions are required.</div>
+                        </div>
+                        <div style="margin-left: 1em">
+							<div style="text-indent: -1em"><code><b>keynoteInfoInput.dataTypeToGet.itemReference: </b></code>(boolean) defines if Keynote item references are required.</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>keynoteInfoInput.includeAncestry: </b></code>(string) keyword defining the part of ancestry to be returned. This key is optional. If it does not exist, ParentOnly option is the default value. Possible values:
+                            </div>
+                            <div><code>"PARENTONLY"</code></div>
+                            <div><code>"FILTEREDANCESTRY": </code>Filters ancestry based on the value of filterToFolders.</div>
+                            <div><code>"FULLANCESTRY"</code></div>
+                        </div>
+                        <div style="margin-left: 1em">
+							<div style="text-indent: -1em"><code><b>keynoteInfoInput.omitConflict: </b></code>(boolean) defines if conflicting Keynote item or folder fields should be omitted, or a placeholder text returned instead. This key is optional. If it does not exist, placeholder text is returned. </div>
+                        </div>
+						<div style="margin-left: 1em">
+							<div style="text-indent: -1em"><code><b>keynoteInfoInput.sortingType: </b></code>(string) defines the sorting type used on Keynote items and folders in the Keynote Legend. This key is optional. If it does not exist, the Keynote items and folders will be sorted alphabetically.</div>
+							<div><code>"ALPHABETICAL": </code>Alphabetical sorting is based on the selected column order.</div>
+                            <div><code>"HIERARCHICAL": </code>Hierarchical sorting gives back the Keynotes palette order, except that Keynote items without folders always appear at the top of the list.</div>
+                        </div>
+						<div style="margin-left: 1em">
+							<div style="text-indent: -1em"><code><b>keynoteInfoInput.activeKeynoteColumns: </b></code>(array) contains dictionaries corresponding to each selected Keynote item column. It may contain at least one and at most four elements. This key is optional. If it does not exist, the request sorts items based on the default <span class="italic">[KEYNOTE_KEY, KEYNOTE_TITLE]</span> active column order.</div>
+                        </div>
+						<div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>keynoteInfoInput.activeKeynoteColumns[n].keynoteField: </b></code>(string) selected field of the nth active Keynote item column.</div>
+                            <div><code>"NONE"</code></div>
+							<div><code>"KEYNOTE_KEY"</code></div>
+                            <div><code>"KEYNOTE_TITLE"</code></div>
+                            <div><code>"KEYNOTE_DESCRIPTION"</code></div>
+                            <div><code>"KEYNOTE_REFERENCE"</code></div>
+                        </div>
+						<div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>keynoteInfoInput.activeKeynoteColumns[n].keynoteMerge: </b></code>(bool) defines if nth active Keynote item column is merged with the next column.</div>
+                        </div>
+						
+						<div style="margin-left: 1em">
+							<div style="text-indent: -1em"><code><b>keynoteInfoInput.activeFolderColumns: </b></code>(array) contains an array of dictionaries corresponding to each selected Keynote folder column. It may contain at least one and at most four element. This key is optional. If it does not exist, the request sorts items based on the default <span class="italic">[FOLDER_KEY (merged with), FOLDER_TITLE]</span> active column order.</div>
+                        </div>
+						<div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>keynoteInfoInput.activeFolderColumns[n].folderField: </b></code>(string) selected field of the nth active Keynote folder column.</div>
+                            <div><code>"NONE"</code></div>
+							<div><code>"FOLDER_KEY"</code></div>
+                            <div><code>"FOLDER_TITLE"</code></div>
+                            <div><code>"FOLDER_REFERENCE"</code></div>
+                        </div>
+						<div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>keynoteInfoInput.activeFolderColumns[n].folderMerge: </b></code>(bool) defines if nth active Keynote folder column is merged with the next column.</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>keynoteInfoOutput: </b></code>(dictionary) requested Keynote information </div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>keynoteInfoOutput.subFolders[n]: </b></code>(dictionary) information about Keynote folder </div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>keynoteInfoOutput.subFolders[n].key: </b></code>(string) the key field of the Keynote folder. This key is optional. </div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>keynoteInfoOutput.subFolders[n].title: </b></code>(string) the title field of the Keynote folder. This key is optional. </div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>keynoteInfoOutput.subFolders[n].reference: </b></code>(string) the reference field of the Keynote folder. This key is optional. </div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>keynoteInfoOutput.subFolders[n].items: </b></code>(array) list of the Keynote items in the folder. This key is optional. </div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>keynoteInfoOutput.subFolders[n].subfolders: </b></code>(array) list of the subfolders in the folder. This key is optional. </div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>keynoteInfoOutput.subFolders[n].subfolders[m]: </b></code>(dictionary) information about Keynote subfolder. Its fields are similar to those of subFolders[n]. </div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>keynoteInfoOutput.items: </b></code>(array) list of items </div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>keynoteInfoOutput.items[n]: </b></code>(dictionary) information about Keynote item</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>keynoteInfoOutput.items[n].key: </b></code>(string) the key field of the Keynote item. This key is optional. </div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>keynoteInfoOutput.items[n].title: </b></code>(string) the title field of the Keynote item. This key is optional. </div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>keynoteInfoOutput.items[n].description: </b></code>(string) the description field of the Keynote item. This key is optional. </div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>keynoteInfoOutput.items[n].reference: </b></code>(string) the reference field of the Keynote item. This key is optional. </div>
+                        </div>
+                    
+                <hr/><a href="002.015.html#KEYNOTE_INFO_gdlrequest">Related in Miscellaneous</a><p>
+                <span class="bold"><strong>GDL Reference Guide</strong></span>
+            </p><p>
+                <span class="trademark">Copyright</span><sup>©</sup> 2024 by Graphisoft, all rights reserved.
+                Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+            </p></body></html>
