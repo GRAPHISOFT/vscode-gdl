@@ -13,6 +13,7 @@ import { Constants } from './constparser';
 import path = require('path');
 import { Jumps, Jump } from './jumpparser';
 import { Variables } from './varparser';
+import { Parameter } from './paramlistparser';
 
 export async function activate(context: vscode.ExtensionContext) {
     //console.log("extension.activate");
@@ -388,8 +389,9 @@ export class GDLExtension
                 const text = this._editor.document.getText();
                 if (text) {
                     for (const p of await this.hsflibpart.paramlist()) {
-                        //TODO store regexs?
-                        const find = new RegExp("\\b" + p.nameCS + "\\b", "ig");
+                        const find = new RegExp("\\b(?<!\\.)" + p.nameCS + "\\b", "ig");
+                            // this matches param.key even if param is not a dict,
+                            // better to highlight possible error
                         let current : RegExpExecArray | null;
                         while ((current = find.exec(text)) !== null) {
                             const start = this._editor.document.positionAt(current.index);
@@ -990,12 +992,8 @@ export class GDLExtension
     }
 
     async provideHover (document: vscode.TextDocument, position: vscode.Position): Promise<vscode.Hover> {
-        // implemented only for hsf libparts
-        if (this.hsflibpart && this.infoFromHSF) {
-            const word = document.getText(document.getWordRangeAtPosition(position));
-            const paramlist = await this.hsflibpart.paramlist();
-
-            const p = paramlist.get(word);
+        if (this.infoFromHSF) {
+            const p = await this.isParameter(document, position);
             if (p) {
                 return new vscode.Hover([
                     new vscode.MarkdownString("**\"" + p.desc + "\"** `" + p.nameCS + "`" +
@@ -1182,83 +1180,141 @@ export class GDLExtension
         return symbols;
     }
 
-    async provideDefinition(document: vscode.TextDocument, position: vscode.Position, cancel: vscode.CancellationToken): Promise<vscode.LocationLink[]> {
-        let definitions : vscode.LocationLink[] = [];
+    private async isParameter(document: vscode.TextDocument, position: vscode.Position): Promise<Parameter | undefined> {
+        // implemented only for hsf libparts
+        if (!this.hsflibpart) return undefined;
 
-        const label = this.isLibpartReference(document, position)     // Parser.GDLLibpartReference
-                      ?? this.isSubroutineDefinition(position)        // vscode.DocumentSymbol
-                      ?? this.isSubroutineCall(document, position);   // Jump
+        const word = document.getText(document.getWordRangeAtPosition(position, /\b(?<!\.)[_~a-z][_~0-9a-z]*\b/i));
+        const paramlist = await this.hsflibpart.paramlist();
+        return paramlist.get(word);
+    }
 
-        if (label instanceof Parser.GDLLibpartReference) {
-            const link = await this.libpartLinks(label, document, cancel); 
-            if (link !== undefined) {
-                // if there are multiple results, select target by matching workspace folder
-                if (link.length > 1) {
-                    definitions = link.filter(t => {
-                        const target_wsfolder = vscode.workspace.getWorkspaceFolder(t.targetUri);
-                        const call_wsfolder = vscode.workspace.getWorkspaceFolder(document.uri);
-                        return target_wsfolder === call_wsfolder;
-                    });
-                    // if narrowed results are zero, show all matches
-                    if (definitions.length === 0) {
-                        definitions = link;
-                    }
-                } else {
-                    definitions = link;
-                }
-            }
-        } else if (label !== undefined) {
-            if (label instanceof vscode.DocumentSymbol) {   //subroutine definition, link back to itself
-                definitions = [{ originSelectionRange:  label.selectionRange,
-                                 targetRange:           label.range,
-                                 targetSelectionRange:  label.selectionRange,
-                                 targetUri:             document.uri }];
+    private async libpartReferenceLinks(ref: Parser.GDLLibpartReference, document: vscode.TextDocument, cancel: vscode.CancellationToken): Promise<vscode.LocationLink[]> {
+        const links = await this.libpartLinks(ref, document, cancel);
+        if (links === undefined) return [];
 
-            } else {    // subroutine call
-                let functionSymbols : {symbol: vscode.DocumentSymbol, document: vscode.TextDocument}[] = [];
-
-                for (const [_scriptType, scriptUri] of await this.hsflibpart!.info.allScripts()) {
-                    const otherdoc = await vscode.workspace.openTextDocument(scriptUri);
-                    const otherscript = new Parser.ParseXMLGDL(otherdoc.getText(),
-                    true, false, false, false, false);
-                    
-                    functionSymbols = functionSymbols.concat(
-                        GDLExtension.mapFunctionSymbols(otherscript, Parser.ScriptType.ROOT, otherdoc)
-                                    .map(s => {return {symbol: s, document: otherdoc}}));
-                }
-                            
-                definitions = functionSymbols
-                    .filter(s => (label.target === s.symbol.name ||                                        // number
-                                  label.target === s.symbol.name.substring(1, s.symbol.name.length - 1)))  // "name"
-                    .map(s => ({originSelectionRange:  label.range,
-                                targetRange:           s.symbol.range,
-                                targetSelectionRange:  s.symbol.selectionRange,
-                                targetUri:             s.document.uri }));
+        // if there are multiple results, select target by matching workspace folder
+        if (links.length > 1) {
+            const links_in_folder = links.filter(t => {
+                const target_wsfolder = vscode.workspace.getWorkspaceFolder(t.targetUri);
+                const call_wsfolder = vscode.workspace.getWorkspaceFolder(document.uri);
+                return target_wsfolder === call_wsfolder;
+            });
+            // if narrowed results are zero, show all matches
+            if (links_in_folder.length === 0) {
+                return links;
+            } else {
+                return links_in_folder;
             }
         } else {
-            // try to find word in variable definitions
-            const wordRange = document.getWordRangeAtPosition(position, /\b[_~a-z][_~0-9a-z]*\b/i);
-            const word = document.getText(wordRange);
-            const allVariableDefinitions = await this.getRelevantVariableDefinitions();
+            return links;
+        }
+    }
 
-            const definitionsForWord = [...allVariableDefinitions.keys()].flatMap(uri => {
-                const scriptDefinitionsForWord = allVariableDefinitions.get(uri)!.get(word);
-                return scriptDefinitionsForWord.map(vardef => ({uri: uri, vardef: vardef}));
-            });
+    private async paramlistLinks(document: vscode.TextDocument, position: vscode.Position): Promise<vscode.LocationLink[]> {
+        const param = await this.isParameter(document, position);
+        if (param === undefined) return []; // can't have a Parameter without a ParamList
 
-            definitions = definitionsForWord.map(({uri, vardef}) => {
-                const targetRange = new vscode.Range(vardef.subline.start,
-                                                     vardef.subline.start.translate(0, vardef.subline.text.length));
-                const selectionRange = new vscode.Range(vardef.subline.start.translate(0, vardef.defstart),
-                                                        targetRange.end);
-                return {originSelectionRange:   wordRange,
-                        targetRange:            targetRange,
-                        targetSelectionRange:   selectionRange,
-                        targetUri:              uri };
-            });
+        const paramlist = await this.hsflibpart!.paramlist();   // isParameter cached awaited paramlist, will return immediately
+        const paramlist_position = paramlist.position(param.nameCS)!;
+
+        // parameter info is shown customized in hover, hide xml from this definition by returning empty range
+        const link = {  targetUri: paramlist.uri,
+                        targetRange: new vscode.Range(paramlist_position, paramlist_position) };
+        return [link];
+    }
+
+    private async jumpLinks(jump: Jump): Promise<vscode.LocationLink[]> {
+        let functionSymbols : {symbol: vscode.DocumentSymbol, document: vscode.TextDocument}[] = [];
+
+        for (const [_scriptType, scriptUri] of await this.hsflibpart!.info.allScripts()) {
+            const otherdoc = await vscode.workspace.openTextDocument(scriptUri);
+            const otherscript = new Parser.ParseXMLGDL(otherdoc.getText(),
+            true, false, false, false, false);
+            
+            functionSymbols = functionSymbols.concat(
+                GDLExtension.mapFunctionSymbols(otherscript, Parser.ScriptType.ROOT, otherdoc)
+                            .map(s => {return {symbol: s, document: otherdoc}}));
+        }
+                    
+        return functionSymbols
+            .filter(s => (jump.target === s.symbol.name ||                                        // number
+                          jump.target === s.symbol.name.substring(1, s.symbol.name.length - 1)))  // "name"
+            .map(s => ({originSelectionRange:  jump.range,
+                        targetRange:           s.symbol.range,
+                        targetSelectionRange:  s.symbol.selectionRange,
+                        targetUri:             s.document.uri }));
+    }
+
+    private async variableLinks(document: vscode.TextDocument, position: vscode.Position): Promise<vscode.LocationLink[]> {
+        const wordRange = document.getWordRangeAtPosition(position, /\b[_~a-z][_~0-9a-z]*\b/i);
+        const word = document.getText(wordRange);
+        const allVariableDefinitions = await this.getRelevantVariableDefinitions();
+
+        const definitionsForWord = [...allVariableDefinitions.keys()].flatMap(uri => {
+            const scriptDefinitionsForWord = allVariableDefinitions.get(uri)!.get(word);
+            return scriptDefinitionsForWord.map(vardef => ({uri: uri, vardef: vardef}));
+        });
+
+        return definitionsForWord.map(({uri, vardef}) => {
+            const selectionRange = new vscode.Range(vardef.subline.start.translate(0, vardef.varstart),
+                                                 vardef.subline.start.translate(0, vardef.defstart));
+                                                 // TODO handle end of declarations
+            const targetRange = new vscode.Range(vardef.subline.start,
+                                                vardef.subline.start.translate(0, vardef.subline.text.length));
+            return {originSelectionRange:   wordRange,
+                    targetRange:            targetRange,
+                    targetSelectionRange:   selectionRange,
+                    targetUri:              uri };
+        });
+    }
+
+    private async dictParamSubkeyLinks(document: vscode.TextDocument, position: vscode.Position): Promise<vscode.LocationLink[]> {
+        // give links for dict.key in paramlist if key exists as any subkey of any dict parameter
+        // it could be copied to any other structure, eg:
+        // paramlist: param.a.b
+        // dict var : var = param.a
+        // var.b    ! is param.a.b
+        const wordRange = document.getWordRangeAtPosition(position, /(?<=\.)[_~a-z][_~0-9a-z]*\b/i);
+        const subkey = document.getText(wordRange);
+
+        let links: vscode.LocationLink[] = [];
+        const paramlist = await this.hsflibpart!.paramlist();
+        for (const dict of paramlist.all_of_type("Dictionary")) {
+            if (dict.hasSubKey(subkey)) {
+                const paramlist_position = paramlist.position(dict.nameCS)!;
+                links.push({targetUri: paramlist.uri,
+                            targetRange: new vscode.Range(paramlist_position, paramlist_position) });
+            }
         }
 
-        return definitions;
+        return links;        
+    }
+
+    async provideDefinition(document: vscode.TextDocument, position: vscode.Position, cancel: vscode.CancellationToken): Promise<vscode.LocationLink[]> {
+        // different kinds of jumps
+        const label = (  this.isLibpartReference(document, position)  // Parser.GDLLibpartReference
+                      ?? this.isSubroutineDefinition(position)        // vscode.DocumentSymbol
+                      ?? this.isSubroutineCall(document, position))   // Jump
+
+        if (label) { // these can't be other types too
+            if (label instanceof Parser.GDLLibpartReference) {
+                return await this.libpartReferenceLinks(label, document, cancel);
+            } else if (label instanceof vscode.DocumentSymbol) { // link back to itself
+                return [{   originSelectionRange:  label.selectionRange,
+                            targetRange:           label.range,
+                            targetSelectionRange:  label.selectionRange,
+                            targetUri:             document.uri }];
+            } else {    // instanceof Jump
+                return await this.jumpLinks(label);
+            }
+        } else {
+            const definitions = await Promise.all([ this.paramlistLinks(document, position),
+                                                    this.dictParamSubkeyLinks(document, position),
+                                                    this.variableLinks(document, position)]);
+            // TODO don't link variables to dict keys
+            return definitions.flat();
+        }
     }
 
     /** return variable definitions from libpart */

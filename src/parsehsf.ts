@@ -53,8 +53,8 @@ export class HSFLibpart {
 
     public async paramlist() : Promise<ParamList> {
         if (this._paramlist === undefined) {
-            this._paramlist = new ParamList();
-            await this._paramlist.addfrom(this.info.root_uri);
+            this._paramlist = new ParamList(this.info.root_uri);
+            await this._paramlist.parse();
         }
         return this._paramlist;
     }

@@ -15,6 +15,8 @@ export class Parameter {
     public readonly fix : boolean;
     public readonly hidden : boolean;
 
+    private subkeys : Map<string, Array<string>> = new Map();    // d => [a.b.c.d, a.e.d]
+
     constructor(xml : string) {
         const result_ = xml.match(/^\t\t<(.*?) Name="(.*?)">((.|[\n\r])*?)^\t\t<\/\1>/m);
         if (result_) {
@@ -77,6 +79,10 @@ export class Parameter {
                 } else {
                     this.vardim2 = 0;
                 }
+
+                if (this.type === "Dictionary") {
+                    this.addsubkeys(this.defaultvalue, this.nameCS);
+                }
             }
         } else {
             this.type           = "";
@@ -92,6 +98,46 @@ export class Parameter {
             this.fix            = false;
             this.hidden         = false;
         }
+    }
+
+    private static unindent(xml: string) {
+        // remove indent of first line from all lines
+        const firstLineIndent = xml.match(/^\s*/)?.[0] ?? "";
+        const regex = new RegExp(`^${firstLineIndent}`, "gm");
+        return xml.replace(regex, "");
+    }
+
+    private addsubkeys(xml: string, prefix: string) {
+        const subkeys = /^<((Dictionary|Array)|(Integer|RealNum|String))\s+(Index|Name)="(.*?)"\s*>\s*(((.*?)<\/\3\s*>)|(\s*[\n\r]+((^\s.*[\n\r]+)*?)^<\/\2\s*>))/gm;
+        for (const match of xml.matchAll(subkeys)) {
+            const id = match[5];
+            if (match[2] !== undefined) {
+                // array or dict
+                const content = Parameter.unindent(match[10]);
+                const inArray = match[4] === "Index";
+                if (inArray) {
+                    this.addsubkeys(content, prefix);
+                } else {
+                    const name = this.addsubkey(id, prefix);
+                    this.addsubkeys(content, name);
+                }
+            } else {
+                // string or number
+                this.addsubkey(id, prefix);
+            }
+        }
+    }
+
+    private addsubkey(key: string, prefix: string) {
+        const name = `${prefix}.${key}`;
+        const keyLC = key.toLowerCase();
+        if (!this.subkeys.has(keyLC)) this.subkeys.set(keyLC, []);
+        this.subkeys.get(keyLC)!.push(name);
+        return name;
+    }
+
+    public hasSubKey(key: string) {
+        return this.subkeys.has(key.toLowerCase());
     }
 
     public getDocString(desc : boolean = true, name : boolean = true, defaultvalue : boolean = true) : vscode.MarkdownString {
@@ -136,33 +182,46 @@ export class Parameter {
 }
 
 export class ParamList implements Iterable<Parameter> {
-    private readonly parameters : Map<string, Parameter> = new Map<string, Parameter>();
+    private readonly parameters : Map<string, [Parameter, vscode.Position]> = new Map<string, [Parameter, vscode.Position]>();
+    public readonly uri : vscode.Uri;
 
-    async addfrom(rootfolder : vscode.Uri) {
-        const paramlistfile = vscode.Uri.joinPath(rootfolder, "paramlist.xml");
-        const paramlist = await vscode.workspace.openTextDocument(paramlistfile);
+    constructor(rootfolder : vscode.Uri) {
+        this.uri = vscode.Uri.joinPath(rootfolder, "paramlist.xml");
+    }
+
+    async parse() {
+        const paramlist = await vscode.workspace.openTextDocument(this.uri);
         this.parameters.clear();
 
         if (paramlist) {
-            const parameters_ = paramlist.getText().match(/^\t\t<(.*?) Name=.*?>((.|[\n\r])*?)^\t\t<\/\1>/mg);
-            if (parameters_) {
-                for (const xml of parameters_) {
-                    const parameter = new Parameter(xml);
-                    this.parameters.set(parameter.nameCS.toLowerCase(), parameter);
-                }
+            const parameters_ = paramlist.getText().matchAll(/^\t\t<(.*?) Name=.*?>((.|[\n\r])*?)^\t\t<\/\1>/mg);
+            for (const match of parameters_) {
+                const parameter = new Parameter(match[0]);
+                const position = paramlist.positionAt(match.index!);
+                this.parameters.set(parameter.nameCS.toLowerCase(), [parameter, position]);
             }
         }
     }
 
     has(name : string) : boolean {
-        return this.parameters.has(name);
+        return this.parameters.has(name.toLowerCase());
     }
 
     get(name : string) {
-        return this.parameters.get(name.toLowerCase());
+        return this.parameters.get(name.toLowerCase())?.[0];
     }
 
-    [Symbol.iterator]() {
-        return this.parameters.values();
+    position(name : string) {
+        return this.parameters.get(name.toLowerCase())?.[1];
+    }    
+
+    *[Symbol.iterator]() {
+        yield* this.all_of_type();
+    }
+
+    *all_of_type(type: string | undefined = undefined) {
+        for (const [parameter, _] of this.parameters.values()) {
+            if (type === undefined || type === parameter.type) yield parameter;
+        }
     }
 }

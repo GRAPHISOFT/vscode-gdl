@@ -45,8 +45,8 @@ class HSFLibpart {
     }
     async paramlist() {
         if (this._paramlist === undefined) {
-            this._paramlist = new paramlistparser_1.ParamList();
-            await this._paramlist.addfrom(this.info.root_uri);
+            this._paramlist = new paramlistparser_1.ParamList(this.info.root_uri);
+            await this._paramlist.parse();
         }
         return this._paramlist;
     }
