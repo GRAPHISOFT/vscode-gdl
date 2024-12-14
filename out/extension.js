@@ -1019,7 +1019,7 @@ class GDLExtension {
     }
     async jumpLinks(jump) {
         let functionSymbols = [];
-        for (const [_scriptType, scriptUri] of await this.hsflibpart.info.allScripts()) {
+        for await (const [_scriptType, scriptUri] of this.hsflibpart.info.allScripts()) {
             const otherdoc = await vscode.workspace.openTextDocument(scriptUri);
             const otherscript = new Parser.ParseXMLGDL(otherdoc.getText(), true, false, false, false, false);
             functionSymbols = functionSymbols.concat(GDLExtension.mapFunctionSymbols(otherscript, Parser.ScriptType.ROOT, otherdoc)
@@ -1107,8 +1107,7 @@ class GDLExtension {
     /** return variable definitions from libpart */
     async getRelevantVariableDefinitions(word, isSubkey) {
         const result = new Map();
-        // TODO async for!
-        for (const [scriptType, scriptUri] of await this.hsflibpart.info.allScripts()) {
+        for await (const [scriptType, scriptUri] of this.hsflibpart.info.allScripts()) {
             const vardefs = await this.hsflibpart.vardefs(scriptType);
             result.set(scriptUri, vardefs.get(word).filter(v => v.isSubkey == isSubkey));
         }
@@ -1158,7 +1157,7 @@ class GDLExtension {
         if (label !== undefined) {
             const target = (label instanceof vscode.DocumentSymbol) ? label.name : label.target;
             //const target = ("command" in label) ? label.target : label.name;
-            for (const [_scriptType, scriptUri] of await this.hsflibpart.info.allScripts()) {
+            for await (const [_scriptType, scriptUri] of this.hsflibpart.info.allScripts()) {
                 const searchDocument = await vscode.workspace.openTextDocument(scriptUri);
                 const jumps = new jumpparser_1.Jumps(searchDocument.getText());
                 references = references.concat(jumps.jumps.filter(j => j.target === target)
