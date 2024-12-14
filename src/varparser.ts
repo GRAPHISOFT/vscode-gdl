@@ -39,8 +39,8 @@ class SubLine {
 }
 
 type RegExpMatchArryWithIndices = RegExpMatchArray & { indices: Array<Array<number>> } | null;
-type Vardef = { subline: SubLine, varstart: number, defstart: number };
-type VardefOf = [string, Vardef];
+export type Vardef = { subline: SubLine, varstart: number, defstart: number, isSubkey: boolean };
+type VardefOf = [string, Vardef];  // key, position
 
 export class Variables {
     /*  variable definitions:
@@ -88,7 +88,7 @@ export class Variables {
                             ignoreFirstMatch = false;
                             continue;
                         }
-                        yield vd;   // TODO targetRange start at first match
+                        yield vd;
                     }
 
                     // loop
@@ -134,27 +134,31 @@ export class Variables {
         while (dimregex.test(nodim)) {
             nodim = nodim.replace(dimregex, m => " ".repeat(m.length));
         }
-        
+
         // var or dict.keys or dict.dim[...].keys
         const match = nodim.match(/^(\s*([_~a-z][_~0-9a-z]*)((\s*\.([_~a-z][_~0-9a-z]*))*))\s*=\s*/id) as RegExpMatchArryWithIndices;
         if (match && match.index! >= 0) {
             const variable = match[2];
             const varstart = match.indices[2][0];
+            const isSubkey = match[4] !== undefined;
 
-            yield [variable, {  subline: subline,
-                                varstart: varstart,
-                                defstart: match[1].length }];
+            yield [ variable,
+                    {   subline: subline,
+                        varstart: varstart,
+                        defstart: match[1].length,
+                        isSubkey: false }];
 
 
-            // dict subkeys
-            if (match[3] !== undefined) {
+            if (isSubkey) {
                 // repeated capturing group can't return each match on its own, only all together
                 for (const subkey of match[3].split(".")) {
                     const subkeyTrimmed = subkey.trimEnd();
                     if (subkeyTrimmed.length > 0) {
-                        yield [subkeyTrimmed, { subline: subline,
-                                                varstart: varstart,
-                                                defstart: match[1].length }];
+                        yield [ subkeyTrimmed,
+                                {   subline: subline,
+                                    varstart: varstart,
+                                    defstart: match[1].length,
+                                    isSubkey: true }];
                     }
                 }
             }
@@ -162,10 +166,12 @@ export class Variables {
     }
 
     private static* identifiers(subline: SubLine): Generator<VardefOf> {
-        for (const match of subline.maskedText.matchAll(/([_~a-z][_~0-9a-z]*)/ig)) {
-            yield [match[0], {  subline: subline,
-                                varstart: match.index!,
-                                defstart: match.index! + match[0].length }];
+        for (const match of subline.maskedText.matchAll(/\b([_~a-z][_~0-9a-z]*\b)/ig)) {
+            yield [ match[0],
+                    {   subline: subline,
+                        varstart: match.index!,
+                        defstart: match.index! + match[0].length,
+                        isSubkey: false }];
         }
     }
 
@@ -174,9 +180,11 @@ export class Variables {
         if ((match?.index ?? -1) >= 0) {
             const variable = match![1];
             const varstart = match!.indices[1][0];
-            yield [variable, {  subline: subline,
-                                varstart: varstart,
-                                defstart: varstart + match![1].length }];
+            yield [ variable,
+                    {   subline: subline,
+                        varstart: varstart,
+                        defstart: varstart + match![1].length,
+                        isSubkey: false}];
         }
     }
 

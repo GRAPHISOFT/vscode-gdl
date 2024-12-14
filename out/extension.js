@@ -976,7 +976,10 @@ class GDLExtension {
         // implemented only for hsf libparts
         if (!this.hsflibpart)
             return undefined;
-        const word = document.getText(document.getWordRangeAtPosition(position, /\b(?<!\.)[_~a-z][_~0-9a-z]*\b/i));
+        const wordRange = document.getWordRangeAtPosition(position, /\b(?<!\.)[_~a-z][_~0-9a-z]*\b/i);
+        if (wordRange === undefined)
+            return undefined;
+        const word = document.getText(wordRange);
         const paramlist = await this.hsflibpart.paramlist();
         return paramlist.get(word);
     }
@@ -1032,10 +1035,16 @@ class GDLExtension {
     }
     async variableLinks(document, position) {
         const wordRange = document.getWordRangeAtPosition(position, /\b[_~a-z][_~0-9a-z]*\b/i);
+        if (wordRange === undefined)
+            return [];
+        // match .key in dict.key
+        const dictTestRange = document.getWordRangeAtPosition(position, /\.[_~a-z][_~0-9a-z]*\b/i);
+        const isSubkey = dictTestRange !== undefined;
+        // TODO check declared dicts too, could be dict2.x = 0 : dict1 = dict2
         const word = document.getText(wordRange);
-        const allVariableDefinitions = await this.getRelevantVariableDefinitions();
+        const allVariableDefinitions = await this.getRelevantVariableDefinitions(word, isSubkey);
         const definitionsForWord = [...allVariableDefinitions.keys()].flatMap(uri => {
-            const scriptDefinitionsForWord = allVariableDefinitions.get(uri).get(word);
+            const scriptDefinitionsForWord = allVariableDefinitions.get(uri);
             return scriptDefinitionsForWord.map(vardef => ({ uri: uri, vardef: vardef }));
         });
         return definitionsForWord.map(({ uri, vardef }) => {
@@ -1055,6 +1064,8 @@ class GDLExtension {
         // dict var : var = param.a
         // var.b    ! is param.a.b
         const wordRange = document.getWordRangeAtPosition(position, /(?<=\.)[_~a-z][_~0-9a-z]*\b/i);
+        if (wordRange === undefined)
+            return [];
         const subkey = document.getText(wordRange);
         let links = [];
         const paramlist = await this.hsflibpart.paramlist();
@@ -1090,15 +1101,16 @@ class GDLExtension {
             const definitions = await Promise.all([this.paramlistLinks(document, position),
                 this.dictParamSubkeyLinks(document, position),
                 this.variableLinks(document, position)]);
-            // TODO don't link variables to dict keys
             return definitions.flat();
         }
     }
     /** return variable definitions from libpart */
-    async getRelevantVariableDefinitions() {
+    async getRelevantVariableDefinitions(word, isSubkey) {
         const result = new Map();
+        // TODO async for!
         for (const [scriptType, scriptUri] of await this.hsflibpart.info.allScripts()) {
-            result.set(scriptUri, await this.hsflibpart.vardefs(scriptType));
+            const vardefs = await this.hsflibpart.vardefs(scriptType);
+            result.set(scriptUri, vardefs.get(word).filter(v => v.isSubkey == isSubkey));
         }
         return result;
     }
