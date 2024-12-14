@@ -13,7 +13,7 @@ import { Constants } from './constparser';
 import path = require('path');
 import { Jumps, Jump } from './jumpparser';
 import { Vardef } from './varparser';
-import { Parameter } from './paramlistparser';
+import { Parameter, ParamList } from './paramlistparser';
 
 export async function activate(context: vscode.ExtensionContext) {
     //console.log("extension.activate");
@@ -92,6 +92,10 @@ export class GDLExtension
     private suggestHSF : vscode.Disposable | undefined;
 
     private readonly sectionDecorations : vscode.TextEditorDecorationType[] = [];
+
+    // filesystem observers
+    private paramlist_watcher: vscode.FileSystemWatcher | undefined;
+    private gdl_watcher: vscode.FileSystemWatcher | undefined;
 
     constructor(public context : vscode.ExtensionContext) {
         this.parser = new Parser.ParseXMLGDL();  // without text only initializes
@@ -338,16 +342,22 @@ export class GDLExtension
 
     private updateHsfLibpart() {
         // create new HSFLibpart if root folder changed
-        const rootFolder = this.getNewHSFLibpartFolder(this.hsflibpart?.info.root_uri);
-        if (rootFolder !== undefined && this._editor !== undefined) {   // no editor on startup
-            const script = HSFScriptType(this._editor!.document.uri)!;
-            if (rootFolder) {
+        const newRootFolder = this.getNewHSFLibpartFolder(this.hsflibpart?.info.root_uri);
+        if (newRootFolder !== undefined && this._editor !== undefined) {   // no editor on startup
+            if (newRootFolder) {
                 //start async operations
-                this.hsflibpart = new HSFLibpart(rootFolder);
-            } else {
-                this.hsflibpart?.refresh(script);
+                this.hsflibpart = new HSFLibpart(newRootFolder);
+
+                // observe file changes not in opened editor
+                // didn't work in HSFLibpart (maybe accidental async?)
+                this.paramlist_watcher?.dispose();
+                this.gdl_watcher?.dispose();
+                this.paramlist_watcher = vscode.workspace.createFileSystemWatcher(new vscode.RelativePattern(newRootFolder, ParamList.subpath));
+                this.gdl_watcher = vscode.workspace.createFileSystemWatcher(new vscode.RelativePattern(newRootFolder, "scripts/*.gdl"));
+                this.paramlist_watcher.onDidChange(() => this.hsflibpart?.refresh(true, false));
+                this.gdl_watcher.onDidChange(() => this.hsflibpart?.refresh(false, true));
             }
-        } else if (rootFolder === undefined) {
+        } else if (newRootFolder === undefined) {
             // delete HSFLibpart
             this.hsflibpart = undefined;
         }
@@ -434,7 +444,7 @@ export class GDLExtension
     private onDocumentChanged(changeEvent: vscode.TextDocumentChangeEvent) {
         //console.log("GDLExtension.onDocumentChanged", changeEvent.document.uri.toString());
         this.pathnametableView.refreshFromEditor();
-        this.updateHsfLibpart();
+        this.hsflibpart?.refresh(false, true);
         this.reparseDoc(changeEvent.document);  // with default timeout
     }
     
@@ -505,6 +515,8 @@ export class GDLExtension
         //console.log("GDLExtension.dispose");
         this.cancelParseTimer();
         this.cancelSuggestHSF();
+        this.paramlist_watcher?.dispose();
+        this.gdl_watcher?.dispose();
     }
 
 	gotoCursor() {
@@ -1256,7 +1268,6 @@ export class GDLExtension
         // match .key in dict.key
         const dictTestRange = document.getWordRangeAtPosition(position, /\.[_~a-z][_~0-9a-z]*\b/i);
         const isSubkey = dictTestRange !== undefined;
-        // TODO check declared dicts too, could be dict2.x = 0 : dict1 = dict2
 
         const word = document.getText(wordRange);
         const allVariableDefinitions = await this.getRelevantVariableDefinitions(word, isSubkey);
@@ -1269,7 +1280,6 @@ export class GDLExtension
         return definitionsForWord.map(({uri, vardef}) => {
             const selectionRange = new vscode.Range(vardef.subline.start.translate(0, vardef.varstart),
                                                  vardef.subline.start.translate(0, vardef.defstart));
-                                                 // TODO handle end of declarations
             const targetRange = new vscode.Range(vardef.subline.start,
                                                 vardef.subline.start.translate(0, vardef.subline.text.length));
             return {originSelectionRange:   wordRange,

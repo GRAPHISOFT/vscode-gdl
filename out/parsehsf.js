@@ -14,10 +14,15 @@ class HSFLibpart {
     constructor(rootFolder) {
         this.info = new wssymbols_1.LibpartInfo(vscode.Uri.joinPath(rootFolder, "libpartdata.xml"), "");
     }
-    async refresh(script) {
-        this._constants.delete(script);
-        this._variables.delete(script);
-        //TODO register paramlist observer
+    refresh(paramlist, scripts) {
+        if (scripts) {
+            // always delete all cache because all script's results are shown
+            this._constants.clear();
+            this._variables.clear();
+        }
+        if (paramlist) {
+            this._paramlist = undefined;
+        }
     }
     async constants(script) {
         let constants = this._constants.get(script);

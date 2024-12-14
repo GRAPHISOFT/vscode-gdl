@@ -184,9 +184,10 @@ export class Parameter {
 export class ParamList implements Iterable<Parameter> {
     private readonly parameters : Map<string, [Parameter, vscode.Position]> = new Map<string, [Parameter, vscode.Position]>();
     public readonly uri : vscode.Uri;
+    static readonly subpath = "paramlist.xml";
 
     constructor(rootfolder : vscode.Uri) {
-        this.uri = vscode.Uri.joinPath(rootfolder, "paramlist.xml");
+        this.uri = vscode.Uri.joinPath(rootfolder, ParamList.subpath);
     }
 
     async parse() {

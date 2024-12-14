@@ -172,8 +172,9 @@ exports.Parameter = Parameter;
 class ParamList {
     parameters = new Map();
     uri;
+    static subpath = "paramlist.xml";
     constructor(rootfolder) {
-        this.uri = vscode.Uri.joinPath(rootfolder, "paramlist.xml");
+        this.uri = vscode.Uri.joinPath(rootfolder, ParamList.subpath);
     }
     async parse() {
         const paramlist = await vscode.workspace.openTextDocument(this.uri);

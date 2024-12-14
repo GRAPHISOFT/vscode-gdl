@@ -15,14 +15,18 @@ export class HSFLibpart {
     public readonly info : LibpartInfo;
 
     constructor(rootFolder : vscode.Uri) {
-        this.info = new LibpartInfo(vscode.Uri.joinPath(rootFolder, "libpartdata.xml"), ""); 
+        this.info = new LibpartInfo(vscode.Uri.joinPath(rootFolder, "libpartdata.xml"), "");
     }
 
-
-    public async refresh(script: Parser.ScriptType) {
-        this._constants.delete(script);
-        this._variables.delete(script);
-        //TODO register paramlist observer
+    public refresh(paramlist: boolean, scripts: boolean) {
+        if (scripts) {
+            // always delete all cache because all script's results are shown
+            this._constants.clear();
+            this._variables.clear();
+        }
+        if (paramlist) {
+            this._paramlist = undefined;
+        }
     }
 
     public async constants(script: Parser.ScriptType) : Promise<Constants> {
