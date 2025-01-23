@@ -107,7 +107,6 @@
 										CUSTOM_ARROW |
 										FONT_(NAME|STYLE(2)?) |
 										FRAME_(OFFSET|ON) |
-										ROTANGLE |
 										TEXT_	(	ALIGN |
 													(BG_)?PEN |
 													(CHARSPACE|WIDTH)_FACT |

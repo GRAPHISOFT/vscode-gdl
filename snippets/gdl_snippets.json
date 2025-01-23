@@ -2451,6 +2451,10 @@
       "prefix": "LABEL_POSITION",
       "body": "LABEL_POSITION[${01:index}][${02:index}]"
     },
+    "\"LABEL_ROTANGLE\" global": {
+      "prefix": "LABEL_ROTANGLE",
+      "body": "LABEL_ROTANGLE"
+    },
     "\"LAYOUT_CHANGE_HISTORY\" global": {
       "prefix": "LAYOUT_CHANGE_HISTORY",
       "body": "LAYOUT_CHANGE_HISTORY[${01:index}][${02:index}]"

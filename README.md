@@ -167,6 +167,9 @@ Some valid syntaxes won't be highlighted, and some invalid syntaxes will be high
 
 # Release Notes
 
+## 1.28.1
+* documentation / snippet updates
+
 ## 1.28.0
 * Reference guide 28
 * pathNameTable tree view (move, rename, open, check against source)
