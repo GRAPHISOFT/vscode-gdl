@@ -1356,11 +1356,23 @@
 										Height |
 										Width |
 										ElevationTo(ProjectZero|((First|Second)Reference|Sea)Level|Story) | 
+										(Element|Hotlink(AndElement|Master)|Owner|Unique)ID |
+										LastIssue(Name|ID) |
 										(Top|Bottom)ElevationTo(ProjectZero|((First|Second)Reference|Sea)Level|HomeStory) |
 										(Home|Top)Offset |
 										SurfaceArea |
+										(Conditional|Gross|Net)(Bottom|Top)SurfaceArea |
+										(Gross|Net)EdgeSurfaceArea |
+										LibraryPartName |
+										Locked |
+										(From|To)Zone(Number)? |
+										RelatedZone(Name|Number) |
 										3DLength |
+										ProfileCategory |
+										SurveyCoordinate[XYZ] |
 										Thickness |
+										TopLinkStory |
+										Type |
 										(Net|Gross|Conditional)Volume |
 										InsulationSkinThickness |
 										((Holes)?3D|FloorPlan(Holes)?)Perimeter |
@@ -1368,6 +1380,12 @@
 										OpeningNumber |
 										CrossSection(Height|Width)At((Begin|End)(Perpendicular|Cut)) |
 										CrossSectionAreaAt(Begin|End)Cut ) |
+									Zone_(
+										AreaReducement |
+										(Calculated|Extracted(Column|CurtainWall|Fill|Low|Wall)|Measured|Net|Reduced|TotalExtracted|WallInset((Back)?Side|Top)Surface)Area |
+										FloorThickness |
+										(Net|Walls)?Perimeter |
+										Zone(Category(Code)?|Name|Number) ) |
 									Component_(
 										Thickness |
 										CrossSection(Height|Width|Area) |
