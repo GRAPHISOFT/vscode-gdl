@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-<html xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><title>GDL Reference Guide</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="index.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/><link rel="StyleSheet" href="dtree.css" type="text/css"/><script type="text/javascript" src="dtree.js">
-		 //Fake content to keep the end script tag 
-	  </script></head><body onload="followLink(document.location.href);" onhashchange="followLink(document.location.href);"><div class="hoveringtoc"><script type="text/javascript">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><title>New GDL Features in Archicad 28 – GDL Reference Guide</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="index.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/><link rel="StyleSheet" href="dtree.css" type="text/css"/><script type="text/javascript" src="dtree.js">
+					 //Fake content to keep the end script tag 
+				</script></head><body onload="followLink(document.location.href);" onhashchange="followLink(document.location.href);" class="chapter"><div class="hoveringtoc"><script type="text/javascript">
 			//&lt;![CDATA[
 			GDLManualTOC = new dTree('GDLManualTOC');
 			GDLManualTOC.config.useIcons = false;
@@ -1144,26 +1144,11 @@
 				GDLManualTOC.openTo(filename, true);
 			}
 			//]]&gt;
-		</script></div><div class="book"><div class="titlepage"><div><div><h1 class="title"><a id="id556155"/>GDL Reference Guide</h1></div><div><div class="legalnotice"><a id="id556138"/><p>
-                <span class="bold"><strong><span class="trademark">Graphisoft</span><sup>®</sup></strong></span>
-            </p><p>
-                Visit the Graphisoft website at <a class="ulink" href="https://graphisoft.com">https://graphisoft.com</a>
-                for local distributor and product availability information.
-            </p><p>
-                <span class="bold"><strong>GDL Reference Guide</strong></span>
-            </p><p>
-                <span class="trademark">Copyright</span><sup>©</sup> 2024 by Graphisoft, all rights reserved.
-                Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
-            </p><p>
-                <span class="bold"><strong>Trademarks</strong></span>
-            </p><p>
-                <span class="trademark">Archicad</span><sup>®</sup> is a registered trademark and PlotMaker, Virtual Building and GDL are trademarks of Graphisoft.
-                All other trademarks are the property of their respective holders.
-            </p></div></div></div><hr/></div><div class="preface"><div class="titlepage"><div><div><h2 class="title"><a id="id556180"/>Introduction</h2></div></div></div><p>
-            This manual is a complete reference to the Graphisoft's proprietary scripting language, GDL (Geometric Description Language).
-            The manual is recommended for those users who wish to expand on the possibilities presented by the construction tools and
-            object libraries in Graphisoft software. It gives a detailed description of GDL, including syntax definitions, commands, variables, etc.
-        </p></div><h2 class="title"><a href="002.004.html">General Overview</a></h2><h2 class="title"><a href="002.005.html">GDL Syntax</a></h2><h2 class="title"><a href="002.006.html">Coordinate Transformations</a></h2><h2 class="title"><a href="002.007.html">3D Shapes</a></h2><h2 class="title"><a href="002.008.html">2D Shapes</a></h2><h2 class="title"><a href="002.009.html">Graphical Editing Using Hotspots</a></h2><h2 class="title"><a href="002.010.html">Status Codes</a></h2><h2 class="title"><a href="002.011.html">Attributes</a></h2><h2 class="title"><a href="002.012.html">Non-Geometric Scripts</a></h2><h2 class="title"><a href="002.013.html">Expressions and Functions</a></h2><h2 class="title"><a href="002.014.html">Control Statements</a></h2><h2 class="title"><a href="002.015.html">Miscellaneous</a></h2><h2 class="title"><a href="002.016.html">New GDL Features in Archicad 28</a></h2><h2 class="title"><a href="002.019.html">Index</a></h2></div><hr/><p>
+		</script></div><table><tr><td style="width:33%" align="left"><a href="002.015.html">&lt;&lt; Miscellaneous</a></td><td style="width:33%" align="center"><a href="index.html">Back to the main page</a></td><td style="width:33%" align="right"><a href="002.019.html">Index &gt;&gt;</a></td></tr></table><hr/><div class="titlepage"><div><div><h2 class="title"><a id="id688380"/>Chapter 13. New GDL Features in Archicad 28</h2></div></div></div><p>
+            This section contains a fly-through of the new GDL features in Archicad 28.
+        </p><div class="section"><div class="titlepage"><div><div><h2 class="title"><a id="id688368"/>New MEP route features</h2></div></div></div><div class="itemizedlist"><ul class="itemizedlist"><li class="listitem"><p>There is a new Flexible Pipe Segment tool, whose geometry can be queried with <a class="xref" href="reference/requests/MEP_PIPE_FLEXIBLE_SEGMENT_GEOMETRY.html"><code>MEP_PIPE_FLEXIBLE_SEGMENT_GEOMETRY</code></a>.</p></li><li class="listitem"><p>There are new Floor Plan Display Settings available for MEP routes, returned in existing <a class="xref" href="reference/requests/MEP_ROUTE_ATTRIBUTES.html"><code>MEP_ROUTE_ATTRIBUTES</code></a>.</p></li></ul></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title"><a id="id688410"/>Keynotes</h2></div></div></div><p>Keynote data can be accessed by objects under a new built-in subtype: <code class="code">General GDL Object / Documentation Element / Drawing Symbol / Keynote Legends</code>.
+                </p><div class="itemizedlist"><ul class="itemizedlist"><li class="listitem"><p>Entries are returned by <a class="xref" href="reference/requests/KEYNOTE_INFO.html"><code>KEYNOTE_INFO</code></a> with various filter options.</p></li><li class="listitem"><p>The folder tree can be queried in UI script with <a class="xref" href="reference/requests/KEYNOTE_FOLDER_TREE.html"><code>KEYNOTE_FOLDER_TREE</code></a>.</p></li></ul></div><p>
+            </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title"><a id="id688437"/>Built-in properties</h2></div></div></div><p>Miscellaneous new built-in properties, see <a class="xref" href="002.015.html#builtin_propertyids_section" title="Built-in Property Guide">the section called “Built-in Property Guide”</a>.</p></div><hr/><p>
                 <span class="bold"><strong>GDL Reference Guide</strong></span>
             </p><p>
                 <span class="trademark">Copyright</span><sup>©</sup> 2024 by Graphisoft, all rights reserved.
