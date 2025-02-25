@@ -50,11 +50,11 @@ __hotspot__ or __hotspot2__ - length edit hotspot triplet
   * If the workspace changed in a process outside VSCode, use the "Re-scan library parts in workspace folders" command to refresh the known library parts.
 * When a folder of HSF files is opened, further features are available:
   * Show info about parameters when the mouse hovers on them (can be toggled on/off with Ctrl-Alt-Space)
-  * Show parameters with bold font (can be toggled on/off with Ctrl-Alt-Space)
+  * Show parameters with bold font (can be toggled on/off with Ctrl-Alt-Space), jump to paramlist.xml with Ctrl-click.
   * IntelliSense lists constants (ALL_CAPS) with their initialized values
   * IntelliSense lists parameters with their description, type, flags and default value. This list can be filtered by parameter type too.
   * Follow libraryglobal, macro and subroutine calls with Ctrl-click
-  * Show variable assignments with Ctrl-click
+  * Show variable, dictionary key, returned_parameters assignments, dictionary or array declarations with Ctrl-click.
 * Go to definitions/references, find all references of subroutines in same libpart (Ctrl-click or F12, Shift-F12, Shift-Alt-F12)
 * Show Call Hierarchy (Shift-Alt-H), Peek Call Hierarchy
   * Incoming or outgoing macro calls are shown, respecting the execution context of the edited scipt. Eg. all scripts are searched outgoing from a master script, but only master and 2d scripts are searched outgoing from a 2d script.
@@ -168,6 +168,16 @@ Some valid syntaxes won't be highlighted, and some invalid syntaxes will be high
 # Release Notes
 
 ## 1.28.1
+* improved links (Ctrl-click):
+  * link parameters to paramlist.xml
+  * link dict keys to dict parameter keys
+  * link to dict key assignments
+  * link to `returned_parameters`
+  * link to `dict`, `dim` declarations
+  * link to `for` loop variables
+  * highlight target variable in peek window instead assigned value (works better with new links)
+* improved parameter highlight: don't highlight dict key with name of a parameter
+* links / suggestions / highlights react to changes in files not opened in vscode (eg. master script while editing 2d script)
 * documentation / snippet updates
 
 ## 1.28.0

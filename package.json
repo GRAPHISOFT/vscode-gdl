@@ -165,7 +165,7 @@
                     "icon": "$(symbol-misc)"
                 }
             ]
-        },      
+        },
         "views": {
             "gdl-views": [
                 {
@@ -645,7 +645,7 @@
         "@vscode/vsce": "^2.20.1",
         "eslint": "^8.1.0",
         "glob": "^7.2.0",
-        "mocha": "^9.1.3",
+        "mocha": "^11.1.0",
         "typescript": "4.6.3"
     }
 }
