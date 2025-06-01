@@ -64,6 +64,7 @@ __hotspot__ or __hotspot2__ - length edit hotspot triplet
   * Increase after lines with block-opening keywords (for, if, while, group, subroutine...)
   * Decrease after block-closing keywords (next, else, endif, endwhile, endgroup, return...)
   * Line ending comments are handled, comment-only lines and difficult syntax with : or multiline strings are not
+* Links to source files from LP_XMLConverter error messages in terminal. The error message is shown next to the code, until the first edit or switching the editor.
 
 # Script outline view
 
@@ -166,6 +167,9 @@ Some valid syntaxes won't be highlighted, and some invalid syntaxes will be high
 1. Press Ctrl-S to apply changes to the user settings
 
 # Release Notes
+
+## 1.28.1-dev.1
+* Links to source files from LP_XMLConverter error messages in terminal
 
 ## 1.28.1
 * improved links (Ctrl-click):

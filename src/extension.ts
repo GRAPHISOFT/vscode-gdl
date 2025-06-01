@@ -31,13 +31,22 @@ type FormattedTokens = {
 	tokens: Parser.GDLToken[]
 };
 
+interface HSFTerminalLink extends vscode.TerminalLink {
+    path: vscode.Uri,
+    err_line?: number,
+    is_error: boolean,
+    msg?: string
+};
+
+
 export class GDLExtension
     implements vscode.HoverProvider,
                vscode.CompletionItemProvider,
                vscode.DocumentSymbolProvider,
                vscode.DefinitionProvider,
                vscode.ReferenceProvider,
-               vscode.DocumentDropEditProvider {
+               vscode.DocumentDropEditProvider,
+               vscode.TerminalLinkProvider<HSFTerminalLink> {
 
     // data
     private parseTimer? : NodeJS.Timer;
@@ -92,6 +101,8 @@ export class GDLExtension
     private suggestHSF : vscode.Disposable | undefined;
 
     private readonly sectionDecorations : vscode.TextEditorDecorationType[] = [];
+    private error_decoration : vscode.TextEditorDecorationType;
+    private warning_decoration : vscode.TextEditorDecorationType;
 
     // filesystem observers
     private paramlist_watcher: vscode.FileSystemWatcher | undefined;
@@ -121,6 +132,20 @@ export class GDLExtension
 
         //init extension-relative paths
         this.initUIDecorations();
+        this.warning_decoration = vscode.window.createTextEditorDecorationType({
+            textDecoration: "orange dotted underline",
+            after: {
+                color: "orange",
+                fontStyle: "italic"
+            }
+        });
+        this.error_decoration = vscode.window.createTextEditorDecorationType({
+            textDecoration: "red dotted underline",
+            after: {
+                color: "red",
+                fontStyle: "italic"
+            }
+        });
 
         context.subscriptions.push(
             // callbacks
@@ -153,6 +178,7 @@ export class GDLExtension
             vscode.commands.registerCommand('GDL.infoFromHSF', () => this.setInfoFromHSF(!this.infoFromHSF)),
             vscode.commands.registerCommand('GDL.rescanFolders', async () => this.rescanFolders()),
 
+            vscode.commands.registerCommand('GDL.clearErrorDecorations', async () => this.clearErrorDecorations()),
 
             // language features
             vscode.languages.registerHoverProvider(["gdl-hsf"], this),
@@ -161,7 +187,8 @@ export class GDLExtension
             vscode.languages.registerDefinitionProvider(["gdl-hsf"], this),
             vscode.languages.registerReferenceProvider(["gdl-hsf"], this),
             vscode.languages.registerCallHierarchyProvider(["gdl-hsf"], this.callTree),
-            vscode.languages.registerDocumentDropEditProvider(["gdl-hsf"], this)
+            vscode.languages.registerDocumentDropEditProvider(["gdl-hsf"], this),
+            vscode.window.registerTerminalLinkProvider(this)
         );
     }
 
@@ -445,6 +472,7 @@ export class GDLExtension
         //console.log("GDLExtension.onDocumentChanged", changeEvent.document.uri.toString());
         this.pathnametableView.refreshFromEditor();
         this.hsflibpart?.refresh(false, true);
+        this.clearErrorDecorations();
         this.reparseDoc(changeEvent.document);  // with default timeout
     }
     
@@ -1412,6 +1440,81 @@ export class GDLExtension
         }
         
         return references;
+    }
+
+    public provideTerminalLinks(context: vscode.TerminalLinkContext,
+        _token: vscode.CancellationToken): HSFTerminalLink[] {
+        const line = context.line;
+           
+        // ...\Source\Macros\MEP_m_Connections(8) : warning: (in Script_2D) : Use of real types can result in precision problems 
+        // ...\Source\Macros\MEP_m_Connections(10) : error: (in Script_2D) : Keywords can't be used as variables
+        // -> open source code
+        const error_re = /^(?<libpart>.*?)\((?<err_line>\d+)\) : (?<type>error|warning): \(in (Script_(?<script>1D|2D|3D|VL|UI|PR|FWM|BWM))\) : (?<msg>.*)$/;
+        const match = line.match(error_re);
+        if (match) {
+            const { libpart, err_line, type, script, msg } = match.groups!;
+            const err_line_num = Number.parseInt(err_line);
+            const path = vscode.Uri.joinPath(vscode.Uri.file(libpart), "scripts", `${script}.gdl`);
+            const tooltip = `show ${type} in ${script} script`;
+            const link : HSFTerminalLink = {
+                ...new vscode.TerminalLink(match.index!, match[0].length, tooltip),
+                path: path,
+                err_line: err_line_num,
+                is_error: type === "error",
+                msg: msg
+            };
+
+            return [link];
+        }
+
+        return [];
+    }
+
+    private decorateError(link: HSFTerminalLink, editor: vscode.TextEditor, range: vscode.Range) {
+        const options : vscode.DecorationOptions = {
+            range: range,
+            renderOptions: {
+                after: {
+                    contentText: ` ${link.msg}`
+                }
+            }
+        };
+        const decor = link.is_error ? this.error_decoration : this.warning_decoration;
+        const other_decor = link.is_error ? this.warning_decoration : this.error_decoration;
+        editor.setDecorations(decor, [options]);
+        editor.setDecorations(other_decor, []);
+    }
+
+    private clearErrorDecorations() {
+        const editor = vscode.window.activeTextEditor;
+        if (editor !== undefined) {
+            editor.setDecorations(this.error_decoration, []);
+            editor.setDecorations(this.warning_decoration, []);
+        }
+    }
+
+    private async openError(link: HSFTerminalLink) : Promise<[vscode.TextEditor, vscode.Range]> {
+        const document = await vscode.workspace.openTextDocument(link.path);
+        const editor = await vscode.window.showTextDocument(document);
+        let range: vscode.Range;
+        if (link.err_line !== undefined && !isNaN(link.err_line)) {
+            const line = document.lineAt(link.err_line - 1);
+            const stripped_match = line.text.match(/^(?<ws>\s*).*?(?<comment>\s*!.*)?$/);
+            const { ws, comment } = stripped_match!.groups!;
+            range = new vscode.Range(
+                link.err_line - 1, ws.length,
+                link.err_line - 1, line.text.length - (comment?.length ?? 0)
+            );
+        } else {
+            range = new vscode.Range(0, 0, 0, 0); // no line number, show start of document
+        }
+        editor.revealRange(range, vscode.TextEditorRevealType.InCenterIfOutsideViewport);
+        return [editor, range];
+    }
+
+    public async handleTerminalLink(link: HSFTerminalLink) {
+        const [editor, range] = await this.openError(link);
+        this.decorateError(link, editor, range);
     }
 }
 

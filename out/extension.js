@@ -21,6 +21,7 @@ async function activate(context) {
     extension.init(); // start async operation
 }
 exports.activate = activate;
+;
 class GDLExtension {
     context;
     // data
@@ -69,6 +70,8 @@ class GDLExtension {
     static allowedImageMimes = new Set(GDLExtension.allowedImageTypes.values());
     suggestHSF;
     sectionDecorations = [];
+    error_decoration;
+    warning_decoration;
     // filesystem observers
     paramlist_watcher;
     gdl_watcher;
@@ -93,6 +96,20 @@ class GDLExtension {
         context.subscriptions.push(this.statusHSF);
         //init extension-relative paths
         this.initUIDecorations();
+        this.warning_decoration = vscode.window.createTextEditorDecorationType({
+            textDecoration: "orange dotted underline",
+            after: {
+                color: "orange",
+                fontStyle: "italic"
+            }
+        });
+        this.error_decoration = vscode.window.createTextEditorDecorationType({
+            textDecoration: "red dotted underline",
+            after: {
+                color: "red",
+                fontStyle: "italic"
+            }
+        });
         context.subscriptions.push(
         // callbacks
         // changed settings
@@ -106,9 +123,9 @@ class GDLExtension {
         // moved cursor
         vscode.window.onDidChangeTextEditorSelection(() => this.updateCurrentScript()), 
         // extension commands
-        vscode.commands.registerCommand('GDL.gotoCursor', () => this.gotoCursor()), vscode.commands.registerCommand('GDL.gotoScript', async (id) => this.gotoScript(id)), vscode.commands.registerCommand('GDL.gotoRelative', async (id) => this.gotoRelative(id)), vscode.commands.registerCommand('GDL.selectScript', async (id) => this.selectScript(id)), vscode.commands.registerCommand('GDL.insertGUID', (id) => this.insertGUID(id)), vscode.commands.registerCommand('GDL.insertPict', (id) => this.insertPict(id)), vscode.commands.registerCommand('GDLOutline.toggleSpecComments', async () => this.outlineView.toggleSpecComments()), vscode.commands.registerCommand('GDLOutline.toggleMacroCalls', async () => this.outlineView.toggleMacroCalls()), vscode.commands.registerCommand('GDL.switchToGDL', async () => this.switchLang("gdl-xml")), vscode.commands.registerCommand('GDL.switchToHSF', async () => this.switchLang("gdl-hsf")), vscode.commands.registerCommand('GDL.switchToXML', async () => this.switchLang("xml")), vscode.commands.registerCommand('GDL.refguide', async () => this.showRefguide()), vscode.commands.registerCommand('GDL.infoFromHSF', () => this.setInfoFromHSF(!this.infoFromHSF)), vscode.commands.registerCommand('GDL.rescanFolders', async () => this.rescanFolders()), 
+        vscode.commands.registerCommand('GDL.gotoCursor', () => this.gotoCursor()), vscode.commands.registerCommand('GDL.gotoScript', async (id) => this.gotoScript(id)), vscode.commands.registerCommand('GDL.gotoRelative', async (id) => this.gotoRelative(id)), vscode.commands.registerCommand('GDL.selectScript', async (id) => this.selectScript(id)), vscode.commands.registerCommand('GDL.insertGUID', (id) => this.insertGUID(id)), vscode.commands.registerCommand('GDL.insertPict', (id) => this.insertPict(id)), vscode.commands.registerCommand('GDLOutline.toggleSpecComments', async () => this.outlineView.toggleSpecComments()), vscode.commands.registerCommand('GDLOutline.toggleMacroCalls', async () => this.outlineView.toggleMacroCalls()), vscode.commands.registerCommand('GDL.switchToGDL', async () => this.switchLang("gdl-xml")), vscode.commands.registerCommand('GDL.switchToHSF', async () => this.switchLang("gdl-hsf")), vscode.commands.registerCommand('GDL.switchToXML', async () => this.switchLang("xml")), vscode.commands.registerCommand('GDL.refguide', async () => this.showRefguide()), vscode.commands.registerCommand('GDL.infoFromHSF', () => this.setInfoFromHSF(!this.infoFromHSF)), vscode.commands.registerCommand('GDL.rescanFolders', async () => this.rescanFolders()), vscode.commands.registerCommand('GDL.clearErrorDecorations', async () => this.clearErrorDecorations()), 
         // language features
-        vscode.languages.registerHoverProvider(["gdl-hsf"], this), vscode.languages.registerDocumentSymbolProvider(["gdl-xml", "gdl-hsf"], this), vscode.languages.registerWorkspaceSymbolProvider(this.wsSymbols), vscode.languages.registerDefinitionProvider(["gdl-hsf"], this), vscode.languages.registerReferenceProvider(["gdl-hsf"], this), vscode.languages.registerCallHierarchyProvider(["gdl-hsf"], this.callTree), vscode.languages.registerDocumentDropEditProvider(["gdl-hsf"], this));
+        vscode.languages.registerHoverProvider(["gdl-hsf"], this), vscode.languages.registerDocumentSymbolProvider(["gdl-xml", "gdl-hsf"], this), vscode.languages.registerWorkspaceSymbolProvider(this.wsSymbols), vscode.languages.registerDefinitionProvider(["gdl-hsf"], this), vscode.languages.registerReferenceProvider(["gdl-hsf"], this), vscode.languages.registerCallHierarchyProvider(["gdl-hsf"], this.callTree), vscode.languages.registerDocumentDropEditProvider(["gdl-hsf"], this), vscode.window.registerTerminalLinkProvider(this));
     }
     async init() {
         await this.onConfigChanged(); // wait for configuration
@@ -361,6 +378,7 @@ class GDLExtension {
         //console.log("GDLExtension.onDocumentChanged", changeEvent.document.uri.toString());
         this.pathnametableView.refreshFromEditor();
         this.hsflibpart?.refresh(false, true);
+        this.clearErrorDecorations();
         this.reparseDoc(changeEvent.document); // with default timeout
     }
     onDocumentOpened(document) {
@@ -1173,6 +1191,70 @@ class GDLExtension {
             }
         }
         return references;
+    }
+    provideTerminalLinks(context, _token) {
+        const line = context.line;
+        // ...\Source\Macros\MEP_m_Connections(8) : warning: (in Script_2D) : Use of real types can result in precision problems 
+        // ...\Source\Macros\MEP_m_Connections(10) : error: (in Script_2D) : Keywords can't be used as variables
+        // -> open source code
+        const error_re = /^(?<libpart>.*?)\((?<err_line>\d+)\) : (?<type>error|warning): \(in (Script_(?<script>1D|2D|3D|VL|UI|PR|FWM|BWM))\) : (?<msg>.*)$/;
+        const match = line.match(error_re);
+        if (match) {
+            const { libpart, err_line, type, script, msg } = match.groups;
+            const err_line_num = Number.parseInt(err_line);
+            const path = vscode.Uri.joinPath(vscode.Uri.file(libpart), "scripts", `${script}.gdl`);
+            const tooltip = `show ${type} in ${script} script`;
+            const link = {
+                ...new vscode.TerminalLink(match.index, match[0].length, tooltip),
+                path: path,
+                err_line: err_line_num,
+                is_error: type === "error",
+                msg: msg
+            };
+            return [link];
+        }
+        return [];
+    }
+    decorateError(link, editor, range) {
+        const options = {
+            range: range,
+            renderOptions: {
+                after: {
+                    contentText: ` ${link.msg}`
+                }
+            }
+        };
+        const decor = link.is_error ? this.error_decoration : this.warning_decoration;
+        const other_decor = link.is_error ? this.warning_decoration : this.error_decoration;
+        editor.setDecorations(decor, [options]);
+        editor.setDecorations(other_decor, []);
+    }
+    clearErrorDecorations() {
+        const editor = vscode.window.activeTextEditor;
+        if (editor !== undefined) {
+            editor.setDecorations(this.error_decoration, []);
+            editor.setDecorations(this.warning_decoration, []);
+        }
+    }
+    async openError(link) {
+        const document = await vscode.workspace.openTextDocument(link.path);
+        const editor = await vscode.window.showTextDocument(document);
+        let range;
+        if (link.err_line !== undefined && !isNaN(link.err_line)) {
+            const line = document.lineAt(link.err_line - 1);
+            const stripped_match = line.text.match(/^(?<ws>\s*).*?(?<comment>\s*!.*)?$/);
+            const { ws, comment } = stripped_match.groups;
+            range = new vscode.Range(link.err_line - 1, ws.length, link.err_line - 1, line.text.length - (comment?.length ?? 0));
+        }
+        else {
+            range = new vscode.Range(0, 0, 0, 0); // no line number, show start of document
+        }
+        editor.revealRange(range, vscode.TextEditorRevealType.InCenterIfOutsideViewport);
+        return [editor, range];
+    }
+    async handleTerminalLink(link) {
+        const [editor, range] = await this.openError(link);
+        this.decorateError(link, editor, range);
     }
 }
 exports.GDLExtension = GDLExtension;

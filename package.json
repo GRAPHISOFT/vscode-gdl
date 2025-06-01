@@ -2,7 +2,7 @@
     "name": "gdl",
     "displayName": "GDL",
     "description": "Development environment for Archicad 28 GDL language (XML and HSF source code): syntax coloring, snippets, code outline, quick reference.",
-    "version": "1.28.1",
+    "version": "1.28.1-dev.1",
     "publisher": "Graphisoft",
     "author": "Péter Baksa",
     "contributors": [
@@ -165,7 +165,7 @@
                     "icon": "$(symbol-misc)"
                 }
             ]
-        },
+        },      
         "views": {
             "gdl-views": [
                 {
