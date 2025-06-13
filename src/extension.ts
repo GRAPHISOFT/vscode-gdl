@@ -46,7 +46,9 @@ export class GDLExtension
                vscode.DefinitionProvider,
                vscode.ReferenceProvider,
                vscode.DocumentDropEditProvider,
-               vscode.TerminalLinkProvider<HSFTerminalLink> {
+               vscode.TerminalLinkProvider<HSFTerminalLink>,
+               //vscode.CodeActionProvider<vscode.CodeAction>,
+               vscode.DocumentPasteEditProvider<vscode.DocumentPasteEdit>   {
 
     // data
     private parseTimer? : NodeJS.Timer;
@@ -188,7 +190,9 @@ export class GDLExtension
             vscode.languages.registerReferenceProvider(["gdl-hsf"], this),
             vscode.languages.registerCallHierarchyProvider(["gdl-hsf"], this.callTree),
             vscode.languages.registerDocumentDropEditProvider(["gdl-hsf"], this),
-            vscode.window.registerTerminalLinkProvider(this)
+            vscode.window.registerTerminalLinkProvider(this),
+            //vscode.languages.registerCodeActionsProvider(["gdl-hsf"], this, { providedCodeActionKinds: [vscode.CodeActionKind.RefactorRewrite] })
+            vscode.languages.registerDocumentPasteEditProvider(["gdl-hsf"], this, { pasteMimeTypes: ["text/plain"], providedPasteEditKinds: [vscode.DocumentDropOrPasteEditKind.Text]})
         );
     }
 
@@ -1515,6 +1519,97 @@ export class GDLExtension
     public async handleTerminalLink(link: HSFTerminalLink) {
         const [editor, range] = await this.openError(link);
         this.decorateError(link, editor, range);
+    }
+
+    /*public async provideCodeActions(document: vscode.TextDocument, range: vscode.Range, context: vscode.CodeActionContext, cancel: vscode.CancellationToken) : Promise<vscode.CodeAction[] | undefined> {
+
+        if (!range.isEmpty) {
+            const clipboardText = (await vscode.env.clipboard.readText()).trimStart();
+            if (clipboardText && clipboardText.length > 0) {
+                const [first, second] = clipboardText.split(/\s+/, 2);
+                let endtag: string | undefined;
+                switch (first.toLowerCase()) {
+                    case "if":
+                        endtag = "endif";
+                        break;
+                    case "for":
+                        endtag = `next ${second}`;
+                        break;
+                    case "while":
+                        endtag = "endwhile";
+                        break;
+                    case "do":
+                        endtag = "while";
+                        break;
+                    case "repeat":
+                        endtag = "until";
+                        break;
+                }
+                if (endtag === undefined) return;
+
+                let ca = new vscode.CodeAction(
+                    "Paste clipboard as new block before selection, close block after selection",
+                    vscode.CodeActionKind.RefactorRewrite);
+                ca.edit = new vscode.WorkspaceEdit();
+
+                //TODO if selection ends newline
+                const indent = document.getText(new vscode.Range(range.start.with({character: 0}), range.start));
+                ca.edit.insert(document.uri, range.end, `\n${indent}${endtag}`);
+                ca.edit.insert(document.uri, range.start, `${clipboardText}\n${indent}`);
+                ca.command = { command: "editor.action.indentLines", title: "Indent" };
+
+                return [ca];
+            }
+        }
+
+    }*/
+
+    public async provideDocumentPasteEdits(document: vscode.TextDocument, ranges: readonly vscode.Range[], dataTransfer: vscode.DataTransfer, _context: vscode.DocumentPasteEditContext, _token: vscode.CancellationToken): Promise<vscode.DocumentPasteEdit[] | undefined> {
+        // TODO prepareDocumentPaste -> process indentation when copied
+
+        if (ranges.length > 0 && !ranges[0].isEmpty) {
+            const range = ranges[0];
+            // Get clipboard text from the paste event's DataTransfer
+            const text = (await dataTransfer.get("text/plain")?.asString() ?? "").trim();
+            if (this._editor && text.length > 0) {
+                const [first, second] = text.split(/\s+/, 2);
+                let endtag: string | undefined;
+                switch (first.toLowerCase()) {
+                    case "if":
+                        endtag = "endif";
+                        break;
+                    case "for":
+                        endtag = `next ${second}`;
+                        break;
+                    case "while":
+                        endtag = "endwhile";
+                        break;
+                    case "do":
+                        endtag = "while";
+                        break;
+                    case "repeat":
+                        endtag = "until";
+                        break;
+                }
+                if (endtag === undefined) return;
+
+                // TODO handle ending newlines better
+                // TODO handle pasting multiline text
+                const indent = this._editor.options.insertSpaces ? " ".repeat(this._editor.options.indentSize as number) : "\t";
+                const selection = document.getText(range);
+                const leadingWS = selection.split(/[^\s]/, 1)[0];
+                const selectionIndented = selection.split(/\r?\n/).map(line => `${indent}${line}`).join("\n").trimEnd();
+
+                const pasteText = `${leadingWS}${text}\n${selectionIndented}\n${leadingWS}${endtag}\n`;
+                const edit = new vscode.DocumentPasteEdit(pasteText,
+                    "Paste as new block before selection, close block after selection",
+                    vscode.DocumentDropOrPasteEditKind.Text);
+
+                return [edit];
+            }
+        }
+
+        return;
     }
 }
 

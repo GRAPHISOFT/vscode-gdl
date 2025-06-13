@@ -408,8 +408,8 @@ class TokenUI {
 		}
 
 		treeItem.iconPath = {
-			light: extcontext.asAbsolutePath("images/" + this.lighticon),
-			dark:  extcontext.asAbsolutePath("images/" + this.darkicon)
+			light: vscode.Uri.joinPath(extcontext.extensionUri, `images/${this.lighticon}`),
+			dark:  vscode.Uri.joinPath(extcontext.extensionUri, `images/${this.darkicon}`)
 		};		
 		treeItem.tooltip = this.tooltip;
 
