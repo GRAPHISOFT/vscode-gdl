@@ -1570,9 +1570,9 @@ export class GDLExtension
         if (ranges.length > 0 && !ranges[0].isEmpty) {
             const range = ranges[0];
             // Get clipboard text from the paste event's DataTransfer
-            const text = (await dataTransfer.get("text/plain")?.asString() ?? "").trim();
+            const text = (await dataTransfer.get("text/plain")?.asString() ?? "");
             if (this._editor && text.length > 0) {
-                const [first, second] = text.split(/\s+/, 2);
+                const [first, second] = text.trimStart().split(/\s+/, 2);
                 let endtag: string | undefined;
                 switch (first.toLowerCase()) {
                     case "if":
@@ -1594,13 +1594,14 @@ export class GDLExtension
                 if (endtag === undefined) return;
 
                 // TODO handle ending newlines better
-                // TODO handle pasting multiline text
                 const indent = this._editor.options.insertSpaces ? " ".repeat(this._editor.options.indentSize as number) : "\t";
                 const selection = document.getText(range);
                 const leadingWS = selection.split(/[^\s]/, 1)[0];
-                const selectionIndented = selection.split(/\r?\n/).map(line => `${indent}${line}`).join("\n").trimEnd();
 
-                const pasteText = `${leadingWS}${text}\n${selectionIndented}\n${leadingWS}${endtag}\n`;
+                const selectionIndented = this.indentBlock(selection, indent);
+                const textIndented = this.indentBlock(this.unIndentBlock(text), leadingWS);
+
+                const pasteText = `${textIndented}\n${selectionIndented}\n${leadingWS}${endtag}\n`;
                 const edit = new vscode.DocumentPasteEdit(pasteText,
                     "Paste as new block before selection, close block after selection",
                     vscode.DocumentDropOrPasteEditKind.Text);
@@ -1610,6 +1611,21 @@ export class GDLExtension
         }
 
         return;
+    }
+
+    // remove leading whitespace of first line from all lines
+    private unIndentBlock(text: string): string {
+        const lines = text.split(/\r?\n/);
+        const leadingWS = lines[0].split(/[^\s]/, 1)[0].length;
+        const unindented = lines.map(line => line.substring(leadingWS)).join("\n");
+        return unindented.trimEnd(); //remove ending empty lines
+    }
+
+    // add leading whitespace to all lines
+    private indentBlock(text: string, indent: string): string {
+        const lines = text.split(/\r?\n/);
+        const indented = lines.map(line => `${indent}${line}`).join("\n");
+        return indented.trimEnd(); //remove ending empty lines
     }
 }
 
