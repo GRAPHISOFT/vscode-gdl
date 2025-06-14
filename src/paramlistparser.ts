@@ -14,6 +14,7 @@ export class Parameter {
     public readonly bold : boolean;
     public readonly fix : boolean;
     public readonly hidden : boolean;
+    public readonly unique : boolean;
 
     private subkeys : Map<string, Array<string>> = new Map();    // d => [a.b.c.d, a.e.d]
 
@@ -32,11 +33,12 @@ export class Parameter {
             }
 
             this.fix = (content.match(/<Fix\/>/) !== null);
-            
+
             let flags = content.match(/(?<=<ParFlg_).*?(?=\/>)/g) ?? [] as string[];
             this.child  = (flags.indexOf("Child") !== -1);
             this.bold   = (flags.indexOf("BoldName") !== -1);
             this.hidden = (flags.indexOf("Hidden") !== -1);
+            this.unique = (flags.indexOf("Unique") !== -1);
             
             const defaultvalue_ = content.match(/<(Value|ArrayValues)(.*?)>((.|[\n\r])*?)(?=<\/\1>)/m)
                                     ?? ["", "", ""];   // Value tag isn't present for Title and Separator
@@ -97,6 +99,7 @@ export class Parameter {
             this.bold           = false;
             this.fix            = false;
             this.hidden         = false;
+            this.unique         = false;
         }
     }
 
@@ -140,22 +143,45 @@ export class Parameter {
         return this.subkeys.has(key.toLowerCase());
     }
 
-    public getDocString(desc : boolean = true, name : boolean = true, defaultvalue : boolean = true) : vscode.MarkdownString {
-        return new vscode.MarkdownString(
-            (desc ? ("**\"" + this.desc + "\"** ") : "") + 
-            (name ? ("`" + this.nameCS + "`") : "") + 
-            "\n\n" +
-            "**" + this.type + "**" +
-            this.getFlagString("`") +
-            "\n\n" + 
-            (defaultvalue ? this.getDefaultString() : ""));
+    public getDocString(block: Parameter | undefined, desc : boolean = true, name : boolean = true, defaultvalue : boolean = true) : vscode.MarkdownString {
+        const md = new vscode.MarkdownString();
+        if (desc) {
+            md.appendMarkdown(`${this.getDescString(block)}  \n`);
+        }
+        if (name) {
+            md.appendMarkdown(`\`${this.nameCS}\``);
+        }
+        md.appendMarkdown(`${this.getFlagString(block)}  \n`);
+        if (defaultvalue) {
+            md.appendMarkdown(`**${this.type}** ${this.getDefaultString()}`);
+        }
+        return md;
     }
 
-    public getFlagString(markdown : string = "") : string {
-        return  (this.fix ? (" " + markdown + "Fix" + markdown) : "") +
-                (this.hidden ? (" " + markdown + "Hidden" + markdown) : "") +
-                (this.child ? (" " + markdown + "Child" + markdown) : "") +
-                (this.bold ? (" " + markdown + "BoldName" + markdown) : "");
+    public getDescString(block: Parameter | undefined, plaintext: boolean = false) {
+        const description = plaintext ? `"${this.desc}"` : `**"${this.desc}"**`;
+        if (block) {
+            return `"${block.desc}" / `+ description;
+        }
+        return description;
+    }
+
+    public getFlagString(block?: Parameter) {
+        let flags = (this.fix ? " `Fix`" : "");
+        flags    += (this.bold ? " `BoldName`" : "");
+        flags    += (this.hidden ? " `Hidden`" : "");
+        flags    += (this.unique ? " `Unique`" : "");
+        if (block === this) {
+            flags += (this.child ? " `Child`" : ""); // probably wrong but show it
+            flags += " `PARAMETER BLOCK`";
+        } else if (block) {
+            // shouldn't have block without child flag but show it
+            flags += ` \`${this.child ? "Child" : ""} of ${block.nameCS}\``;
+        } else {
+            flags += (this.child ? " `Child`" : ""); // probably wrong but show it
+        }
+
+        return flags;
     }
 
     public getDefaultString() : string {
@@ -183,6 +209,7 @@ export class Parameter {
 
 export class ParamList implements Iterable<Parameter> {
     private readonly parameters : Map<string, [Parameter, vscode.Position]> = new Map<string, [Parameter, vscode.Position]>();
+    private readonly group: Map<string, string> = new Map<string, string>();
     public readonly uri : vscode.Uri;
     static readonly subpath = "paramlist.xml";
 
@@ -193,13 +220,27 @@ export class ParamList implements Iterable<Parameter> {
     async parse() {
         const paramlist = await vscode.workspace.openTextDocument(this.uri);
         this.parameters.clear();
+        this.group.clear();
 
         if (paramlist) {
-            const parameters_ = paramlist.getText().matchAll(/^\t\t<(.*?) Name=.*?>((.|[\n\r])*?)^\t\t<\/\1>/mg);
+            //const parameters_ = paramlist.getText().matchAll(/^\t\t<(!--) (.*?): PARAMETER BLOCK.*?-->|^\t\t<(.*?) Name=.*?>((.|[\n\r])*?)^\t\t<\/\1>/mg);
+            const parameters_ = paramlist.getText().matchAll(/^\t\t<(.*?) (Name=.*?>((.|[\n\r])*?)^\t\t<\/\1>|(.*?): PARAMETER BLOCK.*?-->)/mg);
+            let group = "";
             for (const match of parameters_) {
-                const parameter = new Parameter(match[0]);
-                const position = paramlist.positionAt(match.index!);
-                this.parameters.set(parameter.nameCS.toLowerCase(), [parameter, position]);
+                if (match[1] == "!--") {
+                    group = match[5];
+                } else {
+                    const parameter = new Parameter(match[0]);
+                    const nameLC = parameter.nameCS.toLowerCase();
+                    if (group.toLowerCase() !== nameLC && !parameter.child) {
+                        // group applies to child parameters only
+                        // first parameter in group must have group name, is not child
+                        group = "";
+                    }
+                    this.group.set(nameLC, group);
+                    const position = paramlist.positionAt(match.index!);
+                    this.parameters.set(nameLC, [parameter, position]);
+                }
             }
         }
     }
@@ -212,9 +253,13 @@ export class ParamList implements Iterable<Parameter> {
         return this.parameters.get(name.toLowerCase())?.[0];
     }
 
+    block_of(parameter : Parameter) {
+        return this.get(this.group.get(parameter.nameCS.toLowerCase()) ?? "");
+    }
+
     position(name : string) {
         return this.parameters.get(name.toLowerCase())?.[1];
-    }    
+    }
 
     *[Symbol.iterator]() {
         yield* this.all_of_type();

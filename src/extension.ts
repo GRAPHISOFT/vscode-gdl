@@ -38,6 +38,10 @@ interface HSFTerminalLink extends vscode.TerminalLink {
     msg?: string
 };
 
+type ParameterInfo = {
+    parameter: Parameter,
+    block: Parameter | undefined
+};
 
 export class GDLExtension
     implements vscode.HoverProvider,
@@ -1035,15 +1039,7 @@ export class GDLExtension
         if (this.infoFromHSF) {
             const p = await this.isParameter(document, position);
             if (p) {
-                return new vscode.Hover([
-                    new vscode.MarkdownString("**\"" + p.desc + "\"** `" + p.nameCS + "`" +
-                                              "  \n**" + p.type + "**" +
-                                                (p.fix ? " `Fix`" : "") +
-                                                (p.hidden ? " `Hidden`" : "") +
-                                                (p.child ? " `Child`" : "") +
-                                                (p.bold ? " `BoldName`" : "") +
-                                              "  \n" + p.getDefaultString())
-                    ]);
+                return new vscode.Hover([p.parameter.getDocString(p.block, true, true)]);
             }
         }
 
@@ -1055,12 +1051,20 @@ export class GDLExtension
         if (this.hsflibpart) {
             const completions = new vscode.CompletionList();
 
-            for (const p of await this.hsflibpart.paramlist()) {
+            const paramlist = await this.hsflibpart.paramlist();
+            for (const p of paramlist) {
+                const block = paramlist.block_of(p);
                 const padding = " ".repeat(34 - p.nameCS.length); // max. parameter name length is 32 chars
-                const completion = new vscode.CompletionItem(p.nameCS + padding + p.type + p.getDimensionString(), vscode.CompletionItemKind.Field);
+                const decription = p.getDescString(block, true);
+                const completion = new vscode.CompletionItem(
+                    {
+                        label: p.nameCS + padding + p.type + p.getDimensionString(),    // allow filtering on type/dimensions too
+                        description: decription,
+                    },
+                    vscode.CompletionItemKind.Field);
                 completion.insertText = p.nameCS;
-                completion.detail = "\"" + p.desc + "\"";
-                completion.documentation = p.getDocString(false, false);
+                completion.detail = decription;
+                completion.documentation = p.getDocString(block, false, false);
                 completions.items.push(completion);
             }
 
@@ -1220,7 +1224,7 @@ export class GDLExtension
         return symbols;
     }
 
-    private async isParameter(document: vscode.TextDocument, position: vscode.Position): Promise<Parameter | undefined> {
+    private async isParameter(document: vscode.TextDocument, position: vscode.Position): Promise<ParameterInfo | undefined> {
         // implemented only for hsf libparts
         if (!this.hsflibpart) return undefined;
 
@@ -1229,7 +1233,9 @@ export class GDLExtension
 
         const word = document.getText(wordRange);
         const paramlist = await this.hsflibpart.paramlist();
-        return paramlist.get(word);
+        const parameter = paramlist.get(word);
+        if (parameter === undefined) return undefined;
+        return { parameter: parameter, block: paramlist.block_of(parameter) };
     }
 
     private async libpartReferenceLinks(ref: Parser.GDLLibpartReference, document: vscode.TextDocument, cancel: vscode.CancellationToken): Promise<vscode.LocationLink[]> {
@@ -1259,7 +1265,7 @@ export class GDLExtension
         if (param === undefined) return []; // can't have a Parameter without a ParamList
 
         const paramlist = await this.hsflibpart!.paramlist();   // isParameter cached awaited paramlist, will return immediately
-        const paramlist_position = paramlist.position(param.nameCS)!;
+        const paramlist_position = paramlist.position(param.parameter.nameCS)!;
 
         // parameter info is shown customized in hover, hide xml from this definition by returning empty range
         const link = {  targetUri: paramlist.uri,
