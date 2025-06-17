@@ -168,6 +168,9 @@ Some valid syntaxes won't be highlighted, and some invalid syntaxes will be high
 
 # Release Notes
 
+## 1.28.2-dev.2
+* require _dark.tif for .svg source image in pathnametable check
+
 ## 1.28.1-dev.2
 * Show group of parameters in hover / suggestions
 

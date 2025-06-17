@@ -1560,11 +1560,16 @@ function gsmUri(rooturi: vscode.Uri) : LibpartUri {
     return { binaryFileName: binaryFileName, sourceUri: rooturi };
 }
 
-function fileUri(parenturi: vscode.Uri, filename: string) : LibpartUri {
+function fileUris(parenturi: vscode.Uri, filename: string) : LibpartUri[] {
     let sourceUri = vscode.Uri.joinPath(parenturi, filename);
-    const binaryFileName = filename.replace(/\.svg$/i, ".tif");
 
-    return { binaryFileName: binaryFileName, sourceUri: sourceUri };
+    const svg = filename.match(/^(.*?)\.svg$/i);
+    if (svg) {
+        return [{ binaryFileName: svg[1] + ".tif", sourceUri: sourceUri },
+                { binaryFileName: svg[1] + "_dark.tif", sourceUri: sourceUri }];
+    } else {
+        return [{ binaryFileName: filename, sourceUri: sourceUri }];
+    }
 }
 
 export async function* getLibparts(uri : vscode.Uri) : AsyncIterableIterator<LibpartUri> {
@@ -1577,7 +1582,9 @@ export async function* getLibparts(uri : vscode.Uri) : AsyncIterableIterator<Lib
             if (type & vscode.FileType.File) {
                 // return file uri
                 if (name !== "IDEntryList.dbe" && !name.endsWith("_Interface.xml")) {   // skip (TODO only at specific location)
-                    yield fileUri(uri, name);
+                    for (const libpartUri of fileUris(uri, name)) {
+                        yield libpartUri;
+                    }
                 }
             } else {
                 // continue with contents of folder
