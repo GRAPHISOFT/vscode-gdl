@@ -108,6 +108,11 @@
                     "type": "boolean",
                     "default": true,
                     "description": "At GDL-HSF Language Mode the parameter's names are showing as bold and have info in hover. "
+                },
+                "gdl.enablePasteAsBlock": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Paste clipboard contents before selection as code block, closing block after selection."
                 }
             }
         },
@@ -262,6 +267,10 @@
                     "when": "editorLangId == gdl-hsf && isFileSystemResource && resourceExtname == .gdl && workbenchState != empty"
                 },
                 {
+                    "command": "GDL.togglePasteAsBlock",
+                    "when": "editorLangId == gdl-hsf"
+                },
+                {
                     "command": "GDL.rescanFolders",
                     "when": "workbenchState != empty"
                 }
@@ -411,6 +420,11 @@
                     "command": "GDL.infoFromHSF",
                     "when": "editorLangId == gdl-hsf && isFileSystemResource && resourceExtname == .gdl && workbenchState != empty",
                     "group": "navigation"
+                },
+                {
+                    "command": "GDL.togglePasteAsBlock",
+                    "when": "editorLangId == gdl-hsf",
+                    "group": "1_modification"
                 }
             ],
             "explorer/context": [
@@ -569,6 +583,12 @@
                 "icon": "$(symbol-parameter)",
                 "category": "GDL",
                 "when": "editorLangId == gdl-hsf && isFileSystemResource && resourceExtname == .gdl && workbenchState != empty"
+            },
+            {
+                "command": "GDL.togglePasteAsBlock",
+                "title": "Toggle Paste as Block",
+                "category": "GDL",
+                "when": "editorLangId == gdl-hsf"
             },
             {
                 "command": "GDL.rescanFolders",

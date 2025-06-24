@@ -35,6 +35,7 @@ class GDLExtension {
     // user settings
     refguidePath = "";
     infoFromHSF = true;
+    pasteAsBlock = false;
     // UI elements
     _editor;
     statusXMLposition;
@@ -91,8 +92,6 @@ class GDLExtension {
         context.subscriptions.push(this.statusXMLposition);
         //status bar initialization - HSF
         this.statusHSF = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left);
-        this.statusHSF.tooltip = "Show Info from HSF Files";
-        this.statusHSF.command = 'GDL.infoFromHSF';
         context.subscriptions.push(this.statusHSF);
         //init extension-relative paths
         this.initUIDecorations();
@@ -123,7 +122,7 @@ class GDLExtension {
         // moved cursor
         vscode.window.onDidChangeTextEditorSelection(() => this.updateCurrentScript()), 
         // extension commands
-        vscode.commands.registerCommand('GDL.gotoCursor', () => this.gotoCursor()), vscode.commands.registerCommand('GDL.gotoScript', async (id) => this.gotoScript(id)), vscode.commands.registerCommand('GDL.gotoRelative', async (id) => this.gotoRelative(id)), vscode.commands.registerCommand('GDL.selectScript', async (id) => this.selectScript(id)), vscode.commands.registerCommand('GDL.insertGUID', (id) => this.insertGUID(id)), vscode.commands.registerCommand('GDL.insertPict', (id) => this.insertPict(id)), vscode.commands.registerCommand('GDLOutline.toggleSpecComments', async () => this.outlineView.toggleSpecComments()), vscode.commands.registerCommand('GDLOutline.toggleMacroCalls', async () => this.outlineView.toggleMacroCalls()), vscode.commands.registerCommand('GDL.switchToGDL', async () => this.switchLang("gdl-xml")), vscode.commands.registerCommand('GDL.switchToHSF', async () => this.switchLang("gdl-hsf")), vscode.commands.registerCommand('GDL.switchToXML', async () => this.switchLang("xml")), vscode.commands.registerCommand('GDL.refguide', async () => this.showRefguide()), vscode.commands.registerCommand('GDL.infoFromHSF', () => this.setInfoFromHSF(!this.infoFromHSF)), vscode.commands.registerCommand('GDL.rescanFolders', async () => this.rescanFolders()), vscode.commands.registerCommand('GDL.clearErrorDecorations', async () => this.clearErrorDecorations()), 
+        vscode.commands.registerCommand('GDL.gotoCursor', () => this.gotoCursor()), vscode.commands.registerCommand('GDL.gotoScript', async (id) => this.gotoScript(id)), vscode.commands.registerCommand('GDL.gotoRelative', async (id) => this.gotoRelative(id)), vscode.commands.registerCommand('GDL.selectScript', async (id) => this.selectScript(id)), vscode.commands.registerCommand('GDL.insertGUID', (id) => this.insertGUID(id)), vscode.commands.registerCommand('GDL.insertPict', (id) => this.insertPict(id)), vscode.commands.registerCommand('GDLOutline.toggleSpecComments', async () => this.outlineView.toggleSpecComments()), vscode.commands.registerCommand('GDLOutline.toggleMacroCalls', async () => this.outlineView.toggleMacroCalls()), vscode.commands.registerCommand('GDL.switchToGDL', async () => this.switchLang("gdl-xml")), vscode.commands.registerCommand('GDL.switchToHSF', async () => this.switchLang("gdl-hsf")), vscode.commands.registerCommand('GDL.switchToXML', async () => this.switchLang("xml")), vscode.commands.registerCommand('GDL.refguide', async () => this.showRefguide()), vscode.commands.registerCommand('GDL.infoFromHSF', () => this.setInfoFromHSF(!this.infoFromHSF)), vscode.commands.registerCommand('GDL.togglePasteAsBlock', () => this.setPasteAsBlock(!this.pasteAsBlock)), vscode.commands.registerCommand('GDL.rescanFolders', async () => this.rescanFolders()), vscode.commands.registerCommand('GDL.clearErrorDecorations', async () => this.clearErrorDecorations()), 
         // language features
         vscode.languages.registerHoverProvider(["gdl-hsf"], this), vscode.languages.registerDocumentSymbolProvider(["gdl-xml", "gdl-hsf"], this), vscode.languages.registerWorkspaceSymbolProvider(this.wsSymbols), vscode.languages.registerDefinitionProvider(["gdl-hsf"], this), vscode.languages.registerReferenceProvider(["gdl-hsf"], this), vscode.languages.registerCallHierarchyProvider(["gdl-hsf"], this.callTree), vscode.languages.registerDocumentDropEditProvider(["gdl-hsf"], this), vscode.window.registerTerminalLinkProvider(this), 
         //vscode.languages.registerCodeActionsProvider(["gdl-hsf"], this, { providedCodeActionKinds: [vscode.CodeActionKind.RefactorRewrite] })
@@ -373,6 +372,12 @@ class GDLExtension {
             this.decorateParameters(); // start async operation
         }
     }
+    setPasteAsBlock(pasteAsBlock) {
+        this.pasteAsBlock = pasteAsBlock;
+        if (this.editor) {
+            this.updateStatusHSF();
+        }
+    }
     async rescanFolders() {
         await this.wsSymbols.changeFolders();
     }
@@ -426,6 +431,13 @@ class GDLExtension {
         else {
             this.setInfoFromHSF(infoFromHSF);
         }
+        let pasteAsBlock = config.get("enablePasteAsBlock");
+        if (pasteAsBlock === undefined) {
+            this.setPasteAsBlock(false);
+        }
+        else {
+            this.setPasteAsBlock(pasteAsBlock);
+        }
     }
     cancelParseTimer() {
         if (this.parseTimer) {
@@ -446,6 +458,7 @@ class GDLExtension {
         this.cancelSuggestHSF();
         this.paramlist_watcher?.dispose();
         this.gdl_watcher?.dispose();
+        this.suggestHSF?.dispose();
     }
     gotoCursor() {
         if (this.editor) {
@@ -657,10 +670,31 @@ class GDLExtension {
                 if (this.suggestHSF === undefined) {
                     this.suggestHSF = vscode.languages.registerCompletionItemProvider("*", this);
                 }
-                this.statusHSF.text = `GDL-HSF Parameter Hints ON`;
             }
             else {
-                this.statusHSF.text = `GDL-HSF Parameter Hints OFF`;
+                this.cancelSuggestHSF();
+            }
+            const md = new vscode.MarkdownString();
+            md.appendMarkdown(`[Toggle Parameter Hints](command:GDL.infoFromHSF)  \n`);
+            md.appendMarkdown(`[Toggle Paste as block](command:GDL.togglePasteAsBlock)  \n`);
+            md.appendMarkdown(`[Toggle Outline view spec comments](command:GDLOutline.toggleSpecComments)  \n`);
+            md.appendMarkdown(`[Toggle Outline view macro calls](command:GDLOutline.toggleMacroCalls)  \n`);
+            md.supportThemeIcons = true;
+            md.isTrusted = true;
+            this.statusHSF.tooltip = md;
+            const HSF = "$(symbol-misc) GDL-HSF";
+            let features = [];
+            if (this.infoFromHSF) {
+                features.push("highlight parameters");
+            }
+            if (this.pasteAsBlock) {
+                features.push("paste as block");
+            }
+            if (features.length > 0) {
+                this.statusHSF.text = `${HSF}: ${features.join(", ")}`;
+            }
+            else {
+                this.statusHSF.text = HSF;
             }
             this.statusHSF.show();
         }
@@ -1259,49 +1293,9 @@ class GDLExtension {
         const [editor, range] = await this.openError(link);
         this.decorateError(link, editor, range);
     }
-    /*public async provideCodeActions(document: vscode.TextDocument, range: vscode.Range, context: vscode.CodeActionContext, cancel: vscode.CancellationToken) : Promise<vscode.CodeAction[] | undefined> {
-
-        if (!range.isEmpty) {
-            const clipboardText = (await vscode.env.clipboard.readText()).trimStart();
-            if (clipboardText && clipboardText.length > 0) {
-                const [first, second] = clipboardText.split(/\s+/, 2);
-                let endtag: string | undefined;
-                switch (first.toLowerCase()) {
-                    case "if":
-                        endtag = "endif";
-                        break;
-                    case "for":
-                        endtag = `next ${second}`;
-                        break;
-                    case "while":
-                        endtag = "endwhile";
-                        break;
-                    case "do":
-                        endtag = "while";
-                        break;
-                    case "repeat":
-                        endtag = "until";
-                        break;
-                }
-                if (endtag === undefined) return;
-
-                let ca = new vscode.CodeAction(
-                    "Paste clipboard as new block before selection, close block after selection",
-                    vscode.CodeActionKind.RefactorRewrite);
-                ca.edit = new vscode.WorkspaceEdit();
-
-                //TODO if selection ends newline
-                const indent = document.getText(new vscode.Range(range.start.with({character: 0}), range.start));
-                ca.edit.insert(document.uri, range.end, `\n${indent}${endtag}`);
-                ca.edit.insert(document.uri, range.start, `${clipboardText}\n${indent}`);
-                ca.command = { command: "editor.action.indentLines", title: "Indent" };
-
-                return [ca];
-            }
-        }
-
-    }*/
     async provideDocumentPasteEdits(document, ranges, dataTransfer, _context, _token) {
+        if (!this.pasteAsBlock)
+            return;
         // TODO prepareDocumentPaste -> process indentation when copied
         if (ranges.length > 0 && !ranges[0].isEmpty) {
             const range = ranges[0];
