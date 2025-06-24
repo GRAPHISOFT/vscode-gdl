@@ -14,6 +14,7 @@ class Parameter {
     bold;
     fix;
     hidden;
+    unique;
     subkeys = new Map(); // d => [a.b.c.d, a.e.d]
     constructor(xml) {
         const result_ = xml.match(/^\t\t<(.*?) Name="(.*?)">((.|[\n\r])*?)^\t\t<\/\1>/m);
@@ -33,6 +34,7 @@ class Parameter {
             this.child = (flags.indexOf("Child") !== -1);
             this.bold = (flags.indexOf("BoldName") !== -1);
             this.hidden = (flags.indexOf("Hidden") !== -1);
+            this.unique = (flags.indexOf("Unique") !== -1);
             const defaultvalue_ = content.match(/<(Value|ArrayValues)(.*?)>((.|[\n\r])*?)(?=<\/\1>)/m)
                 ?? ["", "", ""]; // Value tag isn't present for Title and Separator
             const isArray = (defaultvalue_[1] === "ArrayValues");
@@ -90,6 +92,7 @@ class Parameter {
             this.bold = false;
             this.fix = false;
             this.hidden = false;
+            this.unique = false;
         }
     }
     static unindent(xml) {
@@ -131,20 +134,44 @@ class Parameter {
     hasSubKey(key) {
         return this.subkeys.has(key.toLowerCase());
     }
-    getDocString(desc = true, name = true, defaultvalue = true) {
-        return new vscode.MarkdownString((desc ? ("**\"" + this.desc + "\"** ") : "") +
-            (name ? ("`" + this.nameCS + "`") : "") +
-            "\n\n" +
-            "**" + this.type + "**" +
-            this.getFlagString("`") +
-            "\n\n" +
-            (defaultvalue ? this.getDefaultString() : ""));
+    getDocString(block, desc = true, name = true, defaultvalue = true) {
+        const md = new vscode.MarkdownString();
+        if (desc) {
+            md.appendMarkdown(`${this.getDescString(block)}  \n`);
+        }
+        if (name) {
+            md.appendMarkdown(`\`${this.nameCS}\``);
+        }
+        md.appendMarkdown(`${this.getFlagString(block)}  \n`);
+        if (defaultvalue) {
+            md.appendMarkdown(`**${this.type}** ${this.getDefaultString()}`);
+        }
+        return md;
     }
-    getFlagString(markdown = "") {
-        return (this.fix ? (" " + markdown + "Fix" + markdown) : "") +
-            (this.hidden ? (" " + markdown + "Hidden" + markdown) : "") +
-            (this.child ? (" " + markdown + "Child" + markdown) : "") +
-            (this.bold ? (" " + markdown + "BoldName" + markdown) : "");
+    getDescString(block, plaintext = false) {
+        const description = plaintext ? `"${this.desc}"` : `**"${this.desc}"**`;
+        if (block) {
+            return `"${block.desc}" / ` + description;
+        }
+        return description;
+    }
+    getFlagString(block) {
+        let flags = (this.fix ? " `Fix`" : "");
+        flags += (this.bold ? " `BoldName`" : "");
+        flags += (this.hidden ? " `Hidden`" : "");
+        flags += (this.unique ? " `Unique`" : "");
+        if (block === this) {
+            flags += (this.child ? " `Child`" : ""); // probably wrong but show it
+            flags += " `PARAMETER BLOCK`";
+        }
+        else if (block) {
+            // shouldn't have block without child flag but show it
+            flags += ` \`${this.child ? "Child" : ""} of ${block.nameCS}\``;
+        }
+        else {
+            flags += (this.child ? " `Child`" : ""); // probably wrong but show it
+        }
+        return flags;
     }
     getDefaultString() {
         if (this.type !== "Title" && this.type !== "Separator") {
@@ -171,6 +198,7 @@ class Parameter {
 exports.Parameter = Parameter;
 class ParamList {
     parameters = new Map();
+    group = new Map();
     uri;
     static subpath = "paramlist.xml";
     constructor(rootfolder) {
@@ -179,12 +207,27 @@ class ParamList {
     async parse() {
         const paramlist = await vscode.workspace.openTextDocument(this.uri);
         this.parameters.clear();
+        this.group.clear();
         if (paramlist) {
-            const parameters_ = paramlist.getText().matchAll(/^\t\t<(.*?) Name=.*?>((.|[\n\r])*?)^\t\t<\/\1>/mg);
+            //const parameters_ = paramlist.getText().matchAll(/^\t\t<(!--) (.*?): PARAMETER BLOCK.*?-->|^\t\t<(.*?) Name=.*?>((.|[\n\r])*?)^\t\t<\/\1>/mg);
+            const parameters_ = paramlist.getText().matchAll(/^\t\t<(.*?) (Name=.*?>((.|[\n\r])*?)^\t\t<\/\1>|(.*?): PARAMETER BLOCK.*?-->)/mg);
+            let group = "";
             for (const match of parameters_) {
-                const parameter = new Parameter(match[0]);
-                const position = paramlist.positionAt(match.index);
-                this.parameters.set(parameter.nameCS.toLowerCase(), [parameter, position]);
+                if (match[1] == "!--") {
+                    group = match[5];
+                }
+                else {
+                    const parameter = new Parameter(match[0]);
+                    const nameLC = parameter.nameCS.toLowerCase();
+                    if (group.toLowerCase() !== nameLC && !parameter.child) {
+                        // group applies to child parameters only
+                        // first parameter in group must have group name, is not child
+                        group = "";
+                    }
+                    this.group.set(nameLC, group);
+                    const position = paramlist.positionAt(match.index);
+                    this.parameters.set(nameLC, [parameter, position]);
+                }
             }
         }
     }
@@ -193,6 +236,9 @@ class ParamList {
     }
     get(name) {
         return this.parameters.get(name.toLowerCase())?.[0];
+    }
+    block_of(parameter) {
+        return this.get(this.group.get(parameter.nameCS.toLowerCase()) ?? "");
     }
     position(name) {
         return this.parameters.get(name.toLowerCase())?.[1];

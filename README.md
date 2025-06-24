@@ -52,7 +52,7 @@ __hotspot__ or __hotspot2__ - length edit hotspot triplet
   * Show info about parameters when the mouse hovers on them (can be toggled on/off with Ctrl-Alt-Space)
   * Show parameters with bold font (can be toggled on/off with Ctrl-Alt-Space), jump to paramlist.xml with Ctrl-click.
   * IntelliSense lists constants (ALL_CAPS) with their initialized values
-  * IntelliSense lists parameters with their description, type, flags and default value. This list can be filtered by parameter type too.
+  * IntelliSense lists parameters with their description, type, flags, group and default value. This list can be filtered by parameter type too.
   * Follow libraryglobal, macro and subroutine calls with Ctrl-click
   * Show variable, dictionary key, returned_parameters assignments, dictionary or array declarations with Ctrl-click.
 * Go to definitions/references, find all references of subroutines in same libpart (Ctrl-click or F12, Shift-F12, Shift-Alt-F12)
@@ -167,6 +167,12 @@ Some valid syntaxes won't be highlighted, and some invalid syntaxes will be high
 1. Press Ctrl-S to apply changes to the user settings
 
 # Release Notes
+
+## 1.28.2-dev.2
+* require _dark.tif for .svg source image in pathnametable check
+
+## 1.28.1-dev.2
+* Show group of parameters in hover / suggestions
 
 ## 1.28.1-dev.1
 * Links to source files from LP_XMLConverter error messages in terminal
