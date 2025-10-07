@@ -1545,17 +1545,17 @@
       "body": "\n\n! ==================================================================================================\nend ! end ! end ! end ! end ! end ! end ! end ! end ! end ! end ! end ! end ! end ! end ! end ! end\n! ==================================================================================================\n\n\n"
     },
     "series 0...": {
-      "prefix": "0",
+      "prefix": "0...",
       "description": "insert integer series starting from 0 at each cursor position",
       "body": "$CURSOR_INDEX"
     },
     "series 1...": {
-      "prefix": "1",
+      "prefix": "1...",
       "description": "insert integer series starting from 1 at each cursor position",
       "body": "$CURSOR_NUMBER"
     },
     "series [1...": {
-      "prefix": "[",
+      "prefix": "[...",
       "description": "insert integer series starting from 1 at each cursor position",
       "body": "[$CURSOR_NUMBER"
     },

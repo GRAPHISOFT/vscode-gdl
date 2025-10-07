@@ -177,17 +177,12 @@ Some valid syntaxes won't be highlighted, and some invalid syntaxes will be high
 
 # Release Notes
 
-## 1.28.2-dev.3
-* snippet updates
-
-## 1.28.2-dev.2
-* require _dark.tif for .svg source image in pathnametable check
-* paste as block
-
-## 1.28.1-dev.2
+## 1.29.0
+* Reference guide 29
+* Snippet updates
+* Require _dark.tif for .svg source image in pathnametable check
+* Paste as block
 * Show group of parameters in hover / suggestions
-
-## 1.28.1-dev.1
 * Links to source files from LP_XMLConverter error messages in terminal
 
 ## 1.28.1
