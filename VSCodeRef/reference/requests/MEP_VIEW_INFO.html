@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../../"/><title>MEP_VIEW_INFO</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlrequest"><h3 id="MEP_VIEW_INFO_gdlrequest" style="font-family: monospace">MEP_VIEW_INFO</h3>
+                    <pre class="programlisting">n = REQUEST("MEP_VIEW_INFO", InputParameters, MEPViewInfo)</pre>
+                    
+                        <p>
+                            Returns the MEP information related to the current view. <span class="italic">Expression returns 0 and contains dummy return values (empty dictionary) if used in parameter script, causing additional warning.</span>
+                        </p>
+                        <p>
+                            <span class="italic">Compatibility: introduced in Archicad 29.</span>
+                        </p>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>InputParameters: </b></code>(dictionary)</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>MEPViewInfo: </b></code>(dictionary)</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>.floorPlanRepresentationMode: </b></code>(integer) floor plan representation mode for MEP elements according to the MVO: 1 - Projected, 2 - Symbolic</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>.symbolicLoD: </b></code>(integer) symbolic floor plan display representation's level of detail: 1 - Center line only, 2 - Center line + Outlines, 3 - Center line + Outlines + Insulation</div>
+                        </div>
+                    
+                    <div class="example"><a id="id654933"/><p class="title"><b>Example:
+</b></p><div class="example-contents"><pre class="programlisting">DICT InputParameters, MEPViewInfo
+n = REQUEST ("MEP_VIEW_INFO", InputParameters, MEPViewInfo)</pre></div></div>
+                <hr/><a href="002.015.html#MEP_VIEW_INFO_gdlrequest">Related in Miscellaneous</a><p>
+                <span class="bold"><strong>GDL Reference Guide</strong></span>
+            </p><p>
+                <span class="trademark">Copyright</span><sup>©</sup> 2025 by Graphisoft, all rights reserved.
+                Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+            </p></body></html>

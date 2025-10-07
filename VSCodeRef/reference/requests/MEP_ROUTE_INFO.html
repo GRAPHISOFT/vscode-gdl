@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><base href="../../"/><title>MEP_ROUTE_INFO</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/><meta http-equiv="content-language" content="en-US"/><meta name="author" content="Graphisoft SE"/><link rel="stylesheet" href="reference.css" type="text/css"/><link rel="stylesheet" href="print.css" type="text/css" media="print"/></head><body class="gdlrequest"><h3 id="MEP_ROUTE_INFO_gdlrequest" style="font-family: monospace">MEP_ROUTE_INFO</h3>
+                    <pre class="programlisting">n = REQUEST("MEP_ROUTE_INFO", InputParameters, MEPRouteInfo)</pre>
+                    
+                        <p>
+                            Returns geometrical data specific to the MEP routing tool. Can be used only in MEP routing. <span class="italic">Expression returns 0 and contains dummy return values (empty dictionary) if used in parameter script, causing additional warning.</span>
+                        </p>
+                        <p>
+                            <span class="italic">Compatibility: introduced in Archicad 29.</span>
+                        </p>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>InputParameters: </b></code>(dictionary)</div>
+                        </div>
+                         <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>.elemType: </b></code>(integer) MEP element type. Segment = 1, Bend = 2, Transition = 3, Branch = 4</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>MEPRouteInfo: </b></code>(dictionary) containing the following keys:</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>.portData: </b></code>(array) descriptors of ports</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>.portData[n].position: </b></code>(dictionary) position of the port</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>.portData[n].position.x: </b></code>(float)</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>.portData[n].position.y: </b></code>(float)</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>.portData[n].position.z: </b></code>(float)</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>.portData[n].directionVector: </b></code>(dictionary) unitvector pointing away from the port</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>.portData[n].directionVector.ux: </b></code>(float)</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>.portData[n].directionVector.uy: </b></code>(float)</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>.portData[n].directionVector.uz: </b></code>(float)</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>.portData[n].widthVector: </b></code>(dictionary) unitvector pointing sideways of the port</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>.portData[n].widthVector.ux: </b></code>(float)</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>.portData[n].widthVector.uy: </b></code>(float)</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>.portData[n].widthVector.uz: </b></code>(float)</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>.portData[n].width: </b></code>(float) width of the port</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>.portData[n].height: </b></code>(float) height of the port</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>.portData[n].wallThickness: </b></code>(float) wall thickness of the port</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>.portData[n].flangeSize: </b></code>(float) size of the flange</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>.portData[n].depth: </b></code>(float) depth of the connector</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>.portData[n].length: </b></code>(float) length of the port</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>.portData[n].isConnected: </b></code>(boolean) True if connected to any other port</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>.portData[n].class: </b></code>(integer) Duct = 1, Pipe = 2, CableCarrier = 3</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>.portData[n].gender: </b></code>(integer) Unisex = 0, Male = 1, Female = 2</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>.portData[n].shape: </b></code>(integer) Rectangular = 1, Circular = 2, Oval = 3, UShape = 4</div>
+                        </div> 
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>.portData[n].visibility: </b></code>(boolean) True if port is visible</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>.portData[n].style: </b></code>(integer) NoConnector = 1, Flanged = 2, Overlap = 3</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>.position: </b></code>(dictionary) position of the element within the local coordinate system</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>.position.x: </b></code>(float)</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>.position.y: </b></code>(float)</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>.position.z: </b></code>(float)</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>.directionVector: </b></code>(dictionary) unitvector determining the direction of the element</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>.directionVector.ux: </b></code>(float)</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>.directionVector.uy: </b></code>(float)</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>.directionVector.uz: </b></code>(float)</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>.widthVector: </b></code>(dictionary) unitvector pointing to the side of the element</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>.widthVector.ux: </b></code>(float)</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>.widthVector.uy: </b></code>(float)</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>.widthVector.uz: </b></code>(float)</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>.numberConnections: </b></code>(integer) number of the element's ports</div>
+                        </div>
+                         <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>.hasInsulation: </b></code>(boolean) element has insulation</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>.insulationThickness: </b></code>(float) insulation thickness</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>.straightLength: </b></code>(float) length of the element (Only filled for Segment and Transition elements)</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>.transitionOffsetY: </b></code>(float) offset of the second port along the width axis (Only filled for Transition elements)</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>.transitionOffsetZ: </b></code>(float) offset of the second port along the height axis (Only filled for Transition elements)</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>.bendAngle: </b></code>(float) angle of bend (Only filled for Bend elements)</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>.bendRadius: </b></code>(float) radius of bend (Only filled for Bend elements)</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>.branchAngle: </b></code>(float) angle of branch (Only filled for tee elements)</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>.branchOffset: </b></code>(float) offset of the branch, measured from its first port (Only filled for tee elements)</div>
+                        </div>
+                    
+                    <div class="example"><a id="id654425"/><p class="title"><b>Example:
+</b></p><div class="example-contents"><pre class="programlisting">DICT InputParameters, MEPRouteInfo
+n = REQUEST ("MEP_ROUTE_INFO", InputParameters, MEPRouteInfo)</pre></div></div>
+                <hr/><a href="002.015.html#MEP_ROUTE_INFO_gdlrequest">Related in Miscellaneous</a><p>
+                <span class="bold"><strong>GDL Reference Guide</strong></span>
+            </p><p>
+                <span class="trademark">Copyright</span><sup>©</sup> 2025 by Graphisoft, all rights reserved.
+                Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
+            </p></body></html>

@@ -167,6 +167,10 @@ Some valid syntaxes won't be highlighted, and some invalid syntaxes will be high
 
 # Release Notes
 
+## 1.29.0
+* Reference guide 29
+* Snippet updates
+
 ## 1.28.1
 * improved links (Ctrl-click):
   * link parameters to paramlist.xml

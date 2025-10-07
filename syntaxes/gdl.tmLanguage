@@ -1270,7 +1270,7 @@
 									KEYNOTE_(FOLDER_TREE|INFO) |
 									(MODEL|LAYOUT)_(LENGTH|TEXT_SIZE)_UNIT |
 									MATERIAL_INFO |
-									MEP_(ROUTE_ATTRIBUTES|PIPE_FLEXIBLE_SEGMENT_GEOMETRY) |
+									MEP_(ROUTE_(ATTRIBUTES|INFO)|VIEW_INFO|PIPE_FLEXIBLE_SEGMENT_GEOMETRY) |
 									Model_size |
 									NAME_OF_((BUILDING_)?MATERIAL|FILL|LINE_TYPE|LISTED|MACRO|MAIN|PLAN|PROFILE|PROGRAM|STYLE) |
 									Pen_of_RGB\s+[01](\.\d+)?\s+[01](\.\d+)?\s+[01](\.\d+)?\s? |
@@ -1287,7 +1287,7 @@
 									SUM_WITH_ROUNDING |
 									STORY(_INFO)? |
 									(STYLE|TEXTBLOCK)_INFO |
-									VIEW_ROTANGLE |
+									VIEW_(SUBTYPE|ROTANGLE) |
 									WINDOW_(DOOR_(DIMENSION|SHOW_DIM|ZONE_RELEV(_OF_OWNER)?)|SHOW_DIM) |
 									WORKING_(ANGLE|LENGTH)_UNIT |
 									ZONE_(CATEGORY|COLUS_AREA|RELATIONS(_OF_OWNER)?)
@@ -1541,7 +1541,9 @@
 														mirror_once
 													) |
 											width
-										)
+										) |
+									MEP_RequestBased |
+									Con(Status|System|(Connector)?Type|Width|Depth)_([2-9]|1[0-8]?)
 								)(\1)(?!\w)</string>
 						<key>name</key>
 						<string>variable.language.gdl</string>
