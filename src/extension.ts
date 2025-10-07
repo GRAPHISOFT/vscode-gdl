@@ -205,10 +205,6 @@ export class GDLExtension
         await this.onConfigChanged();   // wait for configuration
         this.onActiveEditorChanged();   // start async operation
         this.wsSymbols.changeFolders(); // handles waiting for result on its own
-
-        // TODO this is just a demo
-        // const packages = await allPackages();
-        // console.log(packages.map(p => p.packageName));
     }
 
     get updateEnabled() : boolean { return this._updateEnabled; }
@@ -1568,7 +1564,6 @@ export class GDLExtension
     public async provideDocumentPasteEdits(document: vscode.TextDocument, ranges: readonly vscode.Range[], dataTransfer: vscode.DataTransfer, _context: vscode.DocumentPasteEditContext, _token: vscode.CancellationToken): Promise<vscode.DocumentPasteEdit[] | undefined> {
         if (!this.pasteAsBlock) return;
         
-        // TODO prepareDocumentPaste -> process indentation when copied
         if (ranges.length > 0 && !ranges[0].isEmpty) {
             const range = ranges[0];
             // Get clipboard text from the paste event's DataTransfer
@@ -1595,7 +1590,6 @@ export class GDLExtension
                 }
                 if (endtag === undefined) return;
 
-                // TODO handle ending newlines better
                 const indent = this._editor.options.insertSpaces ? " ".repeat(this._editor.options.indentSize as number) : "\t";
                 const selection = document.getText(range);
                 const leadingWS = selection.split(/[^\s]/, 1)[0];

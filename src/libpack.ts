@@ -35,7 +35,7 @@ function escapeRegex(str: string) {
 export async function allPackages(): Promise<PackageInfo[]> {
     const infos = await vscode.workspace.findFiles("**/package.info");
     const packageInfos = infos.map(async info => await PackageInfo.read(info));
-    return (await Promise.allSettled(packageInfos)) // TODO write function for it, report rejected promises
+    return (await Promise.allSettled(packageInfos))
         .flatMap(result => result.status === "fulfilled" ? result.value : undefined)
         .filter((e) : e is PackageInfo => e !== undefined);
 }
@@ -47,7 +47,6 @@ interface LanguageFiles {
     scriptDictionary? : vscode.Uri;
 }
 
-// TODO merge all pathnametables for selected localization
 class PackageInfo {
 
     static async read(packageInfoUri: vscode.Uri): Promise<PackageInfo> {
