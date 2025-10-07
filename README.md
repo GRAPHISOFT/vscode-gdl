@@ -35,6 +35,8 @@ __subroutine__ - subroutine header and body
 
 __hotspot__ or __hotspot2__ - length edit hotspot triplet
 
+__[...__ __1...__ __0...__ - when used with multiple cursors, insert series of numbers starting from 1 or 0
+
 # VSCode standard language features for GDL-HSF
 
 * Document symbols (Ctrl-Shift-O)
@@ -65,6 +67,13 @@ __hotspot__ or __hotspot2__ - length edit hotspot triplet
   * Decrease after block-closing keywords (next, else, endif, endwhile, endgroup, return...)
   * Line ending comments are handled, comment-only lines and difficult syntax with : or multiline strings are not
 * Links to source files from LP_XMLConverter error messages in terminal. The error message is shown next to the code, until the first edit or switching the editor.
+
+# Paste as block
+When when pasting text on a selection, and the pasted text begins with a block-starter GDL statement, text is inserted before the selection and a corresponding block-closing statement is inserted after. Pasted text is indented to the selection's indentation, and selection gets indented.
+
+Reconginzed statements: `if` `for` `while` `do` `repeat`
+
+By default this feature is off, can be enabled by command `Toggle Paste as Block`.
 
 # Script outline view
 
@@ -173,6 +182,7 @@ Some valid syntaxes won't be highlighted, and some invalid syntaxes will be high
 
 ## 1.28.2-dev.2
 * require _dark.tif for .svg source image in pathnametable check
+* paste as block
 
 ## 1.28.1-dev.2
 * Show group of parameters in hover / suggestions
