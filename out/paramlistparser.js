@@ -102,13 +102,14 @@ class Parameter {
         return xml.replace(regex, "");
     }
     addsubkeys(xml, prefix) {
-        const subkeys = /^<((Dictionary|Array)|(Integer|RealNum|String))\s+(Index|Name)="(.*?)"\s*>\s*(((.*?)<\/\3\s*>)|(\s*[\n\r]+((^\s.*[\n\r]+)*?)^<\/\2\s*>))/gm;
+        const subkeys = /^<((?<collection>Dictionary|Array)|(Integer|RealNum|String))\s+(?<idType>Index|Name)="(?<id>.*?)"\s*(\/>|>\s*(((.*?)<\/\3\s*>)|(\s*[\n\r]+(?<content>(^\s.*[\n\r]+)*?)^<\/\2\s*>)))/gm;
+        // group count     12                             2 3                      31   4                   4  5        5    6        789   9         8 A          B          C            C  B          A76
         for (const match of xml.matchAll(subkeys)) {
-            const id = match[5];
-            if (match[2] !== undefined) {
+            const id = match.groups?.id ?? "";
+            if (match.groups?.collection !== undefined) {
                 // array or dict
-                const content = Parameter.unindent(match[10]);
-                const inArray = match[4] === "Index";
+                const content = Parameter.unindent(match.groups?.content ?? "");
+                const inArray = match.groups?.idType === "Index";
                 if (inArray) {
                     this.addsubkeys(content, prefix);
                 }
@@ -133,6 +134,9 @@ class Parameter {
     }
     hasSubKey(key) {
         return this.subkeys.has(key.toLowerCase());
+    }
+    getSubKeys() {
+        return this.subkeys.entries();
     }
     getDocString(block, desc = true, name = true, defaultvalue = true) {
         const md = new vscode.MarkdownString();

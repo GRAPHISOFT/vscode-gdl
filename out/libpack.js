@@ -239,8 +239,8 @@ class PathNameTreeItem {
             // count file types
             const entries = this.getTableEntries(true);
             const fileTypes = entries.map(e => PathNameTableView.typeByExtension(e.fileName));
-            const numberOfLibparts = fileTypes.reduce((count, e) => (e === 1 /* SCRIPT */) ? count + 1 : count, 0);
-            const numberOfImages = fileTypes.reduce((count, e) => (e === 2 /* IMAGE */) ? count + 1 : count, 0);
+            const numberOfLibparts = fileTypes.reduce((count, e) => (e === 1 /* LibpartType.SCRIPT */) ? count + 1 : count, 0);
+            const numberOfImages = fileTypes.reduce((count, e) => (e === 2 /* LibpartType.IMAGE */) ? count + 1 : count, 0);
             item.tooltip = `${entries.length} entries\n${numberOfLibparts} libparts\n${numberOfImages} images`;
         }
         // icon
@@ -327,10 +327,10 @@ class PathNameTableView {
     static typeByExtension(fileName) {
         const ext = path.extname(fileName).toLowerCase();
         if (ext === ".gsm")
-            return 1 /* SCRIPT */;
+            return 1 /* LibpartType.SCRIPT */;
         if (extension_1.GDLExtension.allowedImageTypes.has(ext))
-            return 2 /* IMAGE */;
-        return 0 /* OTHER */;
+            return 2 /* LibpartType.IMAGE */;
+        return 0 /* LibpartType.OTHER */;
     }
     static VIEWID = "PathNameTableView";
     static treeMime = 'application/vnd.code.tree.pathnametableview';
@@ -567,7 +567,7 @@ class PathNameTableView {
             for await (const uri of (0, extension_1.getLibparts)(vscode.Uri.file(packagePath))) {
                 if (uri.binaryFileName.toLocaleLowerCase() === findFile) {
                     found = true;
-                    if (PathNameTableView.typeByExtension(item.entry.fileName) === 1 /* SCRIPT */) {
+                    if (PathNameTableView.typeByExtension(item.entry.fileName) === 1 /* LibpartType.SCRIPT */) {
                         vscode.commands.executeCommand('vscode.open', vscode.Uri.joinPath(uri.sourceUri, "libpartdata.xml"));
                     }
                     else {
