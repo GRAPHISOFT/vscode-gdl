@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ParseXMLGDL = exports.GDLPict = exports.GDLPictParent = exports.GDLSection = exports.GDLScript = exports.GDLFile = exports.GDLXMLSection = exports.GDLMigrationGUID = exports.GDLMainGUID = exports.GDLLibrayGlobalCall = exports.GDLMacroCall = exports.GDLLibpartReference = exports.GDLCalledMacro = exports.GDLComment = exports.GDLFunction = exports.GDLToken = exports.getRelatedScripts = exports.Scripts = exports.ScriptsExceptMaster = exports.scriptName = exports.scriptFile = exports.scriptAbbrev = exports.ScriptType = void 0;
+exports.ParseXMLGDL = exports.GDLPict = exports.GDLPictParent = exports.GDLSection = exports.GDLScript = exports.GDLFile = exports.GDLXMLSection = exports.GDLMigrationGUID = exports.GDLMainGUID = exports.GDLLibrayGlobalCall = exports.GDLMacroCall = exports.GDLLibpartReference = exports.GDLCalledMacro = exports.GDLComment = exports.GDLFunction = exports.GDLToken = exports.getRelatedScripts = exports.Scripts = exports.ScriptsExceptMaster = exports.scriptName = exports.scriptIconCircle = exports.scriptIconSquare = exports.scriptFile = exports.scriptAbbrev = exports.ScriptType = void 0;
 const vscode = require("vscode");
 var ScriptType;
 (function (ScriptType) {
@@ -20,6 +20,8 @@ var ScriptType;
 })(ScriptType = exports.ScriptType || (exports.ScriptType = {}));
 exports.scriptAbbrev = ["FILE", "MASTER", "2D", "3D", "UI", "PARAM", "PROP", "FWM", "BWM", "", "", "", ""];
 exports.scriptFile = ["", "1d", "2d", "3d", "ui", "vl", "pr", "fwm", "bwm", "", "", "", ""];
+exports.scriptIconSquare = ["", "⬛", "🟥", "🟨", "🟪", "🟧", "🟦", "🟩", "🟫", "", "", "", ""];
+exports.scriptIconCircle = ["", "⚫", "🔴", "🟡", "🟣", "🟠", "🔵", "🟢", "🟤", "", "", "", ""];
 exports.scriptName = ["file",
     "MASTER SCRIPT",
     "2D SCRIPT",

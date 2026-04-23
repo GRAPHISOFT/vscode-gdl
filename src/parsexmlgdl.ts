@@ -3,6 +3,8 @@ import * as vscode from 'vscode';
 export enum ScriptType { ROOT = 0, D, DD, DDD, UI, VL, PR, FWM, BWM, MIGTABLE, PARAMSECTION, CALLEDMACROS, GDLPICT }
 export const scriptAbbrev = [ "FILE", "MASTER", "2D", "3D", "UI", "PARAM", "PROP", "FWM", "BWM", "", "", "", "" ];
 export const scriptFile = [ "", "1d", "2d", "3d", "ui", "vl", "pr", "fwm", "bwm", "", "", "", "" ];
+export const scriptIconSquare = [ "", "⬛", "🟥", "🟨", "🟪", "🟧", "🟦", "🟩", "🟫", "", "", "", "" ];
+export const scriptIconCircle = [ "", "⚫", "🔴", "🟡", "🟣", "🟠", "🔵", "🟢", "🟤", "", "", "", "" ];
 export const scriptName = [ "file",
 							"MASTER SCRIPT",
 							"2D SCRIPT",

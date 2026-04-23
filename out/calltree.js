@@ -63,14 +63,20 @@ class CallTree {
     static createIncomingDocumentItem(document, referrer, searchMode) {
         // don't show line in result, an item can have multiple ranges
         const hint = (referrer instanceof Parser.GDLMacroCall) ? extension_1.GDLExtension.libpartReferenceDetail(referrer) : "";
-        return new vscode.CallHierarchyItem(vscode.SymbolKind.File, `${(0, extension_1.HSFNameOfScript)(document.uri)}`, `${CallTree.formatContext(searchMode)} ${referrer.keyword()} "${referrer.name}"${hint} ${CallTree.formatScriptReference(document.uri)}`, document.uri, referrer.range(document), referrer.namerange(document));
+        const all = (referrer instanceof Parser.GDLMacroCall) ? referrer.all : true;
+        const namerange = referrer.namerange(document);
+        return new vscode.CallHierarchyItem(vscode.SymbolKind.File, `${(0, extension_1.HSFNameOfScript)(document.uri)}`, `${CallTree.formatContext(searchMode)} ${referrer.keyword()} "${referrer.name}"${hint} ${CallTree.formatScriptReference(document.uri, all, namerange)}`, document.uri, referrer.range(document), namerange);
     }
-    static formatScriptReference(uri, range) {
+    static formatScriptReference(uri, all, range) {
+        const scriptType = (0, extension_1.HSFScriptType)(uri);
+        const scriptName = Parser.scriptFile[scriptType];
+        const scriptIcon = all ? Parser.scriptIconCircle[scriptType] : Parser.scriptIconSquare[scriptType];
+        const scriptID = (all === undefined) ? scriptName : `${scriptIcon} ${scriptName}`;
         if (range === undefined) {
-            return `- ${path.basename(uri.fsPath, ".gdl")}`;
+            return `- ${scriptID}`;
         }
         else {
-            return `- ${path.basename(uri.fsPath, ".gdl")} : ${range.start.line + 1}`;
+            return `- ${scriptID} : ${range.start.line + 1}`;
         }
     }
     static modeRegex = /(?<=^\[).*?(?= context\])/;
@@ -85,12 +91,13 @@ class CallTree {
     static createReferencedItem(document, reference, direction, searchMode) {
         const range = reference.range(document);
         const newMode = CallTree.getOutgoingMode(document.uri, searchMode);
+        const all = (reference instanceof Parser.GDLMacroCall) ? reference.all : true;
         const hint = (reference instanceof Parser.GDLMacroCall) ? extension_1.GDLExtension.libpartReferenceDetail(reference) : "";
-        return new vscode.CallHierarchyItem(vscode.SymbolKind.Object, `${reference.keyword()} "${reference.name}"${hint}`, `${CallTree.formatContext(newMode)} ${direction}${(0, extension_1.HSFNameOfScript)(document.uri)} ${CallTree.formatScriptReference(document.uri, range)}`, document.uri, range, reference.namerange(document));
+        return new vscode.CallHierarchyItem(vscode.SymbolKind.Object, `${reference.keyword()} "${reference.name}"${hint}`, `${CallTree.formatContext(newMode)} ${direction}${(0, extension_1.HSFNameOfScript)(document.uri)} ${CallTree.formatScriptReference(document.uri, all, range)}`, document.uri, range, reference.namerange(document));
     }
     static createDocumentItem(uri, direction, searchMode) {
         const newMode = CallTree.getOutgoingMode(uri, searchMode);
-        return new vscode.CallHierarchyItem(vscode.SymbolKind.File, `all calls`, `${CallTree.formatContext(newMode)} ${direction}${(0, extension_1.HSFNameOfScript)(uri)} ${CallTree.formatScriptReference(uri)}`, uri, extension_1.GDLExtension.zero_range, extension_1.GDLExtension.zero_range);
+        return new vscode.CallHierarchyItem(vscode.SymbolKind.File, `all calls`, `${CallTree.formatContext(newMode)} ${direction}${(0, extension_1.HSFNameOfScript)(uri)} ${CallTree.formatScriptReference(uri, undefined)}`, uri, extension_1.GDLExtension.zero_range, extension_1.GDLExtension.zero_range);
     }
     static copyOutgoingItem(item, searchMode) {
         const newMode = CallTree.formatContext(searchMode);
@@ -204,14 +211,14 @@ class CallTree {
                     const references = (await this.getReferenceList(scriptUri, cancel))
                         .filter(reference => (reference.name.toLowerCase() === targetName));
                     if (references.length > 0) {
-                        // add one item with all found ranges
                         let searchDocument = await vscode.workspace.openTextDocument(scriptUri);
-                        const ranges = references.map(macrocall => macrocall.range(searchDocument));
-                        const targetItem = CallTree.createIncomingDocumentItem(searchDocument, references[0], searchMode);
-                        results.push({
-                            from: libpart.name,
-                            to: new vscode.CallHierarchyIncomingCall(targetItem, ranges)
-                        });
+                        const locations = references.map(macrocall => ({ range: macrocall.range(searchDocument),
+                            item: CallTree.createIncomingDocumentItem(searchDocument, macrocall, searchMode)
+                        }));
+                        const targetItems = locations.map(loc => ({ from: libpart.name,
+                            to: new vscode.CallHierarchyIncomingCall(loc.item, [loc.range])
+                        }));
+                        results.push(...targetItems);
                     }
                 }
             }
