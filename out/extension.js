@@ -12,6 +12,7 @@ const wssymbols_1 = require("./wssymbols");
 const calltree_1 = require("./calltree");
 const path = require("path");
 const jumpparser_1 = require("./jumpparser");
+const varparser_1 = require("./varparser");
 const paramlistparser_1 = require("./paramlistparser");
 async function activate(context) {
     //console.log("extension.activate");
@@ -903,9 +904,16 @@ class GDLExtension {
                 completion.detail = decription;
                 completion.documentation = p.getDocString(block, false, false);
                 completions.items.push(completion);
+                if (p.type === "Dictionary") {
+                    for (const subkeypaths of p.getSubKeys()) {
+                        if (subkeypaths[0].match(/^\d/) === null) { // subkeys starting with a digit are array indices, ignore them
+                            completions.items.push(GDLExtension.createParamDictCompletion(subkeypaths));
+                        }
+                    }
+                }
             }
             let masterconstants = undefined;
-            let scriptType = HSFScriptType(document.uri);
+            const scriptType = HSFScriptType(document.uri);
             if (scriptType !== Parser.ScriptType.D) {
                 // get master script constants
                 masterconstants = await this.hsflibpart.constants(Parser.ScriptType.D);
@@ -913,9 +921,11 @@ class GDLExtension {
             // get current script constants
             const editedconstants = await this.hsflibpart.constants(scriptType);
             const mergedconstants = [...masterconstants ?? [], ...editedconstants];
+            const constantnames = new Set();
             for (const prefix of mergedconstants) {
                 for (const c of prefix) {
                     const completion = new vscode.CompletionItem(c.name, vscode.CompletionItemKind.Constant);
+                    constantnames.add(c.name);
                     completion.sortText = c.value.length.toString() + c.value; // shorter values probably smaller numbers
                     completion.detail = c.value;
                     const wordRange = document.getWordRangeAtPosition(position);
@@ -929,11 +939,59 @@ class GDLExtension {
                     completions.items.push(completion);
                 }
             }
+            // get variables
+            const vardefs = await this.hsflibpart.vardefs(scriptType);
+            const vardefsmaster = (scriptType === Parser.ScriptType.D)
+                ? new varparser_1.Variables() // empty because we have the same in vardefs
+                : await this.hsflibpart.vardefs(Parser.ScriptType.D);
+            // show other scripts too?
+            for (const vardef of vardefs) {
+                if (!(constantnames.has(vardef) && (vardefs.get(vardef).length + vardefsmaster.get(vardef).length) === 1)) { // exclude constant that are asigned only once TODO handle if assigned in different scripts, sort at same position as constant
+                    completions.items.push(GDLExtension.createVariableCompletion(vardefs, vardef, scriptType));
+                }
+            }
+            for (const vardef of vardefsmaster) {
+                if (!(constantnames.has(vardef) && (vardefs.get(vardef).length + vardefsmaster.get(vardef).length) === 1)) {
+                    completions.items.push(GDLExtension.createVariableCompletion(vardefsmaster, vardef, Parser.ScriptType.D));
+                }
+            }
             return completions;
         }
         else {
             return undefined;
         }
+    }
+    static createParamDictCompletion(subkeypaths) {
+        const [subkey, paths] = subkeypaths;
+        // use case sensitive name from first path (including .)
+        const csName = paths[0].slice(paths[0].lastIndexOf("."));
+        const completion = new vscode.CompletionItem({
+            label: csName,
+            detail: ` paramlist`,
+        }, vscode.CompletionItemKind.Field);
+        // join all usages in docstring
+        const docstring = Array.from(paths).join("\n");
+        const mdstring = new vscode.MarkdownString().appendCodeblock(docstring, "gdl-hsf");
+        completion.documentation = mdstring;
+        // exclude . from completion
+        completion.insertText = csName.slice(1);
+        completion.sortText = subkey;
+        return completion;
+    }
+    static createVariableCompletion(vardefs, vardef, scriptType) {
+        const completion = new vscode.CompletionItem({
+            label: vardefs.get(vardef)[0].isSubkey ? `.${vardef}` : vardef,
+            detail: ` ${Parser.scriptFile[scriptType]}`
+        }, vscode.CompletionItemKind.Variable);
+        // join all usages in docstring, without duplicates
+        const usageset = new Set(vardefs.get(vardef).map(v => v.subline.text.replaceAll(/\s+/g, " ").trimStart()));
+        const docstring = Array.from(usageset).join("\n");
+        const mdstring = new vscode.MarkdownString().appendCodeblock(docstring, "gdl-hsf");
+        completion.documentation = mdstring;
+        // exclude . from completion for subkeys
+        completion.insertText = vardef;
+        completion.sortText = vardef;
+        return completion;
     }
     static mapFunctionSymbols(parser, scriptType, document) {
         return parser.getFunctionList(scriptType).map((f, i, array) => {
