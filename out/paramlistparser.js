@@ -36,7 +36,7 @@ class Parameter {
             this.hidden = (flags.indexOf("Hidden") !== -1);
             this.unique = (flags.indexOf("Unique") !== -1);
             const defaultvalue_ = content.match(/<(Value|ArrayValues)(.*?)>((.|[\n\r])*?)(?=<\/\1>)/m)
-                ?? ["", "", ""]; // Value tag isn't present for Title and Separator
+                ?? ["", "", "", ""]; // Value tag isn't present for Title and Separator, or empty <Value/> in Dictionary
             const isArray = (defaultvalue_[1] === "ArrayValues");
             const attribs = defaultvalue_[2];
             const value = defaultvalue_[3];
