@@ -7,7 +7,7 @@
                             Returns the MEP information related to the current view. <span class="italic">Expression returns 0 and contains dummy return values (empty dictionary) if used in parameter script, causing additional warning.</span>
                         </p>
                         <p>
-                            <span class="italic">Compatibility: introduced in Archicad 29.</span>
+                            <span class="italic">Compatibility: introduced in Archicad 29. In Archicad 30 the level of detail was split into six values.</span>
                         </p>
                         <div style="margin-left: 1em">
                             <div style="text-indent: -1em"><code><b>InputParameters: </b></code>(dictionary)</div>
@@ -19,15 +19,33 @@
                             <div style="text-indent: -1em"><code><b>.floorPlanRepresentationMode: </b></code>(integer) floor plan representation mode for MEP elements according to the MVO: 1 - Projected, 2 - Symbolic</div>
                         </div>
                         <div style="margin-left: 1em">
-                            <div style="text-indent: -1em"><code><b>.symbolicLoD: </b></code>(integer) symbolic floor plan display representation's level of detail: 1 - Center line only, 2 - Center line + Outlines, 3 - Center line + Outlines + Insulation</div>
+                            <div style="text-indent: -1em"><code><b>.floorPlanAndSection.symbolicLoD: </b></code>(integer - deprecated from Archicad 30) symbolic floor plan display representation's level of detail: 1 - Center line only, 2 - Center line + Outlines, 3 - Center line + Outlines + Insulation</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>.floorPlanAndSection.ductRouteLoD: </b></code>(integer) floor plan display representation's level of detail for Duct Routes: 1 - Schematic, 2 - Simplified, 3 - Detailed, 4 - Projected</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>.floorPlanAndSection.ductAcessoriesLoD: </b></code>(integer) floor plan display representation's level of detail for Duct Accessories: 1 - Schematic, 2 - Simplified, 3 - Detailed, 4 - Projected</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>.floorPlanAndSection.pipeRouteLoD: </b></code>(integer) floor plan display representation's level of detail for Pipe Routes: 1 - Schematic, 2 - Simplified, 3 - Detailed, 4 - Projected</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>.floorPlanAndSection.pipeAcessoriesLoD: </b></code>(integer) floor plan display representation's level of detail for Pipe Accessories: 1 - Schematic, 2 - Simplified, 3 - Detailed, 4 - Projected</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>.floorPlanAndSection.cableCarrierLoD: </b></code>(integer) floor plan display representation's level of detail for Cable Carrier Routes: 1 - Schematic, 2 - Simplified, 3 - Detailed, 4 - Projected</div>
+                        </div>
+                        <div style="margin-left: 1em">
+                            <div style="text-indent: -1em"><code><b>.floorPlanAndSection.equipmentLoD: </b></code>(integer) floor plan display representation's level of detail for Equipments: 1 - Schematic, 2 - Simplified, 3 - Detailed, 4 - Projected</div>
                         </div>
                     
-                    <div class="example"><a id="id654933"/><p class="title"><b>Example:
+                    <div class="example"><a id="id701796"/><p class="title"><b>Example:
 </b></p><div class="example-contents"><pre class="programlisting">DICT InputParameters, MEPViewInfo
 n = REQUEST ("MEP_VIEW_INFO", InputParameters, MEPViewInfo)</pre></div></div>
                 <hr/><a href="002.015.html#MEP_VIEW_INFO_gdlrequest">Related in Miscellaneous</a><p>
                 <span class="bold"><strong>GDL Reference Guide</strong></span>
             </p><p>
-                <span class="trademark">Copyright</span><sup>©</sup> 2025 by Graphisoft, all rights reserved.
+                <span class="trademark">Copyright</span><sup>©</sup> 2026 by Graphisoft, all rights reserved.
                 Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
             </p></body></html>
