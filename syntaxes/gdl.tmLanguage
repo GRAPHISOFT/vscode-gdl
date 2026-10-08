@@ -130,7 +130,13 @@
 				<string>(?ix)\b
 						(	ac_	(	(bottom|top)ConnPlane |
 									(beam|colu)_crosssection_type |
-									disable_controls
+									(cut|overhead)_linetype |
+									disable_controls |
+									MarkerFill |
+									(overhead|uncut)_pen |
+									skylight_debug |
+									type |
+									use(_symb_display_option|uniformtextformat) |
 								) |
 							gs_	(	(right|front)Offset |
 									originOffset[XY]
@@ -1505,7 +1511,8 @@
 						<string>(?ix)(["“”]|\b)
 								(	[AB] |
 									ZZYZX |
-									ac_ (	aSizeIsWithClamp |
+									ac_ (	ArcDivParam |
+											aSizeIsWithClamp |
 											AutoSchematicModel |
 											(beam|post|rail|railend)(ProfileID) |
 											bButtGlazedFrame |
@@ -1513,37 +1520,49 @@
 											bDisableLabelFrameDisplay |
 											capProfileID |
 											clamp(Width|Depth) |
+											convertedtitle |
 											CWFrame(BuildMat|CutLine(Pen|Type)) |
-											custom_component_type_name |
+											custom(readability|_component_type_name) |
 											DisableLabelOrientationVal |
+											deltaa(beg|end) |
+											(egress|leaf|reveal|unit|wallhole)_(width|height) |
 											height |
 											hole(_hotspot_control|MaterialCurved|SideMaterial) |
 											iCWFrameType |
 											frame((Back)?Depth|OffsetSide|Width) |
+											mep_connectionpage_active |
 											nominal(Height|Width) |
 											openingDir |
 											originIsFrameCenter |
 											panel_type |
 											panelThickness |
 											plane_definition |
+											PM_(AutoSheet|DrawingNo) |
 											(post|rail|railend)(Height|Width) |
 											post_boundingbox_(inside|left|right|outside) |
 											(rail|railend)_boundingbox_(bottom|left|right|top) |
+											sectionlinestartoffset |
+											show2dhotspotsin3d |
 											special_2d_symbol |
 											thickness |
 											treadClassifications |
 											stairStructure(Thickness|Width) |
 											symb_(display_option|show_projection_to) |
+											titlefitmode |
 											(top|bottom)level |
+											wallcontours |
 											wido_	(	sill |
 														hide_options |
 														flip_(once|disable) |
 														mirror_once
 													) |
-											width
+											width |
+											zone_on_reveal_side
 										) |
+									gs_bOpeningToZone |
 									MEP_RequestBased |
-									Con(Status|System|(Connector)?Type|Width|Depth)_([2-9]|1[0-8]?)
+									Con(Status|System|(Connector)?Type|Width|Depth)_([2-9]|1[0-8]?) |
+									ui_current_con
 								)(\1)(?!\w)</string>
 						<key>name</key>
 						<string>variable.language.gdl</string>
@@ -1564,21 +1583,29 @@
 											backReferenceGUIDList |
 											beam_uncut_pen |
 											bLabel(AlwaysReadable|Frame|OpaqueFill|TextWrap) |
-											clamp(FreeRegion|Vector) |
+											bOverrideStructureSurface |
+											Ceiling_Plan |
+											clamp(ingtolerance|FreeRegionCoords|Vector) |
+											Clipp(Coord|Nodes)? |
 											(colu|beam)_(inclination|twist_angle) |
-											drawing(Name|Number|Scale) |
-											enableBackReference |
+											Component |
+											CutWidth |
+											drawing(Name|Number|Scale|GUID(_[1-4])?|Rect) |
+											enable(BackReference|NoLink) |
+											fit_to_wall_height |
 											frame	(	AxisCoords |
 														Dirs |
 														Width(Left|Right|Front|Back)
 													) |
 											glob_elevation |
 											globalZDir |
+											gridrect |
 											hole_	(	cut_linetype |
 														display_option |
 														direction_type |
 														(overhead_|uncut_)(pen|linetype) |
-														position_angle
+														position_angle |
+														wido_rotation
 													) |
 											Label	(	FrameOffset |
 														LabelPointerLineType |
@@ -1586,20 +1613,36 @@
 														Pointer(Connection|Pen) |
 														TextBgrPen
 													) |
+											layoutrect |
 											magnification |
+											ManualPosition |
+											Marker	(	mirror |
+														(Bottom|Left|Right|Upper)Arrow |
+														Size |
+														Text_[1-9] |
+														Text_10
+											 		) |
 											nConnectingPanels |
+											nolinkmarker |
 											openingside |
 											originalDrawingScale |
 											panel(Coords|Offsets|Presences) |
-											RiserPosition |
+											Polygon(Coords|Nodes) |
+											previewtype |
+											RefCoord |
+											ReferToDrawing |
+											Riser(Position|Surface) |
 											revealToWallCore |
 											roof_	(	display_option |
 														overhead_(pen|linetype) |
 														show_projection_to
 													) |
 											sill_to_(curr_story|anchor_level) |
+											shell_base_thickness |
 											show(boundary|DrawingReferences) |
+											skyl_rotangle |
 											sourceFile(Name|Path) |
+											Story(Elevation|Name|Number) |
 											symb_rotangle |
 											Text	(	Font |
 														Alignment |
@@ -1609,9 +1652,12 @@
 														Size |
 														Style
 													)_1 |
+											treadsurface |
 											(valid)?CellAngle[12] |
+											(valid)?(left|right)cellnormaldir |
 											(vert|reveal)AnchorPos |
-											wall_(elevation|slant_angle[12]|direction_type|thickness) |
+											walkinglineoffset |
+											wall_(elevation|slant_angle[12]|direction_type|thickness|position) |
 											(wall|colu|beam)_	(	overhead_(pen|linetype) |
 																	display_option |
 																	profile_name |
@@ -1666,11 +1712,15 @@
 						<key>match</key>
 						<string>(?ix)(["“”]|\b)
 								(	ac_	(	edge_(lower|upper)_(type|angle) |
-											cw_function |
+											(cw|skylight)_function |
 											corner_(window|angle) |
+											curb_height |
+											Custom_3D_Hole |
 											(diff_)?con_wall_thk |
 											cw_debug |
-											con_wall_(skins_(number|params)|direction_type)
+											con_wall_(skins_(number|params)|direction_type) |
+											(lower|side|upper)_mat |
+											roof(ang|thk)
 										) |
 									IFC2x_ConstEnum |
 									ifc_	(	(Casing|Threshold)(Depth|Thickness) |

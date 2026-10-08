@@ -7,7 +7,7 @@ class Constant {
     id;
     value;
     constructor(gdl) {
-        const result_ = gdl.match(/(?<=^\s*)([A-Z][0-9A-Z~]*)(_[0-9A-Z_~]+)?\s*=\s*(.*)\s*$/);
+        const result_ = gdl.match(/(?<=^\s*)([A-Z][0-9A-Z~]*)(_[0-9A-Za-z_~]+)?\s*=\s*(.*)\s*$/);
         if (result_) {
             this.prefix = result_[1];
             this.id = (result_[2] ? result_[2] : "");
@@ -28,8 +28,8 @@ class Constants {
     constants = new Map();
     addfromtext(code) {
         if (code !== undefined) {
-            const constants_ = code.match(/^\s*[A-Z][0-9A-Z~]*(_[0-9A-Z_~]+)?\s*=.*(?<!(\\|then|THEN|,))\s*$/mg);
-            //ABC[_ABC] = * but not ending \ or then or , (multiline conditions, macro paramlist)
+            const constants_ = code.match(/^\s*[A-Z][0-9A-Z~]*(_[0-9A-Za-z_~]+)?\s*=.*(?<!(\\|then|THEN|,))\s*$/mg);
+            //ABC[_abc] = * but not ending \ or then or , (multiline conditions, macro paramlist)
             if (constants_) {
                 for (const gdl of constants_) {
                     const constant = new Constant(gdl);

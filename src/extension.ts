@@ -12,7 +12,7 @@ import { Constants } from './constparser';
 
 import path = require('path');
 import { Jumps, Jump } from './jumpparser';
-import { Vardef } from './varparser';
+import { Vardef, Variables } from './varparser';
 import { Parameter, ParamList } from './paramlistparser';
 
 export async function activate(context: vscode.ExtensionContext) {
@@ -1088,49 +1088,86 @@ export class GDLExtension
         // implemented only for hsf libparts
         if (this.hsflibpart) {
             const completions = new vscode.CompletionList();
+            const lineText = document.lineAt(position.line).text;
+            const completionWordRange = document.getWordRangeAtPosition(position);
+            const wordStart = completionWordRange?.start.character ?? position.character;
+            const triggeredAfterDot = wordStart > 0 && lineText[wordStart - 1] === ".";
 
             const paramlist = await this.hsflibpart.paramlist();
             for (const p of paramlist) {
-                const block = paramlist.block_of(p);
-                const padding = " ".repeat(34 - p.nameCS.length); // max. parameter name length is 32 chars
-                const decription = p.getDescString(block, true);
-                const completion = new vscode.CompletionItem(
-                    {
-                        label: p.nameCS + padding + p.type + p.getDimensionString(),    // allow filtering on type/dimensions too
-                        description: decription,
-                    },
-                    vscode.CompletionItemKind.Field);
-                completion.insertText = p.nameCS;
-                completion.detail = decription;
-                completion.documentation = p.getDocString(block, false, false);
-                completions.items.push(completion);
-            }
-
-            let masterconstants : Constants | undefined = undefined;
-            let scriptType = HSFScriptType(document.uri)!;
-            if (scriptType !== Parser.ScriptType.D) {
-                // get master script constants
-                masterconstants = await this.hsflibpart.constants(Parser.ScriptType.D);
-            }
-
-            // get current script constants
-            const editedconstants = await this.hsflibpart.constants(scriptType);
-
-            const mergedconstants = [...masterconstants ?? [], ...editedconstants];
-            for (const prefix of mergedconstants) {
-                for (const c of prefix) {
-                    const completion = new vscode.CompletionItem(c.name, vscode.CompletionItemKind.Constant);
-                    completion.sortText = c.value.length.toString() + c.value;  // shorter values probably smaller numbers
-                    completion.detail = c.value;
-                    const wordRange = document.getWordRangeAtPosition(position);
-                    if (wordRange) {
-                        completion.range = {
-                            inserting: wordRange,
-                            replacing: wordRange
-                        };
+                if (!triggeredAfterDot || p.type === "Dictionary") {
+                    if (!triggeredAfterDot) {
+                        const block = paramlist.block_of(p);
+                        const padding = " ".repeat(34 - p.nameCS.length); // max. parameter name length is 32 chars
+                        const decription = p.getDescString(block, true);
+                        const completion = new vscode.CompletionItem(
+                            {
+                                label: p.nameCS + padding + p.type + p.getDimensionString(),    // allow filtering on type/dimensions too
+                                description: decription,
+                            },
+                            vscode.CompletionItemKind.Field);
+                        completion.insertText = p.nameCS;
+                        completion.detail = decription;
+                        completion.documentation = p.getDocString(block, false, false);
+                        completions.items.push(completion);
+                    } else {    // triggeredAfterDot && p.type === "Dictionary"
+                        for (const subkeypaths of p.getSubKeys()) {
+                            if (subkeypaths[0].match(/^\d/) === null) {  // subkeys starting with a digit are array indices, ignore them
+                                completions.items.push(GDLExtension.createParamDictCompletion(subkeypaths));
+                            }
+                        }
                     }
-                    //completion.documentation = p.getDocString(false, false);
-                    completions.items.push(completion);
+                }
+            }
+
+            if (!triggeredAfterDot) {
+                let masterconstants : Constants | undefined = undefined;
+                const scriptType = HSFScriptType(document.uri)!;
+                if (scriptType !== Parser.ScriptType.D) {
+                    // get master script constants
+                    masterconstants = await this.hsflibpart.constants(Parser.ScriptType.D);
+                }
+
+                // get current script constants
+                const editedconstants = await this.hsflibpart.constants(scriptType);
+
+                const mergedconstants = [...masterconstants ?? [], ...editedconstants];
+                const constantnames = new Set<string>();
+                for (const prefix of mergedconstants) {
+                    for (const c of prefix) {
+                        const completion = new vscode.CompletionItem(c.name, vscode.CompletionItemKind.Constant);
+                        constantnames.add(c.name);
+                        completion.sortText = c.value.length.toString() + c.value;  // shorter values probably smaller numbers
+                        completion.detail = c.value;
+                        const wordRange = document.getWordRangeAtPosition(position);
+                        if (wordRange) {
+                            completion.range = {
+                                inserting: wordRange,
+                                replacing: wordRange
+                            };
+                        }
+                        //completion.documentation = p.getDocString(false, false);
+                        completions.items.push(completion);
+                    }
+                }
+
+                // get variables
+                const vardefs = await this.hsflibpart.vardefs(scriptType);
+                const vardefsmaster = (scriptType === Parser.ScriptType.D) 
+                                        ? new Variables()   // empty because we have the same in vardefs
+                                        : await this.hsflibpart.vardefs(Parser.ScriptType.D);
+                                                    
+
+                // show other scripts too?
+                for (const vardef of vardefs) {
+                    if (!(constantnames.has(vardef) && (vardefs.get(vardef).length + vardefsmaster.get(vardef).length) === 1)) { // exclude constant that are asigned only once TODO handle if assigned in different scripts, sort at same position as constant
+                        completions.items.push(GDLExtension.createVariableCompletion(vardefs, vardef, scriptType));
+                    }
+                }
+                for (const vardef of vardefsmaster) {
+                    if (!(constantnames.has(vardef) && (vardefs.get(vardef).length + vardefsmaster.get(vardef).length) === 1)) {
+                        completions.items.push(GDLExtension.createVariableCompletion(vardefsmaster, vardef, Parser.ScriptType.D));
+                    }
                 }
             }
 
@@ -1139,6 +1176,52 @@ export class GDLExtension
             return undefined;
         }
     }
+
+    private static createParamDictCompletion(subkeypaths: [string, Array<string>]) : vscode.CompletionItem {
+        const [subkey, paths] = subkeypaths;
+
+        // use case sensitive name from first path (including .)
+        const csName = paths[0].slice(paths[0].lastIndexOf("."));
+        const completion = new vscode.CompletionItem(
+            {
+                label: csName,
+                detail: ` paramlist`,
+            },
+            vscode.CompletionItemKind.Field);
+
+        // join all usages in docstring
+        const docstring = Array.from(paths).join("\n");
+        const mdstring = new vscode.MarkdownString().appendCodeblock(docstring, "gdl-hsf");
+        completion.documentation = mdstring;
+
+        // exclude . from completion
+        completion.insertText = csName.slice(1);
+        completion.sortText = `.${subkey}`;
+
+        return completion;
+
+    }
+
+    private static createVariableCompletion(vardefs : Variables, vardef: string, scriptType: Parser.ScriptType) : vscode.CompletionItem {
+        const completion = new vscode.CompletionItem(
+            {
+                label: vardefs.get(vardef)[0].isSubkey ? `.${vardef}` : vardef,
+                detail: ` ${Parser.scriptFile[scriptType]}`
+            },
+            vscode.CompletionItemKind.Variable);
+
+        // join all usages in docstring, without duplicates
+        const usageset = new Set(vardefs.get(vardef).map(v => v.subline.text.replaceAll(/\s+/g, " ").trimStart()));
+        const docstring = Array.from(usageset).join("\n");
+        const mdstring = new vscode.MarkdownString().appendCodeblock(docstring, "gdl-hsf");
+        completion.documentation = mdstring;
+
+        // exclude . from completion for subkeys
+        completion.insertText = vardef;
+        completion.sortText = vardef;
+
+        return completion;
+    } 
 
     private static mapFunctionSymbols(parser : Parser.ParseXMLGDL, scriptType : Parser.ScriptType, document : vscode.TextDocument) {
         return parser.getFunctionList(scriptType).map((f : Parser.GDLFunction, i : number, array : Parser.GDLFunction[]) => {

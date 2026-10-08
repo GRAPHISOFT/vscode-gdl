@@ -1,6 +1,6 @@
 # GDL extension for Visual Studio Code
 
-Development environment for Archicad 29 GDL language (XML, HSF and GDL source code): syntax coloring, snippets, code outline, quick reference.
+Development environment for Archicad 30 GDL language (XML, HSF and GDL source code): syntax coloring, snippets, code outline, quick reference.
 
 # Usage
 
@@ -176,6 +176,12 @@ Some valid syntaxes won't be highlighted, and some invalid syntaxes will be high
 1. Press Ctrl-S to apply changes to the user settings
 
 # Release Notes
+
+## 1.30.0
+* Reference guide 30
+* variables and dictionary keys as completion items
+* match lowercase in constant names after prefix (ABC_def)
+* syntax highlight of newly documented ac_ parameters
 
 ## 1.29.0
 * Reference guide 29

@@ -41,7 +41,7 @@ export class Parameter {
             this.unique = (flags.indexOf("Unique") !== -1);
             
             const defaultvalue_ = content.match(/<(Value|ArrayValues)(.*?)>((.|[\n\r])*?)(?=<\/\1>)/m)
-                                    ?? ["", "", ""];   // Value tag isn't present for Title and Separator
+                                    ?? ["", "", "", ""];   // Value tag isn't present for Title and Separator, or empty <Value/> in Dictionary
             const isArray = (defaultvalue_[1] === "ArrayValues");
             const attribs = defaultvalue_[2];
             const value = defaultvalue_[3];
@@ -111,13 +111,14 @@ export class Parameter {
     }
 
     private addsubkeys(xml: string, prefix: string) {
-        const subkeys = /^<((Dictionary|Array)|(Integer|RealNum|String))\s+(Index|Name)="(.*?)"\s*>\s*(((.*?)<\/\3\s*>)|(\s*[\n\r]+((^\s.*[\n\r]+)*?)^<\/\2\s*>))/gm;
+        const subkeys = /^<((?<collection>Dictionary|Array)|(Integer|RealNum|String))\s+(?<idType>Index|Name)="(?<id>.*?)"\s*(\/>|>\s*(((.*?)<\/\3\s*>)|(\s*[\n\r]+(?<content>(^\s.*[\n\r]+)*?)^<\/\2\s*>)))/gm;
+        // group count     12                             2 3                      31   4                   4  5        5    6        789   9         8 A          B          C            C  B          A76
         for (const match of xml.matchAll(subkeys)) {
-            const id = match[5];
-            if (match[2] !== undefined) {
+            const id = match.groups?.id ?? "";
+            if (match.groups?.collection !== undefined) {
                 // array or dict
-                const content = Parameter.unindent(match[10]);
-                const inArray = match[4] === "Index";
+                const content = Parameter.unindent(match.groups?.content ?? "");
+                const inArray = match.groups?.idType === "Index";
                 if (inArray) {
                     this.addsubkeys(content, prefix);
                 } else {
@@ -141,6 +142,10 @@ export class Parameter {
 
     public hasSubKey(key: string) {
         return this.subkeys.has(key.toLowerCase());
+    }
+
+    public getSubKeys() {
+        return this.subkeys.entries();
     }
 
     public getDocString(block: Parameter | undefined, desc : boolean = true, name : boolean = true, defaultvalue : boolean = true) : vscode.MarkdownString {

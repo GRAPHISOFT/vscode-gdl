@@ -11,11 +11,14 @@
                         shapes. CUTPLANE may have a different number of parameters.
                     </p>
                     <p>If CUTPLANE has the following number of parameters:</p>
-                    <p>0: x-y plane;</p>
-                    <p>1: cutting plane goes across x axis, angle is between cutting plane and x-y plane;</p>
-                    <p>2: cutting plane is parallel to z axis, crosses x axis and y axis at the given values;</p>
-                    <p>3: cutting plane crosses the x, y and z axes at the given values;</p>
-                    <p>4: the first three parameters are as above, with the addition of the side value as follows:</p>
+                    <p>0: cuts above the x-y plane.</p>
+                    <p>1: the cutting plane passes through the x axis; the parameter defines the angle between the cutting plane and the x-y plane.</p>
+                    <p>2: the cutting plane is parallel to the z axis and intersects the x and y axes at the given values, facing away from the origin.
+                        </p><div class="itemizedlist"><p>Special cases when one or both values are 0:</p><ul class="itemizedlist"><li class="listitem"><p>0, 0 → cuts above the x-y plane.</p></li><li class="listitem"><p>0, y → cuts with a plane parallel to the x-z plane at y, facing away from the origin.</p></li><li class="listitem"><p>x, 0 → cuts with a plane parallel to the y-z plane at x, facing away from the origin.</p></li></ul></div><p>
+                    </p>
+                    <p>3: the cutting plane intersects the x, y, and z axes at the given values.</p>
+                    <p>If two or more values are 0, the cutplane will be undefined (writing a warning to the Report Window).</p>
+                    <p>4: same as for three parameters, plus the side parameter as follows:</p>
                     <div style="margin-left: 1em">
                         <div style="text-indent: -1em"><code><b>side: </b></code>definition of the side to cut.</div>
                         <div><code>0: </code>removes parts above cutting plane (default),</div>
@@ -30,7 +33,7 @@
                         <div><code>j<sub>9</sub>: </code>vertices on the cutting plane are treated as removed.</div>
                     </div>
                     <p>
-                        The cut (without the side parameter) removes parts above the cutting plane.
+                        The cut (without the side parameter) removes the parts on the side of the cutting plane that is opposite the origin.
                         If the first three parameters define the x-y, x-z or y-z plane (for example, 1.0, 1.0, 0.0 defines the x-y plane),
                         the parts in the positive direction of the third axis are removed.
                     </p>
@@ -65,7 +68,7 @@
                         For CUTPLANE{3}, this parameter has effect independently from the 5th parameter.
                     </div>
                 
-                <div class="example"><a id="id573378"/><p class="title"><b>Example 1:
+                <div class="example"><a id="id606928"/><p class="title"><b>Example 1:
 </b></p><div class="example-contents"><div class="informaltable"><table border="0"><colgroup><col/><col/></colgroup><tbody><tr><td>
                                         <pre class="programlisting">CUTPLANE 2, 2, 4
 CUTPLANE -2, 2, 4
@@ -81,7 +84,7 @@ CUTEND</pre>
                                     </td><td>
                                         <div style="text-align: center"><img src="Images/GDL_Images/3Dshapes_cutplane_ex1.png" style="text-align: middle" alt="Images/GDL_Images/3Dshapes_cutplane_ex1.png"/></div>
                                     </td></tr></tbody></table></div></div></div>
-                <div class="example"><a id="id573402"/><p class="title"><b>Example 2:
+                <div class="example"><a id="id606970"/><p class="title"><b>Example 2:
 </b></p><div class="example-contents"><div class="informaltable"><table border="0"><colgroup><col/><col/></colgroup><tbody><tr><td>
                                         <div style="text-align: center"><img src="Images/GDL_Images/3Dshapes_cutplane_ex2_1.png" style="text-align: middle" alt="Images/GDL_Images/3Dshapes_cutplane_ex2_1.png"/></div>
                                     </td><td>
@@ -95,7 +98,7 @@ CUTEND</pre>
 SPHERE 2
 CUTEND</pre>
                                     </td></tr></tbody></table></div></div></div>
-                <div class="example"><a id="id573457"/><p class="title"><b>Example 3:
+                <div class="example"><a id="id607035"/><p class="title"><b>Example 3:
 </b></p><div class="example-contents"><div class="informaltable"><table border="0"><colgroup><col/><col/></colgroup><tbody><tr><td>
                                         <div style="text-align: center"><img src="Images/GDL_Images/3Dshapes_cutplane_ex3_1.png" style="text-align: middle" alt="Images/GDL_Images/3Dshapes_cutplane_ex3_1.png"/></div>
                                     </td><td>
@@ -109,7 +112,7 @@ CUTEND</pre>
 SPHERE 2
 CUTEND</pre>
                                     </td></tr></tbody></table></div></div></div>
-                <div class="example"><a id="id573487"/><p class="title"><b>Example 4:
+                <div class="example"><a id="id607085"/><p class="title"><b>Example 4:
 </b></p><div class="example-contents"><div class="informaltable"><table border="0"><colgroup><col/><col/></colgroup><tbody><tr><td>
                                         <div style="text-align: center"><img src="Images/GDL_Images/3Dshapes_cutplane_ex4_1.png" style="text-align: middle" alt="Images/GDL_Images/3Dshapes_cutplane_ex4_1.png"/></div>
                                     </td><td>
@@ -126,6 +129,6 @@ CUTEND</pre>
             <hr/><a href="002.007.html#CUTPLANE3_gdlcommand">Related in 3D Shapes</a><p>
                 <span class="bold"><strong>GDL Reference Guide</strong></span>
             </p><p>
-                <span class="trademark">Copyright</span><sup>©</sup> 2025 by Graphisoft, all rights reserved.
+                <span class="trademark">Copyright</span><sup>©</sup> 2026 by Graphisoft, all rights reserved.
                 Reproduction, paraphrasing or translation without express prior written permission is strictly prohibited.
             </p></body></html>
