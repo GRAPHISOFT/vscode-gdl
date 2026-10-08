@@ -3,6 +3,17 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ParamList = exports.Parameter = void 0;
 const vscode = require("vscode");
 class Parameter {
+    type;
+    nameCS; // case sensitive
+    desc;
+    defaultvalue;
+    meaning;
+    vardim1;
+    vardim2;
+    child;
+    bold;
+    fix;
+    hidden;
     constructor(xml) {
         const result_ = xml.match(/^\t\t<(.*?) Name="(.*?)">((.|[\n\r])*?)^\t\t<\/\1>/m);
         if (result_) {
@@ -116,12 +127,11 @@ class Parameter {
 }
 exports.Parameter = Parameter;
 class ParamList {
-    constructor() {
-        this.parameters = new Map();
-    }
+    parameters = new Map();
     async addfrom(rootfolder) {
         const paramlistfile = vscode.Uri.joinPath(rootfolder, "paramlist.xml");
         const paramlist = await vscode.workspace.openTextDocument(paramlistfile);
+        this.parameters.clear();
         if (paramlist) {
             const parameters_ = paramlist.getText().match(/^\t\t<(.*?) Name=.*?>((.|[\n\r])*?)^\t\t<\/\1>/mg);
             if (parameters_) {

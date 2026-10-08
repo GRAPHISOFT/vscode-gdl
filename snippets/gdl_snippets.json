@@ -1544,6 +1544,21 @@
       "prefix": "end",
       "body": "\n\n! ==================================================================================================\nend ! end ! end ! end ! end ! end ! end ! end ! end ! end ! end ! end ! end ! end ! end ! end ! end\n! ==================================================================================================\n\n\n"
     },
+    "series 0...": {
+      "prefix": "0",
+      "description": "insert integer series starting from 0 at each cursor position",
+      "body": "$CURSOR_INDEX"
+    },
+    "series 1...": {
+      "prefix": "1",
+      "description": "insert integer series starting from 1 at each cursor position",
+      "body": "$CURSOR_NUMBER"
+    },
+    "series [1...": {
+      "prefix": "[",
+      "description": "insert integer series starting from 1 at each cursor position",
+      "body": "[$CURSOR_NUMBER"
+    },
     "\"BEAM_AXES_LINETYPE\" global": {
       "prefix": "BEAM_AXES_LINETYPE",
       "body": "BEAM_AXES_LINETYPE"
@@ -4635,6 +4650,18 @@
     "request (\"TEXTBLOCK_INFO\")": {
       "prefix": "request (\"TEXTBLOCK_INFO",
       "body": "n = REQUEST (\"TEXTBLOCK_INFO\", ${01:textblock_name}, ${02:width}, ${03:height})"
+    },
+    "request (\"KEYNOTE_FOLDER_TREE\")": {
+      "prefix": "request (\"KEYNOTE_FOLDER_TREE",
+      "body": "n = REQUEST (\"KEYNOTE_FOLDER_TREE\", ${01:keynoteFolderTreeInput}, ${02:keynoteFolderTreeOutput})"
+    },
+    "request (\"KEYNOTE_INFO\")": {
+      "prefix": "request (\"KEYNOTE_INFO",
+      "body": "n = REQUEST (\"KEYNOTE_INFO\", ${01:keynoteInfoInput}, ${02:keynoteInfoOutput})"
+    },
+    "request (\"MEP_PIPE_FLEXIBLE_SEGMENT_GEOMETRY\")": {
+      "prefix": "request (\"MEP_PIPE_FLEXIBLE_SEGMENT_GEOMETRY",
+      "body": "n = REQUEST (\"MEP_PIPE_FLEXIBLE_SEGMENT_GEOMETRY\", ${01:InputParameters}, ${02:FlexibleSegmentGeometry})"
     },
     "request (\"MEP_ROUTE_ATTRIBUTES\")": {
       "prefix": "request (\"MEP_ROUTE_ATTRIBUTES",

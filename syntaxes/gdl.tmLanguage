@@ -1268,9 +1268,10 @@
 									HOME(_STORY(_OF_OPENING)?|DB_INFO) |
 									ID_OF_MAIN |
 									INTERNAL_ID |
+									KEYNOTE_(FOLDER_TREE|INFO) |
 									(MODEL|LAYOUT)_(LENGTH|TEXT_SIZE)_UNIT |
 									MATERIAL_INFO |
-									MEP_ROUTE_ATTRIBUTES |
+									MEP_(ROUTE_ATTRIBUTES|PIPE_FLEXIBLE_SEGMENT_GEOMETRY) |
 									Model_size |
 									NAME_OF_((BUILDING_)?MATERIAL|FILL|LINE_TYPE|LISTED|MACRO|MAIN|PLAN|PROFILE|PROGRAM|STYLE) |
 									Pen_of_RGB\s+[01](\.\d+)?\s+[01](\.\d+)?\s+[01](\.\d+)?\s? |

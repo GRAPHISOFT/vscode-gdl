@@ -4,11 +4,16 @@ import * as vscode from 'vscode';
 import { fileExists, readFile } from './extension';
 import * as Parser from './parsexmlgdl';
 
+type ScriptUriOrNullPair = [Parser.ScriptType, vscode.Uri | null];
+type ScriptUriPair = [Parser.ScriptType, vscode.Uri];
+
 export class LibpartInfo {
     private _root_uri : vscode.Uri | undefined;
+    private _images_uri : vscode.Uri | undefined;
     private _name : string | undefined;
     
     private scriptsCache = new Map<Parser.ScriptType, vscode.Uri | null>();
+    private imagesCache : Map<string, number> | undefined;
 
     constructor(public readonly libpartdata_uri: vscode.Uri, public readonly guid: string) {}
 
@@ -26,10 +31,18 @@ export class LibpartInfo {
         return this._root_uri;
     }
 
+    get images_uri() : vscode.Uri {
+        if (this._images_uri === undefined) {
+           this._images_uri = vscode.Uri.joinPath(this.root_uri, "images");
+        }
+        return this._images_uri;
+    }
+
+    /** check whether has file relative to root_uri
+     *  optionally offering masterscript as fallback
+     *  then offering libpartdata.xml as fallback
+     */
     async relative_withFallback(relative: string, masterscript: boolean) : Promise<vscode.Uri> {
-        // check whether has file relative to root_uri
-        // optionally offering masterscript as fallback
-        // then offering libpartdata.xml as fallback
 
         let target = vscode.Uri.joinPath(this.root_uri, relative);
         if ((await fileExists(target))) {
@@ -64,9 +77,70 @@ export class LibpartInfo {
         }
     }
 
+    /** return map of existing script types and uris (unsaved files not included) */
     async allScripts() {
-        // return array of uris for each script, null if doesn't exist on disk
-        return Parser.Scripts.map(async (script) => await this.scriptUri(script));
+        const uris : Array<ScriptUriOrNullPair> = await Promise.all(Parser.Scripts.map(async script => [script, await this.scriptUri(script)]));
+        return new Map(uris.filter((e) : e is ScriptUriPair => e[1] !== null));
+    }
+
+    /** return names and uris of files in images folder */
+    async allImages() {
+        try {
+            const entries = await vscode.workspace.fs.readDirectory(this.images_uri);
+            const imagenames = entries.filter(e => e[1] !== vscode.FileType.Directory)
+                                    .map(e => e[0]);
+            return new Map(imagenames.map(e => [e, vscode.Uri.joinPath(this.images_uri, e)]));
+        } catch {
+            return new Map<string, vscode.Uri>();
+        }
+    }
+
+    async imageIndex(name: string) {
+        if (this.imagesCache === undefined) {
+            // enumerate images in libpartdata - creates this.imagesCache
+            await this.embedded_image_insertposition();
+        }
+        return this.imagesCache!.get(name);
+    }
+
+    /**  returns position and picture index where new embedded images can be added */
+    async embedded_image_insertposition() : Promise<{ position: vscode.Position, index: number }> {
+        const libpartdata_doc = await vscode.workspace.openTextDocument(this.libpartdata_uri);
+        const libpartdata = libpartdata_doc.getText();
+        let greatestIndex = 0;
+        let lastPosition = -1;
+
+        // find greatest index and last image position
+        this.imagesCache = new Map<string, number>();
+        for (const match of libpartdata.matchAll(/<GDLPict\s(.*?\s*SubIdent\s*=\s*"(\d+)".*?)\/>/migd)) {
+            const index = parseInt(match[2]);
+            greatestIndex = Math.max(greatestIndex, index);
+            lastPosition = Math.max(lastPosition, (match as any).indices[0][1]);
+
+            // get name and store in cache with index
+            const namematch = match[1].match(/\sName\s*=\s*"(.*?)"/i);
+            if (namematch) {
+                this.imagesCache.set(namematch[1], index)
+            }
+        }
+
+        // determine insert position
+        let insertPosition : vscode.Position;
+        if (lastPosition == -1) {
+            // no images yet, insert before end of LibpartData
+            const found = libpartdata.search(/<\/LibpartData>/mig);
+            if (found !== -1) {
+                insertPosition = libpartdata_doc.positionAt(found);
+            } else {
+                // no LibpartData, insert at end
+                insertPosition = libpartdata_doc.positionAt(libpartdata.length - 1);
+            }
+        } else {
+            // insert after last GDLPict
+            insertPosition = libpartdata_doc.positionAt(lastPosition + 1);
+        }
+
+        return { position: insertPosition, index: greatestIndex + 1}
     }
 }
 

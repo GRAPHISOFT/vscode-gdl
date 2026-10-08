@@ -1,6 +1,6 @@
 # GDL extension for Visual Studio Code
 
-Development environment for Archicad 27 GDL language (XML, HSF and GDL source code): syntax coloring, snippets, code outline, quick reference.
+Development environment for Archicad 28 GDL language (XML, HSF and GDL source code): syntax coloring, snippets, code outline, quick reference.
 
 # Usage
 
@@ -53,7 +53,8 @@ __hotspot__ or __hotspot2__ - length edit hotspot triplet
   * Show parameters with bold font (can be toggled on/off with Ctrl-Alt-Space)
   * IntelliSense lists constants (ALL_CAPS) with their initialized values
   * IntelliSense lists parameters with their description, type, flags and default value. This list can be filtered by parameter type too.
-  * Follow macro and subroutine calls with Ctrl-click
+  * Follow libraryglobal, macro and subroutine calls with Ctrl-click
+  * Show variable assignments with Ctrl-click
 * Go to definitions/references, find all references of subroutines in same libpart (Ctrl-click or F12, Shift-F12, Shift-Alt-F12)
 * Show Call Hierarchy (Shift-Alt-H), Peek Call Hierarchy
   * Incoming or outgoing macro calls are shown, respecting the execution context of the edited scipt. Eg. all scripts are searched outgoing from a master script, but only master and 2d scripts are searched outgoing from a 2d script.
@@ -165,6 +166,13 @@ Some valid syntaxes won't be highlighted, and some invalid syntaxes will be high
 1. Press Ctrl-S to apply changes to the user settings
 
 # Release Notes
+
+## 1.28.0
+* Reference guide 28
+* pathNameTable tree view (move, rename, open, check against source)
+* drag&drop image files into GDL code, adding them to libpartdata.xml too
+* show variable assignments with Ctrl-click
+* Show/Peek Call Hierarchy, Goto/Peek Definition and Ctrl-click follows LIBRARYGLOBAL calls
 
 ## 1.27.1
 * new GSID_INFO request

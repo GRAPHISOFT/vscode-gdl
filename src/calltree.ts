@@ -15,7 +15,7 @@ type callData = {
 export class CallTree implements vscode.CallHierarchyProvider {
     
     // store already searched files' calls
-    private callsCache = new Map<string, Parser.GDLMacroCall[]>();
+    private callsCache = new Map<string, Parser.GDLLibpartReference[]>();
 
     private static scriptTypeOfMode = new Map<string, Parser.ScriptType>();
     static scriptOfMode(mode : string) {
@@ -75,9 +75,10 @@ export class CallTree implements vscode.CallHierarchyProvider {
         }
     }
 
-    static createIncomingDocumentItem(document : vscode.TextDocument, macrocall : Parser.GDLMacroCall, searchMode : Parser.ScriptType) {
+    static createIncomingDocumentItem(document : vscode.TextDocument, referrer : Parser.GDLLibpartReference, searchMode : Parser.ScriptType) {
         // don't show line in result, an item can have multiple ranges
-        return new vscode.CallHierarchyItem(vscode.SymbolKind.File, `${HSFNameOfScript(document.uri)}`, `${CallTree.formatContext(searchMode)} call "${macrocall.name}"${macrocall.all ? " PARAMETERS ALL" : ""} ${CallTree.formatScriptReference(document.uri)}`, document.uri, macrocall.range(document), macrocall.namerange(document));
+        const hint = (referrer instanceof Parser.GDLMacroCall) ? GDLExtension.libpartReferenceDetail(referrer) : "";
+        return new vscode.CallHierarchyItem(vscode.SymbolKind.File, `${HSFNameOfScript(document.uri)}`, `${CallTree.formatContext(searchMode)} ${referrer.keyword()} "${referrer.name}"${hint} ${CallTree.formatScriptReference(document.uri)}`, document.uri, referrer.range(document), referrer.namerange(document));
     }
 
     static formatScriptReference(uri : vscode.Uri, range? : vscode.Range) {
@@ -100,10 +101,11 @@ export class CallTree implements vscode.CallHierarchyProvider {
         return CallTree.scriptOfMode(match[0]);
     }
 
-    static createMacroItem(document : vscode.TextDocument, macrocall : Parser.GDLMacroCall, direction : string, searchMode? : Parser.ScriptType) {
-        const range = macrocall.range(document);
+    static createReferencedItem(document : vscode.TextDocument, reference : Parser.GDLLibpartReference, direction : string, searchMode? : Parser.ScriptType) {
+        const range = reference.range(document);
         const newMode = CallTree.getOutgoingMode(document.uri, searchMode);
-        return new vscode.CallHierarchyItem(vscode.SymbolKind.Object, `call "${macrocall.name}"${macrocall.all ? " PARAMETERS ALL" : ""}`, `${CallTree.formatContext(newMode)} ${direction}${HSFNameOfScript(document.uri)} ${CallTree.formatScriptReference(document.uri, range)}`, document.uri, range, macrocall.namerange(document));
+        const hint = (reference instanceof Parser.GDLMacroCall) ? GDLExtension.libpartReferenceDetail(reference) : "";
+        return new vscode.CallHierarchyItem(vscode.SymbolKind.Object, `${reference.keyword()} "${reference.name}"${hint}`, `${CallTree.formatContext(newMode)} ${direction}${HSFNameOfScript(document.uri)} ${CallTree.formatScriptReference(document.uri, range)}`, document.uri, range, reference.namerange(document));
     }
 
     static createDocumentItem(uri : vscode.Uri, direction : string, searchMode? : Parser.ScriptType) {
@@ -117,8 +119,9 @@ export class CallTree implements vscode.CallHierarchyProvider {
         return new vscode.CallHierarchyItem(item.kind, item.name, newDetail, item.uri, item.range, item.selectionRange);
     }
 
-    static createOutgoingMacro(document : vscode.TextDocument, macrocall : Parser.GDLMacroCall, searchMode? : Parser.ScriptType) {
-        const item = CallTree.createMacroItem(document, macrocall, "from ", searchMode);
+    static createOutgoingReference(document : vscode.TextDocument, reference : Parser.GDLLibpartReference, searchMode? : Parser.ScriptType) {
+        const item = CallTree.createReferencedItem(document, reference, "from ", searchMode);
+        item.detail += GDLExtension.libpartReferenceDetail(reference);
         return new vscode.CallHierarchyOutgoingCall(item, [item.selectionRange]);
     }
 
@@ -130,9 +133,9 @@ export class CallTree implements vscode.CallHierarchyProvider {
     prepareCallHierarchy(document : vscode.TextDocument, position : vscode.Position, _cancel : vscode.CancellationToken) : vscode.CallHierarchyItem {
         //console.log("prepare", HSFNameOfScript(document.uri), HSFScriptType(document.uri), position.line);
         const parser = new Parser.ParseXMLGDL(document.getText(), false, false, false, true, false);    // read possibly unsaved document
-        const callsymbol = parser.getMacroCallList(Parser.ScriptType.ROOT).find(m => m.range(document).contains(position));
+        const callsymbol = parser.getLibpartReferenceList(Parser.ScriptType.ROOT).find(m => m.range(document).contains(position));
         if (callsymbol) { // selected macro
-            return CallTree.createMacroItem(document, callsymbol, "");
+            return CallTree.createReferencedItem(document, callsymbol, "");
         }
         else { // this script
             return CallTree.createDocumentItem(document.uri, "");
@@ -201,8 +204,8 @@ export class CallTree implements vscode.CallHierarchyProvider {
             calls = uris.map(async (target) => {
                 const document = await vscode.workspace.openTextDocument(target);
                 const parser = new Parser.ParseXMLGDL(document.getText(), false, false, false, true, false);
-                const calledmacros = parser.getMacroCallList(Parser.ScriptType.ROOT);
-                return calledmacros.map(macro => CallTree.createOutgoingMacro(document, macro, searchMode));
+                const references = parser.getLibpartReferenceList(Parser.ScriptType.ROOT);
+                return references.map(reference => CallTree.createOutgoingReference(document, reference, searchMode));
             });
         }
         return (await Promise.allSettled(calls))
@@ -232,14 +235,14 @@ export class CallTree implements vscode.CallHierarchyProvider {
             const searchUris = searchScripts.map(async (script) => libpart.scriptUri(script));  // null if script doesn't exist
             for await (const scriptUri of searchUris) {
                 if (scriptUri?.fsPath.endsWith(".gdl")) {
-                    const calledmacros = (await this.getMacroCallList(scriptUri, cancel))
-                        .filter(macro => (macro.name.toLowerCase() === targetName));
+                    const references = (await this.getReferenceList(scriptUri, cancel))
+                        .filter(reference => (reference.name.toLowerCase() === targetName));
 
-                    if (calledmacros.length > 0) {
+                    if (references.length > 0) {
                         // add one item with all found ranges
                         let searchDocument = await vscode.workspace.openTextDocument(scriptUri);
-                        const ranges = calledmacros.map(macrocall => macrocall.range(searchDocument));
-                        const targetItem = CallTree.createIncomingDocumentItem(searchDocument, calledmacros[0], searchMode);
+                        const ranges = references.map(macrocall => macrocall.range(searchDocument));
+                        const targetItem = CallTree.createIncomingDocumentItem(searchDocument, references[0], searchMode);
 
                         results.push({
                             from: libpart.name,
@@ -259,7 +262,7 @@ export class CallTree implements vscode.CallHierarchyProvider {
             .map(e => e.to);
     }
 
-    private async getMacroCallList(scriptUri : vscode.Uri, cancel : vscode.CancellationToken) : Promise<Parser.GDLMacroCall[]> {
+    private async getReferenceList(scriptUri : vscode.Uri, cancel : vscode.CancellationToken) : Promise<Parser.GDLLibpartReference[]> {
         const cachedValue = this.callsCache.get(scriptUri.path);
 
         if (cachedValue) {
@@ -267,7 +270,7 @@ export class CallTree implements vscode.CallHierarchyProvider {
         } else {
             // can't use many concurrent OpenTextDocument's will be rejected, have to read file directly
             const parser = new Parser.ParseXMLGDL(await readFile(scriptUri, true, cancel), false, false, false, true, false);
-            const result = parser.getMacroCallList(Parser.ScriptType.ROOT);
+            const result = parser.getLibpartReferenceList(Parser.ScriptType.ROOT);
             this.callsCache.set(scriptUri.path, result);
             return result;
         }

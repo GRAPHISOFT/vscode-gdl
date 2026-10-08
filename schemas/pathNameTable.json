@@ -1,0 +1,83 @@
+{
+    "$schema": "http://json-schema.org/schema",
+    "type": "array",
+    "items": { 
+        "$ref": "#/$defs/PathNameTableEntry"
+    },
+    "$defs": {
+        "fileName": {
+            "type": "string",
+            "pattern": "^[^\\p{Cc}/\\\\?*:|\"<>]{0,254}[^\\p{Cc}/\\\\?*:|\"<>. ]$",
+            "$comment": "forbidden characters: / \\ ? * : | \" < > and control characters, can't end with space or ., shorter than 256 chars, TODO forbidden strings like NUL"
+        },
+        "folderName": {
+            "$ref": "#/$defs/fileName",
+            "defaultSnippets": [
+                {
+                    "label": "sub-folder",
+                    "description": "add subfolder",
+                    "body": "${1:sub-folder}"
+                }
+            ]
+        },
+        "PathNameTableEntry": {
+            "type": "object",
+            "required": ["fileName", "virtualFileName", "virtualPath"],
+            "additionalProperties": false,
+            "properties": {
+                "fileName": {
+                    "$ref": "#/$defs/fileName",
+                    "description": "binary filename (with extension)"
+                },
+                "virtualFileName": {
+                    "$ref": "#/$defs/fileName",
+                    "description": "virtual filename (without extension)"
+                },
+                "virtualPath": {
+                    "type": "array",
+                    "description": "virtual path components as array",
+                    "items":  { 
+                        "$ref": "#/$defs/folderName"
+                    }
+                },
+                "meta": {
+                    "type": "object",
+                    "properties": {
+                        "translatePathName": {
+                            "enum": [
+                                null,
+                                true,
+                                false
+                            ] 
+                        },
+                        "description": "mark virtual path/filename to be translated or not (use null as unknown)"
+                    },
+                    "defaultSnippets": [
+                        {
+                            "label": "translated",
+                            "description": "translate virtual path/name",
+                            "body": { "translatePathName": true }
+                        },
+                        {
+                            "label": "not translated",
+                            "description": "do not translate virtual path/name",
+                            "body": { "translatePathName": false }
+                        }
+                    ]
+                }
+            },
+            "defaultSnippets": [
+                {
+                    "label": "new entry (translated)",
+                    "description": "new pathNameTable entry",
+                    "body": { "fileName": "${1:filename}.${2:extension}", "meta": { "translatePathName": true }, "virtualFileName": "${1:filename}", "virtualPath": [] }
+                },
+                {
+                    "label": "new entry (not translated)",
+                    "description": "new pathNameTable entry",
+                    "body": { "fileName": "${1:filename}.${2:extension}", "meta": { "translatePathName": false }, "virtualFileName": "${1:filename}", "virtualPath": [] }
+                }
+            ]
+        }
+    }
+}

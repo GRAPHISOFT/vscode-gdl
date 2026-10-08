@@ -5,9 +5,12 @@ const vscode = require("vscode");
 const extension_1 = require("./extension");
 const path = require("path");
 class RefGuide {
+    extension;
+    refguideView;
+    refguideroot;
+    callbacks = [];
     constructor(extension, root) {
         this.extension = extension;
-        this.callbacks = [];
         this.refguideroot = root;
         //console.log("RefGuide()", this.refguideroot);
         this.refguideView = vscode.window.createWebviewPanel('refguide', 'GDL reference guide', { preserveFocus: true,
