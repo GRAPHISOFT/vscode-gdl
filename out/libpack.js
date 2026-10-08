@@ -25,12 +25,11 @@ function escapeRegex(str) {
 async function allPackages() {
     const infos = await vscode.workspace.findFiles("**/package.info");
     const packageInfos = infos.map(async (info) => await PackageInfo.read(info));
-    return (await Promise.allSettled(packageInfos)) // TODO write function for it, report rejected promises
+    return (await Promise.allSettled(packageInfos))
         .flatMap(result => result.status === "fulfilled" ? result.value : undefined)
         .filter((e) => e !== undefined);
 }
 exports.allPackages = allPackages;
-// TODO merge all pathnametables for selected localization
 class PackageInfo {
     packageInfo;
     packageName;

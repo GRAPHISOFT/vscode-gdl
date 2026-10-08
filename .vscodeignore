@@ -10,3 +10,4 @@
 **/.vscodeignore.txt
 **/*.code-workspace
 *.vsix
+.gitignore

@@ -14,6 +14,8 @@ class Parameter {
     bold;
     fix;
     hidden;
+    unique;
+    subkeys = new Map(); // d => [a.b.c.d, a.e.d]
     constructor(xml) {
         const result_ = xml.match(/^\t\t<(.*?) Name="(.*?)">((.|[\n\r])*?)^\t\t<\/\1>/m);
         if (result_) {
@@ -32,6 +34,7 @@ class Parameter {
             this.child = (flags.indexOf("Child") !== -1);
             this.bold = (flags.indexOf("BoldName") !== -1);
             this.hidden = (flags.indexOf("Hidden") !== -1);
+            this.unique = (flags.indexOf("Unique") !== -1);
             const defaultvalue_ = content.match(/<(Value|ArrayValues)(.*?)>((.|[\n\r])*?)(?=<\/\1>)/m)
                 ?? ["", "", ""]; // Value tag isn't present for Title and Separator
             const isArray = (defaultvalue_[1] === "ArrayValues");
@@ -73,6 +76,9 @@ class Parameter {
                 else {
                     this.vardim2 = 0;
                 }
+                if (this.type === "Dictionary") {
+                    this.addsubkeys(this.defaultvalue, this.nameCS);
+                }
             }
         }
         else {
@@ -86,22 +92,86 @@ class Parameter {
             this.bold = false;
             this.fix = false;
             this.hidden = false;
+            this.unique = false;
         }
     }
-    getDocString(desc = true, name = true, defaultvalue = true) {
-        return new vscode.MarkdownString((desc ? ("**\"" + this.desc + "\"** ") : "") +
-            (name ? ("`" + this.nameCS + "`") : "") +
-            "\n\n" +
-            "**" + this.type + "**" +
-            this.getFlagString("`") +
-            "\n\n" +
-            (defaultvalue ? this.getDefaultString() : ""));
+    static unindent(xml) {
+        // remove indent of first line from all lines
+        const firstLineIndent = xml.match(/^\s*/)?.[0] ?? "";
+        const regex = new RegExp(`^${firstLineIndent}`, "gm");
+        return xml.replace(regex, "");
     }
-    getFlagString(markdown = "") {
-        return (this.fix ? (" " + markdown + "Fix" + markdown) : "") +
-            (this.hidden ? (" " + markdown + "Hidden" + markdown) : "") +
-            (this.child ? (" " + markdown + "Child" + markdown) : "") +
-            (this.bold ? (" " + markdown + "BoldName" + markdown) : "");
+    addsubkeys(xml, prefix) {
+        const subkeys = /^<((Dictionary|Array)|(Integer|RealNum|String))\s+(Index|Name)="(.*?)"\s*>\s*(((.*?)<\/\3\s*>)|(\s*[\n\r]+((^\s.*[\n\r]+)*?)^<\/\2\s*>))/gm;
+        for (const match of xml.matchAll(subkeys)) {
+            const id = match[5];
+            if (match[2] !== undefined) {
+                // array or dict
+                const content = Parameter.unindent(match[10]);
+                const inArray = match[4] === "Index";
+                if (inArray) {
+                    this.addsubkeys(content, prefix);
+                }
+                else {
+                    const name = this.addsubkey(id, prefix);
+                    this.addsubkeys(content, name);
+                }
+            }
+            else {
+                // string or number
+                this.addsubkey(id, prefix);
+            }
+        }
+    }
+    addsubkey(key, prefix) {
+        const name = `${prefix}.${key}`;
+        const keyLC = key.toLowerCase();
+        if (!this.subkeys.has(keyLC))
+            this.subkeys.set(keyLC, []);
+        this.subkeys.get(keyLC).push(name);
+        return name;
+    }
+    hasSubKey(key) {
+        return this.subkeys.has(key.toLowerCase());
+    }
+    getDocString(block, desc = true, name = true, defaultvalue = true) {
+        const md = new vscode.MarkdownString();
+        if (desc) {
+            md.appendMarkdown(`${this.getDescString(block)}  \n`);
+        }
+        if (name) {
+            md.appendMarkdown(`\`${this.nameCS}\``);
+        }
+        md.appendMarkdown(`${this.getFlagString(block)}  \n`);
+        if (defaultvalue) {
+            md.appendMarkdown(`**${this.type}** ${this.getDefaultString()}`);
+        }
+        return md;
+    }
+    getDescString(block, plaintext = false) {
+        const description = plaintext ? `"${this.desc}"` : `**"${this.desc}"**`;
+        if (block) {
+            return `"${block.desc}" / ` + description;
+        }
+        return description;
+    }
+    getFlagString(block) {
+        let flags = (this.fix ? " `Fix`" : "");
+        flags += (this.bold ? " `BoldName`" : "");
+        flags += (this.hidden ? " `Hidden`" : "");
+        flags += (this.unique ? " `Unique`" : "");
+        if (block === this) {
+            flags += (this.child ? " `Child`" : ""); // probably wrong but show it
+            flags += " `PARAMETER BLOCK`";
+        }
+        else if (block) {
+            // shouldn't have block without child flag but show it
+            flags += ` \`${this.child ? "Child" : ""} of ${block.nameCS}\``;
+        }
+        else {
+            flags += (this.child ? " `Child`" : ""); // probably wrong but show it
+        }
+        return flags;
     }
     getDefaultString() {
         if (this.type !== "Title" && this.type !== "Separator") {
@@ -128,28 +198,59 @@ class Parameter {
 exports.Parameter = Parameter;
 class ParamList {
     parameters = new Map();
-    async addfrom(rootfolder) {
-        const paramlistfile = vscode.Uri.joinPath(rootfolder, "paramlist.xml");
-        const paramlist = await vscode.workspace.openTextDocument(paramlistfile);
+    group = new Map();
+    uri;
+    static subpath = "paramlist.xml";
+    constructor(rootfolder) {
+        this.uri = vscode.Uri.joinPath(rootfolder, ParamList.subpath);
+    }
+    async parse() {
+        const paramlist = await vscode.workspace.openTextDocument(this.uri);
         this.parameters.clear();
+        this.group.clear();
         if (paramlist) {
-            const parameters_ = paramlist.getText().match(/^\t\t<(.*?) Name=.*?>((.|[\n\r])*?)^\t\t<\/\1>/mg);
-            if (parameters_) {
-                for (const xml of parameters_) {
-                    const parameter = new Parameter(xml);
-                    this.parameters.set(parameter.nameCS.toLowerCase(), parameter);
+            //const parameters_ = paramlist.getText().matchAll(/^\t\t<(!--) (.*?): PARAMETER BLOCK.*?-->|^\t\t<(.*?) Name=.*?>((.|[\n\r])*?)^\t\t<\/\1>/mg);
+            const parameters_ = paramlist.getText().matchAll(/^\t\t<(.*?) (Name=.*?>((.|[\n\r])*?)^\t\t<\/\1>|(.*?): PARAMETER BLOCK.*?-->)/mg);
+            let group = "";
+            for (const match of parameters_) {
+                if (match[1] == "!--") {
+                    group = match[5];
+                }
+                else {
+                    const parameter = new Parameter(match[0]);
+                    const nameLC = parameter.nameCS.toLowerCase();
+                    if (group.toLowerCase() !== nameLC && !parameter.child) {
+                        // group applies to child parameters only
+                        // first parameter in group must have group name, is not child
+                        group = "";
+                    }
+                    this.group.set(nameLC, group);
+                    const position = paramlist.positionAt(match.index);
+                    this.parameters.set(nameLC, [parameter, position]);
                 }
             }
         }
     }
     has(name) {
-        return this.parameters.has(name);
+        return this.parameters.has(name.toLowerCase());
     }
     get(name) {
-        return this.parameters.get(name.toLowerCase());
+        return this.parameters.get(name.toLowerCase())?.[0];
     }
-    [Symbol.iterator]() {
-        return this.parameters.values();
+    block_of(parameter) {
+        return this.get(this.group.get(parameter.nameCS.toLowerCase()) ?? "");
+    }
+    position(name) {
+        return this.parameters.get(name.toLowerCase())?.[1];
+    }
+    *[Symbol.iterator]() {
+        yield* this.all_of_type();
+    }
+    *all_of_type(type = undefined) {
+        for (const [parameter, _] of this.parameters.values()) {
+            if (type === undefined || type === parameter.type)
+                yield parameter;
+        }
     }
 }
 exports.ParamList = ParamList;

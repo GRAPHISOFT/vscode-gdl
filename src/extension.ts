@@ -12,7 +12,8 @@ import { Constants } from './constparser';
 
 import path = require('path');
 import { Jumps, Jump } from './jumpparser';
-import { Variables } from './varparser';
+import { Vardef } from './varparser';
+import { Parameter, ParamList } from './paramlistparser';
 
 export async function activate(context: vscode.ExtensionContext) {
     //console.log("extension.activate");
@@ -30,13 +31,29 @@ type FormattedTokens = {
 	tokens: Parser.GDLToken[]
 };
 
+interface HSFTerminalLink extends vscode.TerminalLink {
+    path: vscode.Uri,
+    err_line?: number,
+    is_error: boolean,
+    msg?: string
+};
+
+type ParameterInfo = {
+    parameter: Parameter,
+    block: Parameter | undefined
+};
+
 export class GDLExtension
     implements vscode.HoverProvider,
                vscode.CompletionItemProvider,
                vscode.DocumentSymbolProvider,
                vscode.DefinitionProvider,
                vscode.ReferenceProvider,
-               vscode.DocumentDropEditProvider {
+               vscode.DocumentDropEditProvider,
+               vscode.TerminalLinkProvider<HSFTerminalLink>,
+               //vscode.CodeActionProvider<vscode.CodeAction>,
+               vscode.DocumentPasteEditProvider<vscode.DocumentPasteEdit>,
+               vscode.Disposable  {
 
     // data
     private parseTimer? : NodeJS.Timer;
@@ -50,6 +67,7 @@ export class GDLExtension
     // user settings
     private refguidePath: string = "";
     private infoFromHSF: boolean = true;
+    private pasteAsBlock: boolean = false;
 
     // UI elements
     private _editor? : vscode.TextEditor;
@@ -91,6 +109,12 @@ export class GDLExtension
     private suggestHSF : vscode.Disposable | undefined;
 
     private readonly sectionDecorations : vscode.TextEditorDecorationType[] = [];
+    private error_decoration : vscode.TextEditorDecorationType;
+    private warning_decoration : vscode.TextEditorDecorationType;
+
+    // filesystem observers
+    private paramlist_watcher: vscode.FileSystemWatcher | undefined;
+    private gdl_watcher: vscode.FileSystemWatcher | undefined;
 
     constructor(public context : vscode.ExtensionContext) {
         this.parser = new Parser.ParseXMLGDL();  // without text only initializes
@@ -110,12 +134,24 @@ export class GDLExtension
 
         //status bar initialization - HSF
         this.statusHSF = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left);
-        this.statusHSF.tooltip = "Show Info from HSF Files";
-    	this.statusHSF.command = 'GDL.infoFromHSF';
         context.subscriptions.push(this.statusHSF);
 
         //init extension-relative paths
         this.initUIDecorations();
+        this.warning_decoration = vscode.window.createTextEditorDecorationType({
+            textDecoration: "orange dotted underline",
+            after: {
+                color: "orange",
+                fontStyle: "italic"
+            }
+        });
+        this.error_decoration = vscode.window.createTextEditorDecorationType({
+            textDecoration: "red dotted underline",
+            after: {
+                color: "red",
+                fontStyle: "italic"
+            }
+        });
 
         context.subscriptions.push(
             // callbacks
@@ -146,8 +182,10 @@ export class GDLExtension
             vscode.commands.registerCommand('GDL.refguide', async () => this.showRefguide()),
     
             vscode.commands.registerCommand('GDL.infoFromHSF', () => this.setInfoFromHSF(!this.infoFromHSF)),
+            vscode.commands.registerCommand('GDL.togglePasteAsBlock', () => this.setPasteAsBlock(!this.pasteAsBlock)),
             vscode.commands.registerCommand('GDL.rescanFolders', async () => this.rescanFolders()),
 
+            vscode.commands.registerCommand('GDL.clearErrorDecorations', async () => this.clearErrorDecorations()),
 
             // language features
             vscode.languages.registerHoverProvider(["gdl-hsf"], this),
@@ -156,7 +194,10 @@ export class GDLExtension
             vscode.languages.registerDefinitionProvider(["gdl-hsf"], this),
             vscode.languages.registerReferenceProvider(["gdl-hsf"], this),
             vscode.languages.registerCallHierarchyProvider(["gdl-hsf"], this.callTree),
-            vscode.languages.registerDocumentDropEditProvider(["gdl-hsf"], this)
+            vscode.languages.registerDocumentDropEditProvider(["gdl-hsf"], this),
+            vscode.window.registerTerminalLinkProvider(this),
+            //vscode.languages.registerCodeActionsProvider(["gdl-hsf"], this, { providedCodeActionKinds: [vscode.CodeActionKind.RefactorRewrite] })
+            vscode.languages.registerDocumentPasteEditProvider(["gdl-hsf"], this, { pasteMimeTypes: ["text/plain"], providedPasteEditKinds: [vscode.DocumentDropOrPasteEditKind.Text]})
         );
     }
 
@@ -164,10 +205,6 @@ export class GDLExtension
         await this.onConfigChanged();   // wait for configuration
         this.onActiveEditorChanged();   // start async operation
         this.wsSymbols.changeFolders(); // handles waiting for result on its own
-
-        // TODO this is just a demo
-        // const packages = await allPackages();
-        // console.log(packages.map(p => p.packageName));
     }
 
     get updateEnabled() : boolean { return this._updateEnabled; }
@@ -337,16 +374,22 @@ export class GDLExtension
 
     private updateHsfLibpart() {
         // create new HSFLibpart if root folder changed
-        const rootFolder = this.getNewHSFLibpartFolder(this.hsflibpart?.info.root_uri);
-        if (rootFolder !== undefined && this._editor !== undefined) {   // no editor on startup
-            const script = HSFScriptType(this._editor!.document.uri)!;
-            if (rootFolder) {
+        const newRootFolder = this.getNewHSFLibpartFolder(this.hsflibpart?.info.root_uri);
+        if (newRootFolder !== undefined && this._editor !== undefined) {   // no editor on startup
+            if (newRootFolder) {
                 //start async operations
-                this.hsflibpart = new HSFLibpart(rootFolder);
-            } else {
-                this.hsflibpart?.refresh(script);
+                this.hsflibpart = new HSFLibpart(newRootFolder);
+
+                // observe file changes not in opened editor
+                // didn't work in HSFLibpart (maybe accidental async?)
+                this.paramlist_watcher?.dispose();
+                this.gdl_watcher?.dispose();
+                this.paramlist_watcher = vscode.workspace.createFileSystemWatcher(new vscode.RelativePattern(newRootFolder, ParamList.subpath));
+                this.gdl_watcher = vscode.workspace.createFileSystemWatcher(new vscode.RelativePattern(newRootFolder, "scripts/*.gdl"));
+                this.paramlist_watcher.onDidChange(() => this.hsflibpart?.refresh(true, false));
+                this.gdl_watcher.onDidChange(() => this.hsflibpart?.refresh(false, true));
             }
-        } else if (rootFolder === undefined) {
+        } else if (newRootFolder === undefined) {
             // delete HSFLibpart
             this.hsflibpart = undefined;
         }
@@ -388,8 +431,9 @@ export class GDLExtension
                 const text = this._editor.document.getText();
                 if (text) {
                     for (const p of await this.hsflibpart.paramlist()) {
-                        //TODO store regexs?
-                        const find = new RegExp("\\b" + p.nameCS + "\\b", "ig");
+                        const find = new RegExp("\\b(?<!\\.)" + p.nameCS + "\\b", "ig");
+                            // this matches param.key even if param is not a dict,
+                            // better to highlight possible error
                         let current : RegExpExecArray | null;
                         while ((current = find.exec(text)) !== null) {
                             const start = this._editor.document.positionAt(current.index);
@@ -425,6 +469,13 @@ export class GDLExtension
         }
     }
 
+    public setPasteAsBlock(pasteAsBlock : boolean) {
+        this.pasteAsBlock = pasteAsBlock;
+        if (this.editor) {
+            this.updateStatusHSF();
+        }
+    }
+
     private async rescanFolders() {
         await this.wsSymbols.changeFolders();
     }
@@ -432,7 +483,8 @@ export class GDLExtension
     private onDocumentChanged(changeEvent: vscode.TextDocumentChangeEvent) {
         //console.log("GDLExtension.onDocumentChanged", changeEvent.document.uri.toString());
         this.pathnametableView.refreshFromEditor();
-        this.updateHsfLibpart();
+        this.hsflibpart?.refresh(false, true);
+        this.clearErrorDecorations();
         this.reparseDoc(changeEvent.document);  // with default timeout
     }
     
@@ -482,6 +534,13 @@ export class GDLExtension
         } else {
             this.setInfoFromHSF(infoFromHSF);
         }
+
+        let pasteAsBlock = config.get<boolean>("enablePasteAsBlock");
+        if (pasteAsBlock === undefined) {
+            this.setPasteAsBlock(false);
+        } else {
+            this.setPasteAsBlock(pasteAsBlock);
+        }
     }
     
     private cancelParseTimer() {
@@ -503,6 +562,9 @@ export class GDLExtension
         //console.log("GDLExtension.dispose");
         this.cancelParseTimer();
         this.cancelSuggestHSF();
+        this.paramlist_watcher?.dispose();
+        this.gdl_watcher?.dispose();
+        this.suggestHSF?.dispose();
     }
 
 	gotoCursor() {
@@ -759,10 +821,32 @@ export class GDLExtension
                 if (this.suggestHSF === undefined) {
                     this.suggestHSF = vscode.languages.registerCompletionItemProvider("*", this);
                 }
-                this.statusHSF.text = `GDL-HSF Parameter Hints ON`;
             } else {
-                this.statusHSF.text = `GDL-HSF Parameter Hints OFF`;
+                this.cancelSuggestHSF();
             }
+            const md = new vscode.MarkdownString();
+            md.appendMarkdown(`[Toggle Parameter Hints](command:GDL.infoFromHSF)  \n`);
+            md.appendMarkdown(`[Toggle Paste as block](command:GDL.togglePasteAsBlock)  \n`);
+            md.appendMarkdown(`[Toggle Outline view spec comments](command:GDLOutline.toggleSpecComments)  \n`);
+            md.appendMarkdown(`[Toggle Outline view macro calls](command:GDLOutline.toggleMacroCalls)  \n`);
+            md.supportThemeIcons = true;
+            md.isTrusted = true;
+            this.statusHSF.tooltip = md;
+            
+            const HSF = "$(symbol-misc) GDL-HSF";
+            let features: string[] = []
+            if (this.infoFromHSF) {
+                features.push("highlight parameters");
+            }
+            if (this.pasteAsBlock) {
+                features.push("paste as block");
+            }
+            if (features.length > 0) {
+                this.statusHSF.text = `${HSF}: ${features.join(", ")}`;
+            } else {
+                this.statusHSF.text = HSF;
+            }
+
             this.statusHSF.show();
         } else {
             this.cancelSuggestHSF();
@@ -990,22 +1074,10 @@ export class GDLExtension
     }
 
     async provideHover (document: vscode.TextDocument, position: vscode.Position): Promise<vscode.Hover> {
-        // implemented only for hsf libparts
-        if (this.hsflibpart && this.infoFromHSF) {
-            const word = document.getText(document.getWordRangeAtPosition(position));
-            const paramlist = await this.hsflibpart.paramlist();
-
-            const p = paramlist.get(word);
+        if (this.infoFromHSF) {
+            const p = await this.isParameter(document, position);
             if (p) {
-                return new vscode.Hover([
-                    new vscode.MarkdownString("**\"" + p.desc + "\"** `" + p.nameCS + "`" +
-                                              "  \n**" + p.type + "**" +
-                                                (p.fix ? " `Fix`" : "") +
-                                                (p.hidden ? " `Hidden`" : "") +
-                                                (p.child ? " `Child`" : "") +
-                                                (p.bold ? " `BoldName`" : "") +
-                                              "  \n" + p.getDefaultString())
-                    ]);
+                return new vscode.Hover([p.parameter.getDocString(p.block, true, true)]);
             }
         }
 
@@ -1017,12 +1089,20 @@ export class GDLExtension
         if (this.hsflibpart) {
             const completions = new vscode.CompletionList();
 
-            for (const p of await this.hsflibpart.paramlist()) {
+            const paramlist = await this.hsflibpart.paramlist();
+            for (const p of paramlist) {
+                const block = paramlist.block_of(p);
                 const padding = " ".repeat(34 - p.nameCS.length); // max. parameter name length is 32 chars
-                const completion = new vscode.CompletionItem(p.nameCS + padding + p.type + p.getDimensionString(), vscode.CompletionItemKind.Field);
+                const decription = p.getDescString(block, true);
+                const completion = new vscode.CompletionItem(
+                    {
+                        label: p.nameCS + padding + p.type + p.getDimensionString(),    // allow filtering on type/dimensions too
+                        description: decription,
+                    },
+                    vscode.CompletionItemKind.Field);
                 completion.insertText = p.nameCS;
-                completion.detail = "\"" + p.desc + "\"";
-                completion.documentation = p.getDocString(false, false);
+                completion.detail = decription;
+                completion.documentation = p.getDocString(block, false, false);
                 completions.items.push(completion);
             }
 
@@ -1182,90 +1262,160 @@ export class GDLExtension
         return symbols;
     }
 
-    async provideDefinition(document: vscode.TextDocument, position: vscode.Position, cancel: vscode.CancellationToken): Promise<vscode.LocationLink[]> {
-        let definitions : vscode.LocationLink[] = [];
+    private async isParameter(document: vscode.TextDocument, position: vscode.Position): Promise<ParameterInfo | undefined> {
+        // implemented only for hsf libparts
+        if (!this.hsflibpart) return undefined;
 
-        const label = this.isLibpartReference(document, position)     // Parser.GDLLibpartReference
-                      ?? this.isSubroutineDefinition(position)        // vscode.DocumentSymbol
-                      ?? this.isSubroutineCall(document, position);   // Jump
+        const wordRange = document.getWordRangeAtPosition(position, /\b(?<!\.)[_~a-z][_~0-9a-z]*\b/i);
+        if (wordRange === undefined) return undefined;
 
-        if (label instanceof Parser.GDLLibpartReference) {
-            const link = await this.libpartLinks(label, document, cancel); 
-            if (link !== undefined) {
-                // if there are multiple results, select target by matching workspace folder
-                if (link.length > 1) {
-                    definitions = link.filter(t => {
-                        const target_wsfolder = vscode.workspace.getWorkspaceFolder(t.targetUri);
-                        const call_wsfolder = vscode.workspace.getWorkspaceFolder(document.uri);
-                        return target_wsfolder === call_wsfolder;
-                    });
-                    // if narrowed results are zero, show all matches
-                    if (definitions.length === 0) {
-                        definitions = link;
-                    }
-                } else {
-                    definitions = link;
-                }
-            }
-        } else if (label !== undefined) {
-            if (label instanceof vscode.DocumentSymbol) {   //subroutine definition, link back to itself
-                definitions = [{ originSelectionRange:  label.selectionRange,
-                                 targetRange:           label.range,
-                                 targetSelectionRange:  label.selectionRange,
-                                 targetUri:             document.uri }];
+        const word = document.getText(wordRange);
+        const paramlist = await this.hsflibpart.paramlist();
+        const parameter = paramlist.get(word);
+        if (parameter === undefined) return undefined;
+        return { parameter: parameter, block: paramlist.block_of(parameter) };
+    }
 
-            } else {    // subroutine call
-                let functionSymbols : {symbol: vscode.DocumentSymbol, document: vscode.TextDocument}[] = [];
+    private async libpartReferenceLinks(ref: Parser.GDLLibpartReference, document: vscode.TextDocument, cancel: vscode.CancellationToken): Promise<vscode.LocationLink[]> {
+        const links = await this.libpartLinks(ref, document, cancel);
+        if (links === undefined) return [];
 
-                for (const [_scriptType, scriptUri] of await this.hsflibpart!.info.allScripts()) {
-                    const otherdoc = await vscode.workspace.openTextDocument(scriptUri);
-                    const otherscript = new Parser.ParseXMLGDL(otherdoc.getText(),
-                    true, false, false, false, false);
-                    
-                    functionSymbols = functionSymbols.concat(
-                        GDLExtension.mapFunctionSymbols(otherscript, Parser.ScriptType.ROOT, otherdoc)
-                                    .map(s => {return {symbol: s, document: otherdoc}}));
-                }
-                            
-                definitions = functionSymbols
-                    .filter(s => (label.target === s.symbol.name ||                                        // number
-                                  label.target === s.symbol.name.substring(1, s.symbol.name.length - 1)))  // "name"
-                    .map(s => ({originSelectionRange:  label.range,
-                                targetRange:           s.symbol.range,
-                                targetSelectionRange:  s.symbol.selectionRange,
-                                targetUri:             s.document.uri }));
+        // if there are multiple results, select target by matching workspace folder
+        if (links.length > 1) {
+            const links_in_folder = links.filter(t => {
+                const target_wsfolder = vscode.workspace.getWorkspaceFolder(t.targetUri);
+                const call_wsfolder = vscode.workspace.getWorkspaceFolder(document.uri);
+                return target_wsfolder === call_wsfolder;
+            });
+            // if narrowed results are zero, show all matches
+            if (links_in_folder.length === 0) {
+                return links;
+            } else {
+                return links_in_folder;
             }
         } else {
-            // try to find word in variable definitions
-            const wordRange = document.getWordRangeAtPosition(position, /\b[_~a-z][_~0-9a-z]*\b/i);
-            const word = document.getText(wordRange);
-            const allVariableDefinitions = await this.getRelevantVariableDefinitions();
+            return links;
+        }
+    }
 
-            const definitionsForWord = [...allVariableDefinitions.keys()].flatMap(uri => {
-                const scriptDefinitionsForWord = allVariableDefinitions.get(uri)!.get(word);
-                return scriptDefinitionsForWord.map(vardef => ({uri: uri, vardef: vardef}));
-            });
+    private async paramlistLinks(document: vscode.TextDocument, position: vscode.Position): Promise<vscode.LocationLink[]> {
+        const param = await this.isParameter(document, position);
+        if (param === undefined) return []; // can't have a Parameter without a ParamList
 
-            definitions = definitionsForWord.map(({uri, vardef}) => {
-                const targetRange = new vscode.Range(vardef.subline.start,
-                                                     vardef.subline.start.translate(0, vardef.subline.text.length));
-                const selectionRange = new vscode.Range(vardef.subline.start.translate(0, vardef.defstart),
-                                                        targetRange.end);
-                return {originSelectionRange:   wordRange,
-                        targetRange:            targetRange,
-                        targetSelectionRange:   selectionRange,
-                        targetUri:              uri };
-            });
+        const paramlist = await this.hsflibpart!.paramlist();   // isParameter cached awaited paramlist, will return immediately
+        const paramlist_position = paramlist.position(param.parameter.nameCS)!;
+
+        // parameter info is shown customized in hover, hide xml from this definition by returning empty range
+        const link = {  targetUri: paramlist.uri,
+                        targetRange: new vscode.Range(paramlist_position, paramlist_position) };
+        return [link];
+    }
+
+    private async jumpLinks(jump: Jump): Promise<vscode.LocationLink[]> {
+        let functionSymbols : {symbol: vscode.DocumentSymbol, document: vscode.TextDocument}[] = [];
+
+        for await (const [_scriptType, scriptUri] of this.hsflibpart!.info.allScripts()) {
+            const otherdoc = await vscode.workspace.openTextDocument(scriptUri);
+            const otherscript = new Parser.ParseXMLGDL(otherdoc.getText(),
+            true, false, false, false, false);
+            
+            functionSymbols = functionSymbols.concat(
+                GDLExtension.mapFunctionSymbols(otherscript, Parser.ScriptType.ROOT, otherdoc)
+                            .map(s => {return {symbol: s, document: otherdoc}}));
+        }
+                    
+        return functionSymbols
+            .filter(s => (jump.target === s.symbol.name ||                                        // number
+                          jump.target === s.symbol.name.substring(1, s.symbol.name.length - 1)))  // "name"
+            .map(s => ({originSelectionRange:  jump.range,
+                        targetRange:           s.symbol.range,
+                        targetSelectionRange:  s.symbol.selectionRange,
+                        targetUri:             s.document.uri }));
+    }
+
+    private async variableLinks(document: vscode.TextDocument, position: vscode.Position): Promise<vscode.LocationLink[]> {
+        const wordRange = document.getWordRangeAtPosition(position, /\b[_~a-z][_~0-9a-z]*\b/i);
+        if (wordRange === undefined) return [];
+
+        // match .key in dict.key
+        const dictTestRange = document.getWordRangeAtPosition(position, /\.[_~a-z][_~0-9a-z]*\b/i);
+        const isSubkey = dictTestRange !== undefined;
+
+        const word = document.getText(wordRange);
+        const allVariableDefinitions = await this.getRelevantVariableDefinitions(word, isSubkey);
+
+        const definitionsForWord = [...allVariableDefinitions.keys()].flatMap(uri => {
+            const scriptDefinitionsForWord = allVariableDefinitions.get(uri)!;
+            return scriptDefinitionsForWord.map(vardef => ({uri: uri, vardef: vardef}));
+        });
+
+        return definitionsForWord.map(({uri, vardef}) => {
+            const selectionRange = new vscode.Range(vardef.subline.start.translate(0, vardef.varstart),
+                                                 vardef.subline.start.translate(0, vardef.defstart));
+            const targetRange = new vscode.Range(vardef.subline.start,
+                                                vardef.subline.start.translate(0, vardef.subline.text.length));
+            return {originSelectionRange:   wordRange,
+                    targetRange:            targetRange,
+                    targetSelectionRange:   selectionRange,
+                    targetUri:              uri };
+        });
+    }
+
+    private async dictParamSubkeyLinks(document: vscode.TextDocument, position: vscode.Position): Promise<vscode.LocationLink[]> {
+        // give links for dict.key in paramlist if key exists as any subkey of any dict parameter
+        // it could be copied to any other structure, eg:
+        // paramlist: param.a.b
+        // dict var : var = param.a
+        // var.b    ! is param.a.b
+        const wordRange = document.getWordRangeAtPosition(position, /(?<=\.)[_~a-z][_~0-9a-z]*\b/i);
+        if (wordRange === undefined) return [];
+
+        const subkey = document.getText(wordRange);
+
+        let links: vscode.LocationLink[] = [];
+        const paramlist = await this.hsflibpart!.paramlist();
+        for (const dict of paramlist.all_of_type("Dictionary")) {
+            if (dict.hasSubKey(subkey)) {
+                const paramlist_position = paramlist.position(dict.nameCS)!;
+                links.push({targetUri: paramlist.uri,
+                            targetRange: new vscode.Range(paramlist_position, paramlist_position) });
+            }
         }
 
-        return definitions;
+        return links;        
+    }
+
+    async provideDefinition(document: vscode.TextDocument, position: vscode.Position, cancel: vscode.CancellationToken): Promise<vscode.LocationLink[]> {
+        // different kinds of jumps
+        const label = (  this.isLibpartReference(document, position)  // Parser.GDLLibpartReference
+                      ?? this.isSubroutineDefinition(position)        // vscode.DocumentSymbol
+                      ?? this.isSubroutineCall(document, position))   // Jump
+
+        if (label) { // these can't be other types too
+            if (label instanceof Parser.GDLLibpartReference) {
+                return await this.libpartReferenceLinks(label, document, cancel);
+            } else if (label instanceof vscode.DocumentSymbol) { // link back to itself
+                return [{   originSelectionRange:  label.selectionRange,
+                            targetRange:           label.range,
+                            targetSelectionRange:  label.selectionRange,
+                            targetUri:             document.uri }];
+            } else {    // instanceof Jump
+                return await this.jumpLinks(label);
+            }
+        } else {
+            const definitions = await Promise.all([ this.paramlistLinks(document, position),
+                                                    this.dictParamSubkeyLinks(document, position),
+                                                    this.variableLinks(document, position)]);
+            return definitions.flat();
+        }
     }
 
     /** return variable definitions from libpart */
-    private async getRelevantVariableDefinitions() {
-        const result = new Map<vscode.Uri, Variables>();
-        for (const [scriptType, scriptUri] of await this.hsflibpart!.info.allScripts()) {
-            result.set(scriptUri, await this.hsflibpart!.vardefs(scriptType));
+    private async getRelevantVariableDefinitions(word: string, isSubkey: boolean) {
+        const result = new Map<vscode.Uri, Vardef[]>();
+        for await (const [scriptType, scriptUri] of this.hsflibpart!.info.allScripts()) {
+            const vardefs = await this.hsflibpart!.vardefs(scriptType);
+            result.set(scriptUri, vardefs.get(word).filter(v => v.isSubkey == isSubkey));
         }
         return result;
     }
@@ -1324,7 +1474,7 @@ export class GDLExtension
         if (label !== undefined) {
             const target = (label instanceof vscode.DocumentSymbol) ? label.name : label.target;
             //const target = ("command" in label) ? label.target : label.name;
-            for (const [_scriptType, scriptUri] of await this.hsflibpart!.info.allScripts()) {
+            for await (const [_scriptType, scriptUri] of this.hsflibpart!.info.allScripts()) {
                 const searchDocument = await vscode.workspace.openTextDocument(scriptUri);
 
                 const jumps = new Jumps(searchDocument.getText());
@@ -1334,6 +1484,144 @@ export class GDLExtension
         }
         
         return references;
+    }
+
+    public provideTerminalLinks(context: vscode.TerminalLinkContext,
+        _token: vscode.CancellationToken): HSFTerminalLink[] {
+        const line = context.line;
+           
+        // ...\Source\Macros\MEP_m_Connections(8) : warning: (in Script_2D) : Use of real types can result in precision problems 
+        // ...\Source\Macros\MEP_m_Connections(10) : error: (in Script_2D) : Keywords can't be used as variables
+        // -> open source code
+        const error_re = /^(?<libpart>.*?)\((?<err_line>\d+)\) : (?<type>error|warning): \(in (Script_(?<script>1D|2D|3D|VL|UI|PR|FWM|BWM))\) : (?<msg>.*)$/;
+        const match = line.match(error_re);
+        if (match) {
+            const { libpart, err_line, type, script, msg } = match.groups!;
+            const err_line_num = Number.parseInt(err_line);
+            const path = vscode.Uri.joinPath(vscode.Uri.file(libpart), "scripts", `${script}.gdl`);
+            const tooltip = `show ${type} in ${script} script`;
+            const link : HSFTerminalLink = {
+                ...new vscode.TerminalLink(match.index!, match[0].length, tooltip),
+                path: path,
+                err_line: err_line_num,
+                is_error: type === "error",
+                msg: msg
+            };
+
+            return [link];
+        }
+
+        return [];
+    }
+
+    private decorateError(link: HSFTerminalLink, editor: vscode.TextEditor, range: vscode.Range) {
+        const options : vscode.DecorationOptions = {
+            range: range,
+            renderOptions: {
+                after: {
+                    contentText: ` ${link.msg}`
+                }
+            }
+        };
+        const decor = link.is_error ? this.error_decoration : this.warning_decoration;
+        const other_decor = link.is_error ? this.warning_decoration : this.error_decoration;
+        editor.setDecorations(decor, [options]);
+        editor.setDecorations(other_decor, []);
+    }
+
+    private clearErrorDecorations() {
+        const editor = vscode.window.activeTextEditor;
+        if (editor !== undefined) {
+            editor.setDecorations(this.error_decoration, []);
+            editor.setDecorations(this.warning_decoration, []);
+        }
+    }
+
+    private async openError(link: HSFTerminalLink) : Promise<[vscode.TextEditor, vscode.Range]> {
+        const document = await vscode.workspace.openTextDocument(link.path);
+        const editor = await vscode.window.showTextDocument(document);
+        let range: vscode.Range;
+        if (link.err_line !== undefined && !isNaN(link.err_line)) {
+            const line = document.lineAt(link.err_line - 1);
+            const stripped_match = line.text.match(/^(?<ws>\s*).*?(?<comment>\s*!.*)?$/);
+            const { ws, comment } = stripped_match!.groups!;
+            range = new vscode.Range(
+                link.err_line - 1, ws.length,
+                link.err_line - 1, line.text.length - (comment?.length ?? 0)
+            );
+        } else {
+            range = new vscode.Range(0, 0, 0, 0); // no line number, show start of document
+        }
+        editor.revealRange(range, vscode.TextEditorRevealType.InCenterIfOutsideViewport);
+        return [editor, range];
+    }
+
+    public async handleTerminalLink(link: HSFTerminalLink) {
+        const [editor, range] = await this.openError(link);
+        this.decorateError(link, editor, range);
+    }
+
+    public async provideDocumentPasteEdits(document: vscode.TextDocument, ranges: readonly vscode.Range[], dataTransfer: vscode.DataTransfer, _context: vscode.DocumentPasteEditContext, _token: vscode.CancellationToken): Promise<vscode.DocumentPasteEdit[] | undefined> {
+        if (!this.pasteAsBlock) return;
+        
+        if (ranges.length > 0 && !ranges[0].isEmpty) {
+            const range = ranges[0];
+            // Get clipboard text from the paste event's DataTransfer
+            const text = (await dataTransfer.get("text/plain")?.asString() ?? "");
+            if (this._editor && text.length > 0) {
+                const [first, second] = text.trimStart().split(/\s+/, 2);
+                let endtag: string | undefined;
+                switch (first.toLowerCase()) {
+                    case "if":
+                        endtag = "endif";
+                        break;
+                    case "for":
+                        endtag = `next ${second}`;
+                        break;
+                    case "while":
+                        endtag = "endwhile";
+                        break;
+                    case "do":
+                        endtag = "while";
+                        break;
+                    case "repeat":
+                        endtag = "until";
+                        break;
+                }
+                if (endtag === undefined) return;
+
+                const indent = this._editor.options.insertSpaces ? " ".repeat(this._editor.options.indentSize as number) : "\t";
+                const selection = document.getText(range);
+                const leadingWS = selection.split(/[^\s]/, 1)[0];
+
+                const selectionIndented = this.indentBlock(selection, indent);
+                const textIndented = this.indentBlock(this.unIndentBlock(text), leadingWS);
+
+                const pasteText = `${textIndented}\n${selectionIndented}\n${leadingWS}${endtag}\n`;
+                const edit = new vscode.DocumentPasteEdit(pasteText,
+                    "Paste as new block before selection, close block after selection",
+                    vscode.DocumentDropOrPasteEditKind.Text);
+
+                return [edit];
+            }
+        }
+
+        return;
+    }
+
+    // remove leading whitespace of first line from all lines
+    private unIndentBlock(text: string): string {
+        const lines = text.split(/\r?\n/);
+        const leadingWS = lines[0].split(/[^\s]/, 1)[0].length;
+        const unindented = lines.map(line => line.substring(leadingWS)).join("\n");
+        return unindented.trimEnd(); //remove ending empty lines
+    }
+
+    // add leading whitespace to all lines
+    private indentBlock(text: string, indent: string): string {
+        const lines = text.split(/\r?\n/);
+        const indented = lines.map(line => `${indent}${line}`).join("\n");
+        return indented.trimEnd(); //remove ending empty lines
     }
 }
 
@@ -1373,11 +1661,16 @@ function gsmUri(rooturi: vscode.Uri) : LibpartUri {
     return { binaryFileName: binaryFileName, sourceUri: rooturi };
 }
 
-function fileUri(parenturi: vscode.Uri, filename: string) : LibpartUri {
+function fileUris(parenturi: vscode.Uri, filename: string) : LibpartUri[] {
     let sourceUri = vscode.Uri.joinPath(parenturi, filename);
-    const binaryFileName = filename.replace(/\.svg$/i, ".tif");
 
-    return { binaryFileName: binaryFileName, sourceUri: sourceUri };
+    const svg = filename.match(/^(.*?)\.svg$/i);
+    if (svg) {
+        return [{ binaryFileName: svg[1] + ".tif", sourceUri: sourceUri },
+                { binaryFileName: svg[1] + "_dark.tif", sourceUri: sourceUri }];
+    } else {
+        return [{ binaryFileName: filename, sourceUri: sourceUri }];
+    }
 }
 
 export async function* getLibparts(uri : vscode.Uri) : AsyncIterableIterator<LibpartUri> {
@@ -1390,7 +1683,9 @@ export async function* getLibparts(uri : vscode.Uri) : AsyncIterableIterator<Lib
             if (type & vscode.FileType.File) {
                 // return file uri
                 if (name !== "IDEntryList.dbe" && !name.endsWith("_Interface.xml")) {   // skip (TODO only at specific location)
-                    yield fileUri(uri, name);
+                    for (const libpartUri of fileUris(uri, name)) {
+                        yield libpartUri;
+                    }
                 }
             } else {
                 // continue with contents of folder

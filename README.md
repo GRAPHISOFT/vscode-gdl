@@ -1,6 +1,6 @@
 # GDL extension for Visual Studio Code
 
-Development environment for Archicad 28 GDL language (XML, HSF and GDL source code): syntax coloring, snippets, code outline, quick reference.
+Development environment for Archicad 29 GDL language (XML, HSF and GDL source code): syntax coloring, snippets, code outline, quick reference.
 
 # Usage
 
@@ -35,6 +35,8 @@ __subroutine__ - subroutine header and body
 
 __hotspot__ or __hotspot2__ - length edit hotspot triplet
 
+__[...__ __1...__ __0...__ - when used with multiple cursors, insert series of numbers starting from 1 or 0
+
 # VSCode standard language features for GDL-HSF
 
 * Document symbols (Ctrl-Shift-O)
@@ -50,11 +52,11 @@ __hotspot__ or __hotspot2__ - length edit hotspot triplet
   * If the workspace changed in a process outside VSCode, use the "Re-scan library parts in workspace folders" command to refresh the known library parts.
 * When a folder of HSF files is opened, further features are available:
   * Show info about parameters when the mouse hovers on them (can be toggled on/off with Ctrl-Alt-Space)
-  * Show parameters with bold font (can be toggled on/off with Ctrl-Alt-Space)
+  * Show parameters with bold font (can be toggled on/off with Ctrl-Alt-Space), jump to paramlist.xml with Ctrl-click.
   * IntelliSense lists constants (ALL_CAPS) with their initialized values
-  * IntelliSense lists parameters with their description, type, flags and default value. This list can be filtered by parameter type too.
+  * IntelliSense lists parameters with their description, type, flags, group and default value. This list can be filtered by parameter type too.
   * Follow libraryglobal, macro and subroutine calls with Ctrl-click
-  * Show variable assignments with Ctrl-click
+  * Show variable, dictionary key, returned_parameters assignments, dictionary or array declarations with Ctrl-click.
 * Go to definitions/references, find all references of subroutines in same libpart (Ctrl-click or F12, Shift-F12, Shift-Alt-F12)
 * Show Call Hierarchy (Shift-Alt-H), Peek Call Hierarchy
   * Incoming or outgoing macro calls are shown, respecting the execution context of the edited scipt. Eg. all scripts are searched outgoing from a master script, but only master and 2d scripts are searched outgoing from a 2d script.
@@ -64,6 +66,14 @@ __hotspot__ or __hotspot2__ - length edit hotspot triplet
   * Increase after lines with block-opening keywords (for, if, while, group, subroutine...)
   * Decrease after block-closing keywords (next, else, endif, endwhile, endgroup, return...)
   * Line ending comments are handled, comment-only lines and difficult syntax with : or multiline strings are not
+* Links to source files from LP_XMLConverter error messages in terminal. The error message is shown next to the code, until the first edit or switching the editor.
+
+# Paste as block
+When when pasting text on a selection, and the pasted text begins with a block-starter GDL statement, text is inserted before the selection and a corresponding block-closing statement is inserted after. Pasted text is indented to the selection's indentation, and selection gets indented.
+
+Reconginzed statements: `if` `for` `while` `do` `repeat`
+
+By default this feature is off, can be enabled by command `Toggle Paste as Block`.
 
 # Script outline view
 
@@ -166,6 +176,27 @@ Some valid syntaxes won't be highlighted, and some invalid syntaxes will be high
 1. Press Ctrl-S to apply changes to the user settings
 
 # Release Notes
+
+## 1.29.0
+* Reference guide 29
+* Snippet updates
+* Require _dark.tif for .svg source image in pathnametable check
+* Paste as block
+* Show group of parameters in hover / suggestions
+* Links to source files from LP_XMLConverter error messages in terminal
+
+## 1.28.1
+* improved links (Ctrl-click):
+  * link parameters to paramlist.xml
+  * link dict keys to dict parameter keys
+  * link to dict key assignments
+  * link to `returned_parameters`
+  * link to `dict`, `dim` declarations
+  * link to `for` loop variables
+  * highlight target variable in peek window instead assigned value (works better with new links)
+* improved parameter highlight: don't highlight dict key with name of a parameter
+* links / suggestions / highlights react to changes in files not opened in vscode (eg. master script while editing 2d script)
+* documentation / snippet updates
 
 ## 1.28.0
 * Reference guide 28

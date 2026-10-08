@@ -698,19 +698,19 @@
     },
     "\"poly2_b{3}\" command": {
       "prefix": "poly2_b{3}",
-      "body": "poly2_b{3} ${01:n}, ${02:frameFill},\n\t${03:fillPen}, ${04:fillBackgroundPen},\n\t${05:fillOrigoX}, ${06:fillOrigoY}, ${07:fillAngle},\n\t${08:mxx}, ${09:mxy}, ${10:myx}, ${11:myy},\n\t${12:x1}, ${13:y1}, ${14:s1},\n\t${15:...},\n\t${16:xn}, ${17:yn}, ${18:sn}"
+      "body": "poly2_b{3} ${01:n}, ${02:frameFill},\n\t${03:fillPen}, ${04:fillBackgroundPen},\n\t${05:fillOrigoX}, ${06:fillOrigoY},\n\t${07:mxx}, ${08:mxy}, ${09:myx}, ${10:myy},\n\t${11:x1}, ${12:y1}, ${13:s1},\n\t${14:...},\n\t${15:xn}, ${16:yn}, ${17:sn}"
     },
     "\"poly2_b{4}\" command": {
       "prefix": "poly2_b{4}",
-      "body": "poly2_b{4} ${01:n}, ${02:frameFill},\n\t${03:fillPen}, ${04:fillBackgroundPen},\n\t${05:fillOrigoX}, ${06:fillOrigoY}, ${07:fillAngle},\n\t${08:mxx}, ${09:mxy}, ${10:myx}, ${11:myy},\n\t${12:gradientInnerRadius},\n\t${13:x1}, ${14:y1}, ${15:s1},\n\t${16:...},\n\t${17:xn}, ${18:yn}, ${19:sn}"
+      "body": "poly2_b{4} ${01:n}, ${02:frameFill},\n\t${03:fillPen}, ${04:fillBackgroundPen},\n\t${05:fillOrigoX}, ${06:fillOrigoY},\n\t${07:mxx}, ${08:mxy}, ${09:myx}, ${10:myy},\n\t${11:gradientInnerRadius},\n\t${12:x1}, ${13:y1}, ${14:s1},\n\t${15:...},\n\t${16:xn}, ${17:yn}, ${18:sn}"
     },
     "\"poly2_b{5}\" command": {
       "prefix": "poly2_b{5}",
-      "body": "poly2_b{5} ${01:n}, ${02:frameFill}, ${03:fillCategory}, ${04:distortionFlags},\n\t${05:fillPen}, ${06:fillBackgroundPen},\n\t${07:fillOrigoX}, ${08:fillOrigoY}, ${09:fillAngle},\n\t${10:mxx}, ${11:mxy}, ${12:myx}, ${13:myy},\n\t${14:gradientInnerRadius},\n\t${15:x1}, ${16:y1}, ${17:s1},\n\t${18:...},\n\t${19:xn}, ${20:yn}, ${21:sn}"
+      "body": "poly2_b{5} ${01:n}, ${02:frameFill}, ${03:fillCategory}, ${04:distortionFlags},\n\t${05:fillPen}, ${06:fillBackgroundPen},\n\t${07:fillOrigoX}, ${08:fillOrigoY},\n\t${09:mxx}, ${10:mxy}, ${11:myx}, ${12:myy},\n\t${13:gradientInnerRadius},\n\t${14:x1}, ${15:y1}, ${16:s1},\n\t${17:...},\n\t${18:xn}, ${19:yn}, ${20:sn}"
     },
     "\"poly2_b{6}\" command": {
       "prefix": "poly2_b{6}",
-      "body": "poly2_b{6} ${01:n}, ${02:frameFill}, ${03:fillCategory}, ${04:distortionFlags},\n\t${05:fillPen}, ${06:fillBackgroundPen},\n\t${07:fillOrigoX}, ${08:fillOrigoY}, ${09:fillAngle},\n\t${10:mxx}, ${11:mxy}, ${12:myx}, ${13:myy},\n\t${14:gradientInnerRadius},\n\t${15:x1}, ${16:y1}, ${17:s1}, ${18:pen1}, ${19:linetype1},\n\t${20:...},\n\t${21:xn}, ${22:yn}, ${23:sn}, ${24:penn}, ${25:linetypen}"
+      "body": "poly2_b{6} ${01:n}, ${02:frameFill}, ${03:fillCategory}, ${04:distortionFlags},\n\t${05:fillPen}, ${06:fillBackgroundPen},\n\t${07:fillOrigoX}, ${08:fillOrigoY},\n\t${09:mxx}, ${10:mxy}, ${11:myx}, ${12:myy},\n\t${13:gradientInnerRadius},\n\t${14:x1}, ${15:y1}, ${16:s1}, ${17:pen1}, ${18:linetype1},\n\t${19:...},\n\t${20:xn}, ${21:yn}, ${22:sn}, ${23:penn}, ${24:linetypen}"
     },
     "\"arc2\" command": {
       "prefix": "arc2",
@@ -1545,17 +1545,17 @@
       "body": "\n\n! ==================================================================================================\nend ! end ! end ! end ! end ! end ! end ! end ! end ! end ! end ! end ! end ! end ! end ! end ! end\n! ==================================================================================================\n\n\n"
     },
     "series 0...": {
-      "prefix": "0",
+      "prefix": "0...",
       "description": "insert integer series starting from 0 at each cursor position",
       "body": "$CURSOR_INDEX"
     },
     "series 1...": {
-      "prefix": "1",
+      "prefix": "1...",
       "description": "insert integer series starting from 1 at each cursor position",
       "body": "$CURSOR_NUMBER"
     },
     "series [1...": {
-      "prefix": "[",
+      "prefix": "[...",
       "description": "insert integer series starting from 1 at each cursor position",
       "body": "[$CURSOR_NUMBER"
     },
@@ -2450,6 +2450,10 @@
     "\"LABEL_POSITION\" global": {
       "prefix": "LABEL_POSITION",
       "body": "LABEL_POSITION[${01:index}][${02:index}]"
+    },
+    "\"LABEL_ROTANGLE\" global": {
+      "prefix": "LABEL_ROTANGLE",
+      "body": "LABEL_ROTANGLE"
     },
     "\"LAYOUT_CHANGE_HISTORY\" global": {
       "prefix": "LAYOUT_CHANGE_HISTORY",

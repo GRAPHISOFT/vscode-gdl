@@ -77,10 +77,17 @@ export class LibpartInfo {
         }
     }
 
-    /** return map of existing script types and uris (unsaved files not included) */
-    async allScripts() {
-        const uris : Array<ScriptUriOrNullPair> = await Promise.all(Parser.Scripts.map(async script => [script, await this.scriptUri(script)]));
-        return new Map(uris.filter((e) : e is ScriptUriPair => e[1] !== null));
+    /** iterate existing script types and uris (unsaved files not included) */
+    async* allScripts(): AsyncGenerator<ScriptUriPair> {
+        const uris : Promise<ScriptUriOrNullPair>[] = Parser.Scripts.map(async script => this.UriOfScript(script));
+
+        for await (const [script, uri] of uris) {
+            if (uri !== null) yield [script, uri];
+        }
+    }
+
+    async UriOfScript(script: Parser.ScriptType): Promise<ScriptUriOrNullPair> {
+        return [script, await this.scriptUri(script)];
     }
 
     /** return names and uris of files in images folder */
